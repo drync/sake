@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView 
+                android:id="@+id/textview1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:text="this is the search tab" />
+            <TextView 
+                android:id="@+id/textview2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:text="this is the cellar tab" />
+            <TextView 
+                android:id="@+id/textview3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:text="this is the quick notes tab" />
+            <TextView 
+                android:id="@+id/textview4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:text="this is the Top Wine tab" />
+            <TextView 
+                android:id="@+id/textview5"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:text="this is the settings tab" />
+    	</FrameLayout>
+    </LinearLayout>
+</TabHost>
+
+
+	<!--  <Button
+    android:id="@+id/tab_search"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:drawableTop="@drawable/tab_icon_search"
+    android:text="@string/searchtab"
+    android:textSize="3pt" 
+    android:textStyle="bold"
+    android:typeface="sans"/>
+	
+	<Button
+    android:id="@+id/tab_cellar"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:layout_weight="1"
+    android:drawableTop="@drawable/tab_icon_cellar" 
+    android:text="@string/cellartab"
+    android:textSize="3pt" 
+    android:textStyle="bold"
+    android:typeface="sans"/>
+	
+	<Button
+    android:id="@+id/tab_notes"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:drawableTop="@drawable/tab_icon_pencil"
+    android:text="@string/quicknotestab" 
+    android:textSize="3pt" 
+    android:textStyle="bold"
+    android:typeface="sans"/>
+       
+	
+	<Button
+    android:id="@+id/tab_topwines"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+        android:layout_weight="1"
+    android:drawableTop="@drawable/tab_icon_topwines" 
+    android:text="@string/topwinestab"
+    android:textSize="3pt"
+    android:textStyle="bold" 
+    android:typeface="sans"/>
+    
+    <Button
+    android:id="@+id/tab_settings"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+        android:layout_weight="1"
+    android:drawableTop="@drawable/tab_icon_settings"
+    android:text="@string/settingstab" 
+    android:textSize="3pt" 
+    android:textStyle="bold"
+    android:typeface="sans"/>  -->
+		
