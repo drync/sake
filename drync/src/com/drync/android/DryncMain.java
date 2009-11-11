@@ -3,6 +3,8 @@ package com.drync.android;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.drync.android.objects.Bottle;
+
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -86,7 +88,7 @@ public class DryncMain extends TabActivity {
 		            
 		            String word = searchfield.getText().toString();
 		            //WineDirectory.Wine theWine = WineDirectory.getInstance().getMatches(word).get(0);
-		            WineAdapter wordAdapter = new WineAdapter(WineDirectory.getInstance().getMatches(word));
+		            WineAdapter wordAdapter = new WineAdapter(DryncProvider.getInstance().getMatches(word));
 		           
 		            LinearLayout listholder = (LinearLayout)findViewById(R.id.listholder);
 		            
@@ -111,21 +113,21 @@ public class DryncMain extends TabActivity {
 
 	}
 	
-	private void launchWord(WineDirectory.Wine theWord) {
+	private void launchBottle(Bottle bottle) {
         Intent next = new Intent();
         next.setClass(this, WineActivity.class);
-        next.putExtra("word", theWord.word);
-        next.putExtra("definition", theWord.definition);
+        next.putExtra("name", bottle.getName());
+        next.putExtra("style", bottle.getStyle());
         startActivity(next);
     }
 
 	
 	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-        private final List<WineDirectory.Wine> mWines;
+        private final List<Bottle> mWines;
         private final LayoutInflater mInflater;
 
-        public WineAdapter(List<WineDirectory.Wine> wines) {
+        public WineAdapter(List<Bottle> wines) {
         	mWines = wines;
             mInflater = (LayoutInflater) DryncMain.this.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
@@ -158,13 +160,13 @@ public class DryncMain extends TabActivity {
             return item;
         }
 
-        private void bindView(TwoLineListItem view, WineDirectory.Wine wine) {
-            view.getText1().setText(wine.word);
-            view.getText2().setText(wine.definition);
+        private void bindView(TwoLineListItem view, Bottle wine) {
+            view.getText1().setText(wine.getName());
+            view.getText2().setText(wine.getStyle());
         }
 
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            launchWord(mWines.get(position));
+            launchBottle(mWines.get(position));
         }
     }
 
