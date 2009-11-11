@@ -14,12 +14,68 @@
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-            <TextView 
-                android:id="@+id/textview1"
+            android:layout_height="fill_parent"
+            android:background="@drawable/wood2">
+            
+            <LinearLayout 
+            	android:id="@+id/searchview"
+            	android:orientation="vertical"
+    			android:layout_width="fill_parent"
+    			android:layout_height="wrap_content">
+
+    				<LinearLayout
+						android:orientation="horizontal"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:layout_weight="1">
+            
+    					<EditText
+        					android:id="@+id/searchentry"
+       	 					android:layout_width="wrap_content"
+        					android:layout_height="fill_parent"
+        					android:layout_weight="1"
+        					android:background="@android:drawable/editbox_background"
+        					android:drawableLeft="@drawable/glass"
+        					android:layout_marginTop="3dip"
+        					android:drawablePadding="5dip"
+        				/>
+
+					</LinearLayout>
+					
+					<LinearLayout
+						android:id="@+id/listholder"
+						android:orientation="horizontal"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:layout_weight="1">
+						<!-- android:background="@drawable/wood2" -->
+					</LinearLayout>
+			</LinearLayout>
+            
+           <!--   <RelativeView
+                android:id="@+id/searchview"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent" 
-                android:text="this is the search tab" />
+                android:layout_height="fill_parent">
+                	<TextView
+                		android:id="@+id/textview1"
+                		android:layout_width="fill_parent"
+                		android:layout_height="fill_parent" 
+                		android:text="this is the search tab" />
+                	<EditText
+        				android:id="@+id/entry"
+        				android:layout_width="fill_parent"
+        				android:layout_height="wrap_content"
+        				android:layout_below="@id/textview1"/>
+        			<Button
+        				android:id="@+id/ok"
+        				android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+        				android:layout_below="@id/entry"
+        				android:layout_alignParentRight="true"
+        				android:layout_marginLeft="10dip"
+        				android:text="OK" />
+            </RelativeView> -->
+            
             <TextView 
                 android:id="@+id/textview2"
                 android:layout_width="fill_parent"

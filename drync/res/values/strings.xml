@@ -13,4 +13,10 @@
 	<string name="quicknotestab">Quick Notes</string>
 	<string name="topwinestab">Top Wine</string>
 	<string name="settingstab">Settings</string>
+	<!-- General instructions in the main activity. -->
+    <string name="search_instructions">Press the search key to look up a word</string>
+    <string name="title_wine_list">Wines</string>
+    <string name="listview">ListView</string>
+
+	
 </resources>

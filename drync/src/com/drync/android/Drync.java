@@ -39,7 +39,7 @@ public class Drync extends Activity {
     	        		Intent intent = new Intent();
     	                intent.setClass(Drync.this, DryncMain.class);
     	                startActivity(intent);
-    	               // Drync.this.mShowIntro = false;
+    	                Drync.this.mShowIntro = false;
     	                finish();
 
     	        	}
