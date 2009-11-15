@@ -85,20 +85,31 @@ public class DryncProvider {
 						NodeList nodeList = bottleNode.getChildNodes();
 						int len = nodeList.getLength();
 						for(int i=0; i<len; i++) {
-							Node node = nodeList.item(i);
-							String value = this.getNodeValue(node);
-							if("name".equals(node.getNodeName())) {
-								bottle.setName(value);
-							} else if("year".equals(node.getNodeName())) {
-								bottle.setYear(Integer.parseInt(value));
-							} else if("region".equals(node.getNodeName())) {
-								bottle.setRegion(value);
-							} else if("region_path".equals(node.getNodeName())) {
-								bottle.setRegion_path(value);
-							} else if("style".equals(node.getNodeName())) {
-								bottle.setStyle(value);
+							try
+							{
+								Node node = nodeList.item(i);
+								String value = this.getNodeValue(node);
+								if("name".equals(node.getNodeName())) {
+									bottle.setName(value);
+								} else if("year".equals(node.getNodeName())) {
+									bottle.setYear(Integer.parseInt(value));
+								} else if("region".equals(node.getNodeName())) {
+									bottle.setRegion(value);
+								} else if("region_path".equals(node.getNodeName())) {
+									bottle.setRegion_path(value);
+								} else if("style".equals(node.getNodeName())) {
+									bottle.setStyle(value);
+								} else if ("label_thumb".equals(node.getNodeName())) {
+									bottle.setLabel_thumb(value);
+								} else if ("price".equals(node.getNodeName())) {
+									bottle.setPrice(value);
+								} else if ("rating".equals(node.getNodeName())) {
+									bottle.setRating(value);
+								}// else skip for now.
+							} catch (NumberFormatException e)
+							{
+								// skip for now.
 							}
-							// else skip for now.
 						}
 						
 						bottleList.add(bottle);

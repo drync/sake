@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/wood2">
+    <LinearLayout 
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content">
+    	
+    <ImageView
+        android:id="@+id/wineimg"
+        android:layout_width="75px"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dip"
+        android:scaleType="centerInside"
+        android:layout_gravity="left"
+         />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+
+        <TextView
+        	android:id="@+id/wineName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:typeface="serif"
+            android:gravity="center_vertical" />
+        <!--  <LinearLayout 
+        	android:orientation="horizontal"
+        	android:layout_width="fill_parent"
+        	android:layout_weight="1"
+        	android:layout_height="fill_parent"
+        	android:layout_marginTop="10px">
+        	<RelativeLayout 
+        		android:orientation="horizontal"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingRight="10px">
+        		<TextView  
+        		    android:id="@+id/reviewLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:text="reviews:" />
+            	<TextView  
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/reviewLabel"
+            		android:text="111" />
+            </RelativeLayout>
+            <RelativeLayout 
+        		android:orientation="horizontal"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingRight="10px">
+        		<TextView  
+        		    android:id="@+id/ratingLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:text="rating:" />
+            	<TextView  
+            	    android:id="@+id/ratingValue"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/ratingLabel" />
+            </RelativeLayout>
+            <RelativeLayout 
+        		android:orientation="horizontal"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content">
+        		<TextView  
+        		    android:id="@+id/priceLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:text="price:" />
+            	<TextView  
+            		android:id="@+id/priceValue"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/priceLabel" />
+            </RelativeLayout>             
+        </LinearLayout>    -->
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

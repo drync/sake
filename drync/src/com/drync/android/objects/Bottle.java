@@ -2,7 +2,10 @@ package com.drync.android.objects;
 
 import java.util.ArrayList;
 
-public class Bottle {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Bottle implements Parcelable {
 	long id;
 	String name;
 	int year;
@@ -13,11 +16,53 @@ public class Bottle {
 	String winery_name;
 	String label;
 	String label_thumb;
+	String price;
+	String rating;
 	
-	
+	public static final Parcelable.Creator<Bottle> CREATOR = new Parcelable.Creator<Bottle>() {
+        public Bottle createFromParcel(Parcel in) {
+            return new Bottle(in);
+        }
+
+        public Bottle[] newArray(int size) {
+            return new Bottle[size];
+        }
+    };
+    
+	public String getRating() {
+		if ((rating == null) || (rating.equals("")))
+			return "n/a";
+		else
+			return rating;
+	}
+
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
+
+
+	public String getPrice() {
+		if (price == null || price.equals(""))
+			return "n/a";
+		else
+			return price;
+	}
+
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+
 	public Bottle() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public Bottle(Parcel in) {
+		readFromParcel(in);
 	}
 
 
@@ -132,6 +177,41 @@ public class Bottle {
 
 
 	ArrayList<Source> sources = new ArrayList<Source>();
-	
 
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeLong(id);
+		out.writeString(name);
+		out.writeInt(year);
+		out.writeString(region_path);
+		out.writeString(region);
+		out.writeString(grape);
+		out.writeString(style);
+		out.writeString(winery_name);
+		out.writeString(label);
+		out.writeString(label_thumb);
+		out.writeString(price);
+		out.writeString(rating);
+		
+	}
+	
+	public void readFromParcel(Parcel in) {
+		id = in.readLong();
+		name = in.readString();
+		year = in.readInt();
+		region_path = in.readString();
+		region = in.readString();
+		grape = in.readString();
+		style = in.readString();
+		winery_name = in.readString();
+		label = in.readString();
+		label_thumb = in.readString();
+		price = in.readString();
+		rating = in.readString();	
+	}
 }

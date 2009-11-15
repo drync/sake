@@ -1,5 +1,10 @@
 package com.drync.android;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +14,13 @@ import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +30,7 @@ import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -39,35 +49,55 @@ public class DryncMain extends TabActivity {
 	private List<Bottle> mResults = null;
 	private ProgressDialog progressDlg = null;
 	private String deviceId;
+	WineAdapter mAdapter; 
 
 
 	final Runnable mUpdateResults = new Runnable()
 	{
 		public void run()
 		{
+			updateResultsInUi();
 			if (progressDlg != null)
 				progressDlg.dismiss();
-			updateResultsInUi();
 		}
 	};
 	
 	private void updateResultsInUi() {
 
 		// Back in the UI thread -- update our UI elements based on the data in mResults
-		WineAdapter wordAdapter = new WineAdapter(mResults);
-
+		
 		if (mList == null)
 		{
 			LinearLayout listholder = (LinearLayout)findViewById(R.id.listholder);
 			mList = new ListView(DryncMain.this.getBaseContext());
+			mList.setCacheColorHint(0);
 			//mList.setId(R.string.listview);
 			listholder.addView(mList);
 		}
+		
+		if (mAdapter == null)
+		{
+			mAdapter = new WineAdapter(mResults);
+			mList.setAdapter(mAdapter);
+			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-		mList.setAdapter(wordAdapter);
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+					Log.d("BottleClick", "Bottle clicked at position: " + position);
+					launchBottle(mAdapter.mWines.get(position));
+				}
+				
+			});
+		}
+		else
+		{
+			mAdapter.mWines.clear();
+			mAdapter.mWines.addAll(mResults);
+		}
+
+		mAdapter.notifyDataSetChanged();
+		
 	}
-
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +152,7 @@ public class DryncMain extends TabActivity {
 
 					String searchterm = searchfield.getText().toString();
 
-					progressDlg =  new ProgressDialog(DryncMain.this);// Toast.makeText(DryncMain.this, R.id.word, Toast.LENGTH_LONG);//.makeText(DryncMain.this, "Beep Bop", Toast.LENGTH_SHORT).show();
+					progressDlg =  new ProgressDialog(DryncMain.this);
 					progressDlg.setTitle("Dryncing...");
 					progressDlg.setMessage("Retrieving wines...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -148,11 +178,14 @@ public class DryncMain extends TabActivity {
 	}
 
 	private void launchBottle(Bottle bottle) {
+		/*LinearLayout lview = (LinearLayout) this.findViewById(R.id.searchview);
 		Intent next = new Intent();
 		next.setClass(this, WineActivity.class);
-		next.putExtra("name", bottle.getName());
-		next.putExtra("style", bottle.getStyle());
-		startActivity(next);
+		next.putExtra("bottle", bottle);
+		//startActivity(next);
+		
+		final TabHost tabHost = getTabHost();
+		mTabHost.newTabSpec("tab_search").setContent(next);*/
 	}
 
 
@@ -160,11 +193,13 @@ public class DryncMain extends TabActivity {
 
 		private final List<Bottle> mWines;
 		private final LayoutInflater mInflater;
+		private final Drawable defaultIcon;
 
 		public WineAdapter(List<Bottle> wines) {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncMain.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
+			defaultIcon = getResources().getDrawable(R.drawable.icon);
 		}
 
 		public int getCount() {
@@ -180,28 +215,81 @@ public class DryncMain extends TabActivity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			TwoLineListItem view = (convertView != null) ? (TwoLineListItem) convertView :
+			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
 			bindView(view, mWines.get(position));
 			return view;
 		}
 
-		private TwoLineListItem createView(ViewGroup parent) {
+		/*private TwoLineListItem createView(ViewGroup parent) {
 			TwoLineListItem item = (TwoLineListItem) mInflater.inflate(
 					android.R.layout.simple_list_item_2, parent, false);
 			item.getText2().setSingleLine();
 			item.getText2().setEllipsize(TextUtils.TruncateAt.END);
 			return item;
+		}*/
+		
+		private View createView(ViewGroup parent) {
+			View wineItem = mInflater.inflate(
+					R.layout.wineitem, parent, false);
+			/*item.getText2().setSingleLine();
+			item.getText2().setEllipsize(TextUtils.TruncateAt.END);*/
+			return wineItem;
 		}
 
-		private void bindView(TwoLineListItem view, Bottle wine) {
-			view.getText1().setText(wine.getName());
-			view.getText2().setText(wine.getStyle());
+		private void bindView(View view, Bottle wine) {
+			ImageView wineThumb = (ImageView) view.findViewById(R.id.wineThumb);
+			if (wineThumb != null)
+			{
+				if (wine.getLabel_thumb() != null)
+				{
+					Drawable drawable = ImageOperations(DryncMain.this, wine.getLabel_thumb());
+					wineThumb.setImageDrawable(drawable);
+				}
+				else
+				{
+					wineThumb.setImageDrawable(defaultIcon);
+				}
+			}
+			
+			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
+			wineNameText.setText(wine.getName());
+			
+			TextView priceText = (TextView) view.findViewById(R.id.priceValue);
+			priceText.setText(wine.getPrice());
+			
+			TextView ratingText = (TextView) view.findViewById(R.id.ratingValue);
+			ratingText.setText(wine.getRating());
+			
 		}
 
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			launchBottle(mWines.get(position));
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			
+			
 		}
+		
+		private Drawable ImageOperations(Context ctx, String url) {
+			try {
+				InputStream is = (InputStream) this.fetch(url);
+				Drawable d = Drawable.createFromStream(is, "src");
+				
+				return d;
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		public Object fetch(String address) throws MalformedURLException,IOException {
+			URL url = new URL(address);
+			Object content = url.getContent();
+			return content;
+		}
+
 	}
 
 	protected void startQueryOperation(String query)
