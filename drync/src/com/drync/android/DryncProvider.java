@@ -105,7 +105,10 @@ public class DryncProvider {
 									bottle.setPrice(value);
 								} else if ("rating".equals(node.getNodeName())) {
 									bottle.setRating(value);
+								} else if ("reviews".equals(node.getNodeName())) {
+									bottle.setReviewCount(node.getChildNodes().getLength());
 								}// else skip for now.
+								
 							} catch (NumberFormatException e)
 							{
 								// skip for now.

@@ -15,7 +15,13 @@
         <activity android:name=".DryncMain"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".DryncTabMain"
+                  android:label="@string/app_name">
+        </activity>
         <activity android:name=".WineActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".HelloDrync"
                   android:label="@string/app_name">
         </activity>
         

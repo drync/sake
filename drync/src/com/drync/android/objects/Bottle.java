@@ -18,7 +18,18 @@ public class Bottle implements Parcelable {
 	String label_thumb;
 	String price;
 	String rating;
+	int reviewCount = 0;
 	
+	public int getReviewCount() {
+		return reviewCount;
+	}
+
+
+	public void setReviewCount(int reviewCount) {
+		this.reviewCount = reviewCount;
+	}
+
+
 	public static final Parcelable.Creator<Bottle> CREATOR = new Parcelable.Creator<Bottle>() {
         public Bottle createFromParcel(Parcel in) {
             return new Bottle(in);
@@ -197,6 +208,7 @@ public class Bottle implements Parcelable {
 		out.writeString(label_thumb);
 		out.writeString(price);
 		out.writeString(rating);
+		out.writeInt(reviewCount);
 		
 	}
 	
@@ -213,5 +225,6 @@ public class Bottle implements Parcelable {
 		label_thumb = in.readString();
 		price = in.readString();
 		rating = in.readString();	
+		reviewCount = in.readInt();
 	}
 }

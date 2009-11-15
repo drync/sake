@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.drync.android.objects.Bottle;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
@@ -41,9 +42,8 @@ import android.widget.TwoLineListItem;
 import android.text.TextUtils;
 
 
-public class DryncMain extends TabActivity {
+public class DryncMain extends Activity {
 
-	private TabHost mTabHost;
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
@@ -71,7 +71,6 @@ public class DryncMain extends TabActivity {
 			LinearLayout listholder = (LinearLayout)findViewById(R.id.listholder);
 			mList = new ListView(DryncMain.this.getBaseContext());
 			mList.setCacheColorHint(0);
-			//mList.setId(R.string.listview);
 			listholder.addView(mList);
 		}
 		
@@ -105,43 +104,6 @@ public class DryncMain extends TabActivity {
 		setContentView(R.layout.main);
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
-		
-		mTabHost = getTabHost();
-		mTabHost.addTab(mTabHost.newTabSpec("tab_search").setIndicator(
-				getResources().getString(R.string.searchtab),
-				getResources().getDrawable(R.drawable.tab_icon_search)).
-				setContent(R.id.searchview));
-		mTabHost.addTab(mTabHost.newTabSpec("tab_cellar").setIndicator(
-				getResources().getString(R.string.cellartab),
-				getResources().getDrawable(R.drawable.tab_icon_cellar)).
-				setContent(R.id.textview2));
-		mTabHost.addTab(mTabHost.newTabSpec("tab_quicknote").setIndicator(
-				getResources().getString(R.string.quicknotestab),
-				getResources().getDrawable(R.drawable.tab_icon_pencil)).
-				setContent(R.id.textview3));
-		mTabHost.addTab(mTabHost.newTabSpec("tab_topwine").setIndicator(
-				getResources().getString(R.string.topwinestab),
-				getResources().getDrawable(R.drawable.tab_icon_topwines)).
-				setContent(R.id.textview4));
-		mTabHost.addTab(mTabHost.newTabSpec("tab_settings").setIndicator(
-				getResources().getString(R.string.settingstab),
-				getResources().getDrawable(R.drawable.tab_icon_settings)).
-				setContent(R.id.textview5));
-
-
-		int n=mTabHost.getTabWidget().getChildCount();
-		for (int i=0;i<n;i++)
-		{
-			ArrayList<View> views = mTabHost.getTabWidget().getChildAt(i).getTouchables();
-			RelativeLayout relLayout = (RelativeLayout)views.get(0);
-			TextView tv = (TextView)relLayout.getChildAt(1);
-			tv.setPadding(0, 3, 0, 0);
-			tv.setSingleLine(false);
-			tv.setGravity(Gravity.CENTER);
-			tv.setTextSize(10);
-			tv.setLines(2);
-		}
-		mTabHost.setCurrentTab(0);
 
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
 		searchfield.setOnKeyListener(new OnKeyListener() {
@@ -178,14 +140,11 @@ public class DryncMain extends TabActivity {
 	}
 
 	private void launchBottle(Bottle bottle) {
-		/*LinearLayout lview = (LinearLayout) this.findViewById(R.id.searchview);
+		LinearLayout lview = (LinearLayout) this.findViewById(R.id.searchview);
 		Intent next = new Intent();
 		next.setClass(this, WineActivity.class);
 		next.putExtra("bottle", bottle);
-		//startActivity(next);
-		
-		final TabHost tabHost = getTabHost();
-		mTabHost.newTabSpec("tab_search").setContent(next);*/
+		startActivity(next);
 	}
 
 
@@ -220,20 +179,10 @@ public class DryncMain extends TabActivity {
 			bindView(view, mWines.get(position));
 			return view;
 		}
-
-		/*private TwoLineListItem createView(ViewGroup parent) {
-			TwoLineListItem item = (TwoLineListItem) mInflater.inflate(
-					android.R.layout.simple_list_item_2, parent, false);
-			item.getText2().setSingleLine();
-			item.getText2().setEllipsize(TextUtils.TruncateAt.END);
-			return item;
-		}*/
 		
 		private View createView(ViewGroup parent) {
 			View wineItem = mInflater.inflate(
 					R.layout.wineitem, parent, false);
-			/*item.getText2().setSingleLine();
-			item.getText2().setEllipsize(TextUtils.TruncateAt.END);*/
 			return wineItem;
 		}
 
@@ -260,6 +209,9 @@ public class DryncMain extends TabActivity {
 			
 			TextView ratingText = (TextView) view.findViewById(R.id.ratingValue);
 			ratingText.setText(wine.getRating());
+			
+			TextView reviewText = (TextView) view.findViewById(R.id.reviewValue);
+			reviewText.setText("" + wine.getReviewCount());
 			
 		}
 

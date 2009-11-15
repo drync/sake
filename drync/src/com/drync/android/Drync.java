@@ -37,7 +37,7 @@ public class Drync extends Activity {
     	        gotIt.setOnClickListener(new OnClickListener() {
     	        	public void onClick(View v) {
     	        		Intent intent = new Intent();
-    	                intent.setClass(Drync.this, DryncMain.class);
+    	                intent.setClass(Drync.this, DryncTabMain.class);
     	                startActivity(intent);
     	                Drync.this.mShowIntro = false;
     	                finish();
@@ -50,7 +50,7 @@ public class Drync extends Activity {
     			splash.setVisibility(View.GONE);
     			// start Main & End Intro
     			Intent intent = new Intent();
-                intent.setClass(Drync.this, DryncMain.class);
+                intent.setClass(Drync.this, DryncTabMain.class);
                 startActivity(intent);
                 finish();
                 break;
