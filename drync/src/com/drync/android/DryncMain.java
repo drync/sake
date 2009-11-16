@@ -1,23 +1,24 @@
+/**
+ * Credit where credit's due... the pattern for the image lazy loading was borrowed
+ * from Evan Charlton at: http://evancharlton.com/thoughts/lazy-loading-images-in-a-listview/
+ * otherwise...
+ * 
+ * @author Michael Brindamour
+ * 
+ */
 package com.drync.android;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.drync.android.objects.Bottle;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -31,15 +32,13 @@ import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TwoLineListItem;
-import android.text.TextUtils;
+
+import com.drync.android.objects.Bottle;
+import com.drync.android.ui.RemoteImageView;
 
 
 public class DryncMain extends Activity {
@@ -102,6 +101,8 @@ public class DryncMain extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		DryncUtils.checkForLocalCacheArea();
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
 
@@ -153,7 +154,9 @@ public class DryncMain extends Activity {
 		private final List<Bottle> mWines;
 		private final LayoutInflater mInflater;
 		private final Drawable defaultIcon;
-
+		boolean mDone = false;
+		boolean mFlinging = false;
+		
 		public WineAdapter(List<Bottle> wines) {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncMain.this.getSystemService(
@@ -176,7 +179,19 @@ public class DryncMain extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
-			bindView(view, mWines.get(position));
+			boolean useLocalCache = DryncUtils.isUseLocalCache();
+			Bottle wine = mWines.get(position);
+			bindView(view, wine);
+			
+			if (view != null)
+			{
+				RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+				if (wineThumb != null && !mFlinging && useLocalCache)
+				{
+					wineThumb.loadImage();
+				}
+			}
+			
 			return view;
 		}
 		
@@ -187,16 +202,29 @@ public class DryncMain extends Activity {
 		}
 
 		private void bindView(View view, Bottle wine) {
-			ImageView wineThumb = (ImageView) view.findViewById(R.id.wineThumb);
-			if (wineThumb != null)
+			boolean useLocalCache = DryncUtils.isUseLocalCache();
+			RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+			if (wineThumb != null  && !mFlinging )
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					Drawable drawable = ImageOperations(DryncMain.this, wine.getLabel_thumb());
-					wineThumb.setImageDrawable(drawable);
+					if (useLocalCache)
+					{
+						wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+						wineThumb.setRemoteURI(wine.getLabel_thumb());
+						wineThumb.setImageDrawable(defaultIcon);
+						wineThumb.setUseDefaultOnly(false);
+					}
+					else
+					{
+						Drawable drawable = ImageOperations(DryncMain.this, wine.getLabel_thumb());
+						wineThumb.setImageDrawable(drawable);
+						wineThumb.setUseDefaultOnly(false);
+					}
 				}
 				else
 				{
+					wineThumb.setUseDefaultOnly(true);
 					wineThumb.setImageDrawable(defaultIcon);
 				}
 			}
@@ -217,8 +245,6 @@ public class DryncMain extends Activity {
 
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			
-			
 		}
 		
 		private Drawable ImageOperations(Context ctx, String url) {

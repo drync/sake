@@ -3,7 +3,7 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:padding="6dip">
     
-    <ImageView
+    <com.drync.android.ui.RemoteImageView
         android:id="@+id/wineThumb"
         android:layout_width="57px"
         android:layout_height="wrap_content"
