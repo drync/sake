@@ -1,6 +1,7 @@
 package com.drync.android;
 
 import com.drync.android.objects.Bottle;
+import com.drync.android.ui.RemoteImageView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,8 +27,25 @@ public class WineActivity extends Activity {
         mBottle = intent.getParcelableExtra("bottle");
         defaultIcon = getResources().getDrawable(R.drawable.icon);
 
-        ImageView imgview = (ImageView) findViewById(R.id.wineimg);
-        imgview.setImageDrawable(defaultIcon);
+        RemoteImageView imgview = (RemoteImageView) findViewById(R.id.wineimg);
+        if (imgview != null)
+        {
+        	String labelThumb = mBottle.getLabel_thumb();
+        	if (labelThumb != null && !labelThumb.equals(""))
+        	{
+        		imgview.setRemoteURI(labelThumb);
+        		imgview.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+        		imgview.setImageDrawable(defaultIcon);
+        		imgview.setUseDefaultOnly(false);
+        		imgview.loadImage();
+        	}
+        	else
+        	{
+        		imgview.setUseDefaultOnly(true);
+        		imgview.setImageDrawable(defaultIcon);
+        	}
+        }
+        
         TextView nameView = (TextView) findViewById(R.id.wineName);
         nameView.setText(mBottle.getName());
        /* mWord = (TextView) findViewById(R.id.word);

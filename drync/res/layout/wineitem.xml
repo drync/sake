@@ -96,52 +96,5 @@
 			android:layout_alignParentTop="true"
 			android:ellipsize="marquee"
 			android:layout_above="@id/secondLine" />
-           
-         <!--    <RelativeLayout 
-        		android:orientation="horizontal"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:paddingRight="10px">
-        		<TextView  
-        		    android:id="@+id/ratingLabel"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#000000" 
-            		android:textSize="9px"           
-            		android:singleLine="true"
-            		android:paddingRight="5px"
-            		android:text="rating:" />
-            	<TextView  
-            	    android:id="@+id/ratingValue"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#FFFFFF"            
-            		android:singleLine="true"
-            		android:textSize="9px"
-            		android:layout_toRightOf="@id/ratingLabel" />
-            </RelativeLayout>
-            <RelativeLayout 
-        		android:orientation="horizontal"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content">
-        		<TextView  
-        		    android:id="@+id/priceLabel"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#000000" 
-            		android:textSize="9px"           
-            		android:singleLine="true"
-            		android:paddingRight="5px"
-            		android:text="price:" />
-            	<TextView  
-            		android:id="@+id/priceValue"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#FFFFFF"            
-            		android:singleLine="true"
-            		android:textSize="9px"
-            		android:layout_toRightOf="@id/priceLabel" />
-            </RelativeLayout>     -->            
-  
-
+        
 </RelativeLayout>

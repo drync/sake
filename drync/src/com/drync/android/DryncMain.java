@@ -16,6 +16,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -141,11 +142,10 @@ public class DryncMain extends Activity {
 	}
 
 	private void launchBottle(Bottle bottle) {
-		LinearLayout lview = (LinearLayout) this.findViewById(R.id.searchview);
 		Intent next = new Intent();
 		next.setClass(this, WineActivity.class);
 		next.putExtra("bottle", bottle);
-		startActivity(next);
+		this.startActivity(next);
 	}
 
 

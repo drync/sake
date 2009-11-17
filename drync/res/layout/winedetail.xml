@@ -8,7 +8,7 @@
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content">
     	
-    <ImageView
+    <com.drync.android.ui.RemoteImageView
         android:id="@+id/wineimg"
         android:layout_width="75px"
         android:layout_height="wrap_content"
