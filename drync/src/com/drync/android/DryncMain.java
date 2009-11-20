@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,6 +23,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,27 +31,39 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.DryncTabHost;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.drync.android.objects.Bottle;
+import com.drync.android.ui.DryncTabActivity;
 import com.drync.android.ui.RemoteImageView;
 
 
 public class DryncMain extends Activity {
-
+	
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
+	private Bottle mBottle = null;
 	private ProgressDialog progressDlg = null;
 	private String deviceId;
 	WineAdapter mAdapter; 
+	
+	LinearLayout searchView;
+	LinearLayout detailView;
+	
+	Drawable defaultIcon = null;
 
 
 	final Runnable mUpdateResults = new Runnable()
@@ -102,7 +116,10 @@ public class DryncMain extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+		searchView = (LinearLayout) this.findViewById(R.id.searchview);
+		searchView.setVisibility(View.VISIBLE);
+		detailView = (LinearLayout) this.findViewById(R.id.detailview);
+		detailView.setVisibility(View.INVISIBLE);
 		DryncUtils.checkForLocalCacheArea();
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
@@ -140,14 +157,69 @@ public class DryncMain extends Activity {
 		toast.setView(tstLayout);
 		toast.show();
 	}
-
-	private void launchBottle(Bottle bottle) {
-		Intent next = new Intent();
-		next.setClass(this, WineActivity.class);
-		next.putExtra("bottle", bottle);
-		this.startActivity(next);
+	
+	private DryncTabHost getTabHost()
+	{
+		Activity obj = this;
+		DryncTabHost thost = null;
+		while ((obj != null) && (! (obj instanceof DryncTabMain)))
+		{
+			obj = obj.getParent();
+		}
+		
+		if (obj != null)
+		{
+			thost = (DryncTabHost)((DryncTabActivity)obj).getTabHost();
+		}
+		
+		return null;
 	}
 
+	private void launchBottle(Bottle bottle) {
+		mBottle = bottle;
+
+		searchView.setVisibility(View.INVISIBLE);
+		detailView.setVisibility(View.VISIBLE);
+
+		//detailView = (LinearLayout)this.findViewById(R.id.detailview);
+		TextView nameView = (TextView) findViewById(R.id.wineName);
+		TextView titleView = (TextView) findViewById(R.id.detailTitle);
+		nameView.setText(mBottle.getName());
+		titleView.setText(mBottle.getName());
+
+		if (defaultIcon == null)
+		{
+			defaultIcon = getResources().getDrawable(R.drawable.icon);
+		}
+
+
+		RemoteImageView riv = (RemoteImageView) findViewById(R.id.wineThumb);
+		if (riv != null)
+		{
+			String labelThumb = mBottle.getLabel_thumb();
+			if (labelThumb != null && !labelThumb.equals(""))
+			{
+				riv.setRemoteURI(labelThumb);
+				riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+				riv.setImageDrawable(defaultIcon);
+				riv.setUseDefaultOnly(false);
+				riv.loadImage();
+			}
+			else
+			{
+				riv.setUseDefaultOnly(true);
+				riv.setImageDrawable(defaultIcon);
+			}
+		}
+		
+		Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
+		searchBtn.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				DryncMain.this.goToSearchView();				
+			}});
+		
+	}
 
 	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
@@ -282,5 +354,31 @@ public class DryncMain extends Activity {
 		};
 		t.start();
 	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			boolean retval = goToSearchView();
+			
+			if (retval)
+				return true;
+		}
+		
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	private boolean goToSearchView()
+	{
+		if (detailView.getVisibility() == View.VISIBLE)
+		{
+			detailView.setVisibility(View.INVISIBLE);
+			searchView.setVisibility(View.VISIBLE);
+			return true;
+		}
+		return false;
+	}
+	
+	
 }
 

@@ -1,43 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@android:id/tabcontent"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/wood2">
-        
-    <LinearLayout 
-    	android:id="@+id/searchview"
-        android:orientation="vertical"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:background="@drawable/wood2">
+	android:id="@android:id/tabcontent" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/wood2">
 
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
-            
-    		<EditText
-    			android:id="@+id/searchentry"
-    	 		android:layout_width="wrap_content"
-     			android:layout_height="wrap_content"
-     			android:layout_weight="1"
-     			android:background="@android:drawable/editbox_background"
-     			android:drawableLeft="@drawable/glass"
-     			android:layout_marginTop="3dip"
-     			android:drawablePadding="5dip" />
+	<LinearLayout android:id="@+id/detailview"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="invisible"
+		android:background="@drawable/wood2">
+
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:paddingLeft="5px" android:paddingRight="5px" android:background="#410701">
+
+			<Button android:id="@+id/searchBtn" android:textColor="#FFFFFF"
+				android:layout_width="50dip" android:layout_height="20dip"
+				android:textSize="9px"
+				android:background="@drawable/qn_woodbutton" android:layout_gravity="center"
+				android:typeface="normal" android:textStyle="normal"
+				android:layout_weight=".15" android:text="Search" />
+
+			<TextView android:id="@+id/detailTitle"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px"
+				android:marqueeRepeatLimit="marquee_forever"
+				android:focusable="true"
+				android:textColor="#FFFFFF" android:typeface="serif"
+				android:ellipsize="marquee" android:singleLine="true"
+				android:layout_weight=".70" />
+
+			<Button android:id="@+id/addBtn" android:textColor="#FFFFFF"
+				android:layout_width="50dip" android:layout_height="20dip"
+				android:textSize="9px"
+				android:background="@drawable/qn_woodbutton" android:layout_gravity="center"
+				android:typeface="normal" android:textStyle="normal"
+				android:layout_marginTop="15px" android:layout_marginBottom="15px"
+				android:layout_weight=".15" android:text="Add" />
 
 		</LinearLayout>
-					
-		<LinearLayout
-			android:id="@+id/listholder"
-			android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:layout_weight="1"/>
+
+		<RelativeLayout android:layout_width="fill_parent"
+			android:layout_height="?android:attr/listPreferredItemHeight"
+			android:padding="6dip">
+
+			<com.drync.android.ui.RemoteImageView
+				android:id="@+id/wineThumb" android:layout_width="57px"
+				android:layout_height="wrap_content" android:layout_marginRight="6dip"
+				android:scaleType="centerInside" android:layout_alignParentTop="true"
+				android:layout_alignParentBottom="true" />
+
+			<RelativeLayout android:id="@+id/secondLine"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:paddingRight="10px"
+				android:layout_marginTop="5px" android:layout_toRightOf="@id/wineThumb"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentRight="true">
+
+				<TextView android:id="@+id/reviewLabel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#000000" android:textSize="9px"
+					android:singleLine="true" android:paddingRight="5px" android:text="reviews:" />
+				<TextView android:id="@+id/reviewValue"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#FFFFFF" android:singleLine="true"
+					android:textSize="9px" android:layout_toRightOf="@id/reviewLabel"
+					android:text="111" />
+
+				<TextView android:id="@+id/ratingLabel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#000000" android:textSize="9px"
+					android:singleLine="true" android:paddingRight="5px"
+					android:paddingLeft="10px" android:layout_toRightOf="@id/reviewValue"
+					android:text="rating:" />
+				<TextView android:id="@+id/ratingValue"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#FFFFFF" android:singleLine="true"
+					android:textSize="9px" android:layout_toRightOf="@id/ratingLabel" />
+
+				<TextView android:id="@+id/priceLabel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#000000" android:textSize="9px"
+					android:singleLine="true" android:paddingRight="5px"
+					android:paddingLeft="10px" android:layout_toRightOf="@id/ratingValue"
+					android:text="price:" />
+				<TextView android:id="@+id/priceValue"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="#FFFFFF" android:singleLine="true"
+					android:textSize="9px" android:layout_toRightOf="@id/priceLabel" />
+			</RelativeLayout>
+
+			<TextView android:id="@+id/wineName" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:textColor="#FFFFFF" android:typeface="serif"
+				android:layout_toRightOf="@id/wineThumb"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentTop="true" android:ellipsize="marquee"
+				android:layout_above="@id/secondLine" />
+
+		</RelativeLayout>
 	</LinearLayout>
-			
+
+	<LinearLayout android:id="@+id/searchview"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="visible"
+		android:background="@drawable/wood2">
+
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+			<EditText android:id="@+id/searchentry"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_weight="1" android:background="@android:drawable/editbox_background"
+				android:drawableLeft="@drawable/glass" android:layout_marginTop="3dip"
+				android:drawablePadding="5dip" />
+
+		</LinearLayout>
+
+		<LinearLayout android:id="@+id/listholder"
+			android:orientation="horizontal" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:layout_weight="1" />
+	</LinearLayout>
+
 </FrameLayout>
 
 		

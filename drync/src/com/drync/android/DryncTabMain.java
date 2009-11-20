@@ -1,34 +1,56 @@
 package com.drync.android;
 
 import java.util.ArrayList;
-
+import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.DryncTabHost;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.drync.android.DryncMain.WineAdapter;
-
-public class DryncTabMain extends TabActivity 
+import com.drync.android.ui.DryncTabActivity;
+public class DryncTabMain extends DryncTabActivity 
 {
 	
-	private TabHost mTabHost;
+	private DryncTabHost mTabHost;
+	private String mDefaultTab = null;
+	private int mDefaultTabIndex = -1;
+
 	final Handler mHandler = new Handler();
 	//private String deviceId;
 	WineAdapter mAdapter; 
 	
-	
+	/**
+     * Sets the default tab that is the first tab highlighted.
+     * 
+     * @param tag the name of the default tab
+     */
+    public void setDefaultTab(String tag) {
+        mDefaultTab = tag;
+        mDefaultTabIndex = -1;
+    }
+
+    /**
+     * Sets the default tab that is the first tab highlighted.
+     * 
+     * @param index the index of the default tab
+     */
+    public void setDefaultTab(int index) {
+        mDefaultTab = null;
+        mDefaultTabIndex = index;
+    }
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.tabmain);
 		
-		mTabHost = getTabHost();
+		mTabHost = (DryncTabHost)getTabHost();
 		mTabHost.addTab(mTabHost.newTabSpec("tab_search").
 				setIndicator(getResources().getString(R.string.searchtab),
 				getResources().getDrawable(R.drawable.tab_icon_search)).
@@ -64,5 +86,7 @@ public class DryncTabMain extends TabActivity
 			tv.setLines(2);
 		}
 		mTabHost.setCurrentTab(0);
-	}	
+	}
+	
+	
 }
