@@ -104,7 +104,7 @@ public class DryncTabActivity extends ActivityGroup {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        mTabHost = (DryncTabHost) findViewById(R.id.drynctabhost);
+        mTabHost = (DryncTabHost) findViewById(R.id.tabhost);
         
         mTabHost.setup(getLocalActivityManager());
     }

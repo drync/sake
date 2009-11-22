@@ -36,7 +36,6 @@ import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.DryncTabHost;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -160,10 +159,10 @@ public class DryncMain extends Activity {
 		toast.show();
 	}
 	
-	private DryncTabHost getTabHost()
+	private TabHost getTabHost()
 	{
 		Activity obj = this;
-		DryncTabHost thost = null;
+		TabHost thost = null;
 		while ((obj != null) && (! (obj instanceof DryncTabMain)))
 		{
 			obj = obj.getParent();
@@ -171,7 +170,7 @@ public class DryncMain extends Activity {
 		
 		if (obj != null)
 		{
-			thost = (DryncTabHost)((DryncTabActivity)obj).getTabHost();
+			thost = (TabHost)((TabActivity)obj).getTabHost();
 		}
 		
 		return null;

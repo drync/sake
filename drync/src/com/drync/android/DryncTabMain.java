@@ -11,14 +11,15 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.DryncTabHost;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.drync.android.DryncMain.WineAdapter;
 import com.drync.android.ui.DryncTabActivity;
-public class DryncTabMain extends DryncTabActivity 
+public class DryncTabMain extends TabActivity 
 {
 	
-	private DryncTabHost mTabHost;
+	private TabHost mTabHost;
 	private String mDefaultTab = null;
 	private int mDefaultTabIndex = -1;
 
@@ -50,7 +51,7 @@ public class DryncTabMain extends DryncTabActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mTabHost = (DryncTabHost)getTabHost();
+		mTabHost = (TabHost)getTabHost();
 		mTabHost.addTab(mTabHost.newTabSpec("tab_search").
 				setIndicator(getResources().getString(R.string.searchtab),
 				getResources().getDrawable(R.drawable.tab_icon_search)).
