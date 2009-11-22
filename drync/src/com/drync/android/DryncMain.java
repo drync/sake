@@ -41,6 +41,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,9 +60,10 @@ public class DryncMain extends Activity {
 	private ProgressDialog progressDlg = null;
 	private String deviceId;
 	WineAdapter mAdapter; 
+	LayoutInflater mMainInflater;
 	
 	LinearLayout searchView;
-	LinearLayout detailView;
+	ScrollView detailView;
 	
 	Drawable defaultIcon = null;
 
@@ -118,7 +120,7 @@ public class DryncMain extends Activity {
 		setContentView(R.layout.main);
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
 		searchView.setVisibility(View.VISIBLE);
-		detailView = (LinearLayout) this.findViewById(R.id.detailview);
+		detailView = (ScrollView) this.findViewById(R.id.detailview);
 		detailView.setVisibility(View.INVISIBLE);
 		DryncUtils.checkForLocalCacheArea();
 
@@ -181,18 +183,72 @@ public class DryncMain extends Activity {
 		searchView.setVisibility(View.INVISIBLE);
 		detailView.setVisibility(View.VISIBLE);
 
-		//detailView = (LinearLayout)this.findViewById(R.id.detailview);
 		TextView nameView = (TextView) findViewById(R.id.wineName);
 		TextView titleView = (TextView) findViewById(R.id.detailTitle);
+		TextView yearView = (TextView) findViewById(R.id.yearValue);
+		TextView ratingView = (TextView) findViewById(R.id.avgRatingValue);
+		TextView priceView = (TextView) findViewById(R.id.priceValue);
+		TextView ratingCount = (TextView) findViewById(R.id.reviewCount);
+		
+		LinearLayout revListHolder = (LinearLayout)findViewById(R.id.reviewholder);
+		// todo: optimize this to reuse views.
+		revListHolder.removeAllViews();
+		for (int i=0,n=mBottle.getReviewCount();i<n;i++)
+		{
+			if (mMainInflater == null)
+			{
+				mMainInflater = (LayoutInflater) DryncMain.this.getSystemService(
+						Context.LAYOUT_INFLATER_SERVICE);
+			}
+			
+			View reviewItem = mMainInflater.inflate(
+					R.layout.reviewitem, revListHolder, false);
+			revListHolder.addView(reviewItem, i);
+			// inflate view: 
+		}
+		/*if (mReviewList == null)
+		{
+			mReviewList = new ListView(DryncMain.this.getBaseContext());
+			mReviewList.setCacheColorHint(0);
+			revListHolder.addView(mReviewList);
+		}
+		
+		if (mReviewAdapter == null)
+		{
+			mReviewAdapter = new WineReviewAdapter(mBottle);
+			mReviewList.setAdapter(mReviewAdapter);
+			mReviewList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+					Log.d("ReviewClick", "Review clicked at position: " + position);
+					//launchBottle(mAdapter.mWines.get(position));
+				}
+				
+			});
+		}
+		else
+		{
+			mReviewAdapter.bottle = bottle;
+		}
+
+		mReviewAdapter.notifyDataSetChanged();*/
+		
 		nameView.setText(mBottle.getName());
 		titleView.setText(mBottle.getName());
-
+		int year = mBottle.getYear();
+		yearView.setText("" + year);
+		ratingView.setText(mBottle.getRating());
+		priceView.setText(mBottle.getPrice());
+		String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
+							" Reviews" : " Review";
+		ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+		
 		if (defaultIcon == null)
 		{
 			defaultIcon = getResources().getDrawable(R.drawable.icon);
 		}
-
-
+		
 		RemoteImageView riv = (RemoteImageView) findViewById(R.id.wineThumb);
 		if (riv != null)
 		{

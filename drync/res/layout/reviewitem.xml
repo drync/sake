@@ -1,40 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@android:id/tabcontent"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/wood2">
-        <LinearLayout 
-    	android:id="@+id/detailview"
-        android:orientation="vertical"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"
-    	android:background="@drawable/wood2">
-
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
-            
-    		<EditText
-    			android:id="@+id/searchentry"
-    	 		android:layout_width="wrap_content"
-     			android:layout_height="wrap_content"
-     			android:layout_weight="1"
-     			android:background="@android:drawable/editbox_background"
-     			android:drawableLeft="@drawable/glass"
-     			android:layout_marginTop="3dip"
-     			android:drawablePadding="5dip" />
-
-		</LinearLayout>
-		
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="#FFFFFF"
     android:padding="6dip">
     
-    <com.drync.android.ui.RemoteImageView
+    <!--<com.drync.android.ui.RemoteImageView
         android:id="@+id/wineThumb"
         android:layout_width="57px"
         android:layout_height="wrap_content"
@@ -44,7 +14,8 @@
         android:layout_alignParentBottom="true"
          />
 
-		<RelativeLayout 
+		-->
+		<!--<RelativeLayout 
 			    android:id="@+id/secondLine"
         		android:orientation="horizontal"
         		android:layout_width="fill_parent"
@@ -115,19 +86,18 @@
             		android:layout_toRightOf="@id/priceLabel" />
             </RelativeLayout>
             
+        -->
         <TextView
-        	android:id="@+id/wineName"
+        	android:id="@+id/reviewName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:typeface="serif"
-			android:layout_toRightOf="@id/wineThumb"
-			android:layout_alignParentRight="true"
+            android:layout_marginTop="10px"
+			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
-			android:ellipsize="marquee"
-			android:layout_above="@id/secondLine" />
+			android:text="Sample Review Text"
+			 />
         
 </RelativeLayout>
-</LinearLayout>
-</FrameLayout>
