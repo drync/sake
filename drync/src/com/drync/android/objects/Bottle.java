@@ -20,8 +20,13 @@ public class Bottle implements Parcelable {
 	String rating;
 	int reviewCount = 0;
 	
+	ArrayList<Review> reviews;
+	
 	public int getReviewCount() {
-		return reviewCount;
+		if (reviews == null)
+			return 0;
+		else
+			return reviews.size();
 	}
 
 
@@ -68,14 +73,28 @@ public class Bottle implements Parcelable {
 
 	public Bottle() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.reviews = new ArrayList<Review>();
 	}
 
 
 	public Bottle(Parcel in) {
+		super();
 		readFromParcel(in);
 	}
-
+	
+	
+	public void addReview(Review review)
+	{
+		this.reviews.add(review);
+	}
+	
+	public Review getReview(int index)
+	{
+		if (this.reviews.size() > index)
+			return this.reviews.get(index);
+		else
+			return null;
+	}
 
 	public long getId() {
 		return id;

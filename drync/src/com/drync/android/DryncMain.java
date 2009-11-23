@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.drync.android.objects.Bottle;
+import com.drync.android.objects.Review;
 import com.drync.android.ui.DryncTabActivity;
 import com.drync.android.ui.RemoteImageView;
 
@@ -181,6 +182,7 @@ public class DryncMain extends Activity {
 
 		searchView.setVisibility(View.INVISIBLE);
 		detailView.setVisibility(View.VISIBLE);
+		detailView.scrollTo(0, 0);
 
 		TextView nameView = (TextView) findViewById(R.id.wineName);
 		TextView titleView = (TextView) findViewById(R.id.detailTitle);
@@ -202,7 +204,15 @@ public class DryncMain extends Activity {
 			
 			View reviewItem = mMainInflater.inflate(
 					R.layout.reviewitem, revListHolder, false);
+			
+			TextView reviewText = (TextView) reviewItem.findViewById(R.id.reviewText);
+			Review review = mBottle.getReview(i);
+			if (review != null)
+			{
+				reviewText.setText(review.getText());
+			}
 			revListHolder.addView(reviewItem, i);
+			
 			// inflate view: 
 		}
 		/*if (mReviewList == null)

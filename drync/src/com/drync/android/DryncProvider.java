@@ -19,6 +19,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.drync.android.objects.Bottle;
+import com.drync.android.objects.Review;
 
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
@@ -106,7 +107,19 @@ public class DryncProvider {
 								} else if ("rating".equals(node.getNodeName())) {
 									bottle.setRating(value);
 								} else if ("reviews".equals(node.getNodeName())) {
-									bottle.setReviewCount(node.getChildNodes().getLength());
+									Node reviews = node;
+									NodeList reviewChildren = reviews.getChildNodes();
+									int rcLen = reviewChildren.getLength();
+									for (int k=0;k<rcLen;k++)
+									{
+										if (reviewChildren.item(k).getNodeName().equals("review"))
+										{
+											Node reviewNode = reviewChildren.item(k);
+											
+											Review parsedReview = parseReviewFromNode(reviewNode);
+											bottle.addReview(parsedReview);
+										}
+									}
 								}// else skip for now.
 								
 							} catch (NumberFormatException e)
@@ -127,6 +140,38 @@ public class DryncProvider {
 		return bottleList;
 	}
 	
+	private Review parseReviewFromNode(Node reviewNode) {
+		Review review = new Review();
+		
+		NodeList nodeList = reviewNode.getChildNodes();
+		int len = nodeList.getLength();
+		for(int i=0; i<len; i++) 
+		{
+			try
+			{
+				Node node = nodeList.item(i);
+				String value = this.getNodeValue(node);
+				if("publisher".equals(node.getNodeName())) {
+					review.setPublisher(value);
+				} else if("text".equals(node.getNodeName())) {
+					review.setText(value);
+				} else if("url".equals(node.getNodeName())) {
+					review.setUrl(value);
+				} else if("review_category".equals(node.getNodeName())) {
+					review.setReview_cat(value);
+				} else if("review_source".equals(node.getNodeName())) {
+					review.setReview_source(value);
+				} // else ignore others for now.
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return review;
+	}
+
+
 	private String getNodeValue(Node node) {
 		NodeList children = node.getChildNodes();
 		if(children.getLength()>0) {
