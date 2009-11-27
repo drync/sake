@@ -21,9 +21,9 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,7 +37,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -47,7 +46,6 @@ import android.widget.Toast;
 
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Review;
-import com.drync.android.ui.DryncTabActivity;
 import com.drync.android.ui.RemoteImageView;
 
 
@@ -77,6 +75,7 @@ public class DryncMain extends Activity {
 				progressDlg.dismiss();
 		}
 	};
+	
 	
 	private void updateResultsInUi() {
 
@@ -122,6 +121,7 @@ public class DryncMain extends Activity {
 		searchView.setVisibility(View.VISIBLE);
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
 		detailView.setVisibility(View.INVISIBLE);
+
 		DryncUtils.checkForLocalCacheArea();
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
@@ -196,6 +196,10 @@ public class DryncMain extends Activity {
 		revListHolder.removeAllViews();
 		for (int i=0,n=mBottle.getReviewCount();i<n;i++)
 		{
+			Review review = mBottle.getReview(i);
+			if (review == null)
+				continue;
+			
 			if (mMainInflater == null)
 			{
 				mMainInflater = (LayoutInflater) DryncMain.this.getSystemService(
@@ -206,43 +210,20 @@ public class DryncMain extends Activity {
 					R.layout.reviewitem, revListHolder, false);
 			
 			TextView reviewText = (TextView) reviewItem.findViewById(R.id.reviewText);
-			Review review = mBottle.getReview(i);
-			if (review != null)
-			{
-				reviewText.setText(review.getText());
-			}
+			
+			reviewText.setText(review.getText());
+			
 			revListHolder.addView(reviewItem, i);
 			
-			// inflate view: 
+			TextView readReviewTxt = (TextView) reviewItem.findViewById(R.id.readreviewtext);
+			final Review fReview = review;
+			readReviewTxt.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
+					startActivity(myIntent);
+									}});
 		}
-		/*if (mReviewList == null)
-		{
-			mReviewList = new ListView(DryncMain.this.getBaseContext());
-			mReviewList.setCacheColorHint(0);
-			revListHolder.addView(mReviewList);
-		}
-		
-		if (mReviewAdapter == null)
-		{
-			mReviewAdapter = new WineReviewAdapter(mBottle);
-			mReviewList.setAdapter(mReviewAdapter);
-			mReviewList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-					Log.d("ReviewClick", "Review clicked at position: " + position);
-					//launchBottle(mAdapter.mWines.get(position));
-				}
 				
-			});
-		}
-		else
-		{
-			mReviewAdapter.bottle = bottle;
-		}
-
-		mReviewAdapter.notifyDataSetChanged();*/
-		
 		nameView.setText(mBottle.getName());
 		titleView.setText(mBottle.getName());
 		int year = mBottle.getYear();
@@ -424,7 +405,13 @@ public class DryncMain extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			boolean retval = goToSearchView();
+			boolean retval = false;
+			
+			if (detailView.getVisibility() == View.VISIBLE)
+			{
+				retval = goToSearchView();
+			}
+			
 			
 			if (retval)
 				return true;
@@ -443,7 +430,5 @@ public class DryncMain extends Activity {
 		}
 		return false;
 	}
-	
-	
 }
 

@@ -1,93 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:background="@drawable/rndborder"
     android:layout_marginTop="5px"
     android:padding="6dip">
     
-    <!--<com.drync.android.ui.RemoteImageView
-        android:id="@+id/wineThumb"
-        android:layout_width="57px"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="6dip"
-        android:scaleType="centerInside"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-         />
-
-		-->
-		<!--<RelativeLayout 
-			    android:id="@+id/secondLine"
-        		android:orientation="horizontal"
-        		android:layout_width="fill_parent"
-        		android:layout_height="wrap_content"
-        		android:paddingRight="10px"
-        		android:layout_marginTop="5px"
-        		android:layout_toRightOf="@id/wineThumb"
-        		android:layout_alignParentBottom="true"
-        		android:layout_alignParentRight="true">
-        		
-        		<TextView  
-        		    android:id="@+id/reviewLabel"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#000000" 
-            		android:textSize="9px"           
-            		android:singleLine="true"
-            		android:paddingRight="5px"
-            		android:text="reviews:" />
-            	<TextView  
-            	    android:id="@+id/reviewValue"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#FFFFFF"            
-            		android:singleLine="true"
-            		android:textSize="9px"
-            		android:layout_toRightOf="@id/reviewLabel"
-            		android:text="111" />
-            		
-            		<TextView  
-        		    android:id="@+id/ratingLabel"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#000000" 
-            		android:textSize="9px"           
-            		android:singleLine="true"
-            		android:paddingRight="5px"
-            		android:paddingLeft="10px"
-            		android:layout_toRightOf="@id/reviewValue"
-            		android:text="rating:" />
-            	<TextView  
-            	    android:id="@+id/ratingValue"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#FFFFFF"            
-            		android:singleLine="true"
-            		android:textSize="9px"
-            		android:layout_toRightOf="@id/ratingLabel" />
-            		
-            		<TextView  
-        		    android:id="@+id/priceLabel"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#000000" 
-            		android:textSize="9px"           
-            		android:singleLine="true"
-            		android:paddingRight="5px"
-            		android:paddingLeft="10px"
-            		android:layout_toRightOf="@id/ratingValue"
-            		android:text="price:" />
-            	<TextView  
-            		android:id="@+id/priceValue"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:textColor="#FFFFFF"            
-            		android:singleLine="true"
-            		android:textSize="9px"
-            		android:layout_toRightOf="@id/priceLabel" />
-            </RelativeLayout>
-            
-        -->
         <TextView
         	android:id="@+id/reviewText"
             android:layout_width="fill_parent"
@@ -95,10 +12,39 @@
             android:layout_weight="1"
             android:textColor="#000000"
             android:typeface="serif"
+            android:textSize="10px"
             android:layout_marginTop="2px"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:text="Sample Review Text"
 			 />
+			 
+			  <View
+			 android:id="@+id/line"
+         android:layout_width="fill_parent"
+         android:layout_height="2dip"
+         android:background="#55000000"
+          android:layout_alignParentLeft="true"
+          android:layout_below="@id/reviewText" />
+			
+         
+		<TextView
+    android:id="@+id/readreviewtext"
+    android:background="@drawable/reviewbtn_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:textColor="#000000"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentBottom="true"
+    android:layout_below="@id/line"
+    android:textSize="12px"
+    android:textStyle="bold"
+    android:text="Read Review..."
+    android:drawableRight="@drawable/glass" />	
+    
+    
+
         
 </RelativeLayout>
