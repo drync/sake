@@ -33,6 +33,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -43,6 +47,7 @@ import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Review;
@@ -59,6 +64,7 @@ public class DryncMain extends Activity {
 	private String deviceId;
 	WineAdapter mAdapter; 
 	LayoutInflater mMainInflater;
+	ViewFlipper flipper;
 	
 	LinearLayout searchView;
 	ScrollView detailView;
@@ -80,7 +86,6 @@ public class DryncMain extends Activity {
 	private void updateResultsInUi() {
 
 		// Back in the UI thread -- update our UI elements based on the data in mResults
-		
 		if (mList == null)
 		{
 			LinearLayout listholder = (LinearLayout)findViewById(R.id.listholder);
@@ -117,10 +122,16 @@ public class DryncMain extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		flipper = (ViewFlipper) findViewById(R.id.flipper);
+		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+		flipper.setOutAnimation(this, R.anim.push_left_out);
+		
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
-		searchView.setVisibility(View.VISIBLE);
+	//	searchView.setVisibility(View.VISIBLE);
+		
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
-		detailView.setVisibility(View.INVISIBLE);
+		//detailView.setVisibility(View.INVISIBLE);
 
 		DryncUtils.checkForLocalCacheArea();
 
@@ -180,8 +191,11 @@ public class DryncMain extends Activity {
 	private void launchBottle(Bottle bottle) {
 		mBottle = bottle;
 
-		searchView.setVisibility(View.INVISIBLE);
-		detailView.setVisibility(View.VISIBLE);
+		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+		flipper.setOutAnimation(this, R.anim.push_left_out);
+
+		//searchView.setVisibility(View.INVISIBLE);
+	//	detailView.setVisibility(View.VISIBLE);
 		detailView.scrollTo(0, 0);
 
 		TextView nameView = (TextView) findViewById(R.id.wineName);
@@ -191,9 +205,14 @@ public class DryncMain extends Activity {
 		TextView priceView = (TextView) findViewById(R.id.priceValue);
 		TextView ratingCount = (TextView) findViewById(R.id.reviewCount);
 		
-		LinearLayout revListHolder = (LinearLayout)findViewById(R.id.reviewholder);
-		// todo: optimize this to reuse views.
+		
+		LinearLayout revListHolder = (LinearLayout)findViewById(R.id.reviewSection);
+		TextView reviewCount = (TextView)findViewById(R.id.reviewCount);
+
 		revListHolder.removeAllViews();
+		
+		revListHolder.addView(reviewCount,0);
+		
 		for (int i=0,n=mBottle.getReviewCount();i<n;i++)
 		{
 			Review review = mBottle.getReview(i);
@@ -213,7 +232,7 @@ public class DryncMain extends Activity {
 			
 			reviewText.setText(review.getText());
 			
-			revListHolder.addView(reviewItem, i);
+			revListHolder.addView(reviewItem, i+1);
 			
 			TextView readReviewTxt = (TextView) reviewItem.findViewById(R.id.readreviewtext);
 			final Review fReview = review;
@@ -239,7 +258,7 @@ public class DryncMain extends Activity {
 			defaultIcon = getResources().getDrawable(R.drawable.icon);
 		}
 		
-		RemoteImageView riv = (RemoteImageView) findViewById(R.id.wineThumb);
+		RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);
 		if (riv != null)
 		{
 			String labelThumb = mBottle.getLabel_thumb();
@@ -264,6 +283,8 @@ public class DryncMain extends Activity {
 			public void onClick(View v) {
 				DryncMain.this.goToSearchView();				
 			}});
+		
+		flipper.showNext();
 		
 	}
 
@@ -407,11 +428,10 @@ public class DryncMain extends Activity {
 		{
 			boolean retval = false;
 			
-			if (detailView.getVisibility() == View.VISIBLE)
+			if (flipper.getCurrentView() == detailView)
 			{
 				retval = goToSearchView();
 			}
-			
 			
 			if (retval)
 				return true;
@@ -422,13 +442,29 @@ public class DryncMain extends Activity {
 	
 	private boolean goToSearchView()
 	{
-		if (detailView.getVisibility() == View.VISIBLE)
+		if (flipper.getCurrentView() == detailView)
 		{
-			detailView.setVisibility(View.INVISIBLE);
-			searchView.setVisibility(View.VISIBLE);
+			//detailView.setVisibility(View.INVISIBLE);
+			//searchView.setVisibility(View.VISIBLE);
+			
+			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_right_in));
+			flipper.setOutAnimation(this, R.anim.push_right_out);
+			
+			flipper.showPrevious();
 			return true;
 		}
 		return false;
 	}
+	
+	private Animation inFromRightAnimation() {
+
+		Animation inFromRight = new TranslateAnimation(
+		Animation.RELATIVE_TO_PARENT, +1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+		Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f
+		);
+		inFromRight.setDuration(500);
+		inFromRight.setInterpolator(new AccelerateInterpolator());
+		return inFromRight;
+		}
 }
 
