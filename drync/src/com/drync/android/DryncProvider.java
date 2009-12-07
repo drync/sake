@@ -38,7 +38,7 @@ public class DryncProvider {
 	
 	public List<Bottle> getMatches(String deviceId, String query)
 	{
-		HttpHost target = new HttpHost(TEST_SERVER_HOST, SERVER_PORT, "http");
+		HttpHost target = new HttpHost(SERVER_HOST, SERVER_PORT, "http");
 		return this.searchBottles(target, query, deviceId);
 	}
 

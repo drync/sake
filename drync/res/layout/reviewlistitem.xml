@@ -1,0 +1,88 @@
+<!-- <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent" android:layout_height="wrap_content"> -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/revListItem"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+     
+        <TextView
+        	android:id="@+id/publisher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:typeface="serif"
+            android:textSize="14px"
+            android:drawablePadding="5px"
+            android:layout_marginTop="2px"
+            android:layout_marginBottom="20px"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:ellipsize="end"
+			android:singleLine="true"
+			android:minLines="1"
+			android:drawableLeft="@drawable/safari_gray"
+			android:text="Sample Text"/>
+			 />
+			 
+			 <TextView
+        	android:id="@+id/revText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:typeface="sans"
+            android:textSize="10px"
+			android:layout_alignParentLeft="true"
+			android:layout_below="@id/publisher"
+			android:ellipsize="end"
+			android:singleLine="false"
+			android:text="Sample Text"/>
+			 />
+			 
+			 <TextView
+        	android:id="@+id/revSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:typeface="sans"
+            android:textStyle="italic"
+            android:textSize="10px"
+            android:gravity="left"
+            android:paddingRight="2px"
+            android:layout_marginTop="5px"
+            android:layout_marginBottom="5px"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true"
+			android:layout_below="@id/revText"
+			android:singleLine="true"
+			android:minLines="1"
+			android:text="Sample Text"/>
+			 />
+			
+			<LinearLayout
+			   android:gravity="right"
+			   android:layout_width="wrap_content"
+			   android:layout_height="125px"
+			   android:orientation="horizontal"
+			   android:layout_alignParentRight="true"
+			  android:layout_alignParentTop="true"
+			   android:layout_alignRight="@id/revListItem"
+			 android:layout_above="@id/revText"
+			 android:layout_toRightOf="@id/publisher"
+			   >
+			<ImageView
+			 android:id="@+id/ratingImage"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"
+			 android:adjustViewBounds="true"
+			 
+			 android:scaleType="centerCrop"
+			 android:src="@drawable/starburst"
+			 android:layout_gravity="right"
+			 ></ImageView>
+			 </LinearLayout>
+		 
+	 	</RelativeLayout>
+	 <!-- 	</TableRow> -->

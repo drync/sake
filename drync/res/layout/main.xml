@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@android:id/tabcontent" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/wood2">
+	android:layout_height="fill_parent" android:background="@drawable/wood2"> -->
 
-	<ViewFlipper android:id="@+id/flipper"
+	<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/flipper"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 	
@@ -145,11 +145,11 @@
 
 			<!-- Review section -->
 
-			<LinearLayout android:id="@+id/reviewSection"
-				android:orientation="vertical" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginLeft="10px"
-				android:layout_marginRight="10px" android:scrollbars="vertical"
-				android:scrollbarAlwaysDrawVerticalTrack="true">
+			<RelativeLayout android:id="@+id/reviewSection"
+				android:layout_width="fill_parent"
+				android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+				android:layout_height="fill_parent" android:layout_marginLeft="10px"
+				android:layout_marginRight="10px">
 
 				<TextView android:id="@+id/reviewCount"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -159,18 +159,19 @@
 					android:typeface="sans" android:ellipsize="none"
 					android:singleLine="true" android:text="sample text" />
 
+					
 				<!--  <LinearLayout android:id="@+id/reviewholder"
 					android:orientation="vertical" android:layout_width="fill_parent"
 					android:layout_height="fill_parent" android:layout_weight="1"
 					android:layout_marginBottom="10px" android:padding="10px" /> -->
-			</LinearLayout>
+			</RelativeLayout>
 
 			<!-- Other Information section -->
 		</LinearLayout>
 	</ScrollView>
 	
 	</ViewFlipper>
-
+<!-- 
 </FrameLayout>
-
+-->
 		
