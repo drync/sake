@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/reviewview"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:scrollbarAlwaysDrawVerticalTrack="false">
+
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/wood2">
+			
+			<LinearLayout android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:paddingLeft="5px" android:paddingRight="5px"
+				android:background="#410701">
+
+				<Button android:id="@+id/doneBtn" android:textColor="#FFFFFF"
+					android:layout_width="50dip" android:layout_height="20dip"
+					android:textSize="9px" android:background="@drawable/qn_woodbutton"
+					android:layout_gravity="center" android:typeface="normal"
+					android:textStyle="normal" android:layout_weight=".15"
+					android:text="Done" />
+
+				<TextView android:id="@+id/reviewTitle"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_gravity="center" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:marqueeRepeatLimit="marquee_forever"
+					android:focusable="true" android:textStyle="bold" android:gravity="center"
+					android:textColor="#FFFFFF" android:typeface="sans"
+					android:ellipsize="end" android:singleLine="true"
+					android:layout_weight=".70" />
+
+			</LinearLayout>
+
+		 	<RelativeLayout android:id="@+id/genreview"
+				android:layout_width="fill_parent" android:layout_height="80px"
+				android:padding="6dip">
+
+				<com.drync.android.ui.RemoteImageView
+					android:id="@+id/reviewWineThumb" android:layout_width="57px"
+					android:layout_height="57px" android:layout_marginRight="6dip"
+					android:scaleType="fitCenter" android:layout_alignParentTop="true"
+					android:background="#FFFFFF" />
+
+				<TextView android:id="@+id/reviewWineName" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:layout_weight="1"
+					android:textColor="#FFFFFF" android:typeface="serif"
+					android:layout_toRightOf="@id/reviewWineThumb" android:maxLines="2"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentTop="true" android:ellipsize="marquee" />
+
+				<RelativeLayout android:id="@+id/secondLine"
+					android:orientation="horizontal" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:paddingRight="10px"
+					android:layout_marginTop="2px" android:layout_toRightOf="@id/reviewWineThumb"
+					android:layout_below="@id/reviewWineName"
+					android:layout_alignParentRight="true">
+
+					<TextView android:id="@+id/yearLabel"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#000000" android:textSize="10px"
+						android:singleLine="true" android:paddingRight="5px" android:text="Year:" />
+					<TextView android:id="@+id/yearValue"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#FFFFFF" android:singleLine="true"
+						android:textSize="10px" android:layout_toRightOf="@id/yearLabel" />
+				</RelativeLayout>
+
+				<RelativeLayout android:id="@+id/thirdLine"
+					android:orientation="horizontal" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:paddingRight="10px"
+					android:layout_marginTop="2px" android:layout_toRightOf="@id/reviewWineThumb"
+					android:layout_below="@id/secondLine"
+					android:layout_alignParentRight="true">
+
+					<TextView android:id="@+id/avgRatingLabel"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#000000" android:textSize="10px"
+						android:singleLine="true" android:paddingRight="5px"
+						android:layout_alignParentLeft="true"
+						android:layout_alignParentTop="true" android:text="rating:" />
+					<TextView android:id="@+id/avgRatingValue"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#FFFFFF" android:singleLine="true"
+						android:textSize="10px" android:layout_toRightOf="@id/avgRatingLabel" />
+
+				</RelativeLayout>
+
+				<RelativeLayout android:id="@+id/fourthLine"
+					android:orientation="horizontal" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:paddingRight="10px"
+					android:layout_marginTop="2px" android:layout_toRightOf="@id/reviewWineThumb"
+					android:layout_below="@id/thirdLine"
+					android:layout_alignParentRight="true">
+
+					<TextView android:id="@+id/priceLabel"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#000000" android:textSize="10px"
+						android:singleLine="true" android:paddingRight="5px"
+						android:layout_alignParentLeft="true"
+						android:layout_alignParentTop="true" android:text="Price:" />
+					<TextView android:id="@+id/priceValue"
+						android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:textColor="#FFFFFF" android:singleLine="true"
+						android:textSize="10px" android:layout_toRightOf="@id/priceLabel" />
+				</RelativeLayout>
+			</RelativeLayout> 
+
+			<!-- Review section -->
+
+		    <RelativeLayout android:id="@+id/reviewSection"
+				android:layout_width="fill_parent"
+				android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+				android:layout_height="fill_parent" android:layout_marginLeft="10px"
+				android:layout_marginRight="10px">
+
+				<TextView android:id="@+id/reviewCount"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="sample text" />
+
+			</RelativeLayout>
+		</LinearLayout>
+	</ScrollView>

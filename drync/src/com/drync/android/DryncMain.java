@@ -75,12 +75,14 @@ public class DryncMain extends Activity {
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
 	
-	private ListView mReviewList;
-	private WineReviewAdapter mReviewAdapter;
 	private TableLayout mReviewTable;
 	
 	LinearLayout searchView;
 	ScrollView detailView;
+	ScrollView reviewView;
+	
+	boolean rebuildDetail = false;
+	boolean rebuildReviews = false;
 	
 	Drawable defaultIcon = null;
 
@@ -137,15 +139,19 @@ public class DryncMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
+		LayoutInflater inflater = getLayoutInflater();
+		
 		flipper = (ViewFlipper) findViewById(R.id.flipper);
 		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
 		flipper.setOutAnimation(this, R.anim.push_left_out);
 		
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
-	//	searchView.setVisibility(View.VISIBLE);
 		
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
-		//detailView.setVisibility(View.INVISIBLE);
+	
+		reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
+		
+		flipper.addView(reviewView);
 
 		DryncUtils.checkForLocalCacheArea();
 
@@ -172,7 +178,6 @@ public class DryncMain extends Activity {
 			}
 		});
 
-		LayoutInflater inflater = getLayoutInflater();
 		View tstLayout = inflater.inflate(R.layout.searchinstructions,
 		                               (ViewGroup) findViewById(R.id.search_toast_layout));
 		
@@ -203,112 +208,116 @@ public class DryncMain extends Activity {
 	}
 
 	private void launchBottle(Bottle bottle) {
-		mBottle = bottle;
-
-		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-		flipper.setOutAnimation(this, R.anim.push_left_out);
-
-		detailView.scrollTo(0, 0);
-
-		TextView nameView = (TextView) findViewById(R.id.wineName);
-		TextView titleView = (TextView) findViewById(R.id.detailTitle);
-		TextView yearView = (TextView) findViewById(R.id.yearValue);
-		TextView ratingView = (TextView) findViewById(R.id.avgRatingValue);
-		TextView priceView = (TextView) findViewById(R.id.priceValue);
-		TextView ratingCount = (TextView) findViewById(R.id.reviewCount);
-		
-		RelativeLayout revListHolder = (RelativeLayout)findViewById(R.id.reviewSection);
-		TextView reviewCount = (TextView)findViewById(R.id.reviewCount);
-
-		revListHolder.removeAllViews();
-		RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		revListHolder.addView(reviewCount, rcparams);
-		
-		
-		for (int i=0,n=mBottle.getReviewCount();i<n;i++)
+		if (mBottle != bottle)
 		{
-			if (i >= 1)
-				break;
-			
-			Review review = mBottle.getReview(i);
-			if (review == null)
-				continue;
-			
-			if (mMainInflater == null)
+			rebuildDetail = true;
+			rebuildReviews = true;
+		}
+
+		if (rebuildDetail)
+		{
+			mBottle = bottle;
+
+			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+			flipper.setOutAnimation(this, R.anim.push_left_out);
+
+			detailView.scrollTo(0, 0);
+
+			TextView nameView = (TextView) detailView.findViewById(R.id.wineName);
+			TextView titleView = (TextView) detailView.findViewById(R.id.detailTitle);
+			TextView yearView = (TextView) detailView.findViewById(R.id.yearValue);
+			TextView ratingView = (TextView) detailView.findViewById(R.id.avgRatingValue);
+			TextView priceView = (TextView) detailView.findViewById(R.id.priceValue);
+			TextView ratingCount = (TextView) detailView.findViewById(R.id.reviewCount);
+
+			RelativeLayout revListHolder = (RelativeLayout)detailView.findViewById(R.id.reviewSection);
+			TextView reviewCount = (TextView)detailView.findViewById(R.id.reviewCount);
+
+			revListHolder.removeAllViews();
+			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+			revListHolder.addView(reviewCount, rcparams);
+
+
+			for (int i=0,n=mBottle.getReviewCount();i<n;i++)
 			{
-				mMainInflater = (LayoutInflater) DryncMain.this.getSystemService(
-						Context.LAYOUT_INFLATER_SERVICE);
+				if (i >= 1)
+					break;
+
+				Review review = mBottle.getReview(i);
+				if (review == null)
+					continue;
+
+				if (mMainInflater == null)
+				{
+					mMainInflater = (LayoutInflater) DryncMain.this.getSystemService(
+							Context.LAYOUT_INFLATER_SERVICE);
+				}
+
+				final View reviewItem = mMainInflater.inflate(
+						R.layout.reviewitem, revListHolder, false);
+
+				TextView reviewText = (TextView) reviewItem.findViewById(R.id.reviewText);
+
+				reviewText.setText(review.getText());
+
+				RelativeLayout.LayoutParams revItemparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+				revItemparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				revItemparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
+
+				revListHolder.addView(reviewItem, revItemparams);
+
+				TextView readReviewTxt = (TextView) reviewItem.findViewById(R.id.readreviewtext);
+				final Review fReview = review;
+				readReviewTxt.setOnClickListener(new OnClickListener(){
+					public void onClick(View v) {
+						DryncMain.this.launchReviews();
+					}});
 			}
-			
-			final View reviewItem = mMainInflater.inflate(
-					R.layout.reviewitem, revListHolder, false);
-			
-			TextView reviewText = (TextView) reviewItem.findViewById(R.id.reviewText);
-			
-			reviewText.setText(review.getText());
-			
-			RelativeLayout.LayoutParams revItemparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-			revItemparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			revItemparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-			
-			revListHolder.addView(reviewItem, revItemparams);
-			
-			TextView readReviewTxt = (TextView) reviewItem.findViewById(R.id.readreviewtext);
-			final Review fReview = review;
-			readReviewTxt.setOnClickListener(new OnClickListener(){
+
+			nameView.setText(mBottle.getName());
+			titleView.setText(mBottle.getName());
+			int year = mBottle.getYear();
+			yearView.setText("" + year);
+			ratingView.setText(mBottle.getRating());
+			priceView.setText(mBottle.getPrice());
+			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
+					" Reviews" : " Review";
+			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+
+			if (defaultIcon == null)
+			{
+				defaultIcon = getResources().getDrawable(R.drawable.icon);
+			}
+
+			RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);
+			if (riv != null)
+			{
+				String labelThumb = mBottle.getLabel_thumb();
+				if (labelThumb != null && !labelThumb.equals(""))
+				{
+					riv.setRemoteURI(labelThumb);
+					riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+					riv.setImageDrawable(defaultIcon);
+					riv.setUseDefaultOnly(false);
+					riv.loadImage();
+				}
+				else
+				{
+					riv.setUseDefaultOnly(true);
+					riv.setImageDrawable(defaultIcon);
+				}
+			}
+
+			Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
+			searchBtn.setOnClickListener(new OnClickListener(){
+
 				public void onClick(View v) {
-					reviewItem.setVisibility(View.INVISIBLE);
-					if (mReviewTable != null)
-						mReviewTable.setVisibility(View.VISIBLE);
-					/*Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
-					startActivity(myIntent);*/
-									}});
-		}
-				
-		nameView.setText(mBottle.getName());
-		titleView.setText(mBottle.getName());
-		int year = mBottle.getYear();
-		yearView.setText("" + year);
-		ratingView.setText(mBottle.getRating());
-		priceView.setText(mBottle.getPrice());
-		String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
-							" Reviews" : " Review";
-		ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
-		
-		if (defaultIcon == null)
-		{
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
-		}
-		
-		RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);
-		if (riv != null)
-		{
-			String labelThumb = mBottle.getLabel_thumb();
-			if (labelThumb != null && !labelThumb.equals(""))
-			{
-				riv.setRemoteURI(labelThumb);
-				riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
-				riv.setImageDrawable(defaultIcon);
-				riv.setUseDefaultOnly(false);
-				riv.loadImage();
-			}
-			else
-			{
-				riv.setUseDefaultOnly(true);
-				riv.setImageDrawable(defaultIcon);
-			}
-		}
-		
-		Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
-		searchBtn.setOnClickListener(new OnClickListener(){
+					showPrevious();				
+				}});
 
-			public void onClick(View v) {
-				DryncMain.this.goToSearchView();				
-			}});
-		
-		if (mReviewTable == null)
+			/*if (mReviewTable == null)
 		{
 			mReviewTable = new TableLayout(DryncMain.this);
 			mReviewTable.setVisibility(View.INVISIBLE);
@@ -318,52 +327,129 @@ public class DryncMain extends Activity {
 		{
 			mReviewTable.setVisibility(View.INVISIBLE);
 		}
-		
+
 		populateReviewTable(mReviewTable, mBottle);
-		
-		if (mReviewList == null)
-		{
-			mReviewList = new ListView(DryncMain.this.getBaseContext());
-			mReviewList.setScrollContainer(false);
-			mReviewList.setCacheColorHint(0);
-			mReviewList.setVisibility(View.INVISIBLE);
-			mReviewList.setBackgroundResource(R.drawable.rndborder);
-		}
-		else
-		{
-			mReviewList.setVisibility(View.INVISIBLE);
-		}
-		
+
 		RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
 		listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-		
-		revListHolder.addView(mReviewList, listparams);
-		revListHolder.addView(mReviewTable, listparams);
-		
-		if (mReviewAdapter == null)
-		{
-			mReviewAdapter = new WineReviewAdapter(bottle);
-			mReviewList.setAdapter(mReviewAdapter);
+
+		revListHolder.addView(mReviewTable, listparams);*/
+			rebuildDetail = false;
 		}
-		else
+		showNext();
+		
+	}
+	
+	private void launchReviews() {
+		// mBottle should be set by the detail view, if not, return;
+		if (mBottle == null)
+			return;
+		
+		if (rebuildReviews)
 		{
-			mReviewAdapter.bottle = bottle;
+
+			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+			flipper.setOutAnimation(this, R.anim.push_left_out);
+
+			reviewView.scrollTo(0, 0);
+
+			TextView nameView = (TextView) reviewView.findViewById(R.id.reviewWineName);
+			TextView titleView = (TextView) reviewView.findViewById(R.id.reviewTitle);
+			TextView yearView = (TextView) reviewView.findViewById(R.id.yearValue);
+			TextView ratingView = (TextView) reviewView.findViewById(R.id.avgRatingValue);
+			TextView priceView = (TextView) reviewView.findViewById(R.id.priceValue);
+			TextView ratingCount = (TextView) reviewView.findViewById(R.id.reviewCount);
+
+			RelativeLayout revListHolder = (RelativeLayout)reviewView.findViewById(R.id.reviewSection);
+			TextView reviewCount = (TextView)reviewView.findViewById(R.id.reviewCount);
+
+			revListHolder.removeAllViews();
+			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+			revListHolder.addView(reviewCount, rcparams);
+
+			nameView.setText(mBottle.getName());
+			titleView.setText(mBottle.getName());
+			int year = mBottle.getYear();
+			yearView.setText("" + year);
+			ratingView.setText(mBottle.getRating());
+			priceView.setText(mBottle.getPrice());
+			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
+					" Reviews" : " Review";
+			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+
+			if (defaultIcon == null)
+			{
+				defaultIcon = getResources().getDrawable(R.drawable.icon);
+			}
+
+			RemoteImageView riv = (RemoteImageView) reviewView.findViewById(R.id.reviewWineThumb);
+			if (riv != null)
+			{
+				String labelThumb = mBottle.getLabel_thumb();
+				if (labelThumb != null && !labelThumb.equals(""))
+				{
+					riv.setRemoteURI(labelThumb);
+					riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+					riv.setImageDrawable(defaultIcon);
+					riv.setUseDefaultOnly(false);
+					riv.loadImage();
+				}
+				else
+				{
+					riv.setUseDefaultOnly(true);
+					riv.setImageDrawable(defaultIcon);
+				}
+			}
+
+			Button doneBtn = (Button) this.findViewById(R.id.doneBtn);
+			doneBtn.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					showPrevious();			
+				}});
+
+			RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+			listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+			listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
+			
+			if (mReviewTable == null)
+			{
+				mReviewTable = new TableLayout(DryncMain.this);
+				mReviewTable.setBackgroundResource(R.drawable.rndborder);
+
+				revListHolder.addView(mReviewTable, listparams);
+
+			}
+			else
+			{
+				revListHolder.addView(mReviewTable, listparams);
+			}
+
+			populateReviewTable(mReviewTable, mBottle);
+			rebuildReviews = false;
 		}
 		
-		mReviewAdapter.notifyDataSetChanged();
+		showNext();
 		
-		int height = 0;
-		/*for (int j=0,m=mReviewAdapter.getCount(); j<m; j++)
-		{
-			View view = (View)mReviewAdapter.getItem(j);
-			height += view.getHeight();
-		}*/
-		
-		mReviewList.setMinimumHeight(height+350);
+	}
+	
+	private void showNext()
+	{
+		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+		flipper.setOutAnimation(this, R.anim.push_left_out);
 		
 		flipper.showNext();
-		
+	}
+	
+	private void showPrevious()
+	{
+		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_right_in));
+		flipper.setOutAnimation(this, R.anim.push_right_out);
+	
+		flipper.showPrevious();
 	}
 	
 	class WineReviewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
@@ -607,11 +693,11 @@ public class DryncMain extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			boolean retval = false;
+			boolean retval = true;
 			
-			if (flipper.getCurrentView() == detailView)
+			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView))
 			{
-				retval = goToSearchView();
+				showPrevious();
 			}
 			
 			if (retval)
@@ -619,22 +705,6 @@ public class DryncMain extends Activity {
 		}
 		
 		return super.onKeyDown(keyCode, event);
-	}
-	
-	private boolean goToSearchView()
-	{
-		if (flipper.getCurrentView() == detailView)
-		{
-			//detailView.setVisibility(View.INVISIBLE);
-			//searchView.setVisibility(View.VISIBLE);
-			
-			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_right_in));
-			flipper.setOutAnimation(this, R.anim.push_right_out);
-			
-			flipper.showPrevious();
-			return true;
-		}
-		return false;
 	}
 	
 	private void populateReviewTable(TableLayout table, Bottle bottle)
