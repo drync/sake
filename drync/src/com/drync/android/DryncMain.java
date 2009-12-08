@@ -640,6 +640,8 @@ public class DryncMain extends Activity {
 	private void populateReviewTable(TableLayout table, Bottle bottle)
 	{
 		table.removeAllViews();
+		//table.setFocusableInTouchMode(true);
+		//table.setClickable(true);
 		
 		for (int i=0,n=bottle.getReviewCount();i<n;i++)
 		{			
@@ -660,10 +662,19 @@ public class DryncMain extends Activity {
 			TextView reviewText = (TextView) reviewItem.findViewById(R.id.revText);
 			TextView reviewSrc = (TextView) reviewItem.findViewById(R.id.revSource);
 			
+			reviewSrc.setFocusable(true);
+			reviewSrc.setClickable(true);
 			
 			publisherText.setText(review.getPublisher());
 			reviewText.setText(review.getText());
 			reviewSrc.setText(review.getReview_source());
+			
+			final Review fReview = review;
+			publisherText.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
+					startActivity(myIntent);
+									}});
 			
 			table.addView(reviewItem);
 			

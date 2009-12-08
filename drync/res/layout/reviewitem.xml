@@ -5,6 +5,7 @@
     android:layout_marginTop="5px"
     android:padding="6dip">
     
+    	
         <TextView
         	android:id="@+id/reviewText"
             android:layout_width="fill_parent"
@@ -41,7 +42,7 @@
     android:layout_below="@id/line"
     android:textSize="12px"
     android:textStyle="bold"
-    android:text="Read Review..."
+    android:text="Read All Reviews..."
     android:drawableRight="@drawable/glass" />	
     
     

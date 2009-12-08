@@ -167,6 +167,44 @@
 			</RelativeLayout>
 
 			<!-- Other Information section -->
+			<RelativeLayout android:id="@+id/addlInfoSection"
+				android:layout_width="fill_parent"
+				android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+				android:layout_height="fill_parent" android:layout_marginLeft="10px"
+				android:layout_marginRight="10px">
+
+				<TextView android:id="@+id/addlInfoHdr"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Additional Information" />
+					
+				<TableLayout android:id="@+id/addlInfoTbl"
+				    android:layout_width="fill_parent" android:layout_height="wrap_content"
+				    android:background="@drawable/rndborder">
+				
+					<TableRow android:id="@+id/addlInfoVarietal" android:layout_width="fill_parent"
+					android:layout_height="wrap_content">
+					<TextView
+            			android:layout_column="1"
+            			android:text="Varietal: "
+           				 android:padding="3dip" />
+        			<TextView
+            			android:text="blah"
+            			android:gravity="right"
+            			android:padding="3dip" />
+					
+					</TableRow>    
+				</TableLayout>
+
+					
+				<!--  <LinearLayout android:id="@+id/reviewholder"
+					android:orientation="vertical" android:layout_width="fill_parent"
+					android:layout_height="fill_parent" android:layout_weight="1"
+					android:layout_marginBottom="10px" android:padding="10px" /> -->
+			</RelativeLayout>
 		</LinearLayout>
 	</ScrollView>
 	
