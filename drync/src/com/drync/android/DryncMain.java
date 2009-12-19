@@ -157,6 +157,8 @@ public class DryncMain extends Activity {
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
 
+		DryncProvider.getInstance().startupPost(deviceId);
+		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
 		searchfield.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -229,10 +231,15 @@ public class DryncMain extends Activity {
 			TextView ratingView = (TextView) detailView.findViewById(R.id.avgRatingValue);
 			TextView priceView = (TextView) detailView.findViewById(R.id.priceValue);
 			TextView ratingCount = (TextView) detailView.findViewById(R.id.reviewCount);
+			TextView addInfoView = (TextView) detailView.findViewById(R.id.addlInfoHdr);
 
 			RelativeLayout revListHolder = (RelativeLayout)detailView.findViewById(R.id.reviewSection);
 			TextView reviewCount = (TextView)detailView.findViewById(R.id.reviewCount);
-
+			
+			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalval);
+			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
+			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
+			
 			revListHolder.removeAllViews();
 			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -285,6 +292,9 @@ public class DryncMain extends Activity {
 			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
 					" Reviews" : " Review";
 			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+			
+			if (addInfoView != null)
+				addInfoView.setText("" + "Additional Info");
 
 			if (defaultIcon == null)
 			{
@@ -310,6 +320,10 @@ public class DryncMain extends Activity {
 				}
 			}
 
+			varietalView.setText(bottle.getGrape());
+			styleView.setText(bottle.getStyle());
+			regionView.setText(bottle.getRegion());
+			
 			Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
 			searchBtn.setOnClickListener(new OnClickListener(){
 
@@ -360,7 +374,6 @@ public class DryncMain extends Activity {
 			TextView ratingView = (TextView) reviewView.findViewById(R.id.avgRatingValue);
 			TextView priceView = (TextView) reviewView.findViewById(R.id.priceValue);
 			TextView ratingCount = (TextView) reviewView.findViewById(R.id.reviewCount);
-
 			RelativeLayout revListHolder = (RelativeLayout)reviewView.findViewById(R.id.reviewSection);
 			TextView reviewCount = (TextView)reviewView.findViewById(R.id.reviewCount);
 
@@ -379,6 +392,7 @@ public class DryncMain extends Activity {
 			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
 					" Reviews" : " Review";
 			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+			
 
 			if (defaultIcon == null)
 			{
@@ -693,11 +707,12 @@ public class DryncMain extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
-			boolean retval = true;
+			boolean retval = false;
 			
 			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView))
 			{
 				showPrevious();
+				retval = true;
 			}
 			
 			if (retval)

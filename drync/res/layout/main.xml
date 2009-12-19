@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-	<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/flipper"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-	
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/flipper" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
 	<LinearLayout android:id="@+id/searchview"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="visible"
@@ -18,13 +18,21 @@
 				android:drawableLeft="@drawable/glass" android:layout_marginTop="3dip"
 				android:drawablePadding="5dip" />
 
+			<!--
+				<ImageButton android:id="@+id/clearbtn"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_marginBottom="3dip" android:layout_gravity="center"
+				android:layout_marginTop="5dip"
+				android:src="@drawable/clear_selector" />
+			-->
 		</LinearLayout>
 
 		<LinearLayout android:id="@+id/listholder"
 			android:orientation="horizontal" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:layout_weight="1" />
 	</LinearLayout>
-	
+
 	<ScrollView android:id="@+id/detailview"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:scrollbarAlwaysDrawVerticalTrack="false">
@@ -63,7 +71,7 @@
 					android:text="Add" />
 
 			</LinearLayout>
-			
+
 			<RelativeLayout android:id="@+id/gendetail"
 				android:layout_width="fill_parent" android:layout_height="80px"
 				android:padding="6dip">
@@ -141,10 +149,9 @@
 			<!-- Review section -->
 
 			<RelativeLayout android:id="@+id/reviewSection"
-				android:layout_width="fill_parent"
-				android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-				android:layout_height="fill_parent" android:layout_marginLeft="10px"
-				android:layout_marginRight="10px">
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
 
 				<TextView android:id="@+id/reviewCount"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -158,50 +165,130 @@
 
 			<!-- Other Information section -->
 			<RelativeLayout android:id="@+id/addlInfoSection"
-				android:layout_width="fill_parent"
-				android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-				android:layout_height="fill_parent" android:layout_marginLeft="10px"
-				android:layout_marginRight="10px">
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
 
 				<TextView android:id="@+id/addlInfoHdr"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
 					android:layout_gravity="left" android:layout_marginLeft="10px"
 					android:layout_marginRight="10px" android:layout_marginTop="20px"
 					android:gravity="left" android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
 					android:singleLine="true" android:text="Additional Information" />
-					
+
 				<TableLayout android:id="@+id/addlInfoTbl"
-				    android:layout_width="fill_parent" android:layout_height="wrap_content"
-				    android:background="@drawable/rndborder" android:layout_below="@id/addlInfoHdr">
-				
-					<TableRow android:id="@+id/addlInfoVarietal" android:layout_width="fill_parent"
-					android:layout_height="wrap_content">
-					<TextView
-            			android:layout_column="1"
-            			android:text="Varietal: "
-           				 android:padding="3dip" />
-        			<TextView
-            			android:text="blah"
-            			android:gravity="right"
-            			android:padding="3dip" />
-					
-					</TableRow>    
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:background="@drawable/rndborder"
+					android:layout_below="@id/addlInfoHdr">
+
+					<TableRow android:id="@+id/addlInfoVarietal"
+						android:layout_marginTop="5px" android:layout_width="fill_parent"
+						android:layout_height="wrap_content">
+						<TextView android:layout_column="1" android:id="@+id/varietallbl"
+							android:text="Varietal: " android:textColor="#5B1207"
+							android:padding="3dip" />
+						<TextView android:id="@+id/varietalval" android:gravity="left"
+							android:padding="3dip" android:textColor="#000000"/>
+
+					</TableRow>
+
+					<View android:layout_height="2dip"
+						android:layout_marginBottom="7px" android:layout_marginTop="7px"
+						android:background="#FF909090" />
+
+
+					<TableRow android:id="@+id/addlInfoStyle"
+						android:layout_width="fill_parent" android:layout_height="wrap_content">
+						<TextView android:layout_column="1" android:id="@+id/stylelbl"
+							android:textColor="#5B1207" android:text="Style: "
+							android:padding="3dip" />
+						<TextView android:id="@+id/styleval" android:gravity="left"
+							android:padding="3dip" android:textColor="#000000" />
+
+					</TableRow>
+
+					<View android:layout_height="2dip"
+						android:layout_marginBottom="7px" android:layout_marginTop="7px"
+						android:background="#FF909090" />
+
+
+					<TableRow android:id="@+id/addlInfoRegion"
+						android:layout_width="fill_parent" android:layout_height="wrap_content">
+						<TextView android:layout_column="1" android:id="@+id/regionlbl"
+							android:textColor="#5B1207" android:text="Region: "
+							android:padding="3dip" />
+						<TextView android:id="@+id/regionval" android:gravity="left"
+							android:padding="3dip" android:textColor="#000000" />
+
+					</TableRow>
 				</TableLayout>
 
-					
-				<!--  <LinearLayout android:id="@+id/reviewholder"
-					android:orientation="vertical" android:layout_width="fill_parent"
-					android:layout_height="fill_parent" android:layout_weight="1"
-					android:layout_marginBottom="10px" android:padding="10px" /> -->
 			</RelativeLayout>
+			
+			<RelativeLayout android:id="@+id/cellarBtnSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginTop="25px"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+				
+				<Button android:id="@+id/addToCellar" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_alignParentTop="true"
+				android:gravity="center" android:background="@drawable/qn_woodbutton" 
+				android:textColor="#FFFFFF" android:text="Add to Cellar" />
+				<Button android:id="@+id/share" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/addToCellar"
+				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF" 
+				android:gravity="center" android:text="Share" />
+				
+			</RelativeLayout>		
+			
+			<RelativeLayout android:id="@+id/socialSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginTop="25px"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+				
+				<Button android:id="@+id/tweet" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_alignParentTop="true"
+				android:gravity="center" android:background="@drawable/qn_woodbutton" 
+				android:textColor="#FFFFFF" android:text="Twitter: I am drinking this wine" 
+				android:drawableLeft="@drawable/twitter" android:paddingLeft="20px" />
+				
+			</RelativeLayout>
+			
+			<RelativeLayout android:id="@+id/buySection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginTop="25px"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+				
+				<Button android:id="@+id/buySnooth" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_alignParentTop="true"
+				android:gravity="center" android:background="@drawable/qn_woodbutton" 
+				android:textColor="#FFFFFF" android:text="Buy from Snooth" 
+				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px"/>
+				<Button android:id="@+id/buyCellarTracker" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/buySnooth"
+				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF" 
+				android:gravity="center" android:text="Buy from CellarTracker.com" 
+				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px" />
+				<Button android:id="@+id/buyWineCom" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/buyCellarTracker"
+				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF" 
+				android:gravity="center" android:text="Buy from Wine.com" 
+				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px"/>
+				
+			</RelativeLayout>			
+			
 		</LinearLayout>
 	</ScrollView>
-	
-	
-	
-	</ViewFlipper>
-<!-- 
+
+
+
+</ViewFlipper>
+	<!-- 
 </FrameLayout>
 -->
 		

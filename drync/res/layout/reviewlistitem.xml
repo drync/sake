@@ -35,7 +35,6 @@ android:layout_width="fill_parent" android:layout_height="wrap_content"> -->
             android:textSize="10px"
 			android:layout_alignParentLeft="true"
 			android:layout_below="@id/publisher"
-			android:ellipsize="end"
 			android:singleLine="false"
 			android:text="Sample Text"/>
 			 />
@@ -72,7 +71,8 @@ android:layout_width="fill_parent" android:layout_height="wrap_content"> -->
 			 android:layout_above="@id/revText"
 			 android:layout_toRightOf="@id/publisher"
 			   >
-			<ImageView
+			<!-- <ImageView -->
+			<com.drync.android.ui.CustomRatingView
 			 android:id="@+id/ratingImage"
 			 android:layout_width="wrap_content"
 			 android:layout_height="wrap_content"
@@ -81,7 +81,8 @@ android:layout_width="fill_parent" android:layout_height="wrap_content"> -->
 			 android:scaleType="centerCrop"
 			 android:src="@drawable/starburst"
 			 android:layout_gravity="right"
-			 ></ImageView>
+			 ><!--   </ImageView> -->
+			 </com.drync.android.ui.CustomRatingView>
 			 </LinearLayout>
 		 
 	 	</RelativeLayout>
