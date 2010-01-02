@@ -15,11 +15,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.TwitterException;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -60,6 +64,7 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Review;
+import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
 
 
@@ -68,12 +73,15 @@ public class DryncMain extends Activity {
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
+
 	private Bottle mBottle = null;
 	private ProgressDialog progressDlg = null;
 	private String deviceId;
 	WineAdapter mAdapter; 
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
+	
+	boolean displaySearch = true;
 	
 	private TableLayout mReviewTable;
 	
@@ -85,6 +93,8 @@ public class DryncMain extends Activity {
 	boolean rebuildReviews = false;
 	
 	Drawable defaultIcon = null;
+	
+	private String PREFS_NAME = "DRYNC_PREFS";
 
 
 	final Runnable mUpdateResults = new Runnable()
@@ -134,10 +144,18 @@ public class DryncMain extends Activity {
 		
 	}
 
+	SharedPreferences settings;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		
+		String lastQuery = settings.getString("lastQuery", null);
+		
+		Bundle extras = getIntent().getExtras();
+		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
 		
 		LayoutInflater inflater = getLayoutInflater();
 		
@@ -156,10 +174,27 @@ public class DryncMain extends Activity {
 		DryncUtils.checkForLocalCacheArea();
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
-
-		DryncProvider.getInstance().startupPost(deviceId);
+		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
+		
+		if (! displaySearch)
+		{
+			searchholder.setVisibility(View.INVISIBLE);
+			
+			progressDlg =  new ProgressDialog(DryncMain.this);
+			progressDlg.setTitle("Dryncing...");
+			progressDlg.setMessage("Retrieving top wines...");
+			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDlg.show();
+			DryncMain.this.startTopWineQueryOperation();	            
+		}
+		
 		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
+		
+		if (lastQuery != null)
+		{
+			searchfield.setText(lastQuery);
+		}
 		searchfield.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) 
@@ -180,16 +215,19 @@ public class DryncMain extends Activity {
 			}
 		});
 
-		View tstLayout = inflater.inflate(R.layout.searchinstructions,
-		                               (ViewGroup) findViewById(R.id.search_toast_layout));
-		
-		Toast toast = new Toast(getApplicationContext()) {
-			
-		};
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.setDuration(10);
-		toast.setView(tstLayout);
-		toast.show();
+		if (displaySearch)
+		{
+			View tstLayout = inflater.inflate(R.layout.searchinstructions,
+					(ViewGroup) findViewById(R.id.search_toast_layout));
+
+			Toast toast = new Toast(getApplicationContext()) {
+
+			};
+			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+			toast.setDuration(10);
+			toast.setView(tstLayout);
+			toast.show();
+		}
 	}
 	
 	private TabHost getTabHost()
@@ -239,6 +277,9 @@ public class DryncMain extends Activity {
 			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalval);
 			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
 			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
+			
+			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
+			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
 			
 			revListHolder.removeAllViews();
 			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -331,28 +372,90 @@ public class DryncMain extends Activity {
 					showPrevious();				
 				}});
 
-			/*if (mReviewTable == null)
-		{
-			mReviewTable = new TableLayout(DryncMain.this);
-			mReviewTable.setVisibility(View.INVISIBLE);
-			mReviewTable.setBackgroundResource(R.drawable.rndborder);
-		}
-		else
-		{
-			mReviewTable.setVisibility(View.INVISIBLE);
-		}
+			if (btnTweet != null)
+			{
+				btnTweet.setOnClickListener(new OnClickListener()
+				{
 
-		populateReviewTable(mReviewTable, mBottle);
+					public void onClick(View v) {
+						StringBuilder tweetStr = new StringBuilder();
+						//Drinking 2007 Jean Francois Merieau Touraine Sauvignon - #wine http://cellartracker.com/w?538443
+						Twitter twitter = new Twitter("mike_drync", "drynctweet");
+						
+						tweetStr.append("Drinking ");
+						tweetStr.append(mBottle.getName());
+						tweetStr.append(" - #wine ");
+						
+						if (mBottle.getSources().size() > 0)
+						{
+							tweetStr.append(mBottle.getSource(0).getUrl());
+						}
 
-		RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-		listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-
-		revListHolder.addView(mReviewTable, listparams);*/
+						try
+						{
+							twitter.updateStatus(tweetStr.toString());
+							
+							Toast tweetTst = Toast.makeText(DryncMain.this, "Tweeted \"" + tweetStr.toString() + "\"", Toast.LENGTH_LONG);
+							tweetTst.show();
+						}
+						catch (TwitterException e)
+						{
+							Toast noTweetTst = Toast.makeText(DryncMain.this, "Tweet could not be posted.", Toast.LENGTH_LONG);
+							noTweetTst.show();
+						}
+					}});
+			}
+			
+			if (buyBtnSection != null)
+			{
+				ArrayList<Source> sources = mBottle.getSources();
+				int lastAdded = -1;
+				ArrayList<String> trackUsedSrc = new ArrayList<String>();
+				
+				for (int i=0,n=sources.size();i<n;i++)
+				{
+					final Source source = sources.get(i);
+					if (trackUsedSrc.contains(source.getName()))
+						continue;
+						
+					Button buyButton = new Button(this);
+					buyButton.setId(i);
+					buyButton.setText("Buy from " + source.getName());
+					buyButton.setTextColor(Color.WHITE);
+					buyButton.setGravity(Gravity.CENTER);
+					buyButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.qn_woodbutton));
+					buyButton.setPadding(20, 0, 0, 0);
+					Drawable leftDrawable = getResources().getDrawable(R.drawable.safari_white);
+					buyButton.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);
+					LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+					if (lastAdded == -1)
+					{
+						lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+					}
+					else
+					{
+						lp.addRule(RelativeLayout.BELOW, lastAdded);
+					}
+					
+					buyButton.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) 
+						{
+							// TODO: @mbrindam - add "leaving drink" dialog here.
+							
+							Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(source.getUrl()));
+							startActivity(myIntent);
+						}
+					});
+					
+					lastAdded = i;
+					trackUsedSrc.add(source.getName());
+					buyBtnSection.addView(buyButton, lp);
+				}
+			}
+		
 			rebuildDetail = false;
 		}
 		showNext();
-		
 	}
 	
 	private void launchReviews() {
@@ -693,10 +796,27 @@ public class DryncMain extends Activity {
 	protected void startQueryOperation(String query)
 	{
 		final String curQuery = query;
+		
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("lastQuery", query);
+		editor.commit();
+		
 		Thread t = new Thread()
 		{
 			public void run() {
 				mResults = DryncProvider.getInstance().getMatches(deviceId, curQuery);
+				mHandler.post(mUpdateResults);
+			}
+		};
+		t.start();
+	}
+	
+	protected void startTopWineQueryOperation()
+	{
+		Thread t = new Thread()
+		{
+			public void run() {
+				mResults = DryncProvider.getInstance().getTopWines(deviceId, DryncProvider.TOP_POPULAR);
 				mHandler.post(mUpdateResults);
 			}
 		};

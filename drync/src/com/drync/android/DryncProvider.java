@@ -1,7 +1,10 @@
 package com.drync.android;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -33,14 +37,22 @@ import android.util.Log;
 
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Review;
+import com.drync.android.objects.Source;
 
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
-	static String USING_SERVER_HOST=TEST_SERVER_HOST;
+	static String USING_SERVER_HOST=SERVER_HOST;
 	static int SERVER_PORT = 80;
 	static String URL1 = "/search?query=";
-	static String URL2 = "&format=xml&device_id=";
+	static String URL2 = "&format=xml&device_id=";	
+	
+	public static final int TOP_POPULAR = 0;
+	static final String TOP_POPULAR_URL = "/top/popular.xml";
+	public static final int TOP_WANTED = 1;
+	static final String TOP_WANTED_URL = "/top/wanted.xml";
+	public static final int TOP_FEATURED = 2;
+	static final String TOP_FEATURED_URL = "/top/featured.xml";
 
 	//static String URL3 = "/search?query=napa+cab&format=xml&device_id=test";
 	
@@ -49,6 +61,11 @@ public class DryncProvider {
 	public static DryncProvider getInstance() {
 		return sInstance;
 	}
+	public List<Bottle> getTopWines(String deviceId, int topType)
+	{
+		HttpHost target = new HttpHost(SERVER_HOST, SERVER_PORT, "http");
+		return this.getTopWines(target, topType, deviceId);
+	}
 	
 	public List<Bottle> getMatches(String deviceId, String query)
 	{
@@ -56,10 +73,10 @@ public class DryncProvider {
 		return this.searchBottles(target, query, deviceId);
 	}
 	
-	public void startupPost(String deviceId)
+	public String startupPost(String deviceId)
 	{
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
-		this.startupPost(target, deviceId);
+		return this.startupPost(target, deviceId);
 	}
 
 	/**
@@ -142,6 +159,22 @@ public class DryncProvider {
 											bottle.addReview(parsedReview);
 										}
 									}
+								}
+								else if ("sources".equals(node.getNodeName())) {
+									Node sources = node;
+									NodeList srcChildren = sources.getChildNodes();
+									int rcLen = srcChildren.getLength();
+									for (int k=0;k<rcLen;k++)
+									{
+										if (srcChildren.item(k).getNodeName().equals("source"))
+										{
+											Node srcNode = srcChildren.item(k);
+
+											Source parsedSource = parseSourceFromNode(srcNode);
+											
+											bottle.addSource(parsedSource);
+										}
+									}
 								}// else skip for now.
 								
 							} catch (NumberFormatException e)
@@ -169,7 +202,128 @@ public class DryncProvider {
 	 * @param keywords - comma delimited keywords. May contain spaces.
 	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
 	 */
-	public void startupPost(HttpHost target, String deviceId) {
+	private List<Bottle> getTopWines(HttpHost target, int topType, String deviceId) {
+		ArrayList<Bottle> bottleList = new ArrayList<Bottle>();
+		
+		Document doc = null;
+		HttpClient client = new DefaultHttpClient();
+		
+		// set up deviceId
+		String devId = deviceId;
+		if ((deviceId == null) || (deviceId.equals("")))
+				devId = "test";
+		
+		String subUrl = TOP_POPULAR_URL;
+		if (topType == this.TOP_FEATURED)
+			subUrl = TOP_FEATURED_URL;
+		else if (topType == this.TOP_WANTED)
+			subUrl = TOP_WANTED_URL;
+			
+		
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(subUrl);
+		Log.d("DryncPrvdr", "Loading Wines: " + bldr.toString());
+		HttpGet get = new HttpGet(bldr.toString());
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			HttpEntity entity = client.execute(target, get).getEntity();
+
+			doc = builder.parse(entity.getContent());
+			NodeList bottles = doc.getElementsByTagName("bottle");
+
+			if(bottles!=null) {
+				for(int j=0,m=bottles.getLength();j<m;j++)
+				{
+					Node bottleNode = bottles.item(j);
+
+					if (bottleNode != null)
+					{
+						Bottle bottle=new Bottle();
+						NodeList nodeList = bottleNode.getChildNodes();
+						int len = nodeList.getLength();
+						for(int i=0; i<len; i++) {
+							try
+							{
+								Node node = nodeList.item(i);
+								String value = this.getNodeValue(node);
+								if("name".equals(node.getNodeName())) {
+									bottle.setName(value);
+								} else if("year".equals(node.getNodeName())) {
+									bottle.setYear(Integer.parseInt(value));
+								} else if("region".equals(node.getNodeName())) {
+									bottle.setRegion(value);
+								} else if("region_path".equals(node.getNodeName())) {
+									bottle.setRegion_path(value);
+								} else if("style".equals(node.getNodeName())) {
+									bottle.setStyle(value);
+								} else if ("label_thumb".equals(node.getNodeName())) {
+									bottle.setLabel_thumb(value);
+								} else if ("price".equals(node.getNodeName())) {
+									bottle.setPrice(value);
+								} else if ("rating".equals(node.getNodeName())) {
+									bottle.setRating(value);
+								} else if ("grape".equals(node.getNodeName())) {
+									bottle.setGrape(value);
+								} else if ("reviews".equals(node.getNodeName())) {
+									Node reviews = node;
+									NodeList reviewChildren = reviews.getChildNodes();
+									int rcLen = reviewChildren.getLength();
+									for (int k=0;k<rcLen;k++)
+									{
+										if (reviewChildren.item(k).getNodeName().equals("review"))
+										{
+											Node reviewNode = reviewChildren.item(k);
+											
+											Review parsedReview = parseReviewFromNode(reviewNode);
+											bottle.addReview(parsedReview);
+										}
+									}
+								} else if ("sources".equals(node.getNodeName())) {
+									Node sources = node;
+									NodeList srcChildren = sources.getChildNodes();
+									int rcLen = srcChildren.getLength();
+									for (int k=0;k<rcLen;k++)
+									{
+										if (srcChildren.item(k).getNodeName().equals("source"))
+										{
+											Node srcNode = srcChildren.item(k);
+
+											Source parsedSource = parseSourceFromNode(srcNode);
+											
+											bottle.addSource(parsedSource);
+										}
+									}
+								}// else skip for now.
+
+							} catch (NumberFormatException e)
+							{
+								// skip for now.
+							}
+						}
+						
+						bottleList.add(bottle);
+					} // end if (bottleNode != null)
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return bottleList;
+	}
+	
+	
+	
+	/**
+	 * Call the REST service to retrieve the first matching promotion based
+	 * on the give keywords. If none found, return null.
+	 * @param target - the target HTTP host for the REST service.
+	 * @param keywords - comma delimited keywords. May contain spaces.
+	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
+	 */
+	public String startupPost(HttpHost target, String deviceId) {
 		// http://{hostname}/app_session?device_id={device_id}&prod={product_selector}
 		String urlPost1 = "/app_session";
 		Document doc = null;
@@ -178,16 +332,16 @@ public class DryncProvider {
 		// set up deviceId
 		String devId = deviceId;
 		if ((deviceId == null) || (deviceId.equals("")))
-			devId = "test";
+			devId = "UDID-droid-fake-" + System.currentTimeMillis();
 
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(urlPost1);
 		Log.d("DryncPrvdr", "Startup Post: " + bldr.toString());
 		HttpPost post = new HttpPost(bldr.toString());
-		post.addHeader("X-UDID", "3cd5c62f8289994434a9e0845d5888f37522b1b8-fake");
+		post.addHeader("X-UDID", devId);
 		post.addHeader("Accept", "text/iphone");
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-		nvps.add(new BasicNameValuePair("device_id", "3cd5c62f8289994434a9e0845d5888f37522b1b8-fake"));
+		nvps.add(new BasicNameValuePair("device_id", devId));
 		nvps.add(new BasicNameValuePair("prod", "wine-free"));
 
 		try {
@@ -197,28 +351,36 @@ public class DryncProvider {
 			e1.printStackTrace();
 		}
 
-		StringBuilder out = new StringBuilder();
+		//StringBuilder out = new StringBuilder();
+		File fout = new File(DryncUtils.CACHE_DIRECTORY + "register.html");
+		
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
+			
+			StatusLine sl = response.getStatusLine();
+			if (sl.getStatusCode() != 200)
+				return null;
 
-			System.out.println("Login form get: " + response.getStatusLine());
+			//System.out.println("Login form get: " + response.getStatusLine());
 			if (entity != null) {
 				InputStream is = entity.getContent();
 
-				final char[] buffer = new char[0x10000];
+				final byte buf[] = new byte[1024];
 				
-				Reader in = new InputStreamReader(is, "UTF-8");
+				//Reader in = new InputStreamReader(is, "UTF-8");
+				
+				//File fout = new File("register.html");
+				fout.createNewFile();
+				OutputStream out = new FileOutputStream(fout);
 
-				int read;
-				do {
-					read = in.read(buffer, 0, buffer.length);
-					if (read>0) {
-						out.append(buffer, 0, read);
-					}
+				int len;
+				while ((len=is.read(buf)) > 0)
+				{
+					out.write(buf, 0, len);
 				}
-				while (read>=0);
-
+				out.close();
+				is.close();
 				int i=0;
 			}
 		}
@@ -226,6 +388,12 @@ public class DryncProvider {
 		{
 			e.printStackTrace();
 		}
+		
+		if (fout.exists())
+			return "register";
+		
+		else
+			return null;
 	}
 	
 	private Review parseReviewFromNode(Node reviewNode) {
@@ -259,6 +427,31 @@ public class DryncProvider {
 		return review;
 	}
 
+	private Source parseSourceFromNode(Node sourceNode) {
+		Source source = new Source();
+		
+		NodeList nodeList = sourceNode.getChildNodes();
+		int len = nodeList.getLength();
+		for(int i=0; i<len; i++) 
+		{
+			try
+			{
+				Node node = nodeList.item(i);
+				String value = this.getNodeValue(node);
+				if("name".equals(node.getNodeName())) {
+					source.setName(value);
+				} else if("url".equals(node.getNodeName())) {
+					source.setUrl(value);
+				} // else ignore others for now.
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return source;
+	}
+
 
 	private String getNodeValue(Node node) {
 		NodeList children = node.getChildNodes();
@@ -267,6 +460,4 @@ public class DryncProvider {
 		} else
 			return null;
 	}
-
-
 }

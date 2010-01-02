@@ -9,7 +9,7 @@
 		android:layout_height="wrap_content" android:visibility="visible"
 		android:background="@drawable/wood2">
 
-		<LinearLayout android:orientation="horizontal"
+		<LinearLayout android:id="@+id/searchHolder" android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 			<EditText android:id="@+id/searchentry"
@@ -255,7 +255,6 @@
 				android:gravity="center" android:background="@drawable/qn_woodbutton" 
 				android:textColor="#FFFFFF" android:text="Twitter: I am drinking this wine" 
 				android:drawableLeft="@drawable/twitter" android:paddingLeft="20px" />
-				
 			</RelativeLayout>
 			
 			<RelativeLayout android:id="@+id/buySection"
@@ -263,30 +262,9 @@
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
 				android:layout_marginTop="25px"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px">
-				
-				<Button android:id="@+id/buySnooth" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_alignParentTop="true"
-				android:gravity="center" android:background="@drawable/qn_woodbutton" 
-				android:textColor="#FFFFFF" android:text="Buy from Snooth" 
-				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px"/>
-				<Button android:id="@+id/buyCellarTracker" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_below="@id/buySnooth"
-				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF" 
-				android:gravity="center" android:text="Buy from CellarTracker.com" 
-				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px" />
-				<Button android:id="@+id/buyWineCom" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_below="@id/buyCellarTracker"
-				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF" 
-				android:gravity="center" android:text="Buy from Wine.com" 
-				android:drawableLeft="@drawable/safari_white" android:paddingLeft="20px"/>
-				
 			</RelativeLayout>			
-			
 		</LinearLayout>
 	</ScrollView>
-
-
-
 </ViewFlipper>
 	<!-- 
 </FrameLayout>

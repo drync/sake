@@ -3,13 +3,19 @@ package com.drync.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -17,10 +23,13 @@ public class Drync extends Activity {
 
 	private static final int STOPSPLASH = 0;
 	private static final int STARTMAIN = 1;
+	private static final int REGISTER = 2;
 	private static final long SPLASHTIME = 3000;
 	private String PREFS_NAME = "DRYNC_PREFS";
 	
 	private static ImageView splash;
+	private static LinearLayout register;
+	private static WebView regWebView;
 
 	private Handler splashHandler = new Handler() 
     {
@@ -36,18 +45,58 @@ public class Drync extends Activity {
     	        
     	        gotIt.setOnClickListener(new OnClickListener() {
     	        	public void onClick(View v) {
-    	        		Intent intent = new Intent();
-    	                intent.setClass(Drync.this, DryncTabMain.class);
-    	                startActivity(intent);
-    	                Drync.this.mShowIntro = false;
-    	                finish();
-
+    	        		if (Drync.this.mShowReg)
+        	        	{
+    	        			Drync.this.mShowReg = false;
+    	        			Message msg2 = new Message();
+    	        			msg2.what = REGISTER;
+    	        			splashHandler.sendMessage(msg2);    	        			
+        	        	}
+    	        		else
+    	        		{
+    	        			Intent intent = new Intent();
+    	        			intent.setClass(Drync.this, DryncTabMain.class);
+    	        			startActivity(intent);
+    	        			Drync.this.mShowIntro = false;
+    	        			finish();
+    	        		}
     	        	}
     	        });
     			break;
+    		case REGISTER:
+    			splash.setVisibility(View.GONE);
+    			String uri = "file://" + DryncUtils.CACHE_DIRECTORY + "register.html";
+    			setContentView(R.layout.registerweb);
+    			
+    			register = (LinearLayout) findViewById(R.id.registerwebwrap);
+    			
+    			regWebView = (WebView) findViewById(R.id.registerWeb);
+    			regWebView.getSettings().setJavaScriptEnabled(true);
+    			regWebView.setWebViewClient(new RegisterWebViewClient());
+    			
+    			regWebView.loadUrl(uri);
+
+    			//regWebView.loadData(registerText, "text/html", "utf-8"); 
+    			
+    			/*final Button skip = (Button)findViewById(R.id.skip);
+    	        
+    	        skip.setOnClickListener(new OnClickListener() {
+    	        	public void onClick(View v) {
+    	        		Intent intent = new Intent();
+    	                intent.setClass(Drync.this, DryncTabMain.class);
+    	                startActivity(intent);
+    	                Drync.this.mShowReg = false;
+    	                finish();
+
+    	        	}
+    	        });*/
+    			break;
+    			
     		case STARTMAIN:
     			// remove SplashScreen from view
     			splash.setVisibility(View.GONE);
+    			if (register != null)
+    				register.setVisibility(View.GONE);
     			// start Main & End Intro
     			Intent intent = new Intent();
                 intent.setClass(Drync.this, DryncTabMain.class);
@@ -59,6 +108,7 @@ public class Drync extends Activity {
     	}
     };
 	private boolean mShowIntro = true;
+	private boolean mShowReg = true;
 	
 	
 	/** Called when the activity is first created. */
@@ -69,15 +119,22 @@ public class Drync extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         splash = (ImageView) findViewById(R.id.splashscreen);
+        
+        String deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
+        String register = DryncProvider.getInstance().startupPost(deviceId);
      
      // Restore preferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         boolean showIntro = settings.getBoolean("showIntro", true);
         mShowIntro = showIntro;
         
+        mShowReg = register != null && (! register.equals(""));
+        
         Message msg = new Message();
         if (mShowIntro)
         	msg.what = STOPSPLASH;
+        else if (mShowReg)
+        	msg.what = REGISTER;
         else
         	msg.what = STARTMAIN;
         
@@ -97,5 +154,35 @@ public class Drync extends Activity {
       // Don't forget to commit your edits!!!
       editor.commit();
     }
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			if ((register != null) && (register.getVisibility() == View.VISIBLE))
+			{
+				regWebView.goBack();
+				return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
+	
+	private class RegisterWebViewClient extends WebViewClient {
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	    	if (url.startsWith("close:"))
+	    	{
+	    		if (Drync.this.register != null)
+	    		{
+	    			Message msg = new Message();
+	    			msg.what = Drync.this.STARTMAIN;
+	    			Drync.this.splashHandler.sendMessage(msg);
+	    		}
+	    	}
+	        view.loadUrl(url);
+	        return true;
+	    }
+	}
 }

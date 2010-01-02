@@ -64,10 +64,15 @@ public class DryncTabMain extends TabActivity
 				getResources().getString(R.string.quicknotestab),
 				getResources().getDrawable(R.drawable.tab_icon_pencil)).
 				setContent(new Intent(this, HelloDrync.class)));
+		
+		Intent twIntent = new Intent(this, DryncMain.class);
+		twIntent.putExtra("displaySearch", false);
+		twIntent.putExtra("topType", DryncProvider.TOP_FEATURED);
+		
 		mTabHost.addTab(mTabHost.newTabSpec("tab_topwine").setIndicator(
 				getResources().getString(R.string.topwinestab),
 				getResources().getDrawable(R.drawable.tab_icon_topwines)).
-				setContent(new Intent(this, HelloDrync.class)));
+				setContent(twIntent));
 		mTabHost.addTab(mTabHost.newTabSpec("tab_settings").setIndicator(
 				getResources().getString(R.string.settingstab),
 				getResources().getDrawable(R.drawable.tab_icon_settings)).

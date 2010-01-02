@@ -9,6 +9,9 @@ public class Source {
 		this.url = url;
 		this.name = name;
 	}
+	public Source() {
+		super();
+	}
 	public String getUrl() {
 		return url;
 	}

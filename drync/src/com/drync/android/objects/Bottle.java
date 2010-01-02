@@ -207,6 +207,19 @@ public class Bottle implements Parcelable {
 
 
 	ArrayList<Source> sources = new ArrayList<Source>();
+	
+	public void addSource(Source src)
+	{
+		this.sources.add(src);
+	}
+	
+	public Source getSource(int index)
+	{
+		if (this.sources.size() > index)
+			return this.sources.get(index);
+		else
+			return null;
+	}
 
 	public int describeContents() {
 		// TODO Auto-generated method stub
