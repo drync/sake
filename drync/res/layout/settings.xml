@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/settingsflipper" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<LinearLayout android:id="@+id/twittersettings"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="visible"
+		android:background="@drawable/wood2">
+
+		<RelativeLayout android:id="@+id/twitterSection"
+			android:layout_width="fill_parent" android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+			android:layout_marginTop="25px" android:background="@drawable/rndbordertransparent"
+			android:layout_marginLeft="10px" android:padding="15px"
+			android:layout_marginRight="10px" android:layout_marginBottom="25px">
+
+			<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/twimage" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="center"
+				android:layout_alignParentTop="true" android:src="@drawable/tw" />
+				
+			<TextView android:id="@+id/usernameLbl"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true" android:layout_below="@id/twimage"
+				android:textColor="#000000" android:textSize="18px"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px"
+				android:layout_marginTop="20px" android:gravity="center"
+				android:text="Username" />
+
+			<EditText android:id="@+id/usernameVal"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentRight="true" android:layout_below="@id/twimage"
+				android:textSize="16px" android:layout_toRightOf="@id/usernameLbl"
+				android:layout_alignBaseline="@id/usernameLbl" android:singleLine="true" />
+
+			<TextView android:id="@+id/passwordLbl"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true" android:layout_below="@id/usernameLbl"
+				android:textColor="#000000" android:textSize="18px"
+				android:layout_marginLeft="10px" android:layout_marginTop="20px"
+				android:gravity="center" android:text="Password" />
+
+			<EditText android:id="@+id/passwordVal"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentRight="true" android:layout_below="@id/usernameVal"
+				android:inputType="textPassword" android:textSize="16px"
+				android:layout_toRightOf="@id/passwordLbl"
+				android:layout_alignBaseline="@id/passwordLbl" android:singleLine="true"
+				android:layout_alignLeft="@id/usernameVal" />
+
+			<TextView android:id="@+id/cellarTweetsLbl"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true" android:layout_below="@id/passwordLbl"
+				android:textColor="#000000" android:textSize="18px" 
+				android:layout_marginLeft="10px" android:layout_marginTop="40px" android:layout_marginBottom="25px"
+				android:gravity="center" android:text="Cellar Tweets" />
+			
+			<ToggleButton android:id="@+id/cellarTweetVal"  
+				android:layout_width="wrap_content" android:layout_height="20px" 
+				android:layout_below="@id/passwordVal" android:layout_marginTop="10px"
+				android:layout_toRightOf="@id/cellarTweetsLbl" android:layout_marginLeft="10px" 
+				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" />
+		
+		</RelativeLayout> 
+	</LinearLayout>
+	
+	<LinearLayout android:id="@+id/accountsettings"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:visibility="visible"
+		android:background="@drawable/wood2">
+	</LinearLayout>
+</ViewFlipper>

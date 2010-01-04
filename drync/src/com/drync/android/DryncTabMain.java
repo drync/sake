@@ -76,7 +76,7 @@ public class DryncTabMain extends TabActivity
 		mTabHost.addTab(mTabHost.newTabSpec("tab_settings").setIndicator(
 				getResources().getString(R.string.settingstab),
 				getResources().getDrawable(R.drawable.tab_icon_settings)).
-				setContent(new Intent(this, HelloDrync.class)));
+				setContent(new Intent(this, DryncSettings.class)));
 
 
 		int n=mTabHost.getTabWidget().getChildCount();

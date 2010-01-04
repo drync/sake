@@ -24,6 +24,7 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -94,8 +95,8 @@ public class DryncMain extends Activity {
 	
 	Drawable defaultIcon = null;
 	
-	private String PREFS_NAME = "DRYNC_PREFS";
-
+	private String userTwitterUsername = null;
+	private String userTwitterPassword = null;
 
 	final Runnable mUpdateResults = new Runnable()
 	{
@@ -150,9 +151,9 @@ public class DryncMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		settings = getSharedPreferences(PREFS_NAME, 0);
+		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		
-		String lastQuery = settings.getString("lastQuery", null);
+		String lastQuery = settings.getString(DryncUtils.LAST_QUERY_PREF, null);
 		
 		Bundle extras = getIntent().getExtras();
 		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
@@ -379,33 +380,48 @@ public class DryncMain extends Activity {
 
 					public void onClick(View v) {
 						StringBuilder tweetStr = new StringBuilder();
-						//Drinking 2007 Jean Francois Merieau Touraine Sauvignon - #wine http://cellartracker.com/w?538443
-						Twitter twitter = new Twitter("mike_drync", "drynctweet");
-						
-						tweetStr.append("Drinking ");
-						tweetStr.append(mBottle.getName());
-						tweetStr.append(" - #wine ");
-						
-						if (mBottle.getSources().size() > 0)
+						if ((userTwitterUsername == null) || (userTwitterPassword == null))
 						{
-							tweetStr.append(mBottle.getSource(0).getUrl());
+							Toast noTwtSettings = Toast.makeText(DryncMain.this, getResources().getString(R.string.twittersettingsmsg), Toast.LENGTH_LONG);
+							noTwtSettings.show();
 						}
+						else
+						{
+							Twitter twitter = new Twitter(userTwitterUsername, userTwitterPassword);
+							twitter.setSource("DryncWineDroid");
+							tweetStr.append("Drinking the ");
+							tweetStr.append(mBottle.getName());
+							String lastSubstr = " #wine";
+							// ensure proper length for tweet.
+							if (tweetStr.length() > (160 - lastSubstr.length()))
+							{
+								tweetStr.setLength(160 - 3 - lastSubstr.length());
+								tweetStr.append("...");								
+							}
+							tweetStr.append(lastSubstr);
 
-						try
-						{
-							twitter.updateStatus(tweetStr.toString());
-							
-							Toast tweetTst = Toast.makeText(DryncMain.this, "Tweeted \"" + tweetStr.toString() + "\"", Toast.LENGTH_LONG);
-							tweetTst.show();
-						}
-						catch (TwitterException e)
-						{
-							Toast noTweetTst = Toast.makeText(DryncMain.this, "Tweet could not be posted.", Toast.LENGTH_LONG);
-							noTweetTst.show();
+							/*if (mBottle.getSources().size() > 0)
+							{
+								tweetStr.append(mBottle.getSource(0).getUrl());
+							}*/
+
+							try
+							{
+								twitter.updateStatus(tweetStr.toString());
+
+								Toast tweetTst = Toast.makeText(DryncMain.this, "Tweeted \"" + tweetStr.toString() + "\"", Toast.LENGTH_LONG);
+								tweetTst.show();
+							}
+							catch (TwitterException e)
+							{
+								Toast noTweetTst = Toast.makeText(DryncMain.this, "Tweet could not be posted.", Toast.LENGTH_LONG);
+								noTweetTst.show();
+							}
 						}
 					}});
 			}
-			
+
+
 			if (buyBtnSection != null)
 			{
 				ArrayList<Source> sources = mBottle.getSources();
@@ -798,7 +814,7 @@ public class DryncMain extends Activity {
 		final String curQuery = query;
 		
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("lastQuery", query);
+		editor.putString(DryncUtils.LAST_QUERY_PREF, query);
 		editor.commit();
 		
 		Thread t = new Thread()
@@ -897,12 +913,29 @@ public class DryncMain extends Activity {
 	private Animation inFromRightAnimation() {
 
 		Animation inFromRight = new TranslateAnimation(
-		Animation.RELATIVE_TO_PARENT, +1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-		Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f
+				Animation.RELATIVE_TO_PARENT, +1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+				Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f
 		);
 		inFromRight.setDuration(500);
 		inFromRight.setInterpolator(new AccelerateInterpolator());
 		return inFromRight;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		// we need to check for changes to twitter settings.
+		if (settings != null)
+		{
+			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
+			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
+			if (encryptedTwitterPw != null)
+				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}
+	}
+	
+	
+	
 }
 

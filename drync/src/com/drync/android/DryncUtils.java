@@ -3,12 +3,22 @@ package com.drync.android;
 import java.io.File;
 
 import android.os.Environment;
+import android.util.Log;
 
 public class DryncUtils {
 
 	private static StringBuilder builder = new StringBuilder();
 	public static final String CACHE_DIRECTORY = Environment.getExternalStorageDirectory() + "/.drync-cache/";
 	public static boolean useLocalCache = true; // this is true until proven no.
+	
+	//Shared Prefs
+	public static final String PREFS_NAME = "DRYNC_PREFS";
+	public static final String SHOW_INTRO_PREF = "showIntro";
+	public static final String LAST_QUERY_PREF = "lastQuery";
+	public static final String TWITTER_USERNAME_PREF = "twitter_username";
+	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
+	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
+	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";
 
 	public static boolean isUseLocalCache() {
 		return useLocalCache;
@@ -31,7 +41,26 @@ public class DryncUtils {
 		useLocalCache = file.getParentFile().exists();	
 		return useLocalCache;
 	}
+
+	public static String encryptTwitterPassword(String password)
+	{
+		try {
+			return SimpleCrypto.encrypt(DryncUtils.TWITTER_PW_ENCRYPT_SEED, password);
+		} catch (Exception e) {
+			Log.e("DryncUtil", "Could not encrypt password!", e);
+		}
+		return null;
+	}
 	
+	public static String decryptTwitterPassword(String encrypted)
+	{
+		try {
+			return SimpleCrypto.decrypt(DryncUtils.TWITTER_PW_ENCRYPT_SEED, encrypted);
+		} catch (Exception e) {
+			Log.e("DryncUtil", "Could not decrypt password!", e);
+		}
+		return null;
+	}
 	
 	
 	

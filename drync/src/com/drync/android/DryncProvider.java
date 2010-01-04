@@ -42,7 +42,7 @@ import com.drync.android.objects.Source;
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
-	static String USING_SERVER_HOST=SERVER_HOST;
+	static String USING_SERVER_HOST=TEST_SERVER_HOST;
 	static int SERVER_PORT = 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
@@ -331,6 +331,7 @@ public class DryncProvider {
 
 		// set up deviceId
 		String devId = deviceId;
+		String fake = "UDID-droid-fake-888888888888888888888888888888";
 		if ((deviceId == null) || (deviceId.equals("")))
 			devId = "UDID-droid-fake-" + System.currentTimeMillis();
 

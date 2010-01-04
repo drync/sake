@@ -25,7 +25,6 @@ public class Drync extends Activity {
 	private static final int STARTMAIN = 1;
 	private static final int REGISTER = 2;
 	private static final long SPLASHTIME = 3000;
-	private String PREFS_NAME = "DRYNC_PREFS";
 	
 	private static ImageView splash;
 	private static LinearLayout register;
@@ -47,6 +46,7 @@ public class Drync extends Activity {
     	        	public void onClick(View v) {
     	        		if (Drync.this.mShowReg)
         	        	{
+    	        			Drync.this.mShowIntro = false;
     	        			Drync.this.mShowReg = false;
     	        			Message msg2 = new Message();
     	        			msg2.what = REGISTER;
@@ -124,8 +124,8 @@ public class Drync extends Activity {
         String register = DryncProvider.getInstance().startupPost(deviceId);
      
      // Restore preferences
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        boolean showIntro = settings.getBoolean("showIntro", true);
+        SharedPreferences settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
+        boolean showIntro = settings.getBoolean(DryncUtils.SHOW_INTRO_PREF, true);
         mShowIntro = showIntro;
         
         mShowReg = register != null && (! register.equals(""));
@@ -147,9 +147,9 @@ public class Drync extends Activity {
     
       // Save user preferences. We need an Editor object to
       // make changes. All objects are from android.context.Context
-      SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+      SharedPreferences settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
       SharedPreferences.Editor editor = settings.edit();
-      editor.putBoolean("showIntro", mShowIntro);
+      editor.putBoolean(DryncUtils.SHOW_INTRO_PREF, mShowIntro);
 
       // Don't forget to commit your edits!!!
       editor.commit();

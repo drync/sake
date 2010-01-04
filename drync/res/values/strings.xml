@@ -21,6 +21,7 @@
     <string name="searchtoast1">Welcome to Drync Search</string>
     <string name="searchtoast2">Find your wine by typing a few words from the wine label into the search bar above.</string>
     <string name="searchtoast3">You don't need to type in all the details - just make sure you give Drync enough to work with, like "2004 inman pinot" or "chateau margaux 2001".</string>
-
+	
+	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	
 </resources>
