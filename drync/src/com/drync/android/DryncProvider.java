@@ -333,7 +333,7 @@ public class DryncProvider {
 		String devId = deviceId;
 		String fake = "UDID-droid-fake-888888888888888888888888888888";
 		if ((deviceId == null) || (deviceId.equals("")))
-			devId = "UDID-droid-fake-" + System.currentTimeMillis();
+			devId = fake; //"UDID-droid-fake-" + System.currentTimeMillis();
 
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(urlPost1);
@@ -354,10 +354,12 @@ public class DryncProvider {
 
 		//StringBuilder out = new StringBuilder();
 		File fout = new File(DryncUtils.CACHE_DIRECTORY + "register.html");
+		boolean wroteContent = false;
 		
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
+			
 			
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
@@ -375,10 +377,16 @@ public class DryncProvider {
 				fout.createNewFile();
 				OutputStream out = new FileOutputStream(fout);
 
+				
 				int len;
 				while ((len=is.read(buf)) > 0)
 				{
-					out.write(buf, 0, len);
+					String stringcontent = new String(buf);
+					if (! stringcontent.trim().equals(""))
+					{
+						out.write(buf, 0, len);
+						wroteContent = true;
+					}
 				}
 				out.close();
 				is.close();
@@ -390,7 +398,7 @@ public class DryncProvider {
 			e.printStackTrace();
 		}
 		
-		if (fout.exists())
+		if (fout.exists() && wroteContent)
 			return "register";
 		
 		else
