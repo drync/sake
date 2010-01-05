@@ -67,6 +67,7 @@ public class DryncTabMain extends TabActivity
 		
 		Intent twIntent = new Intent(this, DryncMain.class);
 		twIntent.putExtra("displaySearch", false);
+		twIntent.putExtra("displayTopWinesBtns", true);
 		twIntent.putExtra("topType", DryncProvider.TOP_FEATURED);
 		
 		mTabHost.addTab(mTabHost.newTabSpec("tab_topwine").setIndicator(

@@ -83,6 +83,11 @@ public class DryncMain extends Activity {
 	ViewFlipper flipper;
 	
 	boolean displaySearch = true;
+	boolean displayTopWinesBtns = false;
+	
+	int lastSelectedTopWine = -1;
+	
+	
 	
 	private TableLayout mReviewTable;
 	
@@ -157,6 +162,7 @@ public class DryncMain extends Activity {
 		
 		Bundle extras = getIntent().getExtras();
 		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
+		this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
 		
 		LayoutInflater inflater = getLayoutInflater();
 		
@@ -176,19 +182,79 @@ public class DryncMain extends Activity {
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
 		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
+		final LinearLayout topWinesBtnHolder = (LinearLayout) findViewById(R.id.topwinesbuttons);
 		
 		if (! displaySearch)
 		{
-			searchholder.setVisibility(View.INVISIBLE);
+			searchholder.setVisibility(View.GONE);         
+		}
+		
+		if (! displayTopWinesBtns)
+		{
+			topWinesBtnHolder.setVisibility(View.GONE);
+		}	
+		else
+		{
+			topWinesBtnHolder.setVisibility(View.VISIBLE);
 			
-			progressDlg =  new ProgressDialog(DryncMain.this);
+			final Button popButton = (Button)findViewById(R.id.popularBtn);
+			final Button mwButton = (Button)findViewById(R.id.mostWantedBtn);
+			final Button featButton = (Button)findViewById(R.id.featuredBtn);
+			
+			popButton.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					progressDlg =  new ProgressDialog(DryncMain.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving popular wines...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					DryncMain.this.startTopWineQueryOperation(DryncProvider.TOP_POPULAR);
+					DryncMain.this.lastSelectedTopWine = DryncProvider.TOP_POPULAR;
+					
+					detailSelectedTopWineButton(popButton, featButton, mwButton);
+					
+				}});
+			
+			featButton.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					progressDlg =  new ProgressDialog(DryncMain.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving featured wines...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					DryncMain.this.startTopWineQueryOperation(DryncProvider.TOP_FEATURED);
+					DryncMain.this.lastSelectedTopWine = DryncProvider.TOP_FEATURED;
+					
+					detailSelectedTopWineButton(popButton, featButton, mwButton);
+				}});
+			
+			mwButton.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					progressDlg =  new ProgressDialog(DryncMain.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving popular wines...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					DryncMain.this.startTopWineQueryOperation(DryncProvider.TOP_WANTED);
+					DryncMain.this.lastSelectedTopWine = DryncProvider.TOP_WANTED;
+					
+					detailSelectedTopWineButton(popButton, featButton, mwButton);
+					
+				}});
+			
+			if (DryncMain.this.lastSelectedTopWine == -1)
+				popButton.performClick();
+			
+			/*progressDlg =  new ProgressDialog(DryncMain.this);
 			progressDlg.setTitle("Dryncing...");
 			progressDlg.setMessage("Retrieving top wines...");
 			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progressDlg.show();
-			DryncMain.this.startTopWineQueryOperation();	            
+			DryncMain.this.startTopWineQueryOperation();*/	   
 		}
-		
 		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
 		
@@ -827,12 +893,12 @@ public class DryncMain extends Activity {
 		t.start();
 	}
 	
-	protected void startTopWineQueryOperation()
+	protected void startTopWineQueryOperation(final int type)
 	{
 		Thread t = new Thread()
 		{
 			public void run() {
-				mResults = DryncProvider.getInstance().getTopWines(deviceId, DryncProvider.TOP_POPULAR);
+				mResults = DryncProvider.getInstance().getTopWines(deviceId, type);
 				mHandler.post(mUpdateResults);
 			}
 		};
@@ -935,7 +1001,34 @@ public class DryncMain extends Activity {
 		}
 	}
 	
-	
-	
+	private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)
+	{
+		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
+		{
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+		}
+		else
+		{
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+		}
+		
+		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
+		{
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+		}
+		else
+		{
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+		}
+		
+		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
+		{
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+		}
+		else
+		{
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+		}		
+	}
 }
 

@@ -51,7 +51,7 @@ public class DryncProvider {
 	static final String TOP_POPULAR_URL = "/top/popular.xml";
 	public static final int TOP_WANTED = 1;
 	static final String TOP_WANTED_URL = "/top/wanted.xml";
-	public static final int TOP_FEATURED = 2;
+	public static final int TOP_FEATURED = 2; 
 	static final String TOP_FEATURED_URL = "/top/featured.xml";
 
 	//static String URL3 = "/search?query=napa+cab&format=xml&device_id=test";
@@ -354,6 +354,9 @@ public class DryncProvider {
 
 		//StringBuilder out = new StringBuilder();
 		File fout = new File(DryncUtils.CACHE_DIRECTORY + "register.html");
+		if (fout.exists())
+			fout.delete();
+		
 		boolean wroteContent = false;
 		
 		try {

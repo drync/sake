@@ -4,10 +4,40 @@
 	android:id="@+id/flipper" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
+	
 	<LinearLayout android:id="@+id/searchview"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="visible"
 		android:background="@drawable/wood2">
+		
+		<LinearLayout android:id="@+id/topwinesbuttons" android:visibility="invisible"
+	  			android:orientation="horizontal"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:paddingLeft="5px" android:paddingRight="5px"
+				android:background="#410701">
+
+				<Button android:id="@+id/featuredBtn" android:textColor="#FFFFFF"
+					android:layout_width="50dip" android:layout_height="20dip"
+					android:textSize="9px" android:background="@drawable/qn_woodbutton"
+					android:layout_gravity="center" android:typeface="normal"
+					android:textStyle="normal" android:layout_weight=".15"
+					android:text="Featured" />
+
+				<Button android:id="@+id/popularBtn" android:textColor="#FFFFFF"
+					android:layout_width="50dip" android:layout_height="20dip"
+					android:textSize="9px" android:background="@drawable/qn_woodbutton"
+					android:layout_gravity="center" android:typeface="normal"
+					android:textStyle="normal" android:layout_weight=".15"
+					android:text="Popular" />
+
+				<Button android:id="@+id/mostWantedBtn" android:textColor="#FFFFFF"
+					android:layout_width="50dip" android:layout_height="20dip"
+					android:textSize="9px" android:background="@drawable/qn_woodbutton"
+					android:layout_gravity="center" android:typeface="normal"
+					android:textStyle="normal" android:layout_marginTop="15px"
+					android:layout_marginBottom="15px" android:layout_weight=".15"
+					android:text="Most Wanted" />
+			</LinearLayout>
 
 		<LinearLayout android:id="@+id/searchHolder" android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
