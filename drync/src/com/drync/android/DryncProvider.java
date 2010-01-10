@@ -43,8 +43,8 @@ import com.drync.android.objects.Source;
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
-	static String DEV_SERVER_HOST=System.getenv("LOCAL_IP");
-	static String USING_SERVER_HOST=DEV_SERVER_HOST;
+	static String DEV_SERVER_HOST="192.168.1.10";
+	static String USING_SERVER_HOST=TEST_SERVER_HOST;
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
