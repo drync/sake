@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -87,6 +88,8 @@ public class Drync extends Activity {
     			{
     				StringBuilder sb = new StringBuilder("http://");
     				sb.append(DryncProvider.USING_SERVER_HOST);
+    				if (DryncProvider.USING_SERVER_HOST == DryncProvider.DEV_SERVER_HOST)
+    					sb.append(":3000");
     				sb.append("/app_session");
     				regWebView.loadDataWithBaseURL(sb.toString(), registerText, "text/html", "utf-8", null);
     			}
