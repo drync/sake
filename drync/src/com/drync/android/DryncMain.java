@@ -13,6 +13,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
@@ -48,6 +51,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +61,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -94,9 +100,12 @@ public class DryncMain extends Activity {
 	LinearLayout searchView;
 	ScrollView detailView;
 	ScrollView reviewView;
+	ScrollView addView;
 	
 	boolean rebuildDetail = false;
 	boolean rebuildReviews = false;
+	boolean rebuildAddToCellar = false;
+	boolean buildOnceAddToCellar = true;
 	
 	Drawable defaultIcon = null;
 	
@@ -175,9 +184,11 @@ public class DryncMain extends Activity {
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
 	
 		reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
-		
-		flipper.addView(reviewView);
+		flipper.addView(reviewView); 
 
+		addView = (ScrollView) inflater.inflate(R.layout.addtocellar, (ViewGroup)flipper, false);
+		flipper.addView(addView);
+		
 		DryncUtils.checkForLocalCacheArea();
 
 		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
@@ -247,13 +258,6 @@ public class DryncMain extends Activity {
 			
 			if (DryncMain.this.lastSelectedTopWine == -1)
 				popButton.performClick();
-			
-			/*progressDlg =  new ProgressDialog(DryncMain.this);
-			progressDlg.setTitle("Dryncing...");
-			progressDlg.setMessage("Retrieving top wines...");
-			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDlg.show();
-			DryncMain.this.startTopWineQueryOperation();*/	   
 		}
 		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
@@ -319,6 +323,7 @@ public class DryncMain extends Activity {
 		{
 			rebuildDetail = true;
 			rebuildReviews = true;
+			rebuildAddToCellar = true;
 		}
 
 		if (rebuildDetail)
@@ -438,6 +443,15 @@ public class DryncMain extends Activity {
 				public void onClick(View v) {
 					showPrevious();				
 				}});
+			
+			Button addBtn = (Button) this.findViewById(R.id.addBtn);
+			addBtn.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					DryncMain.this.launchAddToCellar();	
+				}});
+			
+			
 
 			if (btnTweet != null)
 			{
@@ -465,11 +479,6 @@ public class DryncMain extends Activity {
 								tweetStr.append("...");								
 							}
 							tweetStr.append(lastSubstr);
-
-							/*if (mBottle.getSources().size() > 0)
-							{
-								tweetStr.append(mBottle.getSource(0).getUrl());
-							}*/
 
 							try
 							{
@@ -538,6 +547,78 @@ public class DryncMain extends Activity {
 			rebuildDetail = false;
 		}
 		showNext();
+	}
+	
+	private void launchAddToCellar() {
+		// mBottle should be set by the detail view, if not, return;
+		if (mBottle == null)
+			return;
+		
+		
+		AutoCompleteTextView yearSpin = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		ArrayAdapter<String> yearSpnAdapter = null;
+		int year = 1800;
+		
+		if (buildOnceAddToCellar)
+		{
+			ArrayList<String> _allYears = new ArrayList<String>();
+		       
+			Date date = new Date();
+			Calendar cal = new GregorianCalendar();
+			cal.setTime(date);
+			year = cal.get(Calendar.YEAR);
+			
+	        for (int i=1800,n=year+3;i<n;i++){
+	            _allYears.add("" + i);
+	        }
+
+	        yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
+	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	        yearSpin.setAdapter(yearSpnAdapter); 
+	        
+			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
+			if (cancelBtn != null)
+			{
+				cancelBtn.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View v) {
+						// in order 
+						flipper.setInAnimation(AnimationUtils.loadAnimation(DryncMain.this, R.anim.push_right_in));
+						flipper.setOutAnimation(DryncMain.this, R.anim.push_right_out);
+						
+						View view = flipper.findViewById(R.id.detailview);
+						int detailViewIdx = flipper.indexOfChild(view);
+						flipper.setDisplayedChild(detailViewIdx);	
+						
+						flipper.setInAnimation(AnimationUtils.loadAnimation(DryncMain.this, R.anim.push_left_in));
+						flipper.setOutAnimation(DryncMain.this, R.anim.push_left_out);
+						
+					}});
+			}
+			
+			buildOnceAddToCellar = false;
+		}
+		
+		if (rebuildAddToCellar)
+		{
+			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+			flipper.setOutAnimation(this, R.anim.push_left_out);
+			
+			int position;
+			if (mBottle.getYear() > 0)
+				position = yearSpnAdapter.getPosition("" + mBottle.getYear());
+			else
+				position = yearSpnAdapter.getPosition("" + year);
+			
+			yearSpin.setText(mBottle.getYear());
+
+			reviewView.scrollTo(0, 0);
+		}
+		
+		View view = flipper.findViewById(R.id.addToCellar);
+		//flipper.bringChildToFront(view);
+		int addToCellarIdx = flipper.indexOfChild(view);
+		flipper.setDisplayedChild(addToCellarIdx);		
 	}
 	
 	private void launchReviews() {
@@ -869,8 +950,15 @@ public class DryncMain extends Activity {
 
 		public Object fetch(String address) throws MalformedURLException,IOException {
 			URL url = new URL(address);
-			Object content = url.getContent();
-			return content;
+			try
+			{
+				Object content = url.getContent();
+				return content;
+			}
+			catch (IOException e)
+			{
+				return null;
+			}
 		}
 
 	}
@@ -959,9 +1047,18 @@ public class DryncMain extends Activity {
 			final Review fReview = review;
 			publisherText.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
-					startActivity(myIntent);
-									}});
+					if (fReview.getUrl() != null)
+					{
+						Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
+						startActivity(myIntent);
+					}	
+					else
+					{
+						Toast noReviewUrl = Toast.makeText(DryncMain.this, getResources().getString(R.string.noreviewurl), Toast.LENGTH_LONG);
+						noReviewUrl.show();
+					}
+				}
+			});
 			
 			table.addView(reviewItem);
 			
@@ -1030,5 +1127,7 @@ public class DryncMain extends Activity {
 			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
 		}		
 	}
+	
+	
 }
 

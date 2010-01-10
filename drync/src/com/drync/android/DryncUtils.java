@@ -8,7 +8,10 @@ import android.util.Log;
 public class DryncUtils {
 
 	private static StringBuilder builder = new StringBuilder();
-	public static final String CACHE_DIRECTORY = Environment.getExternalStorageDirectory() + "/.drync-cache/";
+	public static final String CACHE_DIRECTORY = 
+		(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) ?
+				Environment.getExternalStorageDirectory() + ".drync_cache/" : 
+					"/data/data/com.drync.android/drync-cache/";
 	public static boolean useLocalCache = true; // this is true until proven no.
 	
 	//Shared Prefs
@@ -35,6 +38,10 @@ public class DryncUtils {
 		return builder.toString();
 	}
 	
+	public static String getCacheDirectory()
+	{
+		return DryncUtils.CACHE_DIRECTORY;
+	}
 	public static boolean checkForLocalCacheArea()
 	{
 		File file = new File(DryncUtils.CACHE_DIRECTORY);

@@ -1,5 +1,9 @@
 package com.drync.android;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +32,7 @@ public class Drync extends Activity {
 	
 	private static ImageView splash;
 	private static LinearLayout register;
+	private static String registerTxt;
 	private static WebView regWebView;
 
 	private Handler splashHandler = new Handler() 
@@ -65,7 +70,8 @@ public class Drync extends Activity {
     			break;
     		case REGISTER:
     			splash.setVisibility(View.GONE);
-    			String uri = "file://" + DryncUtils.CACHE_DIRECTORY + "register.html";
+    			String uri = DryncUtils.CACHE_DIRECTORY + "register.html";
+    			String fileuri = "file://" + DryncUtils.CACHE_DIRECTORY + "register.html";  			
     			setContentView(R.layout.registerweb);
     			
     			register = (LinearLayout) findViewById(R.id.registerwebwrap);
@@ -74,22 +80,16 @@ public class Drync extends Activity {
     			regWebView.getSettings().setJavaScriptEnabled(true);
     			regWebView.setWebViewClient(new RegisterWebViewClient());
     			
-    			regWebView.loadUrl(uri);
-
-    			//regWebView.loadData(registerText, "text/html", "utf-8"); 
+    			String registerText = null;
+    			registerText = registerTxt;
     			
-    			/*final Button skip = (Button)findViewById(R.id.skip);
-    	        
-    	        skip.setOnClickListener(new OnClickListener() {
-    	        	public void onClick(View v) {
-    	        		Intent intent = new Intent();
-    	                intent.setClass(Drync.this, DryncTabMain.class);
-    	                startActivity(intent);
-    	                Drync.this.mShowReg = false;
-    	                finish();
-
-    	        	}
-    	        });*/
+    			if (registerText != null)
+    			{
+    				StringBuilder sb = new StringBuilder("http://");
+    				sb.append(DryncProvider.USING_SERVER_HOST);
+    				sb.append("/app_session");
+    				regWebView.loadDataWithBaseURL(sb.toString(), registerText, "text/html", "utf-8", null);
+    			}
     			break;
     			
     		case STARTMAIN:
@@ -122,7 +122,7 @@ public class Drync extends Activity {
         
         String deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
         String register = DryncProvider.getInstance().startupPost(deviceId);
-     
+        registerTxt = register;
      // Restore preferences
         SharedPreferences settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
         boolean showIntro = settings.getBoolean(DryncUtils.SHOW_INTRO_PREF, true);

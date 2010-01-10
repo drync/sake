@@ -24,4 +24,5 @@
 	
 	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	
+	<string name="noreviewurl">There is no link attached to this review.</string>
 </resources>

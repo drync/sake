@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,8 @@ import com.drync.android.objects.Source;
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
-	static String DEV_SERVER_HOST="localhost";
-	static String USING_SERVER_HOST=DEV_SERVER_HOST;
+	static String DEV_SERVER_HOST="192.168.1.10";
+	static String USING_SERVER_HOST=TEST_SERVER_HOST;
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
@@ -332,9 +333,9 @@ public class DryncProvider {
 
 		// set up deviceId
 		String devId = deviceId;
-		String fake = "UDID-droid-fake-888888888888888888888888888888";
+		String fake = "UDID-droid-fake-888888888888888888888888888890";
 		if ((deviceId == null) || (deviceId.equals("")))
-			devId = fake; //"UDID-droid-fake-" + System.currentTimeMillis();
+			devId = "UDID-droid-fake-" + System.currentTimeMillis();
 
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(urlPost1);
@@ -353,62 +354,56 @@ public class DryncProvider {
 			e1.printStackTrace();
 		}
 
-		//StringBuilder out = new StringBuilder();
-		File fout = new File(DryncUtils.CACHE_DIRECTORY + "register.html");
-		if (fout.exists())
-			fout.delete();
-		
 		boolean wroteContent = false;
-		
+
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
-			
-			
+
+
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
 				return null;
 
-			//System.out.println("Login form get: " + response.getStatusLine());
 			if (entity != null) {
 				InputStream is = entity.getContent();
 
-				final byte buf[] = new byte[1024];
-				
-				//Reader in = new InputStreamReader(is, "UTF-8");
-				
-				//File fout = new File("register.html");
-				fout.createNewFile();
-				OutputStream out = new FileOutputStream(fout);
-
-				
-				int len;
-				while ((len=is.read(buf)) > 0)
+				final char[] buffer = new char[0x10000];
+				StringBuilder out = new StringBuilder();
+				Reader in = new InputStreamReader(is, "UTF-8");
+				int read;
+				do 
 				{
-					String stringcontent = new String(buf);
-					if (! stringcontent.trim().equals(""))
-					{
-						out.write(buf, 0, len);
-						wroteContent = true;
+					read = in.read(buffer, 0, buffer.length);
+					if (read>0) {
+						String stringcontent = new String(buffer);
+						if (! stringcontent.trim().equals(""))
+						{
+							out.append(buffer, 0, read);
+							wroteContent = true;
+						}
 					}
 				}
-				out.close();
+				while (read>=0);
+
+				if ((out.toString() != null) &&
+						(! out.toString().equals("")) && wroteContent)
+					return out.toString();
+
 				is.close();
 				int i=0;
 			}
+
 		}
+
 		catch( Exception e)
 		{
 			e.printStackTrace();
 		}
-		
-		if (fout.exists() && wroteContent)
-			return "register";
-		
-		else
-			return null;
+
+		return null;
 	}
-	
+
 	private Review parseReviewFromNode(Node reviewNode) {
 		Review review = new Review();
 		
