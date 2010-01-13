@@ -13,6 +13,7 @@ public class DryncUtils {
 				Environment.getExternalStorageDirectory() + ".drync_cache/" : 
 					"/data/data/com.drync.android/drync-cache/";
 	public static boolean useLocalCache = true; // this is true until proven no.
+	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
 	
 	//Shared Prefs
 	public static final String PREFS_NAME = "DRYNC_PREFS";
@@ -25,6 +26,23 @@ public class DryncUtils {
 
 	public static boolean isUseLocalCache() {
 		return useLocalCache;
+	}
+
+	private static boolean checkForDebugMode() 
+	{
+		try
+		{
+			String debugFilePath = DryncUtils.CACHE_DIRECTORY + "debug.properties";
+			File debugFile = new File(debugFilePath);
+			boolean debugMode = debugFile.exists();
+			Log.d("DryncUtils", "DEBUG MODE ENABLED!!!!!");
+			return debugMode;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		
 	}
 
 	public static void setUseLocalCache(boolean useLocalCache) {

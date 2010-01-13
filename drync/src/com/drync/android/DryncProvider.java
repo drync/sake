@@ -1,13 +1,15 @@
 package com.drync.android;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +27,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.provider.Settings;
 import android.util.Log;
 
 import com.drync.android.objects.Bottle;
@@ -44,7 +42,7 @@ public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
 	static String DEV_SERVER_HOST="10.0.2.2";
-	static String USING_SERVER_HOST=DEV_SERVER_HOST;
+	static String USING_SERVER_HOST=TEST_SERVER_HOST;
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
@@ -216,9 +214,9 @@ public class DryncProvider {
 				devId = "test";
 		
 		String subUrl = TOP_POPULAR_URL;
-		if (topType == this.TOP_FEATURED)
+		if (topType == DryncProvider.TOP_FEATURED)
 			subUrl = TOP_FEATURED_URL;
-		else if (topType == this.TOP_WANTED)
+		else if (topType == DryncProvider.TOP_WANTED)
 			subUrl = TOP_WANTED_URL;
 			
 		
@@ -355,7 +353,7 @@ public class DryncProvider {
 		}
 
 		boolean wroteContent = false;
-
+		InputStream is = null;
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
@@ -366,7 +364,7 @@ public class DryncProvider {
 				return null;
 
 			if (entity != null) {
-				InputStream is = entity.getContent();
+				is = entity.getContent();
 
 				final char[] buffer = new char[0x10000];
 				StringBuilder out = new StringBuilder();
@@ -388,17 +386,37 @@ public class DryncProvider {
 
 				if ((out.toString() != null) &&
 						(! out.toString().equals("")) && wroteContent)
-					return out.toString();
-
-				is.close();
-				int i=0;
+				{
+					if (DryncUtils.isDebugMode)
+					{
+						String filename = DryncUtils.CACHE_DIRECTORY + "register.html";
+						File outputFile = new File(filename);
+						//use buffering
+						Writer output = new BufferedWriter(new FileWriter(outputFile));
+						try {
+							//FileWriter always assumes default encoding is OK!
+							output.write( out.toString() );
+						}
+						finally {
+							output.close();
+						}
+					}
+				}
+				return out.toString();
 			}
-
 		}
-
 		catch( Exception e)
 		{
-			e.printStackTrace();
+			Log.e("StartupPost", "Error posting or reading Startup Post", e);
+		}
+		finally
+		{
+			if (is != null)
+				try {
+					is.close();
+				} catch (IOException e) {
+					Log.w("StartupPost", "Error posting or reading Startup Post", e);
+				}
 		}
 
 		return null;

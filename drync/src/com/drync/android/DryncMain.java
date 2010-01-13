@@ -555,7 +555,10 @@ public class DryncMain extends Activity {
 			return;
 		
 		
-		AutoCompleteTextView yearSpin = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
+		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
+		
 		ArrayAdapter<String> yearSpnAdapter = null;
 		int year = 1800;
 		
@@ -574,7 +577,7 @@ public class DryncMain extends Activity {
 
 	        yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
 	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	        yearSpin.setAdapter(yearSpnAdapter); 
+	        yearVal.setAdapter(yearSpnAdapter); 
 	        
 			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
 			if (cancelBtn != null)
@@ -610,7 +613,9 @@ public class DryncMain extends Activity {
 			else
 				position = yearSpnAdapter.getPosition("" + year);
 			
-			yearSpin.setText(mBottle.getYear());
+			nameVal.setText(mBottle.getName());
+			yearVal.setText("" + mBottle.getYear());
+			priceVal.setText(mBottle.getPrice());
 
 			reviewView.scrollTo(0, 0);
 		}
@@ -628,7 +633,6 @@ public class DryncMain extends Activity {
 		
 		if (rebuildReviews)
 		{
-
 			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
 			flipper.setOutAnimation(this, R.anim.push_left_out);
 

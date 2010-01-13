@@ -42,7 +42,7 @@
 
 		 	<RelativeLayout android:id="@+id/gendetail"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:padding="6dip">
+				android:padding="6dip" >
 
 				<com.drync.android.ui.RemoteImageView
 					android:id="@+id/atcWineThumb" android:layout_width="57px"
@@ -52,74 +52,20 @@
 
 				<EditText android:id="@+id/atcWineName" android:layout_width="fill_parent"
 					android:layout_height="wrap_content" android:layout_weight="1"
-					android:textColor="#FFFFFF" android:typeface="serif"
 					android:layout_toRightOf="@id/atcWineThumb" android:singleLine="true"
 					android:layout_alignParentRight="true"
 					android:layout_alignParentTop="true"  />
-
-				<!--  <RelativeLayout android:id="@+id/secondLine"
-					android:orientation="horizontal" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:paddingRight="10px"
-					android:layout_marginTop="2px" android:layout_toRightOf="@id/dtlWineThumb"
-					android:layout_below="@id/wineName"
-					android:layout_alignParentRight="true">
-
-					<TextView android:id="@+id/yearLabel"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#000000" android:textSize="10px"
-						android:singleLine="true" android:paddingRight="5px" android:text="Year:" />
-					<TextView android:id="@+id/yearValue"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#FFFFFF" android:singleLine="true"
-						android:textSize="10px" android:layout_toRightOf="@id/yearLabel" />
-				</RelativeLayout>
-
-				<RelativeLayout android:id="@+id/thirdLine"
-					android:orientation="horizontal" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:paddingRight="10px"
-					android:layout_marginTop="2px" android:layout_toRightOf="@id/dtlWineThumb"
-					android:layout_below="@id/secondLine"
-					android:layout_alignParentRight="true">
-
-					<TextView android:id="@+id/avgRatingLabel"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#000000" android:textSize="10px"
-						android:singleLine="true" android:paddingRight="5px"
-						android:layout_alignParentLeft="true"
-						android:layout_alignParentTop="true" android:text="rating:" />
-					<TextView android:id="@+id/avgRatingValue"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#FFFFFF" android:singleLine="true"
-						android:textSize="10px" android:layout_toRightOf="@id/avgRatingLabel" />
-
-				</RelativeLayout>
-
-				<RelativeLayout android:id="@+id/fourthLine"
-					android:orientation="horizontal" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:paddingRight="10px"
-					android:layout_marginTop="2px" android:layout_toRightOf="@id/dtlWineThumb"
-					android:layout_below="@id/thirdLine"
-					android:layout_alignParentRight="true">
-
-					<TextView android:id="@+id/priceLabel"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#000000" android:textSize="10px"
-						android:singleLine="true" android:paddingRight="5px"
-						android:layout_alignParentLeft="true"
-						android:layout_alignParentTop="true" android:text="Price:" />
-					<TextView android:id="@+id/priceValue"
-						android:layout_width="wrap_content" android:layout_height="wrap_content"
-						android:textColor="#FFFFFF" android:singleLine="true"
-						android:textSize="10px" android:layout_toRightOf="@id/priceLabel" />
-				</RelativeLayout> -->
+					
 			</RelativeLayout>
 
-			<!-- Review section -->
+			<!-- year price section -->
 
 			<RelativeLayout android:id="@+id/yearPriceSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
-				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
-				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
+				android:layout_marginBottom="20px" 
+				android:padding="5dip">
 
 				<TextView android:id="@+id/atcYearLbl"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -127,26 +73,66 @@
 					android:layout_marginRight="10px" android:layout_marginTop="20px"
 					android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Price" />
+					android:singleLine="true" android:text="Year" />
 					
 				<AutoCompleteTextView android:id="@+id/atcYearVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:layout_toRightOf="@id/atcYearLbl" android:layout_alignParentRight="true"
-					android:singleLine="true" android:layout_alignBaseline="@id/atcYearLbl" />
+					android:singleLine="true" android:layout_alignBaseline="@id/atcYearLbl"  />
 					
 				<TextView android:id="@+id/atcPriceLbl"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:layout_marginRight="10px" android:layout_marginTop="25px"
 					android:layout_below="@id/atcYearLbl" android:layout_alignParentLeft="true"
 					android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Year" />
+					android:singleLine="true" android:text="Price" />
 					
 				<EditText android:id="@+id/atcPriceVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_below="@id/atcYearVal"
 					android:layout_toRightOf="@id/atcPriceLbl" android:layout_alignParentRight="true"
-					android:singleLine="true" android:layout_alignBaseline="@id/atcPriceLbl" />
+					android:singleLine="true" android:layout_alignLeft="@id/atcYearVal" 
+					android:layout_alignBaseline="@id/atcPriceLbl"/>
+
+			</RelativeLayout>
+			
+			<!-- Varietal Style Section -->
+			<RelativeLayout android:id="@+id/atcVtgSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
+				android:layout_marginBottom="20px" 
+				android:padding="5dip">
+
+				<TextView android:id="@+id/atcVarietalLbl"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="center_vertical" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Varietal" />
+					
+				<AutoCompleteTextView android:id="@+id/atcVarietalVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/atcVarietalLbl" android:layout_alignParentRight="true"
+					android:singleLine="true" android:layout_alignBaseline="@id/atcVarietalLbl"  />
+					
+		        <TextView android:id="@+id/atcStyleLbl"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="center_vertical" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="25px"
+					android:layout_below="@id/atcVarietalLbl" android:layout_alignParentLeft="true"
+					android:textColor="#000000" 
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Style" />
+					
+				<AutoCompleteTextView android:id="@+id/atcStyleVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" 
+					android:layout_alignLeft="@id/atcVarietalVal" android:layout_below="@id/atcVarietalVal"
+					android:layout_toRightOf="@id/atcStyleLbl" android:layout_alignParentRight="true"
+					android:singleLine="true"   />
 
 			</RelativeLayout>
 

@@ -1,13 +1,9 @@
 package com.drync.android;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,14 +11,11 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.Toast;
 
 public class Drync extends Activity {
 
@@ -71,13 +64,12 @@ public class Drync extends Activity {
     			break;
     		case REGISTER:
     			splash.setVisibility(View.GONE);
-    			String uri = DryncUtils.CACHE_DIRECTORY + "register.html";
-    			String fileuri = "file://" + DryncUtils.CACHE_DIRECTORY + "register.html";  			
     			setContentView(R.layout.registerweb);
     			
     			register = (LinearLayout) findViewById(R.id.registerwebwrap);
     			
     			regWebView = (WebView) findViewById(R.id.registerWeb);
+    			regWebView.setBackgroundColor(0);
     			regWebView.getSettings().setJavaScriptEnabled(true);
     			regWebView.setWebViewClient(new RegisterWebViewClient());
     			
@@ -177,15 +169,26 @@ public class Drync extends Activity {
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
 	    	if (url.startsWith("close:"))
 	    	{
-	    		if (Drync.this.register != null)
+	    		if (Drync.register != null)
 	    		{
 	    			Message msg = new Message();
-	    			msg.what = Drync.this.STARTMAIN;
+	    			msg.what = Drync.STARTMAIN;
 	    			Drync.this.splashHandler.sendMessage(msg);
 	    		}
 	    	}
 	        view.loadUrl(url);
 	        return true;
 	    }
+
+		@Override
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			super.onReceivedError(view, errorCode, description, failingUrl);
+		}
+
+		@Override
+		public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+			super.onUnhandledKeyEvent(view, event);
+		}
 	}
 }
