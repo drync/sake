@@ -84,6 +84,7 @@ public class Drync extends Activity {
     					sb.append(":3000");
     				sb.append("/app_session");
     				regWebView.loadDataWithBaseURL(sb.toString(), registerText, "text/html", "utf-8", null);
+    				regWebView.requestFocus();
     			}
     			break;
     			
