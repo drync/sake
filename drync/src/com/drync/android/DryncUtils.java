@@ -1,17 +1,16 @@
 package com.drync.android;
 
 import java.io.File;
+import java.io.IOException;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
 public class DryncUtils {
 
 	private static StringBuilder builder = new StringBuilder();
-	public static final String CACHE_DIRECTORY = 
-		(Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) ?
-				Environment.getExternalStorageDirectory() + ".drync_cache/" : 
-					"/data/data/com.drync.android/drync-cache/";
+	public static String CACHE_DIRECTORY = null;
 	public static boolean useLocalCache = true; // this is true until proven no.
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
 	
@@ -87,7 +86,16 @@ public class DryncUtils {
 		return null;
 	}
 	
-	
+	public static void initCacheDir(Context context)
+	{
+		try {
+			DryncUtils.CACHE_DIRECTORY = context.getCacheDir().getCanonicalPath() + "/";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
 
 

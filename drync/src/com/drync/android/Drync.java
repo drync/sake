@@ -113,6 +113,7 @@ public class Drync extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DryncUtils.initCacheDir(this);
         setContentView(R.layout.splash);
         splash = (ImageView) findViewById(R.id.splashscreen);
         
