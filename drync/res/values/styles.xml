@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+<style name="Qype.RatingBarSmall"
+parent="@android:style/Widget.RatingBar.Indicator">
+        <item name="android:minHeight">40dip</item>
+        <item name="android:maxHeight">40dip</item>
+        <item name="android:numStars">3</item>
+        <item name="android:stepSize">50</item>
+        <item name="android:isIndicator">false</item>
+    </style>
+
+
+</resources>
