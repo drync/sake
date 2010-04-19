@@ -6,6 +6,7 @@
 package com.drync.android.ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,7 @@ import java.net.URL;
 import com.drync.android.DryncUtils;
 
 import android.os.Handler;
+import android.util.Log;
 
 public class HTTPThread extends Thread {
 	public static final int STATUS_PENDING = 0;
@@ -25,6 +27,15 @@ public class HTTPThread extends Thread {
 	private boolean mError = false;
 	private Exception mException = null;
 	private String mUrl;
+	
+	public String getUrl() {
+		return mUrl;
+	}
+
+	public void setUrl(String mUrl) {
+		this.mUrl = mUrl;
+	}
+
 	private String mLocal;
 	private int mStatus = STATUS_PENDING;
 	private SoftReference<Handler> mHandler;
@@ -64,11 +75,16 @@ public class HTTPThread extends Thread {
 				fos.flush();
 				fos.close();
 			}
+		} catch (FileNotFoundException e)
+		{
+			Log.d("HTTPThread", "Could not download remote image - file not found - use default: " + e.getMessage()); 
+			mError = true;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+			mError = true;
 		} catch (IOException e) {
-			DryncUtils.setUseLocalCache(false);
 			e.printStackTrace();
+			mError = true;
 		}
 
 		synchronized (this) {

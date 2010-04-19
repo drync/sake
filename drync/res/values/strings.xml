@@ -25,4 +25,16 @@
 	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	
 	<string name="noreviewurl">There is no link attached to this review.</string>
+	
+	<string name="style_prompt">Choose a style</string>
+    <string-array name="style_array">
+        <item>Dessert</item>
+        <item>Red</item>
+        <item>Rose</item>
+        <item>Sparkling/Champagne</item>
+        <item>Port</item>
+        <item>White</item>
+        <item>Other</item>
+    </string-array>
+	
 </resources>

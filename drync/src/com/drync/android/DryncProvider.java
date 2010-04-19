@@ -127,7 +127,10 @@ public class DryncProvider {
 							{
 								Node node = nodeList.item(i);
 								String value = this.getNodeValue(node);
-								if("name".equals(node.getNodeName())) {
+								if("bottle_id".equals(node.getNodeName())) {
+									bottle.setBottle_Id((Long.parseLong(value)));
+								}
+								else if("name".equals(node.getNodeName())) {
 									bottle.setName(value);
 								} else if("year".equals(node.getNodeName())) {
 									bottle.setYear(Integer.parseInt(value));
@@ -389,7 +392,7 @@ public class DryncProvider {
 				{
 					if (DryncUtils.isDebugMode)
 					{
-						String filename = DryncUtils.CACHE_DIRECTORY + "register.html";
+						String filename = DryncUtils.getCacheDir() + "register.html";
 						File outputFile = new File(filename);
 						//use buffering
 						Writer output = new BufferedWriter(new FileWriter(outputFile));

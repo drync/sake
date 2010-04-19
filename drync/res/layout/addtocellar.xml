@@ -99,7 +99,98 @@
 			</RelativeLayout>
 			
 			<!-- Varietal Style Section -->
-			<RelativeLayout android:id="@+id/atcVtgSection"
+			<TableLayout android:id="@+id/atcVtgSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
+				android:stretchColumns="2" android:layout_marginBottom="20px" 
+				android:padding="5dip">
+				
+				<TableRow>
+					<TextView android:id="@+id/atcVarietalLbl" android:layout_column="1"
+						android:text="Varietal"  android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" 
+					/>
+					
+					<AutoCompleteTextView android:id="@+id/atcVarietalVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true" android:gravity="left"  />	
+				</TableRow>
+				
+				<TableRow>
+					<TextView android:id="@+id/atcStyleLbl" android:layout_column="1"
+						android:text="Style" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" 
+					/>
+					
+					<Spinner android:id="@+id/atcStyleVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:gravity="left" android:drawSelectorOnTop="true"
+					android:prompt="@string/style_prompt"  />	
+				</TableRow>
+				
+				<TableRow>
+					<TextView android:id="@+id/atcRegionLbl" android:layout_column="1"
+						android:text="Region" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" 
+					/>
+					
+					<AutoCompleteTextView android:id="@+id/atcRegionVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true" android:gravity="left"  />	
+				</TableRow>
+			
+			</TableLayout>
+			
+			<!-- Rating Style Section -->
+			<TableLayout android:id="@+id/atcRtgSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:stretchColumns="1">
+				
+				<TableRow>
+					<TextView android:id="@+id/atcRatingLbl"
+						android:text="Rating"  android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none" android:gravity="center"
+					android:singleLine="true" 
+					/> 
+				</TableRow>
+				
+				<TableRow>
+					<RatingBar android:id="@+id/atcRatingVal" android:numStars="5"         
+					style="@style/Qype.RatingBarSmall" android:gravity="center"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"/>	
+				</TableRow>
+				
+				<!--  <TableRow>
+					<TextView android:id="@+id/atcStyeLbl" android:layout_column="1"
+						android:text="Style" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" 
+					/>
+					
+					<AutoCompleteTextView android:id="@+id/atcStyleVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true" android:gravity="left"  />	
+				</TableRow>
+				
+				<TableRow>
+					<TextView android:id="@+id/atcRegionLbl" android:layout_column="1"
+						android:text="Region" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" 
+					/>
+					
+					<AutoCompleteTextView android:id="@+id/atcRegionVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true" android:gravity="left"  />	
+				</TableRow> -->
+			
+			</TableLayout>
+		<!-- 	<RelativeLayout android:id="@+id/atcVtgSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
@@ -134,7 +225,22 @@
 					android:layout_toRightOf="@id/atcStyleLbl" android:layout_alignParentRight="true"
 					android:singleLine="true"   />
 
-			</RelativeLayout>
+				<TextView android:id="@+id/atcRegionLbl"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="center_vertical" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:layout_below="@id/atcStyleLbl" android:layout_alignParentLeft="true"
+					android:textColor="#000000" 
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Region" />
+
+				<AutoCompleteTextView android:id="@+id/atcRegionVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" 
+					android:layout_alignLeft="@id/atcStyleVal" android:layout_below="@id/atcStyleVal"
+					android:layout_toRightOf="@id/atcRegionLbl" android:layout_alignParentRight="true"
+					android:singleLine="true"   />
+
+			</RelativeLayout> -->
 
 			<!-- Other Information section -->
 			<RelativeLayout android:id="@+id/addlInfoSection"

@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Bottle implements Parcelable {
-	long id;
+	long bottle_id;
 	String name;
 	int year;
 	String region_path;
@@ -96,13 +96,13 @@ public class Bottle implements Parcelable {
 			return null;
 	}
 
-	public long getId() {
-		return id;
+	public long getBottle_Id() {
+		return bottle_id;
 	}
 
 
-	public void setId(long id) {
-		this.id = id;
+	public void setBottle_Id(long id) {
+		this.bottle_id = id;
 	}
 
 
@@ -228,7 +228,7 @@ public class Bottle implements Parcelable {
 
 
 	public void writeToParcel(Parcel out, int flags) {
-		out.writeLong(id);
+		out.writeLong(bottle_id);
 		out.writeString(name);
 		out.writeInt(year);
 		out.writeString(region_path);
@@ -245,7 +245,7 @@ public class Bottle implements Parcelable {
 	}
 	
 	public void readFromParcel(Parcel in) {
-		id = in.readLong();
+		bottle_id = in.readLong();
 		name = in.readString();
 		year = in.readInt();
 		region_path = in.readString();

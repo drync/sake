@@ -16,28 +16,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -58,6 +54,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -67,16 +64,20 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import android.widget.WineItemRelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView.OnEditorActionListener;
 
+import com.drync.android.helpers.CSVReader;
 import com.drync.android.objects.Bottle;
+import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
 
 
 public class DryncMain extends Activity {
-	
+
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
@@ -180,7 +181,6 @@ public class DryncMain extends Activity {
 		flipper.setOutAnimation(this, R.anim.push_left_out);
 		
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
-		
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
 	
 		reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
@@ -189,9 +189,7 @@ public class DryncMain extends Activity {
 		addView = (ScrollView) inflater.inflate(R.layout.addtocellar, (ViewGroup)flipper, false);
 		flipper.addView(addView);
 		
-		DryncUtils.checkForLocalCacheArea();
-
-		deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
+		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
 		final LinearLayout topWinesBtnHolder = (LinearLayout) findViewById(R.id.topwinesbuttons);
 		
@@ -266,26 +264,25 @@ public class DryncMain extends Activity {
 		{
 			searchfield.setText(lastQuery);
 		}
+		
 		searchfield.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) 
-				{
-					// Perform action on key press
 
-					String searchterm = searchfield.getText().toString();
+			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
+				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+			            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+			        	String searchterm = searchfield.getText().toString();
 
-					progressDlg =  new ProgressDialog(DryncMain.this);
-					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Retrieving wines...");
-					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					progressDlg.show();
-					DryncMain.this.startQueryOperation(searchterm);		            
-					return true;
-				}
-				return false;
-			}
-		});
-
+						progressDlg =  new ProgressDialog(DryncMain.this);
+						progressDlg.setTitle("Dryncing...");
+						progressDlg.setMessage("Retrieving wines...");
+						progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						progressDlg.show();
+						DryncMain.this.startQueryOperation(searchterm);
+						return true;
+			        }
+			        return false;
+			}});
+		
 		if (displaySearch)
 		{
 			View tstLayout = inflater.inflate(R.layout.searchinstructions,
@@ -418,19 +415,7 @@ public class DryncMain extends Activity {
 			if (riv != null)
 			{
 				String labelThumb = mBottle.getLabel_thumb();
-				if (labelThumb != null && !labelThumb.equals(""))
-				{
-					riv.setRemoteURI(labelThumb);
-					riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
-					riv.setImageDrawable(defaultIcon);
-					riv.setUseDefaultOnly(false);
-					riv.loadImage();
-				}
-				else
-				{
-					riv.setUseDefaultOnly(true);
-					riv.setImageDrawable(defaultIcon);
-				}
+				riv.setRemoteImage(labelThumb, defaultIcon);
 			}
 
 			varietalView.setText(bottle.getGrape());
@@ -555,11 +540,17 @@ public class DryncMain extends Activity {
 			return;
 		
 		
-		AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
+
 		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
 		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
+		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
+		
+		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		
 		ArrayAdapter<String> yearSpnAdapter = null;
+		ArrayAdapter<CharSequence> styleSpnAdapter = null;
 		int year = 1800;
 		
 		if (buildOnceAddToCellar)
@@ -578,6 +569,27 @@ public class DryncMain extends Activity {
 	        yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
 	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	        yearVal.setAdapter(yearSpnAdapter); 
+	        
+	        styleSpnAdapter = ArrayAdapter.createFromResource(
+	                this, R.array.style_array, android.R.layout.simple_spinner_item);
+	        styleSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+	        styleVal.setAdapter(styleSpnAdapter);
+	        
+	        Button addToCellarBtn = (Button)addView.findViewById(R.id.addToCellar);
+	        if (addToCellarBtn != null)
+	        {
+	        	addToCellarBtn.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View v) {
+						Cork cork = new Cork();
+						cork.setBottle_Id(mBottle.getBottle_Id());
+						cork.setYear(Integer.parseInt(yearVal.getEditableText().toString()));
+						dbAdapter.open();
+						dbAdapter.insertCork(cork);
+						dbAdapter.close();
+						Log.d("AddToCellar", "Yearselected: " + cork.getYear());
+					}});
+	        }
 	        
 			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
 			if (cancelBtn != null)
@@ -615,7 +627,13 @@ public class DryncMain extends Activity {
 			
 			nameVal.setText(mBottle.getName());
 			yearVal.setText("" + mBottle.getYear());
+			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
+			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
+				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
+			else
+				styleVal.setSelection(stylepos);
 			priceVal.setText(mBottle.getPrice());
+			wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
 
 			reviewView.scrollTo(0, 0);
 		}
@@ -673,19 +691,7 @@ public class DryncMain extends Activity {
 			if (riv != null)
 			{
 				String labelThumb = mBottle.getLabel_thumb();
-				if (labelThumb != null && !labelThumb.equals(""))
-				{
-					riv.setRemoteURI(labelThumb);
-					riv.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
-					riv.setImageDrawable(defaultIcon);
-					riv.setUseDefaultOnly(false);
-					riv.loadImage();
-				}
-				else
-				{
-					riv.setUseDefaultOnly(true);
-					riv.setImageDrawable(defaultIcon);
-				}
+				riv.setRemoteImage(labelThumb, defaultIcon);
 			}
 
 			Button doneBtn = (Button) this.findViewById(R.id.doneBtn);
@@ -869,16 +875,25 @@ public class DryncMain extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
-			boolean useLocalCache = DryncUtils.isUseLocalCache();
-			Bottle wine = mWines.get(position);
-			bindView(view, wine);
 			
-			if (view != null)
+			Log.d("DryncMain", "getview position: " + position);
+			
+			Bottle wine = mWines.get(position);
+			
+			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
+			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
 			{
-				RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
-				if (wineThumb != null && !mFlinging && useLocalCache)
+				bindView(view, wine);
+
+				if (view != null)
 				{
-					wineThumb.loadImage();
+					RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+					if (wineThumb != null && !mFlinging)
+					{
+
+						if (! wineThumb.isUseDefaultOnly() && ! wineThumb.isLoaded())
+							wineThumb.loadImage();
+					}
 				}
 			}
 			
@@ -892,25 +907,17 @@ public class DryncMain extends Activity {
 		}
 
 		private void bindView(View view, Bottle wine) {
-			boolean useLocalCache = DryncUtils.isUseLocalCache();
+			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
+			wiv.setBottle(wine);
 			RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
 			if (wineThumb != null  && !mFlinging )
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					if (useLocalCache)
-					{
-						wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
-						wineThumb.setRemoteURI(wine.getLabel_thumb());
-						wineThumb.setImageDrawable(defaultIcon);
-						wineThumb.setUseDefaultOnly(false);
-					}
-					else
-					{
-						Drawable drawable = ImageOperations(DryncMain.this, wine.getLabel_thumb());
-						wineThumb.setImageDrawable(drawable);
-						wineThumb.setUseDefaultOnly(false);
-					}
+					wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+					wineThumb.setRemoteURI(wine.getLabel_thumb());
+					wineThumb.setImageDrawable(defaultIcon);
+					wineThumb.setUseDefaultOnly(false);
 				}
 				else
 				{
@@ -1003,7 +1010,8 @@ public class DryncMain extends Activity {
 		{
 			boolean retval = false;
 			
-			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView))
+			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView) ||
+					(flipper.getCurrentView() == addView))
 			{
 				showPrevious();
 				retval = true;

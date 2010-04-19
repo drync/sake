@@ -2,20 +2,27 @@ package com.drync.android;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class DryncUtils {
 
 	private static StringBuilder builder = new StringBuilder();
-	public static String CACHE_DIRECTORY = null;
-	public static boolean useLocalCache = true; // this is true until proven no.
+	private static String CACHE_DIRECTORY = null;
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
+	
+	private static String deviceId = null;
 	
 	//Shared Prefs
 	public static final String PREFS_NAME = "DRYNC_PREFS";
+	public static final String DEVICE_ID = "deviceId";
 	public static final String SHOW_INTRO_PREF = "showIntro";
 	public static final String LAST_QUERY_PREF = "lastQuery";
 	public static final String TWITTER_USERNAME_PREF = "twitter_username";
@@ -23,15 +30,11 @@ public class DryncUtils {
 	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
 	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";
 
-	public static boolean isUseLocalCache() {
-		return useLocalCache;
-	}
-
 	private static boolean checkForDebugMode() 
 	{
 		try
 		{
-			String debugFilePath = DryncUtils.CACHE_DIRECTORY + "debug.properties";
+			String debugFilePath = getCacheDir() + "debug.properties";
 			File debugFile = new File(debugFilePath);
 			boolean debugMode = debugFile.exists();
 			Log.d("DryncUtils", "DEBUG MODE ENABLED!!!!!");
@@ -44,26 +47,11 @@ public class DryncUtils {
 		
 	}
 
-	public static void setUseLocalCache(boolean useLocalCache) {
-		DryncUtils.useLocalCache = useLocalCache;
-	}
-
 	public static String getCacheFileName(String url) {
 		builder.setLength(0);
-		builder.append(CACHE_DIRECTORY);
+		builder.append(getCacheDir());
 		builder.append(url.hashCode()).append(".jpg");
 		return builder.toString();
-	}
-	
-	public static String getCacheDirectory()
-	{
-		return DryncUtils.CACHE_DIRECTORY;
-	}
-	public static boolean checkForLocalCacheArea()
-	{
-		File file = new File(DryncUtils.CACHE_DIRECTORY);
-		useLocalCache = file.getParentFile().exists();	
-		return useLocalCache;
 	}
 
 	public static String encryptTwitterPassword(String password)
@@ -85,15 +73,79 @@ public class DryncUtils {
 		}
 		return null;
 	}
-	
-	public static void initCacheDir(Context context)
+	public static String getCacheDir()
 	{
 		try {
-			DryncUtils.CACHE_DIRECTORY = context.getCacheDir().getCanonicalPath() + "/";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return getCacheDir(null);
+		} catch (DryncConfigException e) {
+			Log.e("DryncUtil", e.getMessage());
 		}
+		
+		return /* this is probably where it should go, so let's let it work, at least: */
+		    "/data/data/com.drync.android/cache/";
+	}
+	public static String getCacheDir(Context context) throws DryncConfigException
+	{
+		if (DryncUtils.CACHE_DIRECTORY == null)
+		{
+			if (context == null)
+			{
+				String message = "CACHE DIRECTORY NOT SET.  Must call getCacheDir with a valid context first!";
+				DryncConfigException dce = new DryncConfigException();
+				throw dce;	
+			}
+			
+			try {
+				DryncUtils.CACHE_DIRECTORY = context.getCacheDir().getCanonicalPath() + "/";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return DryncUtils.CACHE_DIRECTORY;
+	}
+	
+	public static String getDeviceId(ContentResolver resolver, Activity activity)
+	{
+		if (deviceId == null)
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+			String savedDevId = settings.getString(DryncUtils.DEVICE_ID, null);
+			if (savedDevId == null)
+			{
+				String sysDevId = Settings.System.getString(resolver, Settings.System.ANDROID_ID);
+				if ((sysDevId == null) || (sysDevId == "")) // probably an emulator, let's create one and stick with it.
+				{
+					StringBuilder bldr = new StringBuilder("droidem-");
+					//use a few random numbers to get something that is hopefully unique.
+					Random rand = new Random(System.currentTimeMillis());
+					bldr.append(rand.nextInt(99999));
+					bldr.append("-");
+					bldr.append(rand.nextInt(99999));
+					bldr.append("-");
+					bldr.append(rand.nextInt(99999));
+					deviceId = bldr.toString();			
+				}
+				else
+				{
+					deviceId = sysDevId;
+				}
+
+				Editor editor = settings.edit();
+				editor.putString(DryncUtils.DEVICE_ID, deviceId);
+				editor.commit();			
+			}
+			else
+			{
+				deviceId = savedDevId;
+			}
+		}
+		
+		Log.d("DryncUtils", "Got deviceId: " + deviceId);
+		
+		return deviceId;
 	}
 
 	

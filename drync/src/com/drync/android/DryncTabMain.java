@@ -24,7 +24,6 @@ public class DryncTabMain extends TabActivity
 	private int mDefaultTabIndex = -1;
 
 	final Handler mHandler = new Handler();
-	//private String deviceId;
 	WineAdapter mAdapter; 
 	
 	/**

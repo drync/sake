@@ -1,13 +1,24 @@
 package com.drync.android;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import com.drync.android.helpers.CSVReader;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,11 +124,17 @@ public class Drync extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DryncUtils.initCacheDir(this);
+        
+        // call this to initialize the cache directory
+        try {
+			DryncUtils.getCacheDir(this);
+		} catch (DryncConfigException e) {
+			Log.d("Drync", "Error initializing the CacheDirectory. - " + e.getMessage());
+		}
         setContentView(R.layout.splash);
         splash = (ImageView) findViewById(R.id.splashscreen);
         
-        String deviceId = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
+        String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
         String register = DryncProvider.getInstance().startupPost(deviceId);
         registerTxt = register;
      // Restore preferences

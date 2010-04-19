@@ -23,6 +23,15 @@ public class RemoteImageView extends ImageView {
 	private String mRemote;
 	private HTTPThread mThread = null;
 	boolean useDefaultOnly = false;
+	boolean loaded = false;
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
+	}
 
 	public boolean isUseDefaultOnly() {
 		return useDefaultOnly;
@@ -45,15 +54,20 @@ public class RemoteImageView extends ImageView {
 	}
 
 	public void setRemoteURI(String uri) {
+		loaded = false;
 		if (uri.startsWith("http")) {
 			mRemote = uri;
 		}
 	}
 
+	public String getRemoteUri() {
+		return mRemote;
+	}
+
 	public void loadImage() {
 		if ((mRemote != null) && (!useDefaultOnly)) {
 			if (mLocal == null) {
-				mLocal = DryncUtils.CACHE_DIRECTORY + mRemote.hashCode() + ".jpg";
+				mLocal = DryncUtils.getCacheDir() + mRemote.hashCode() + ".jpg";
 			}
 			// check for the local file here instead of in the thread because
 			// otherwise previously-cached files wouldn't be loaded until after
@@ -76,6 +90,7 @@ public class RemoteImageView extends ImageView {
 			HTTPQueue queue = HTTPQueue.getInstance();
 			queue.dequeue(mThread);
 		}
+		loaded = true;
 	}
 
 	private void queue() {
@@ -84,6 +99,7 @@ public class RemoteImageView extends ImageView {
 			HTTPQueue queue = HTTPQueue.getInstance();
 			queue.enqueue(mThread, HTTPQueue.PRIORITY_HIGH);
 		}
+		// set default until the queued fetch returns
 		setImageResource(R.drawable.icon);
 	}
 
@@ -93,12 +109,37 @@ public class RemoteImageView extends ImageView {
 		if (d != null) {
 			setImageDrawable(d);
 		}
+		loaded = true;
 	}
 
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			setFromLocal();
+			if ((mThread != null) && (mThread.getStatus() == HTTPThread.STATUS_FINISHED) && (mThread.hasError()))
+			{
+				RemoteImageView.this.setUseDefaultOnly(true);
+			}
+			else
+				setFromLocal();
+			
+			RemoteImageView.this.loaded = true;
 		}
 	};
+	
+	public void setRemoteImage(String labelThumb, Drawable defaultIcon)
+	{
+		if (labelThumb != null && !labelThumb.equals(""))
+		{
+			this.setRemoteURI(labelThumb);
+				this.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+				this.setImageDrawable(defaultIcon);
+				this.setUseDefaultOnly(false);
+				this.loadImage();
+			}
+			else
+			{
+				this.setUseDefaultOnly(true);
+				this.setImageDrawable(defaultIcon);
+			}
+	}
 }

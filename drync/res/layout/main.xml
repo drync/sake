@@ -4,12 +4,11 @@
 	android:id="@+id/flipper" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-	
-	<LinearLayout android:id="@+id/searchview"
+<LinearLayout android:id="@+id/searchview"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="visible"
 		android:background="@drawable/wood2">
-		
+	
 		<LinearLayout android:id="@+id/topwinesbuttons" android:visibility="invisible"
 	  			android:orientation="horizontal"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -47,15 +46,6 @@
 				android:layout_weight="1" android:background="@android:drawable/editbox_background"
 				android:drawableLeft="@drawable/glass" android:layout_marginTop="3dip"
 				android:drawablePadding="5dip" />
-
-			<!--
-				<ImageButton android:id="@+id/clearbtn"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_marginBottom="3dip" android:layout_gravity="center"
-				android:layout_marginTop="5dip"
-				android:src="@drawable/clear_selector" />
-			-->
 		</LinearLayout>
 
 		<LinearLayout android:id="@+id/listholder"
