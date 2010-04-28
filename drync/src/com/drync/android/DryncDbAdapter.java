@@ -46,7 +46,7 @@ public class DryncDbAdapter
     
     private static final String DATABASE_NAME = "drync";
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -55,7 +55,7 @@ public class DryncDbAdapter
         + "cork_uuid text, "
         + "description text, "
         + "location text, "
-        + "cork_rating integer, "
+        + "cork_rating real, "
         + "cork_want boolean, "
         + "cork_own boolean, "
         + "cork_drank boolean, "
@@ -66,7 +66,6 @@ public class DryncDbAdapter
         + "cork_bottle_count integer, "
         + "cork_created_at integer, "
         + "cork_label text, "
-        
         + "bottle_id integer, "
         + "name text, "
         + "year integer, "
@@ -76,7 +75,7 @@ public class DryncDbAdapter
         + "label text, "
         + "label_thumb text, "
         + "price text, "
-        + "rating integer, "
+        + "rating real, "
         + "reviewCount integer" 
         + ");";
         

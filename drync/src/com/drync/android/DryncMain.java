@@ -56,6 +56,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -541,16 +542,20 @@ public class DryncMain extends Activity {
 		
 		
 		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
+		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
 		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
 
 		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
-		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
+		final EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
 		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
-		
+		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		
 		ArrayAdapter<String> yearSpnAdapter = null;
+		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
 		ArrayAdapter<CharSequence> styleSpnAdapter = null;
+		ArrayAdapter<CharSequence> regionSpnAdapter = null;
 		int year = 1800;
 		
 		if (buildOnceAddToCellar)
@@ -570,6 +575,14 @@ public class DryncMain extends Activity {
 	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	        yearVal.setAdapter(yearSpnAdapter); 
 	        
+	       // varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
+	      //  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	      //  varietalVal.setAdapter(varietalSpnAdapter); 
+	        
+	       // regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
+	       // regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	      //  regionVal.setAdapter(regionSpnAdapter); 
+	        
 	        styleSpnAdapter = ArrayAdapter.createFromResource(
 	                this, R.array.style_array, android.R.layout.simple_spinner_item);
 	        styleSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
@@ -582,8 +595,14 @@ public class DryncMain extends Activity {
 
 					public void onClick(View v) {
 						Cork cork = new Cork();
+						cork.setName(nameVal.getEditableText().toString());
 						cork.setBottle_Id(mBottle.getBottle_Id());
-						cork.setYear(Integer.parseInt(yearVal.getEditableText().toString()));
+						cork.setYear(mBottle.getYear());
+						cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
+						cork.setCork_created_at(System.currentTimeMillis());
+						cork.setGrape(varietalVal.getEditableText().toString());
+						cork.setRegion(regionVal.getEditableText().toString());
+						cork.setCork_rating(ratingbar.getRating());
 						dbAdapter.open();
 						dbAdapter.insertCork(cork);
 						dbAdapter.close();
@@ -627,6 +646,8 @@ public class DryncMain extends Activity {
 			
 			nameVal.setText(mBottle.getName());
 			yearVal.setText("" + mBottle.getYear());
+			varietalVal.setText("" + mBottle.getGrape());
+			regionVal.setText("" + mBottle.getRegion());
 			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
 			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
 				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));

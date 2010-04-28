@@ -8,7 +8,7 @@ public class Cork extends Bottle
     String description;
     String location;
     String cork_price;
-    int cork_rating;
+    float cork_rating;
     boolean cork_want = false;
     boolean cork_drank = false;
     boolean cork_own = false;
@@ -89,10 +89,10 @@ public class Cork extends Bottle
 	public void setCork_year(int corkYear) {
 		cork_year = corkYear;
 	}
-	public int getCork_rating() {
+	public float getCork_rating() {
 		return cork_rating;
 	}
-	public void setCork_rating(int corkRating) {
+	public void setCork_rating(float corkRating) {
 		cork_rating = corkRating;
 	}
 	public boolean isCork_want() {

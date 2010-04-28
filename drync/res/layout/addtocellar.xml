@@ -113,7 +113,7 @@
 					android:singleLine="true" 
 					/>
 					
-					<AutoCompleteTextView android:id="@+id/atcVarietalVal"
+					<EditText android:id="@+id/atcVarietalVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:singleLine="true" android:gravity="left"  />	
 				</TableRow>
@@ -138,7 +138,7 @@
 					android:singleLine="true" 
 					/>
 					
-					<AutoCompleteTextView android:id="@+id/atcRegionVal"
+					<EditText android:id="@+id/atcRegionVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:singleLine="true" android:gravity="left"  />	
 				</TableRow>

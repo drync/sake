@@ -30,11 +30,1527 @@
     <string-array name="style_array">
         <item>Dessert</item>
         <item>Red</item>
-        <item>Rose</item>
+        <item>Rosé</item>
         <item>Sparkling/Champagne</item>
         <item>Port</item>
         <item>White</item>
         <item>Other</item>
     </string-array>
-	
+   
+   
+   <!--  <string name="region_prompt">Choose a Region</string>
+    <string-array name="region_array">
+    <item>Échezeaux</item>
+<item>Évora</item>
+<item>25 de Mayo</item>
+<item>AÃ±elo</item>
+<item>Abanilla</item>
+<item>Abona</item>
+<item>Adelaide Hills</item>
+<item>Adelaide Plains</item>
+<item>Adelaide</item>
+<item>Agrelo</item>
+<item>Ahr</item>
+<item>Ahrtal</item>
+<item>Ahrtaler Landwein</item>
+<item>Aimogasta</item>
+<item>Ajaccio</item>
+<item>Albana di Romagna</item>
+<item>Albany</item>
+<item>Albardón</item>
+<item>Albrechtsburg</item>
+<item>AlcobaÃ§a</item>
+<item>Alella</item>
+<item>Alexander Valley</item>
+<item>Alexandria Lakes</item>
+<item>Algarrobo Grande</item>
+<item>Alicante</item>
+<item>Allen Argentina</item>
+<item>Almansa</item>
+<item>Almeirim</item>
+<item>Aloxe-Corton</item>
+<item>Alpine Valleys</item>
+<item>Alsace Grand Cru</item>
+<item>Alta Estremadura</item>
+<item>Alta Mesa</item>
+<item>Alto Salvador</item>
+<item>Altus</item>
+<item>Alva</item>
+<item>Amarante</item>
+<item>Amynteon</item>
+<item>Anchialos</item>
+<item>Anderson Valley</item>
+<item>Andrade Argentina</item>
+<item>Angaco</item>
+<item>Angastac</item>
+<item>AnguinÃ¡n</item>
+<item>Anillaco</item>
+<item>AnimanÃ¡</item>
+<item>Anjou-Coteaux de la Loire</item>
+<item>Anjou-Gamay</item>
+<item>Anjou-Villages</item>
+<item>Anjou</item>
+<item>Applegate Valley</item>
+<item>Arauco</item>
+<item>Arbois (Jura)</item>
+<item>Archanes</item>
+<item>Arianah</item>
+<item>Arkansas Mountain</item>
+<item>Arlanza</item>
+<item>Arribes</item>
+<item>Arroyo Grande Valley</item>
+<item>Arroyo Seco</item>
+<item>Asti Spumante</item>
+<item>Atlas Mountains</item>
+<item>Atlas Peak</item>
+<item>Augusta</item>
+<item>Australian Capital Territory</item>
+<item>Auxey-Duresses</item>
+<item>Ave</item>
+<item>Avellaneda</item>
+<item>BÃ¢tard-Montrachet</item>
+<item>BÃ©arn</item>
+<item>Baden</item>
+<item>Badische BergstraÃŸe</item>
+<item>Badischer Landwein</item>
+<item>BaiÃ£o</item>
+<item>Bailen</item>
+<item>Baixo Corgo</item>
+<item>Bajo Aragon</item>
+<item>Bandol</item>
+<item>Banyuls Grand Cru</item>
+<item>Banyuls</item>
+<item>Barbaresco</item>
+<item>Bardolino Superiore</item>
+<item>Barolo</item>
+<item>Barossa Valley</item>
+<item>Barossa</item>
+<item>Barrancas</item>
+<item>Barsac</item>
+<item>Basto</item>
+<item>Bayerischer Bodensee-Landwein</item>
+<item>Bayerischer Bodensee</item>
+<item>Bayern</item>
+<item>BC Gulf Islands Canada</item>
+<item>Beamsville Bench</item>
+<item>Beaujolais-Villages</item>
+<item>Beaumes de Venise</item>
+<item>Beaune</item>
+<item>Beechworth</item>
+<item>Beira Alta</item>
+<item>Beira Litoral</item>
+<item>BelÃ©n</item>
+<item>Bell Mountain</item>
+<item>Bellet</item>
+<item>Ben Lomond Mountain</item>
+<item>Bendigo</item>
+<item>Benmore Valley</item>
+<item>Bennett Valley</item>
+<item>Bergerac sec</item>
+<item>Bergerac</item>
+<item>Bernkastel</item>
+<item>Besteiros</item>
+<item>Betanzos</item>
+<item>Bienvenues-BÃ¢tard-Montrachet</item>
+<item>Big Rivers in</item>
+<item>Big Rivers</item>
+<item>Bingen</item>
+<item>Binissalem-Mallorca</item>
+<item>Blackwood Valley</item>
+<item>Blanquette de Limoux</item>
+<item>Blanquette mÃ©thode ancestrale</item>
+<item>Blaye</item>
+<item>Bodensee</item>
+<item>Bonnes-Mares</item>
+<item>Bonnezeaux</item>
+<item>Borba</item>
+<item>Bordeaux CÃ´tes de Francs</item>
+<item>Bordeaux Clairet</item>
+<item>Bordeaux Haut-Benauge</item>
+<item>Bordeaux rosÃ©</item>
+<item>Bordeaux sec</item>
+<item>Bordeaux supÃ©rieur</item>
+<item>Borden Ranch</item>
+<item>Bourgogne AligotÃ©</item>
+<item>Bourgogne Clairet</item>
+<item>Bourgogne Grand Ordinaire</item>
+<item>Bourgogne Passe-tout-grains</item>
+<item>Bourgogne rosÃ©</item>
+<item>Bourgogne</item>
+<item>Bourgueil</item>
+<item>Bouzeron</item>
+<item>Bowen</item>
+<item>Brachetto d'Acqui</item>
+<item>Breede River Valley</item>
+<item>Breisgau</item>
+<item>Broke Fordwich</item>
+<item>Brouilly</item>
+<item>Brunello di Montalcino</item>
+<item>Buen Orden</item>
+<item>Bullas</item>
+<item>Burg Cochem</item>
+<item>Burgengau</item>
+<item>Buzet</item>
+<item>CÃ¡vado</item>
+<item>CÃ´te de Beaune</item>
+<item>CÃ´te de Brouilly</item>
+<item>CÃ´te de Nuits-Villages</item>
+<item>CÃ´te RÃ´tie</item>
+<item>CÃ´tes d'Auvergne</item>
+<item>CÃ´tes de Beaune</item>
+<item>CÃ´tes de Bergerac moelleux</item>
+<item>CÃ´tes de Bergerac</item>
+<item>CÃ´tes de Blaye</item>
+<item>CÃ´tes de Bourg</item>
+<item>CÃ´tes de Castillon</item>
+<item>CÃ´tes de Duras</item>
+<item>CÃ´tes de la Malepère</item>
+<item>CÃ´tes de Nuits</item>
+<item>CÃ´tes de Provence</item>
+<item>CÃ´tes de Saint-Mont</item>
+<item>CÃ´tes de Toul</item>
+<item>CÃ´tes du Forez</item>
+<item>CÃ´tes du Jura</item>
+<item>CÃ´tes du Luberon</item>
+<item>CÃ´tes du Marmandais</item>
+<item>CÃ´tes du RhÃ´ne Villages</item>
+<item>CÃ´tes du RhÃ´ne</item>
+<item>CÃ´tes du Roussillon-Villages</item>
+<item>CÃ´tes du Roussillon</item>
+<item>CÃ´tes du Ventoux</item>
+<item>CÃ´tes du Vivarais</item>
+<item>CaÃ±ete â€“ LunahuanÃ¡</item>
+<item>Cabardès</item>
+<item>Cabernet d'Anjou</item>
+<item>Cachi</item>
+<item>Cadillac</item>
+<item>Cafayate</item>
+<item>Cahors</item>
+<item>Calatayud</item>
+<item>Calingasta</item>
+<item>Canberra District</item>
+<item>Cangas</item>
+<item>Canon-Fronsac</item>
+<item>Capay Valley</item>
+<item>CapitÃ¡n Montoya</item>
+<item>Carmel Valley</item>
+<item>Carmignano</item>
+<item>Carneros</item>
+<item>Carrodilla</item>
+<item>Cartaxo</item>
+<item>Cassis</item>
+<item>Castelli</item>
+<item>Castelo Rodrigo</item>
+<item>Castendo</item>
+<item>Castilla</item>
+<item>Castilla</item>
+<item>Castro Barros</item>
+<item>Catoctin</item>
+<item>Caucete</item>
+<item>Cayuga Lake</item>
+<item>Central Coast</item>
+<item>Central Delaware Valley</item>
+<item>Central Ranges</item>
+<item>Central Victoria</item>
+<item>Central Western Australia</item>
+<item>Cerasuolo di Vittoria</item>
+<item>Cerons</item>
+<item>Cerrito</item>
+<item>Cesanese del Piglio</item>
+<item>ChÃ¢teau-Chalon</item>
+<item>ChÃ¢teau-Grillet</item>
+<item>ChÃ¢teaumeillant</item>
+<item>ChÃ¢teauneuf-du-Pape</item>
+<item>ChÃ£ das Caldeiras</item>
+<item>ChÃ©nas</item>
+<item>Chablis Grand Cru</item>
+<item>Chablis Premier Cru</item>
+<item>Chablis</item>
+<item>Chacoli de lava</item>
+<item>Chacras de Coria</item>
+<item>Chalk Hill</item>
+<item>Chalone</item>
+<item>Chambertin-Clos de Bèze</item>
+<item>Chambertin</item>
+<item>Chambolle Musigny</item>
+<item>Chamusca</item>
+<item>Chancay y Huacho Valley</item>
+<item>Chapanay</item>
+<item>Charmes-Chambertin</item>
+<item>Chassagne-Montrachet</item>
+<item>Chateau Romain</item>
+<item>Chateau Tellagh</item>
+<item>Chaume</item>
+<item>Chehalem Mountains</item>
+<item>Chevalier-Montrachet</item>
+<item>Cheverny</item>
+<item>Chianti</item>
+<item>Chilecito</item>
+<item>Chiles Valley</item>
+<item>Chillón Valley</item>
+<item>Chimbas</item>
+<item>Chincha Valley</item>
+<item>Chinon</item>
+<item>Chiroubles</item>
+<item>Chivilcoy</item>
+<item>Choele Choel</item>
+<item>Chorey-lès-Beaune</item>
+<item>Cienega Valley</item>
+<item>Cima Corgo</item>
+<item>Cipoletti</item>
+<item>Clairette de Bellegarde</item>
+<item>Clairette de Die</item>
+<item>Clairette du Languedoc</item>
+<item>Clare Valley</item>
+<item>Clarksburg</item>
+<item>Classico</item>
+<item>Clear Lake</item>
+<item>Clements Hills</item>
+<item>Clos de la Roche</item>
+<item>Clos de Tart</item>
+<item>Clos de Vougeot</item>
+<item>Clos des Lambrays</item>
+<item>Clos Saint-Denis</item>
+<item>Colón</item>
+<item>Colalao del Valle</item>
+<item>Cole Ranch</item>
+<item>Colli Aretini</item>
+<item>Colli Fiorentini</item>
+<item>Colli Orientali del Friuli Picolit</item>
+<item>Colline Pisane</item>
+<item>Collioure</item>
+<item>ColomÃ©</item>
+<item>Colonia Caroya</item>
+<item>Colonia Segovia</item>
+<item>Columbia Gorge</item>
+<item>Columbia Valley</item>
+<item>Condado de Huelva</item>
+<item>Condrieu</item>
+<item>Conero</item>
+<item>Confluencia</item>
+<item>Constantia</item>
+<item>Coonawarra</item>
+<item>Coquimbito</item>
+<item>Corbières</item>
+<item>Cornas</item>
+<item>Cortese di Gavi</item>
+<item>Corton-Charlemagne</item>
+<item>Corton</item>
+<item>Coruche</item>
+<item>Costa de Araujo</item>
+<item>Costa de Cantabria</item>
+<item>Costières de NÃ®mes</item>
+<item>Cosumnes River</item>
+<item>Coteaux Champenois</item>
+<item>Coteaux d'Aix-en-Provence</item>
+<item>Coteaux d'Aix</item>
+<item>Coteaux de l'Aubance</item>
+<item>Coteaux de Languedoc</item>
+<item>Coteaux de Lyonnais</item>
+<item>Coteaux de Mascara</item>
+<item>Coteaux de Pierrevert</item>
+<item>Coteaux de Saumur</item>
+<item>Coteaux de Tlemcen</item>
+<item>Coteaux de Zaccar</item>
+<item>Coteaux du Layon</item>
+<item>Coteaux du Loir</item>
+<item>Coteaux du Tricastin</item>
+<item>Coteaux du VendÃ´mois</item>
+<item>Coteaux Varois</item>
+<item>Cour-Cheverny</item>
+<item>Cova da Beira</item>
+<item>Covelo</item>
+<item>Cowra</item>
+<item>CrÃ©mant d'Alsace</item>
+<item>CrÃ©mant de Bordeaux</item>
+<item>CrÃ©mant de Bourgogne</item>
+<item>CrÃ©mant de Die</item>
+<item>CrÃ©mant de Limoux</item>
+<item>CrÃ©mant de Loire</item>
+<item>CrÃ©mant du Jura</item>
+<item>CrÃ©py</item>
+<item>Creek Shores</item>
+<item>Criots-BÃ¢tard-Montrachet</item>
+<item>Crozes-Hermitage</item>
+<item>Cruz de Piedra</item>
+<item>Cruz del Eje</item>
+<item>Cuadro Nacional</item>
+<item>Cucamonga Valley</item>
+<item>Cumberland Valley</item>
+<item>Currency Creek</item>
+<item>Cuvee du President</item>
+<item>Dafnes</item>
+<item>Dahra</item>
+<item>de Julio</item>
+<item>Denmark</item>
+<item>Diablo Grande</item>
+<item>Diamond Mountain District</item>
+<item>Dolcetta Di Ovada</item>
+<item>Dolcetto di Dogliani Superiore</item>
+<item>Domaine Benchicao</item>
+<item>Domaine Djendel</item>
+<item>Domaine El Bordj</item>
+<item>Domaine Khadra</item>
+<item>Domaine Mamounia</item>
+<item>Domaine Sebra</item>
+<item>Donau</item>
+<item>Dos Rios</item>
+<item>Douro Superior</item>
+<item>Dry Creek Valley</item>
+<item>Dundee Hills</item>
+<item>Dunnigan Hills</item>
+<item>Durbanville</item>
+<item>Eastern Plains, Inland and North of Western Australia</item>
+<item>Eden Valley</item>
+<item>Edna Valley</item>
+<item>El Dorado</item>
+<item>El Espino</item>
+<item>El Mirador</item>
+<item>El Peral</item>
+<item>El Usillal</item>
+<item>Elgin</item>
+<item>Elim</item>
+<item>Elstertal</item>
+<item>Entre-Deux-Mers</item>
+<item>Eola-Amity Hills</item>
+<item>Escondido Valley</item>
+<item>Eugenio Bustos</item>
+<item>Extremadura</item>
+<item>Fair Play</item>
+<item>Famatina</item>
+<item>Far North</item>
+<item>Faugères</item>
+<item>Felipe Varela</item>
+<item>Fennville</item>
+<item>FiambalÃ¡</item>
+<item>Fiano di Avellino</item>
+<item>Fiddletown</item>
+<item>Finger Lakes</item>
+<item>Fitou</item>
+<item>Fixin</item>
+<item>Fleurie</item>
+<item>Fleurieu</item>
+<item>Formentera</item>
+<item>Four Mile Creek</item>
+<item>FrÃ¤nkischer Landwein</item>
+<item>Franciacorta</item>
+<item>Franken</item>
+<item>Frankland River</item>
+<item>Franschoek</item>
+<item>Fraser Valley</item>
+<item>Fray Luis BeltrÃ¡n</item>
+<item>Fredericksburg</item>
+<item>Fronsac</item>
+<item>Fronteira</item>
+<item>Fronton</item>
+<item>Gaillac</item>
+<item>Gattinara</item>
+<item>Geelong</item>
+<item>General Alvear</item>
+<item>General Conesa</item>
+<item>General Lamadrid</item>
+<item>General Roca</item>
+<item>Geographe</item>
+<item>Gevrey-Chambertin</item>
+<item>Ghemme</item>
+<item>Gigondas</item>
+<item>Gippsland</item>
+<item>Givry</item>
+<item>Glenrowan</item>
+<item>Godoy Cruz</item>
+<item>Goudge</item>
+<item>Goulburn Valley</item>
+<item>Goumenissa</item>
+<item>Grampians</item>
+<item>Grand River Valley</item>
+<item>Grand Valley</item>
+<item>Grands Échezeaux</item>
+<item>Granite Belt</item>
+<item>Granja-Amareleja</item>
+<item>Graves de Vayres</item>
+<item>Graves SupÃ©rieurs</item>
+<item>Graves</item>
+<item>Great Southern</item>
+<item>Great Western</item>
+<item>Greater Perth</item>
+<item>Greco di Tufo</item>
+<item>Green Valley of Russian River Valley</item>
+<item>Griotte-Chambertin</item>
+<item>GuaymallÃ©n</item>
+<item>Guenoc Valley</item>
+<item>Gundagai</item>
+<item>Hames Valley</item>
+<item>Hastings River</item>
+<item>Haut-MÃ©doc</item>
+<item>Haut-Montravel</item>
+<item>Heathcote</item>
+<item>Henty</item>
+<item>Hermann</item>
+<item>Hermitage</item>
+<item>Hessische BergstraÃŸe</item>
+<item>High Eden</item>
+<item>High Valley</item>
+<item>Hilltops</item>
+<item>Horse Heaven Hills</item>
+<item>Howell Mountain</item>
+<item>Hudson River Region</item>
+<item>Hunter Valley</item>
+<item>Hunter</item>
+<item>Ica Valley</item>
+<item>Iglesia</item>
+<item>Ingeniero Huergo</item>
+<item>Irancy</item>
+<item>IroulÃ©guy</item>
+<item>Isle St. George</item>
+<item>JÃ¡chal</item>
+<item>Jahant</item>
+<item>Jaime Prats</item>
+<item>Jasnières</item>
+<item>Johannisberg</item>
+<item>JuliÃ©nas</item>
+<item>JunÃ­n</item>
+<item>JuranÃ§on</item>
+<item>Kaiserstuhl</item>
+<item>Kanawha River Valley</item>
+<item>Kangaroo Island</item>
+<item>King Valley</item>
+<item>Knights Valley</item>
+<item>Kocher-Jagst-Tauber</item>
+<item>Kraichgau</item>
+<item>L'Étoile (Jura)</item>
+<item>La Arboleda</item>
+<item>La Central</item>
+<item>La Colonia</item>
+<item>La Consulta</item>
+<item>La Dormida</item>
+<item>La Gomera</item>
+<item>La Libertad</item>
+<item>La Llave</item>
+<item>La Paz</item>
+<item>La Primavera</item>
+<item>La Puntilla</item>
+<item>La RomanÃ©e-Conti</item>
+<item>La RomanÃ©e</item>
+<item>La TÃ¢che</item>
+<item>Ladoix</item>
+<item>Lake Erie North Shore</item>
+<item>Lake Erie</item>
+<item>Lake Michigan Shore</item>
+<item>Lake Wisconsin</item>
+<item>Lalande de Pomerol</item>
+<item>Lancaster Valley</item>
+<item>Landwein der Mosel</item>
+<item>Landwein der Ruwer</item>
+<item>Landwein der Saar</item>
+<item>Langhorne Creek</item>
+<item>Las Catitas</item>
+<item>Las Compuertas</item>
+<item>Las Heras</item>
+<item>Las Paredes</item>
+<item>Latricières-Chambertin</item>
+<item>Lavalle</item>
+<item>Leelanau Peninsula</item>
+<item>Lehigh Valley</item>
+<item>Lemnos</item>
+<item>Lenswood</item>
+<item>Lima</item>
+<item>Lime Kiln Valley</item>
+<item>Limestone Coast</item>
+<item>Limoux</item>
+<item>Lincoln Lakeshore</item>
+<item>Lindau</item>
+<item>Linganore</item>
+<item>Lirac</item>
+<item>Listrac-MÃ©doc</item>
+<item>Little Karoo</item>
+<item>Livermore Valley</item>
+<item>Lodi</item>
+<item>Long Island</item>
+<item>Loramie Creek</item>
+<item>Loreley</item>
+<item>Los Arboles</item>
+<item>Los Barriales</item>
+<item>Los Campamentos</item>
+<item>Los Carneros (Carneros)</item>
+<item>Los Sauces</item>
+<item>Loupiac</item>
+<item>Lower Murray</item>
+<item>LujÃ¡n de Cuyo</item>
+<item>Lunlunta</item>
+<item>Lussac-Saint-Émilion</item>
+<item>Luzuriaga</item>
+<item>MÃ¢con SupÃ©rieur</item>
+<item>MÃ¢con-Villages</item>
+<item>MÃ¢con</item>
+<item>MÃ©doc</item>
+<item>Macedon Ranges</item>
+<item>Madère</item>
+<item>Madeira Weine</item>
+<item>Madeira Wine</item>
+<item>Madera Wijn Ã“bidos</item>
+<item>Madera</item>
+<item>Madiran</item>
+<item>Main</item>
+<item>Maindreieck</item>
+<item>Mainviereck</item>
+<item>MaipÃº</item>
+<item>Mala Valley</item>
+<item>Malibu-Newton Canyon</item>
+<item>Malligasta</item>
+<item>Manjimup</item>
+<item>Mansfelder Seen</item>
+<item>Mantinia</item>
+<item>Maranges</item>
+<item>Marcillac</item>
+<item>Margaret River</item>
+<item>Margaux</item>
+<item>MarkgrÃ¤flerland</item>
+<item>Marsannay</item>
+<item>Martha's Vineyard</item>
+<item>Mascara Tlemcen D'hara Bejaia Chlef Algiers</item>
+<item>Maury</item>
+<item>Mavrodafni Kephalinia</item>
+<item>Mavrodafni Patra</item>
+<item>Mayor Drummond</item>
+<item>Mazis-Chambertin</item>
+<item>Mazoyères-Chambertin</item>
+<item>McDowell Valley</item>
+<item>McLaren Vale</item>
+<item>McMinnville</item>
+<item>Mecklenburger Landwein</item>
+<item>Mecklenburger</item>
+<item>Medea</item>
+<item>MeiÃŸen</item>
+<item>Mendocino Ridge</item>
+<item>Mendocino</item>
+<item>Menetou-Salon</item>
+<item>Mercurey</item>
+<item>Merritt Island</item>
+<item>Mesenicola</item>
+<item>Mesilla Valley</item>
+<item>Meursault</item>
+<item>Middle Rio Grande Valley</item>
+<item>Mimbres Valley</item>
+<item>Minervois</item>
+<item>Mississippi Delta</item>
+<item>Mitteldeutscher Landwein</item>
+<item>Mittelhaardt Deutsche WeinstraÃŸe</item>
+<item>Mittelrhein</item>
+<item>Mokelumne River</item>
+<item>Molino Orfila</item>
+<item>Molinos</item>
+<item>MonÃ§Ã£o</item>
+<item>Monbazillac</item>
+<item>Montagne Saint-Émilion</item>
+<item>Montagny</item>
+<item>Montalbano</item>
+<item>Monte ComÃ¡n</item>
+<item>Montecaseros</item>
+<item>Montepulciano d'Abruzzo Colline Teramane</item>
+<item>Monterey</item>
+<item>Monterrei</item>
+<item>Montespertoli</item>
+<item>MonthÃ©lie</item>
+<item>Monticello</item>
+<item>Montlouis</item>
+<item>Montrachet</item>
+<item>Montravel</item>
+<item>Monts du Tessala</item>
+<item>Morellino di Scansano</item>
+<item>Morey-Saint-Denis</item>
+<item>Morgon</item>
+<item>Mornington Peninsula</item>
+<item>Moscatel do Douro</item>
+<item>Moschatos Kephalinia</item>
+<item>Moschatos Lemnos</item>
+<item>Moschatos Patra</item>
+<item>Moschatos Rhodos</item>
+<item>Moschatos Riou Patra</item>
+<item>Mosel-Saar-Ruwer</item>
+<item>Moseltor</item>
+<item>Moulin Ã  Vent</item>
+<item>Moulis-en-MÃ©doc</item>
+<item>Mount Barker</item>
+<item>Mount Benson</item>
+<item>Mount Lofty Ranges</item>
+<item>Moura</item>
+<item>Mt. Harlan</item>
+<item>Mt. Veeder</item>
+<item>Mudgee</item>
+<item>Mundo Nuevo</item>
+<item>Murray Darling</item>
+<item>Muscadet CÃ´tes de Grand-Lieu</item>
+<item>Muscadet de Sèvre-et-Maine</item>
+<item>Muscadet des Coteaux de la Loire</item>
+<item>Muscadet</item>
+<item>Muscat de Beaumes-de-Venise</item>
+<item>Muscat de Frontignanl</item>
+<item>Muscat de Lunel</item>
+<item>Muscat de Mireval</item>
+<item>Muscat de Rivesaltes</item>
+<item>Muscat de Saint-Jean- de Minervois</item>
+<item>Musigny</item>
+<item>Nabul</item>
+<item>Nagambie Lakes</item>
+<item>Nahe</item>
+<item>Nahegauer Landwein</item>
+<item>Nahetal</item>
+<item>Naoussa</item>
+<item>Napa Valley</item>
+<item>Navarra</item>
+<item>Nazca</item>
+<item>Neckar</item>
+<item>Nemea</item>
+<item>New England</item>
+<item>Niagara Escarpment</item>
+<item>Niagara Lakeshore</item>
+<item>Niagara Peninsula</item>
+<item>Niagara River</item>
+<item>Niagara-on-the-Lake</item>
+<item>Nierstein</item>
+<item>Nonogasta</item>
+<item>Normale</item>
+<item>North Coast</item>
+<item>North East Victoria</item>
+<item>North Fork of Long Island</item>
+<item>North Fork of Roanoke</item>
+<item>North West Victoria</item>
+<item>North Yuba</item>
+<item>Northern Neck George Washington Birthplace</item>
+<item>Northern Rivers</item>
+<item>Northern Slopes</item>
+<item>Northern Sonoma</item>
+<item>Nueva California</item>
+<item>Nuits-Saint-Georges</item>
+<item>Oak Knoll District of Napa Valley</item>
+<item>Oakville</item>
+<item>Oberer Neckar</item>
+<item>Obermosel</item>
+<item>Oberrhein</item>
+<item>Ohio River Valley</item>
+<item>Okanagan Valley</item>
+<item>Old Mission Peninsula</item>
+<item>Oltrepo Pavese Metodo Classico</item>
+<item>Orange River Valley</item>
+<item>Orange</item>
+<item>OrlÃ©ans-ClÃ©ry</item>
+<item>OrlÃ©ans</item>
+<item>Ortenau</item>
+<item>OurÃ©m</item>
+<item>Outer Coastal Plain</item>
+<item>Ozark Highlands</item>
+<item>Ozark Mountain</item>
+<item>PÃ©charmant</item>
+<item>Paarl</item>
+<item>Pacheco Pass</item>
+<item>Pacherenc du Vic-Bilh Sec</item>
+<item>Pacherenc du Vic-Bilh</item>
+<item>Padthaway</item>
+<item>Paicines</item>
+<item>Paiva</item>
+<item>Palette</item>
+<item>Palmira</item>
+<item>Panquehua</item>
+<item>Pareditas</item>
+<item>Paros</item>
+<item>Paso Robles</item>
+<item>Patra</item>
+<item>Patrimonio</item>
+<item>Pauillac</item>
+<item>Peel</item>
+<item>Pelee Island</item>
+<item>Pemberton</item>
+<item>Perdriel</item>
+<item>Pernand-Vergelesses</item>
+<item>Perricoota</item>
+<item>Perth Hills</item>
+<item>Pessac LÃ©ognan</item>
+<item>Petit Chablis</item>
+<item>Peza</item>
+<item>PfÃ¤lzer Landwein</item>
+<item>Pfalz</item>
+<item>Phillips</item>
+<item>Piccadilly Valley</item>
+<item>Pichimahuida</item>
+<item>Pineau des Charentes</item>
+<item>Pinhel</item>
+<item>Pocito</item>
+<item>PomÃ¡n</item>
+<item>Pomerol</item>
+<item>Pommard</item>
+<item>Pomona</item>
+<item>Porongurup</item>
+<item>Port Phillip</item>
+<item>Port Wine</item>
+<item>Portalegre</item>
+<item>Portvin</item>
+<item>Portwein</item>
+<item>Portwijn</item>
+<item>Potter Valley</item>
+<item>Pouilly-FuissÃ©</item>
+<item>Pouilly-FumÃ©</item>
+<item>Pouilly-LochÃ©</item>
+<item>Pouilly-sur-Loire</item>
+<item>Pouilly-Vinzelles</item>
+<item>Premières CÃ´tes de Blaye</item>
+<item>Premières CÃ´tes de Bordeaux</item>
+<item>Puget Sound</item>
+<item>Puisseguin Saint-Émilion</item>
+<item>Puligny-Montrachet</item>
+<item>Pyrenees</item>
+<item>Quarts de Chaume</item>
+<item>Quincy</item>
+<item>RÃ©gniÃ©</item>
+<item>RÃ¶mertor</item>
+<item>Rama CaÃ­da</item>
+<item>Ramandolo</item>
+<item>Ramona Valley</item>
+<item>Rapsani</item>
+<item>Rasteau</item>
+<item>Rattlesnake Hills</item>
+<item>Rawson</item>
+<item>Real del Padre</item>
+<item>Recioto di Soave</item>
+<item>Red Hill Douglas County</item>
+<item>Red Hills Lake County</item>
+<item>Red Mountain</item>
+<item>Redondo</item>
+<item>Reducción</item>
+<item>Redwood Valley</item>
+<item>Regensburger Landwein</item>
+<item>Reguengos</item>
+<item>Remstal-Stuttgart</item>
+<item>Retsina Koropi Attika</item>
+<item>Retsina of Gialtra Evvia</item>
+<item>Retsina of Halkida Evvia</item>
+<item>Retsina of Kropia Attika</item>
+<item>Retsina of Markopoulou Attika</item>
+<item>Reuilly</item>
+<item>Rhein-Mosel</item>
+<item>Rhein</item>
+<item>Rheinburgen-Landwein</item>
+<item>Rheingau</item>
+<item>Rheingauer Landwein</item>
+<item>Rheinhessen</item>
+<item>Rheinischer Landwein</item>
+<item>Rhodos</item>
+<item>Ribbon Ridge</item>
+<item>Ribera del Duero</item>
+<item>Ribera del Guadiana</item>
+<item>Ribera del Queiles</item>
+<item>Richebourg</item>
+<item>Rimac Valley</item>
+<item>Rioja</item>
+<item>Riserva</item>
+<item>Rivadavia</item>
+<item>River Junction</item>
+<item>Riverina</item>
+<item>Riverland</item>
+<item>Rivesaltes</item>
+<item>Robe</item>
+<item>Robertson</item>
+<item>Robola Kephalinia</item>
+<item>Rockpile</item>
+<item>Rocky Knob</item>
+<item>Rodeo de la Cruz</item>
+<item>Rodeo del Medio</item>
+<item>Roero</item>
+<item>Rogue Valley</item>
+<item>RosÃ© de Loire</item>
+<item>RosÃ© des Riceys</item>
+<item>Rosette</item>
+<item>Roussette de Savoie</item>
+<item>Ruchottes-Chambertin</item>
+<item>Rufina</item>
+<item>Rully</item>
+<item>Russel</item>
+<item>Russian River Valley</item>
+<item>Rutherford</item>
+<item>Rutherglen</item>
+<item>Ruwertal</item>
+<item>SÃ¤chsischer Landwein</item>
+<item>SÃ¼dliche WeinstraÃŸe</item>
+<item>Saale-Unstrut</item>
+<item>Saar</item>
+<item>SaarlÃ¤ndischer Landwein der Mosel</item>
+<item>Sachsen</item>
+<item>Saddle Rock - Malibu</item>
+<item>Sagrantino di Montefalco</item>
+<item>Saint-Émilion Grand Cru</item>
+<item>Saint-Émilion</item>
+<item>Saint-Amour</item>
+<item>Saint-Aubin</item>
+<item>Saint-Bris</item>
+<item>Saint-Chinian</item>
+<item>Saint-Estèphe</item>
+<item>Saint-Georges Saint-Émilion</item>
+<item>Saint-Joseph</item>
+<item>Saint-Julien</item>
+<item>Saint-Nicolas-de-Bourgueil</item>
+<item>Saint-PÃ©ray</item>
+<item>Saint-Romain</item>
+<item>Saint-VÃ©ran</item>
+<item>Saint-Vivant</item>
+<item>Sainte-Croix-du-Mont</item>
+<item>Sainte-Foy-Bordeaux</item>
+<item>Salado Creek</item>
+<item>Samos</item>
+<item>San Antonio Valley</item>
+<item>San Benito</item>
+<item>San Bernabe</item>
+<item>San Blas de los Sauces</item>
+<item>San Carlos</item>
+<item>San Francisco Bay</item>
+<item>San Francisco del Monte</item>
+<item>San Javier</item>
+<item>San JosÃ©</item>
+<item>San Lucas</item>
+<item>San MartÃ­n</item>
+<item>San Pasqual Valley</item>
+<item>San Rafael</item>
+<item>San Ysidro District</item>
+<item>Sanagasta</item>
+<item>Sancerre</item>
+<item>Santa Clara Valley</item>
+<item>Santa Cruz Mountains</item>
+<item>Santa LucÃ­a</item>
+<item>Santa Lucia Highlands</item>
+<item>Santa MarÃ­a de Oro</item>
+<item>Santa MarÃ­a</item>
+<item>Santa Maria Valley</item>
+<item>Santa Rosa</item>
+<item>Santa Ynez Valley</item>
+<item>SantarÃ©m</item>
+<item>Santenay</item>
+<item>Santorini</item>
+<item>Sarmiento</item>
+<item>Saumur mousseux</item>
+<item>Saumur-Champigny</item>
+<item>Saumur</item>
+<item>Saussignac</item>
+<item>Sauternes</item>
+<item>Savennières CoulÃ©e-de-Serrant</item>
+<item>Savennières roche-aux-moines</item>
+<item>Savennières</item>
+<item>Savigny-les-Beaune</item>
+<item>SchloÃŸ Neuenburg</item>
+<item>SchwÃ¤bischer Landwein</item>
+<item>Seiad Valley</item>
+<item>Seneca Lake</item>
+<item>Serra da Estrela</item>
+<item>Seyssel</item>
+<item>Sforzato di Valtellina</item>
+<item>Shawnee Hills</item>
+<item>Shenandoah Valley</item>
+<item>Shoalhaven Coast</item>
+<item>Short Hills Bench</item>
+<item>Siebengebirge</item>
+<item>Sierra Foothills</item>
+<item>Silgueiros</item>
+<item>Similkameen Valley</item>
+<item>Sitia</item>
+<item>Slopes of Melitona</item>
+<item>Sloughhouse</item>
+<item>Snake River Valley</item>
+<item>Soave Superiore</item>
+<item>Solano County Green Valley</item>
+<item>Sonoita</item>
+<item>Sonoma Coast</item>
+<item>Sonoma County</item>
+<item>Sonoma Mountain</item>
+<item>Sonoma Valley</item>
+<item>Sousa</item>
+<item>South Burnett</item>
+<item>South Coast</item>
+<item>South West Australia</item>
+<item>Southeastern New England</item>
+<item>Southern Fleurieu</item>
+<item>Southern Flinders Ranges</item>
+<item>Southern Highlands</item>
+<item>Southern New South Wales</item>
+<item>Southern Oregon</item>
+<item>Spring Mountain District</item>
+<item>St. Davidâ€™s Bench</item>
+<item>St. Helena</item>
+<item>Sta. Rita Hills</item>
+<item>Stags Leap District</item>
+<item>Stargarder Land</item>
+<item>Starkenburg</item>
+<item>Starkenburger Landwein</item>
+<item>Steigerwald</item>
+<item>Stellenbosch</item>
+<item>Strathbogie Ranges</item>
+<item>Suisun Valley</item>
+<item>Sunbury</item>
+<item>Superiore</item>
+<item>Susah</item>
+<item>Swan Creek</item>
+<item>Swan District</item>
+<item>Swan Hill</item>
+<item>Swan Valley</item>
+<item>Swartland</item>
+<item>TafÃ­</item>
+<item>Tauberfranken</item>
+<item>TaubertÃ¤ler Landwein</item>
+<item>Taurasi</item>
+<item>Tavel</item>
+<item>Temecula Valley</item>
+<item>Terras de Azurara</item>
+<item>Terras de Senhorim</item>
+<item>Terras de Sicó</item>
+<item>Terras Durienses</item>
+<item>Texas Davis Mountains</item>
+<item>Texas High Plains</item>
+<item>Texas Hill Country</item>
+<item>Texoma</item>
+<item>ThÃ¼ringen</item>
+<item>The Hamptons, Long Island</item>
+<item>The Peninsulas</item>
+<item>Tinogasta</item>
+<item>Tolombón</item>
+<item>Tomar</item>
+<item>Torgiano Rosso Riserva</item>
+<item>Toscana</item>
+<item>Touraine-Amboise</item>
+<item>Touraine-Azay-le-Rideau</item>
+<item>Touraine-Mesland</item>
+<item>Touraine</item>
+<item>Tracy Hills</item>
+<item>Tres de Mayo</item>
+<item>Tres PorteÃ±as</item>
+<item>Trinity Lakes</item>
+<item>Tulbagh</item>
+<item>Tulum Valley</item>
+<item>Tulumaya</item>
+<item>Tumbarumba</item>
+<item>Tuniberg</item>
+<item>TunuyÃ¡n</item>
+<item>Tupungato</item>
+<item>Twenty Mile Bench</item>
+<item>Uco Valley</item>
+<item>Ugarteche</item>
+<item>Ullum</item>
+<item>Umpqua Valley</item>
+<item>Umstadt</item>
+<item>Upper Goulburn</item>
+<item>Vacqueyras</item>
+<item>ValenÃ§ay</item>
+<item>Valle de Cafayate</item>
+<item>Valle de Calingasta</item>
+<item>Valle El Pedernal</item>
+<item>Valle FÃ©rtil</item>
+<item>Valles CalchaquÃ­es</item>
+<item>Valles de Sadacia</item>
+<item>Valtellina Superiore</item>
+<item>Vancouver Island</item>
+<item>vColli Senesi</item>
+<item>Vermentino di Gallura</item>
+<item>Vernaccia di San Gimignano</item>
+<item>Vernaccia di Serrapetrona</item>
+<item>Vichigasta</item>
+<item>Villa Atuel</item>
+<item>Villa BastÃ­as</item>
+<item>Villa Nueva</item>
+<item>Villa Regina</item>
+<item>Villa Seca</item>
+<item>Villa Unión</item>
+<item>Vin de Corse</item>
+<item>Vin de Madère</item>
+<item>Vin de Porto</item>
+<item>Vin de Savoie</item>
+<item>Vinchina</item>
+<item>Vinemount Ridge</item>
+<item>Vinho da Madeira</item>
+<item>Vinho do Douro</item>
+<item>Vino di Madera</item>
+<item>Vino Nobile di Montepulciano</item>
+<item>Vinos de Madrid</item>
+<item>Vinsobres</item>
+<item>Virginia's Eastern Shore</item>
+<item>Vista Flores</item>
+<item>Vistalba</item>
+<item>Volnay</item>
+<item>Vosne-RomanÃ©e</item>
+<item>Vougeot</item>
+<item>Vouvray</item>
+<item>WÃ¼rttemberg</item>
+<item>WÃ¼rttembergisch Unterland</item>
+<item>WÃ¼rttembergischer Bodensee</item>
+<item>Wahluke Slope</item>
+<item>Walla Walla Valley</item>
+<item>Walporzheim</item>
+<item>Warren Hills</item>
+<item>West Australian South East Coastal</item>
+<item>West Elks</item>
+<item>Western Connecticut Highlands</item>
+<item>Western Plains</item>
+<item>Western Victoria</item>
+<item>Wild Horse Valley</item>
+<item>Willamette Valley</item>
+<item>Willow Creek</item>
+<item>Wines of Lazio</item>
+<item>Wonnegau</item>
+<item>Wrattonbully</item>
+<item>Yadkin Valley</item>
+<item>Yakima Valley</item>
+<item>Yamhill-Carlton District</item>
+<item>Yarra Valley</item>
+<item>York Mountain</item>
+<item>Yorkville Highlands</item>
+<item>Yountville</item>
+<item>Zitsa</item>
+<item>Zonda</item>
+    
+    </string-array> -->
+  <!--
+    <string name="varietal_prompt">Choose a Varietal</string>
+	<string-array name="varietal_array">
+	<item>Abouriou</item>
+	<item>Acolon</item>
+	<item>Agiorgitiko</item>
+	<item>Aglianico</item>
+	<item>Airén</item>
+	<item>Alamís</item>
+	<item>Alarije</item>
+	<item>Albalonga</item>
+	<item>Albana</item>
+	<item>Albariño</item>
+	<item>Alcañón</item>
+	<item>Alexandrouli</item>
+	<item>Alicante Bouschet</item>
+	<item>Aligoté</item>
+	<item>Altesse</item>
+	<item>Alvarelhão</item>
+	<item>Alvarinho</item>
+	<item>Amigne</item>
+	<item>Ancellotta</item>
+	<item>Ansonica</item>
+	<item>Antourenein Noir</item>
+	<item>Aragones</item>
+	<item>Arinto</item>
+	<item>Arneis</item>
+	<item>Arvine</item>
+	<item>Assyrtiko</item>
+	<item>Athiri</item>
+	<item>Auxerrois</item>
+	<item>Auxerrois Blanc</item>
+	<item>Azal Espanhol</item>
+	<item>Bacchus</item>
+	<item>Balsamina</item>
+	<item>Barbarossa</item>
+	<item>Barbera</item>
+	<item>Barcelos</item>
+	<item>Bastardo</item>
+	<item>Biancone</item>
+	<item>Bical</item>
+	<item>Black Beauty</item>
+	<item>Blatina</item>
+	<item>Blauburgunder</item>
+	<item>Blauer Portugieser</item>
+	<item>Blauer Wildbacher</item>
+	<item>Blaufränkisch</item>
+	<item>Boal</item>
+	<item>Bobal</item>
+	<item>Bogdanuša</item>
+	<item>Bonarda</item>
+	<item>Bondola</item>
+	<item>Bordelesa Zuri</item>
+	<item>Borgonja Crna</item>
+	<item>Bouvier</item>
+	<item>Bovale Sardo</item>
+	<item>Brachetto</item>
+	<item>Braquet</item>
+	<item>Brunello</item>
+	<item>Bual</item>
+	<item>Burger</item>
+	<item>Băbească Neagră</item>
+	<item>Cabernet Franc</item>
+	<item>Cabernet Sauvignon</item>
+	<item>Cabernet Shiraz</item>
+	<item>Cabernet/Shiraz</item>
+	<item>Cainho Branco</item>
+	<item>Calitor</item>
+	<item>Canaiolo</item>
+	<item>Candive</item>
+	<item>Cannonau</item>
+	<item>Cape Riesling</item>
+	<item>Carignan</item>
+	<item>Carignane</item>
+	<item>Carignano</item>
+	<item>Cariñena</item>
+	<item>Carlos</item>
+	<item>Carménère</item>
+	<item>Carnelian</item>
+	<item>Castelão</item>
+	<item>Castiglione</item>
+	<item>Catarratto</item>
+	<item>Cencibel</item>
+	<item>Cerceal</item>
+	<item>Charbono</item>
+	<item>Chardonnay</item>
+	<item>Chasselas</item>
+	<item>Chenin Blanc</item>
+	<item>Cinsault</item>
+	<item>Cinsaut</item>
+	<item>Clairette</item>
+	<item>Clare Riesling</item>
+	<item>Colombard</item>
+	<item>Cortese</item>
+	<item>Corvina</item>
+	<item>Cot</item>
+	<item>Courbu</item>
+	<item>Courtillier Musqué</item>
+	<item>Cowart</item>
+	<item>Criolla Grande</item>
+	<item>Crljenak Kaštelanski</item>
+	<item>Croatina</item>
+	<item>Crouchen</item>
+	<item>Cserszegi Fűszeres</item>
+	<item>Darkenuša</item>
+	<item>Dobričić</item>
+	<item>Dolcetto</item>
+	<item>Doradillo</item>
+	<item>Dornfelder</item>
+	<item>Drupeggio</item>
+	<item>Durif</item>
+	<item>Ehrenfelser</item>
+	<item>Emir Karasi</item>
+	<item>Entournerein</item>
+	<item>Erbaluce</item>
+	<item>Escanyavella</item>
+	<item>Ezerjó</item>
+	<item>Faber</item>
+	<item>Falanghina</item>
+	<item>Favorita</item>
+	<item>Fendant</item>
+	<item>Fernão Pires</item>
+	<item>Ferral</item>
+	<item>Fetească Albă</item>
+	<item>Fetească Neagră</item>
+	<item>Fetească Regală</item>
+	<item>Fetiaska</item>
+	<item>Fiano</item>
+	<item>Flora</item>
+	<item>Flowers</item>
+	<item>Folle Blanche</item>
+	<item>Francusa</item>
+	<item>Freisa</item>
+	<item>Freisamer</item>
+	<item>Friulano</item>
+	<item>Fromenteau</item>
+	<item>Fry</item>
+	<item>Furmint</item>
+	<item>Gaglioppo</item>
+	<item>Gamay</item>
+	<item>Gamay Noir</item>
+	<item>Gamé</item>
+	<item>Garganega Bianca</item>
+	<item>Garnacha</item>
+	<item>Garnatxa</item>
+	<item>Gellewza</item>
+	<item>Gewürztraminer</item>
+	<item>Gloria</item>
+	<item>Godello</item>
+	<item>Goldriesling</item>
+	<item>Gouais blanc</item>
+	<item>Gouveio</item>
+	<item>Graciano</item>
+	<item>Granny Val</item>
+	<item>Grasă de Cotnari</item>
+	<item>Grecanico</item>
+	<item>Grechetto</item>
+	<item>Greco</item>
+	<item>Greco Bianco</item>
+	<item>Greco Nero</item>
+	<item>Grenache</item>
+	<item>Grenache Blanc</item>
+	<item>Grenache Gris</item>
+	<item>Grey Riesling</item>
+	<item>Grignolino</item>
+	<item>Grillo</item>
+	<item>Grk</item>
+	<item>Gropello</item>
+	<item>Gros Manseng</item>
+	<item>Gros Plant</item>
+	<item>Grüner Veltliner</item>
+	<item>Guardavalle</item>
+	<item>Guarnaccia Bianca</item>
+	<item>Gutedel</item>
+	<item>Hignin Noir</item>
+	<item>Hondarribi Zuri</item>
+	<item>Huxelrebe</item>
+	<item>Hárslevelű</item>
+	<item>Incrocio Manzoni</item>
+	<item>Irsai Oliver</item>
+	<item>Ison</item>
+	<item>Izkiriota Handi</item>
+	<item>Izkiriota Ttipi</item>
+	<item>Izsáki Sarfehér</item>
+	<item>Jacquère</item>
+	<item>James</item>
+	<item>Johannisberg Riesling</item>
+	<item>Juhfark</item>
+	<item>Jumbo</item>
+	<item>Kadarka</item>
+	<item>Kalecik Karasi</item>
+	<item>Kerner</item>
+	<item>Klein Rauschling</item>
+	<item>Klevener de Heiligenstein</item>
+	<item>Klevner</item>
+	<item>Klingelberger</item>
+	<item>Knipperle</item>
+	<item>Kratosija</item>
+	<item>Krstač</item>
+	<item>Kékfrankos</item>
+	<item>Kékoportó</item>
+	<item>Ladikino</item>
+	<item>Lagrein</item>
+	<item>Lambrusco</item>
+	<item>Lazki Rizling</item>
+	<item>Lemberger</item>
+	<item>Len de l'El</item>
+	<item>Leànyka</item>
+	<item>Loureira</item>
+	<item>Macabeo</item>
+	<item>Macabeo</item>
+	<item>Macabeu</item>
+	<item>Madeleine Angevine</item>
+	<item>Magliocco</item>
+	<item>Magnolia</item>
+	<item>Malagousia</item>
+	<item>Malbec</item>
+	<item>Malvar</item>
+	<item>Malvasia</item>
+	<item>Malvasia Nera</item>
+	<item>Malvasia di Schierano</item>
+	<item>Mammolino</item>
+	<item>Mandolari</item>
+	<item>Mantonico Bianco</item>
+	<item>Maratheftiko</item>
+	<item>Maria Gomes</item>
+	<item>Marsanne</item>
+	<item>Marsanne Noir</item>
+	<item>Marsigliana</item>
+	<item>Marzemino</item>
+	<item>Mataro</item>
+	<item>Mauzac</item>
+	<item>Mavro</item>
+	<item>Mavrodafni</item>
+	<item>Mavrud</item>
+	<item>Mayorquin</item>
+	<item>Mazuelo</item>
+	<item>Melon de Bourgogne</item>
+	<item>Melon de Bourgogne</item>
+	<item>Memory</item>
+	<item>Mencia</item>
+	<item>Merlot</item>
+	<item>Merseguera</item>
+	<item>Millot</item>
+	<item>Mission</item>
+	<item>Molinara</item>
+	<item>Monastrell</item>
+	<item>Monbadon</item>
+	<item>Monica</item>
+	<item>Montepulciano</item>
+	<item>Morio-Muskat</item>
+	<item>Moscatel Branco</item>
+	<item>Moscatel de Málaga</item>
+	<item>Moscatel de Setúbal</item>
+	<item>Moscatell</item>
+	<item>Moscato</item>
+	<item>Moschofilero</item>
+	<item>Mosler</item>
+	<item>Mourvèdre</item>
+	<item>Mtsvane</item>
+	<item>Mujuretuli</item>
+	<item>Muscadelle</item>
+	<item>Muscadet de Bourgogne</item>
+	<item>Muscadet de Bourgogne</item>
+	<item>Muscadine</item>
+	<item>Muscadines</item>
+	<item>Muscat</item>
+	<item>Muscat Blanc</item>
+	<item>Muscat Frontignan</item>
+	<item>Muscat Ottonel</item>
+	<item>Muscat of Alexandria</item>
+	<item>Muskateller</item>
+	<item>Müller-Thurgau</item>
+	<item>Müllerebe</item>
+	<item>Nebbiolo</item>
+	<item>Negroamaro</item>
+	<item>Nerello Cappuccio</item>
+	<item>Nerello Mascalese</item>
+	<item>Nero d'Avola</item>
+	<item>Neuburger</item>
+	<item>Nielluccio</item>
+	<item>Nocera</item>
+	<item>Nuragus</item>
+	<item>Négrette</item>
+	<item>Ojaleshi</item>
+	<item>Okuzgozu</item>
+	<item>Olaszrizling</item>
+	<item>Ondenc</item>
+	<item>Optima</item>
+	<item>Ortega</item>
+	<item>Oseleta</item>
+	<item>Pais</item>
+	<item>Palomino</item>
+	<item>Palomino Fino</item>
+	<item>Parellada</item>
+	<item>Parč</item>
+	<item>Pecorello</item>
+	<item>Pecorino</item>
+	<item>Pedro Ximénez</item>
+	<item>Periquita</item>
+	<item>Perle</item>
+	<item>Petit Manseng</item>
+	<item>Petit Meslier</item>
+	<item>Petit Verdot</item>
+	<item>Petite Syrah</item>
+	<item>Pignerol</item>
+	<item>Pineau de la Loire</item>
+	<item>Pinot Bianco</item>
+	<item>Pinot Blanc</item>
+	<item>Pinot Grigio</item>
+	<item>Pinot Gris</item>
+	<item>Pinot Meunier</item>
+	<item>Pinot Nero</item>
+	<item>Pinot Noir</item>
+	<item>Pinotage</item>
+	<item>Piquepoult</item>
+	<item>Plavac Mali</item>
+	<item>Poulsard</item>
+	<item>Preto de Mortágua</item>
+	<item>Primitivo</item>
+	<item>Prosecco</item>
+	<item>Rabigato</item>
+	<item>Refosco</item>
+	<item>Refošk</item>
+	<item>Reichensteiner</item>
+	<item>Rheinriesling</item>
+	<item>Rhoditis</item>
+	<item>Rieslaner</item>
+	<item>Riesling</item>
+	<item>Riesling Italico</item>
+	<item>Rivaner</item>
+	<item>Rkatsiteli</item>
+	<item>Rolle</item>
+	<item>Rondinella</item>
+	<item>Roriz</item>
+	<item>Rotberger</item>
+	<item>Rotburger</item>
+	<item>Rotgipfler</item>
+	<item>Roussanne</item>
+	<item>Rubired</item>
+	<item>Ruby Cabernet</item>
+	<item>Ruché</item>
+	<item>Rufeta</item>
+	<item>Rufete</item>
+	<item>Sagrantino</item>
+	<item>Sangiovese</item>
+	<item>Saperavi</item>
+	<item>Sauvignon Blanc</item>
+	<item>Sauvignon Gris</item>
+	<item>Sauvignon Vert</item>
+	<item>Savagnin</item>
+	<item>Savagnin Blanc</item>
+	<item>Savagnin Rosé</item>
+	<item>Savatiano</item>
+	<item>Scheurebe</item>
+	<item>Schiava</item>
+	<item>Schiras</item>
+	<item>Schwarzriesling</item>
+	<item>Schönburger</item>
+	<item>Sciacarello</item>
+	<item>Scuppernong</item>
+	<item>Septiner</item>
+	<item>Sercial</item>
+	<item>Sereine</item>
+	<item>Sereksia</item>
+	<item>Serine</item>
+	<item>Shiraz</item>
+	<item>Siegerrebe</item>
+	<item>Silvaner</item>
+	<item>Sipon</item>
+	<item>Sirac</item>
+	<item>Smederevka</item>
+	<item>Sousão</item>
+	<item>Spätburgunder</item>
+	<item>Spätrot</item>
+	<item>St. Laurent</item>
+	<item>Sultana</item>
+	<item>Summit</item>
+	<item>Supreme</item>
+	<item>Sylvaner</item>
+	<item>Symphony</item>
+	<item>Syra</item>
+	<item>Syrac</item>
+	<item>Syrah</item>
+	<item>Szürkebarát</item>
+	<item>Sémillon</item>
+	<item>Taminga</item>
+	<item>Tamîioasa</item>
+	<item>Tannat</item>
+	<item>Tarrango</item>
+	<item>Tempranillo</item>
+	<item>Teroldego</item>
+	<item>Terret Noir</item>
+	<item>Thomas</item>
+	<item>Tinta Barroca</item>
+	<item>Tinta Carvalha</item>
+	<item>Tinta Cão</item>
+	<item>Tinta Pinheira</item>
+	<item>Tinta Roriz</item>
+	<item>Tinta del Pais</item>
+	<item>Tokay</item>
+	<item>Torrontés</item>
+	<item>Touriga Franca</item>
+	<item>Touriga Francesa</item>
+	<item>Touriga Nacional</item>
+	<item>Trajadura</item>
+	<item>Traminer</item>
+	<item>Tramini</item>
+	<item>Trebbiano</item>
+	<item>Treixadura</item>
+	<item>Troia</item>
+	<item>Trollinger</item>
+	<item>Trousseau</item>
+	<item>Trousseau Gris</item>
+	<item>Ugni Blanc</item>
+	<item>Ull de Llebre</item>
+	<item>Valdepeñas</item>
+	<item>Valdiguié</item>
+	<item>Verdelho</item>
+	<item>Verdia</item>
+	<item>Verdicchio</item>
+	<item>Verdiso</item>
+	<item>Verduzzo Friulano</item>
+	<item>Verduzzo Trevigiano</item>
+	<item>Vermentino</item>
+	<item>Vernaccia</item>
+	<item>Vilana</item>
+	<item>Viognier</item>
+	<item>Vitovska</item>
+	<item>Viura</item>
+	<item>Viura</item>
+	<item>Vranac</item>
+	<item>Weissburgunder</item>
+	<item>Weisser Gutedel</item>
+	<item>Welschriesling</item>
+	<item>Wildbacher</item>
+	<item>Würzer</item>
+	<item>Xarello</item>
+	<item>Xarel·lo</item>
+	<item>Xuri Zerratua</item>
+	<item>Xynisteri</item>
+	<item>Xynomavro</item>
+	<item>Zeusz</item>
+	<item>Zierfandler</item>
+	<item>Zinfandel</item>
+	<item>Zweigelt</item>
+	<item>Zweigeltrebe</item>
+	<item>Zéta</item>
+	<item>Österreicher</item>
+	<item>Other</item>
+	</string-array> -->
 </resources>
