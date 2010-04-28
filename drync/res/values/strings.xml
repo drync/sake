@@ -29,6 +29,9 @@
 	
 	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	
+	<string name="successfulcellaradd">You have successfully added this wine to your cellar.</string>
+	<string name="failurecellaradd">This wine could not be added to your cellar.</string>
+	
 	<string name="noreviewurl">There is no link attached to this review.</string>
 	
 	<string name="style_prompt">Choose a style</string>

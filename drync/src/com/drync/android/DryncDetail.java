@@ -78,8 +78,6 @@ import com.drync.android.ui.RemoteImageView;
 
 public class DryncDetail extends DryncBaseActivity {
 
-	
-	
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
@@ -183,7 +181,7 @@ public class DryncDetail extends DryncBaseActivity {
 		//this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
 		//this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
 		
-		LayoutInflater inflater = getLayoutInflater();
+		//LayoutInflater inflater = getLayoutInflater();
 		
 		/*flipper = (ViewFlipper) findViewById(R.id.flipper);
 		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
@@ -276,7 +274,7 @@ public class DryncDetail extends DryncBaseActivity {
 				final Review fReview = review;
 				readReviewTxt.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
-						DryncDetail.this.launchReviews();
+						DryncDetail.this.launchReviews(DryncDetail.this.mBottle);
 					}});
 			}
 
@@ -426,8 +424,11 @@ public class DryncDetail extends DryncBaseActivity {
 		if (mBottle == null)
 			return;
 		
+		Intent twIntent = new Intent(this, DryncAddToCellar.class);
+		twIntent.putExtra("bottle", mBottle);
+		startActivity(twIntent);  
 		
-		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
+		/*final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
 		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
 		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
 		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
@@ -548,12 +549,16 @@ public class DryncDetail extends DryncBaseActivity {
 		View view = flipper.findViewById(R.id.addToCellar);
 		//flipper.bringChildToFront(view);
 		int addToCellarIdx = flipper.indexOfChild(view);
-		flipper.setDisplayedChild(addToCellarIdx);		
+		flipper.setDisplayedChild(addToCellarIdx);		*/
 	}
 	
-	private void launchReviews() {
+	private void launchReviews(Bottle bottle) {
+		Intent twIntent = new Intent(this, DryncDetailReviews.class);
+		twIntent.putExtra("bottle", bottle);
+		startActivity(twIntent);  
+		
 		// mBottle should be set by the detail view, if not, return;
-		if (mBottle == null)
+		/*if (mBottle == null)
 			return;
 		
 		if (rebuildReviews)
@@ -627,7 +632,7 @@ public class DryncDetail extends DryncBaseActivity {
 
 			populateReviewTable(mReviewTable, mBottle);
 			rebuildReviews = false;
-		}
+		}*/
 		
 		//showNext();
 		

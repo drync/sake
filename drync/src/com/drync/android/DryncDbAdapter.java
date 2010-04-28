@@ -129,10 +129,9 @@ public class DryncDbAdapter
     }
     
     //---insert a title into the database---
-    public long insertCork(Cork cork) 
+    public long insertCork(Cork cork)
     {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_ROWID, cork.get_id());
         initialValues.put(KEY_CORK_ID, cork.getCork_id());
         initialValues.put(KEY_CORK_UUID, cork.getCork_uuid());
         initialValues.put(KEY_DESCRIPTION, cork.getDescription());
