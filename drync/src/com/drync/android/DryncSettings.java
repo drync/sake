@@ -11,7 +11,7 @@ import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
-public class DryncSettings extends Activity {
+public class DryncSettings extends DryncBaseActivity {
 
 	SharedPreferences settings;
 	EditText usernameEdit;

@@ -11,6 +11,26 @@ public class Review implements Parcelable {
 	String review_cat;
 	String review_source;
 	
+	public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>() {
+        public Review createFromParcel(Parcel in) {
+            return new Review(in);
+        }
+        
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
+	
+    public Review() {
+		super();
+	}
+
+
+	public Review(Parcel in) {
+		super();
+		readFromParcel(in);
+	}
+	
 	public String getPublisher() {
 		return publisher;
 	}
@@ -56,9 +76,22 @@ public class Review implements Parcelable {
 		return 0;
 	}
 
-	public void writeToParcel(Parcel arg0, int arg1) {
-		// TODO Auto-generated method stub
-
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(this.publisher);
+		out.writeString(this.review_cat);
+		out.writeString(this.review_source);
+		out.writeString(this.text);
+		out.writeString(this.url);
 	}
+	
+	private void readFromParcel(Parcel in) {
+		publisher = in.readString();
+		review_cat = in.readString();
+		review_source = in.readString();
+		text = in.readString();
+		url = in.readString();
+		
+	}
+	
 
 }

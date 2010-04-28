@@ -1,6 +1,7 @@
 package com.drync.android.objects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -241,7 +242,8 @@ public class Bottle implements Parcelable {
 		out.writeString(price);
 		out.writeString(rating);
 		out.writeInt(reviewCount);
-		
+		//Review[] reviewarray = reviews.toArray(new Review[0]);
+		out.writeTypedList(reviews);
 	}
 	
 	public void readFromParcel(Parcel in) {
@@ -258,5 +260,8 @@ public class Bottle implements Parcelable {
 		price = in.readString();
 		rating = in.readString();	
 		reviewCount = in.readInt();
+		//Parcelable[] reviewsarray = in.readParcelableArray(Review.class.getClassLoader());
+		reviews = new ArrayList<Review>();
+		in.readTypedList(reviews, Review.CREATOR);//(ArrayList<Review>) Arrays.asList(reviewsarray); 
 	}
 }

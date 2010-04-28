@@ -65,7 +65,7 @@ public class Drync extends Activity {
     	        		else
     	        		{
     	        			Intent intent = new Intent();
-    	        			intent.setClass(Drync.this, DryncTabMain.class);
+    	        			intent.setClass(Drync.this, DryncSearch.class);
     	        			startActivity(intent);
     	        			Drync.this.mShowIntro = false;
     	        			finish();
@@ -106,7 +106,7 @@ public class Drync extends Activity {
     				register.setVisibility(View.GONE);
     			// start Main & End Intro
     			Intent intent = new Intent();
-                intent.setClass(Drync.this, DryncTabMain.class);
+                intent.setClass(Drync.this, DryncSearch.class);
                 startActivity(intent);
                 finish();
                 break;
