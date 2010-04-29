@@ -52,6 +52,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -566,6 +567,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
+		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
+		final EditText locationVal = (EditText)addView.findViewById(R.id.atcLocationVal);
+		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
+		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
+		final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
 		
 		ArrayAdapter<String> yearSpnAdapter = null;
 		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
@@ -619,6 +625,22 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						cork.setGrape(varietalVal.getEditableText().toString());
 						cork.setRegion(regionVal.getEditableText().toString());
 						cork.setCork_rating(ratingbar.getRating());
+						cork.setDescription(tastingNotesVal.getEditableText().toString());
+						cork.setLocation(locationVal.getEditableText().toString());
+						cork.setCork_want(wantVal.isChecked());
+						cork.setCork_drank(drankVal.isChecked());
+						int ownCount = 0;
+						if (ownVal.getEditableText().toString() != "")
+						{
+							ownCount = Integer.parseInt(ownVal.getEditableText().toString());
+						}
+						
+						cork.setCork_bottle_count(ownCount);
+						
+						if (ownCount > 0)
+							cork.setCork_own(true);
+						else
+							cork.setCork_own(false);
 
 						// persist to database.
 						dbAdapter.open();

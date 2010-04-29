@@ -164,100 +164,128 @@
 					style="@style/Qype.RatingBarSmall" android:gravity="center"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"/>	
 				</TableRow>
-				
-				<!--  <TableRow>
-					<TextView android:id="@+id/atcStyeLbl" android:layout_column="1"
-						android:text="Style" android:textColor="#000000"
-					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" 
-					/>
-					
-					<AutoCompleteTextView android:id="@+id/atcStyleVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:singleLine="true" android:gravity="left"  />	
-				</TableRow>
-				
-				<TableRow>
-					<TextView android:id="@+id/atcRegionLbl" android:layout_column="1"
-						android:text="Region" android:textColor="#000000"
-					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" 
-					/>
-					
-					<AutoCompleteTextView android:id="@+id/atcRegionVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:singleLine="true" android:gravity="left"  />	
-				</TableRow> -->
-			
 			</TableLayout>
-		<!-- 	<RelativeLayout android:id="@+id/atcVtgSection"
-				android:layout_width="fill_parent" android:layout_alignParentTop="true"
-				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
-				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
-				android:layout_marginBottom="20px" 
-				android:padding="5dip">
-
-				<TextView android:id="@+id/atcVarietalLbl"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="20px"
-					android:textColor="#000000"
-					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Varietal" />
-					
-				<AutoCompleteTextView android:id="@+id/atcVarietalVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:layout_toRightOf="@id/atcVarietalLbl" android:layout_alignParentRight="true"
-					android:singleLine="true" android:layout_alignBaseline="@id/atcVarietalLbl"  />
-					
-		        <TextView android:id="@+id/atcStyleLbl"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="25px"
-					android:layout_below="@id/atcVarietalLbl" android:layout_alignParentLeft="true"
-					android:textColor="#000000" 
-					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Style" />
-					
-				<AutoCompleteTextView android:id="@+id/atcStyleVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content" 
-					android:layout_alignLeft="@id/atcVarietalVal" android:layout_below="@id/atcVarietalVal"
-					android:layout_toRightOf="@id/atcStyleLbl" android:layout_alignParentRight="true"
-					android:singleLine="true"   />
-
-				<TextView android:id="@+id/atcRegionLbl"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="20px"
-					android:layout_below="@id/atcStyleLbl" android:layout_alignParentLeft="true"
-					android:textColor="#000000" 
-					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Region" />
-
-				<AutoCompleteTextView android:id="@+id/atcRegionVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content" 
-					android:layout_alignLeft="@id/atcStyleVal" android:layout_below="@id/atcStyleVal"
-					android:layout_toRightOf="@id/atcRegionLbl" android:layout_alignParentRight="true"
-					android:singleLine="true"   />
-
-			</RelativeLayout> -->
-
-			<!-- Other Information section -->
-			<RelativeLayout android:id="@+id/addlInfoSection"
+		
+					<!-- Other Information section -->
+			<RelativeLayout android:id="@+id/notesSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px">
 
-				<TextView android:id="@+id/addlInfoHdr"
+			 	<TextView android:id="@+id/tastingNoteHdr"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:layout_alignParentLeft="true"
 					android:layout_gravity="left" android:layout_marginLeft="10px"
 					android:layout_marginRight="10px" android:layout_marginTop="20px"
 					android:gravity="left" android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Additional Information" />
+					android:singleLine="true" android:text="Tasting Notes:" /> 
+					
+				<EditText android:id="@+id/atcTastingNoteVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:background="@drawable/rndborder" 
+					android:layout_below="@id/tastingNoteHdr" android:singleLine="false" />	
+				
+			</RelativeLayout>
 
-				<TableLayout android:id="@+id/addlInfoTbl"
+			<RelativeLayout android:id="@+id/locationSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+
+			 	<TextView android:id="@+id/locationHdr"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Location Bought or Drank:" /> 
+					
+				<EditText android:id="@+id/atcLocationVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:background="@drawable/rndborder" 
+					android:layout_below="@id/locationHdr" android:singleLine="true" />	
+			
+			</RelativeLayout>
+			
+    		<RelativeLayout android:id="@+id/tallySection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">		
+    			
+    			<TableLayout android:id="@+id/atcOwnCountSection"
+				android:layout_width="fill_parent" 
+				android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:stretchColumns="1">
+				
+				<TableRow>
+					<TextView android:id="@+id/atcWantLbl"
+						android:text="I want"  android:textColor="#000000" android:layout_gravity="center_vertical"
+					android:typeface="sans" android:ellipsize="none" android:gravity="left"
+					android:singleLine="true" 
+					/> 
+					
+					<CheckBox android:id="@+id/atcWantValue"
+    				android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:layout_gravity="center_vertical" android:paddingLeft="10px" 
+					android:paddingTop="5px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+    				 />
+				</TableRow>
+				
+				<TableRow>
+					<TextView android:id="@+id/atcOwnCountLbl"
+						android:text="I own"  android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none" android:gravity="left"
+					android:singleLine="true" 
+					/> 
+					
+					<EditText android:id="@+id/atcOwnCountVal"
+					 android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:layout_marginLeft="15px" 
+					android:paddingLeft="10px" android:background="@drawable/rndborder" 
+					android:singleLine="true" />
+				</TableRow>
+				
+				<TableRow>
+					<TextView android:id="@+id/atcDrankLbl"
+						android:text="I drank"  android:textColor="#000000" android:layout_gravity="center_vertical"
+					android:typeface="sans" android:ellipsize="none" android:gravity="left"
+					android:singleLine="true" 
+					/> 
+					
+					<CheckBox android:id="@+id/atcDrankValue"
+    				android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:layout_gravity="center_vertical" android:paddingLeft="10px" 
+					android:paddingTop="5px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+    				 />
+				</TableRow>
+				
+			</TableLayout>
+    
+			 	<!-- <TextView android:id="@+id/locationHdr"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Location Bought or Drank:" /> 
+					
+				<EditText android:id="@+id/atcLocationVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:background="@drawable/rndborder" 
+					android:layout_below="@id/locationHdr" android:singleLine="true" />	-->
+			
+			</RelativeLayout>
+			<!-- 	<TableLayout android:id="@+id/tastingNoteTbl"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:paddingTop="5px" android:background="@drawable/rndborder"
 					android:layout_below="@id/addlInfoHdr">
@@ -302,9 +330,9 @@
 							android:padding="3dip" android:textColor="#000000" />
 
 					</TableRow>
-				</TableLayout>
+				</TableLayout> 
 
-			</RelativeLayout>
+			</RelativeLayout> -->
 			
 			<RelativeLayout android:id="@+id/cellarBtnSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
