@@ -21,6 +21,9 @@
         <activity android:name=".DryncSearch"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".DryncTopWines"
+                  android:label="@string/app_name">
+        </activity>
         <activity android:name=".DryncDetail"
                   android:label="@string/app_name">
         </activity>

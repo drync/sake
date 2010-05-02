@@ -47,6 +47,8 @@ public class DryncProvider {
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
 	
+	static String CORKLISTURL = "corks/?format=xml&device_id=";
+	
 	public static final int TOP_POPULAR = 0;
 	static final String TOP_POPULAR_URL = "/top/popular.xml";
 	public static final int TOP_WANTED = 1;
@@ -112,83 +114,18 @@ public class DryncProvider {
 			doc = builder.parse(entity.getContent());
 			NodeList bottles = doc.getElementsByTagName("bottle");
 
-			if(bottles!=null) {
+			if(bottles!=null) 
+			{
 				for(int j=0,m=bottles.getLength();j<m;j++)
 				{
 					Node bottleNode = bottles.item(j);
-
-					if (bottleNode != null)
+					
+					Bottle bottle = parseBottleFromNode(bottleNode);
+					if (bottle != null)
 					{
-						Bottle bottle=new Bottle();
-						NodeList nodeList = bottleNode.getChildNodes();
-						int len = nodeList.getLength();
-						for(int i=0; i<len; i++) {
-							try
-							{
-								Node node = nodeList.item(i);
-								String value = this.getNodeValue(node);
-								if("bottle_id".equals(node.getNodeName())) {
-									bottle.setBottle_Id((Long.parseLong(value)));
-								}
-								else if("name".equals(node.getNodeName())) {
-									bottle.setName(value);
-								} else if("year".equals(node.getNodeName())) {
-									bottle.setYear(Integer.parseInt(value));
-								} else if("region".equals(node.getNodeName())) {
-									bottle.setRegion(value);
-								} else if("region_path".equals(node.getNodeName())) {
-									bottle.setRegion_path(value);
-								} else if("style".equals(node.getNodeName())) {
-									bottle.setStyle(value);
-								} else if ("label_thumb".equals(node.getNodeName())) {
-									bottle.setLabel_thumb(value);
-								} else if ("price".equals(node.getNodeName())) {
-									bottle.setPrice(value);
-								} else if ("rating".equals(node.getNodeName())) {
-									bottle.setRating(value);
-								} else if ("grape".equals(node.getNodeName())) {
-									bottle.setGrape(value);
-								} else if ("reviews".equals(node.getNodeName())) {
-									Node reviews = node;
-									NodeList reviewChildren = reviews.getChildNodes();
-									int rcLen = reviewChildren.getLength();
-									for (int k=0;k<rcLen;k++)
-									{
-										if (reviewChildren.item(k).getNodeName().equals("review"))
-										{
-											Node reviewNode = reviewChildren.item(k);
-											
-											Review parsedReview = parseReviewFromNode(reviewNode);
-											bottle.addReview(parsedReview);
-										}
-									}
-								}
-								else if ("sources".equals(node.getNodeName())) {
-									Node sources = node;
-									NodeList srcChildren = sources.getChildNodes();
-									int rcLen = srcChildren.getLength();
-									for (int k=0;k<rcLen;k++)
-									{
-										if (srcChildren.item(k).getNodeName().equals("source"))
-										{
-											Node srcNode = srcChildren.item(k);
-
-											Source parsedSource = parseSourceFromNode(srcNode);
-											
-											bottle.addSource(parsedSource);
-										}
-									}
-								}// else skip for now.
-								
-							} catch (NumberFormatException e)
-							{
-								// skip for now.
-							}
-						}
-						
 						bottleList.add(bottle);
-					} // end if (bottleNode != null)
-				}
+					}
+     			}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -240,73 +177,64 @@ public class DryncProvider {
 				{
 					Node bottleNode = bottles.item(j);
 
-					if (bottleNode != null)
+					Bottle bottle = parseBottleFromNode(bottleNode);
+					if (bottle != null)
 					{
-						Bottle bottle=new Bottle();
-						NodeList nodeList = bottleNode.getChildNodes();
-						int len = nodeList.getLength();
-						for(int i=0; i<len; i++) {
-							try
-							{
-								Node node = nodeList.item(i);
-								String value = this.getNodeValue(node);
-								if("name".equals(node.getNodeName())) {
-									bottle.setName(value);
-								} else if("year".equals(node.getNodeName())) {
-									bottle.setYear(Integer.parseInt(value));
-								} else if("region".equals(node.getNodeName())) {
-									bottle.setRegion(value);
-								} else if("region_path".equals(node.getNodeName())) {
-									bottle.setRegion_path(value);
-								} else if("style".equals(node.getNodeName())) {
-									bottle.setStyle(value);
-								} else if ("label_thumb".equals(node.getNodeName())) {
-									bottle.setLabel_thumb(value);
-								} else if ("price".equals(node.getNodeName())) {
-									bottle.setPrice(value);
-								} else if ("rating".equals(node.getNodeName())) {
-									bottle.setRating(value);
-								} else if ("grape".equals(node.getNodeName())) {
-									bottle.setGrape(value);
-								} else if ("reviews".equals(node.getNodeName())) {
-									Node reviews = node;
-									NodeList reviewChildren = reviews.getChildNodes();
-									int rcLen = reviewChildren.getLength();
-									for (int k=0;k<rcLen;k++)
-									{
-										if (reviewChildren.item(k).getNodeName().equals("review"))
-										{
-											Node reviewNode = reviewChildren.item(k);
-											
-											Review parsedReview = parseReviewFromNode(reviewNode);
-											bottle.addReview(parsedReview);
-										}
-									}
-								} else if ("sources".equals(node.getNodeName())) {
-									Node sources = node;
-									NodeList srcChildren = sources.getChildNodes();
-									int rcLen = srcChildren.getLength();
-									for (int k=0;k<rcLen;k++)
-									{
-										if (srcChildren.item(k).getNodeName().equals("source"))
-										{
-											Node srcNode = srcChildren.item(k);
-
-											Source parsedSource = parseSourceFromNode(srcNode);
-											
-											bottle.addSource(parsedSource);
-										}
-									}
-								}// else skip for now.
-
-							} catch (NumberFormatException e)
-							{
-								// skip for now.
-							}
-						}
-						
 						bottleList.add(bottle);
-					} // end if (bottleNode != null)
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return bottleList;
+	}
+	
+	
+	/**
+	 * Call the REST service to retrieve the first matching promotion based
+	 * on the give keywords. If none found, return null.
+	 * @param target - the target HTTP host for the REST service.
+	 * @param keywords - comma delimited keywords. May contain spaces.
+	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
+	 */
+	private List<Bottle> getCorks(HttpHost target, String deviceId) {
+		ArrayList<Bottle> bottleList = new ArrayList<Bottle>();
+		
+		Document doc = null;
+		HttpClient client = new DefaultHttpClient();
+		
+		// set up deviceId
+		String devId = deviceId;
+		if ((deviceId == null) || (deviceId.equals("")))
+				devId = "test";			
+		
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(CORKLISTURL);
+		bldr.append(devId);
+		
+		Log.d("DryncPrvdr", "Loading Corks: " + bldr.toString());
+		HttpGet get = new HttpGet(bldr.toString());
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			HttpEntity entity = client.execute(target, get).getEntity();
+
+			doc = builder.parse(entity.getContent());
+			NodeList bottles = doc.getElementsByTagName("bottle");
+
+			if(bottles!=null) {
+				for(int j=0,m=bottles.getLength();j<m;j++)
+				{
+					Node bottleNode = bottles.item(j);
+
+					Bottle bottle = parseBottleFromNode(bottleNode);
+					if (bottle != null)
+					{
+						bottleList.add(bottle);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -425,6 +353,80 @@ public class DryncProvider {
 		return null;
 	}
 
+	private Bottle parseBottleFromNode(Node bottleNode)
+	{
+		
+		if (bottleNode != null)
+		{
+			Bottle bottle=new Bottle();
+			NodeList nodeList = bottleNode.getChildNodes();
+			int len = nodeList.getLength();
+			for(int i=0; i<len; i++) {
+				try
+				{
+					Node node = nodeList.item(i);
+					String value = this.getNodeValue(node);
+					if("name".equals(node.getNodeName())) {
+						bottle.setName(value);
+					} else if("year".equals(node.getNodeName())) {
+						bottle.setYear(Integer.parseInt(value));
+					} else if("region".equals(node.getNodeName())) {
+						bottle.setRegion(value);
+					} else if("region_path".equals(node.getNodeName())) {
+						bottle.setRegion_path(value);
+					} else if("style".equals(node.getNodeName())) {
+						bottle.setStyle(value);
+					} else if ("label_thumb".equals(node.getNodeName())) {
+						bottle.setLabel_thumb(value);
+					} else if ("price".equals(node.getNodeName())) {
+						bottle.setPrice(value);
+					} else if ("rating".equals(node.getNodeName())) {
+						bottle.setRating(value);
+					} else if ("grape".equals(node.getNodeName())) {
+						bottle.setGrape(value);
+					} else if ("reviews".equals(node.getNodeName())) {
+						Node reviews = node;
+						NodeList reviewChildren = reviews.getChildNodes();
+						int rcLen = reviewChildren.getLength();
+						for (int k=0;k<rcLen;k++)
+						{
+							if (reviewChildren.item(k).getNodeName().equals("review"))
+							{
+								Node reviewNode = reviewChildren.item(k);
+								
+								Review parsedReview = parseReviewFromNode(reviewNode);
+								bottle.addReview(parsedReview);
+							}
+						}
+					} else if ("sources".equals(node.getNodeName())) {
+						Node sources = node;
+						NodeList srcChildren = sources.getChildNodes();
+						int rcLen = srcChildren.getLength();
+						for (int k=0;k<rcLen;k++)
+						{
+							if (srcChildren.item(k).getNodeName().equals("source"))
+							{
+								Node srcNode = srcChildren.item(k);
+
+								Source parsedSource = parseSourceFromNode(srcNode);
+								
+								bottle.addSource(parsedSource);
+							}
+						}
+					}// else skip for now.
+
+				} catch (NumberFormatException e)
+				{
+					// skip for now.
+				}
+			}
+			
+			return bottle;
+		} // end if (bottleNode != null)
+		else
+			return null;
+	}
+	
 	private Review parseReviewFromNode(Node reviewNode) {
 		Review review = new Review();
 		

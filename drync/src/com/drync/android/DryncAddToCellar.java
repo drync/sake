@@ -91,26 +91,26 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	//WineAdapter mAdapter; 
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
-	
+
 	boolean displaySearch = true;
 	boolean displayTopWinesBtns = false;
-	
+
 	int lastSelectedTopWine = -1;
-	
+
 	private TableLayout mReviewTable;
-	
+
 	LinearLayout searchView;
 	ScrollView detailView;
 	ScrollView reviewView;
 	ScrollView addView;
-	
+
 	boolean rebuildDetail = false;
 	boolean rebuildReviews = false;
 	boolean rebuildAddToCellar = false;
 	boolean buildOnceAddToCellar = true;
-	
+
 	Drawable defaultIcon = null;
-	
+
 	private String userTwitterUsername = null;
 	private String userTwitterPassword = null;
 
@@ -123,8 +123,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				progressDlg.dismiss();
 		}
 	};
-	*/
-	
+	 */
+
 	/*private void updateResultsInUi() {
 
 		// Back in the UI thread -- update our UI elements based on the data in mResults
@@ -133,10 +133,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			LinearLayout listholder = (LinearLayout)findViewById(R.id.listholder);
 			mList = new ListView(DryncAddToCellar.this.getBaseContext());
 			mList.setCacheColorHint(0);
-			
+
 			listholder.addView(mList);
 		}
-		
+
 		if (mAdapter == null)
 		{
 			mAdapter = new WineAdapter(mResults);
@@ -148,7 +148,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					Log.d("BottleClick", "Bottle clicked at position: " + position);
 					launchBottle(mAdapter.mWines.get(position));
 				}
-				
+
 			});
 		}
 		else
@@ -158,7 +158,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		}
 
 		mAdapter.notifyDataSetChanged();
-		
+
 	}*/
 
 	SharedPreferences settings;
@@ -166,7 +166,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addtocellar);
-		
+
 		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		// we need to check for changes to twitter settings.
 		if (settings != null)
@@ -176,52 +176,52 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}
-		
+
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
-		
-	//	String lastQuery = settings.getString(DryncUtils.LAST_QUERY_PREF, null);
-		
-	//	Bundle extras = getIntent().getExtras();
-	//	this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
-	//	this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
-		
-	//	LayoutInflater inflater = getLayoutInflater();
-		
-	//	flipper = (ViewFlipper) findViewById(R.id.flipper);
-	//	flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-	//	flipper.setOutAnimation(this, R.anim.push_left_out);
-		
-	//	searchView = (LinearLayout) this.findViewById(R.id.searchview);
-	//	detailView = (ScrollView) this.findViewById(R.id.detailview);
-	
-	//	reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
-	//	flipper.addView(reviewView); 
+
+		//	String lastQuery = settings.getString(DryncUtils.LAST_QUERY_PREF, null);
+
+		//	Bundle extras = getIntent().getExtras();
+		//	this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
+		//	this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
+
+		//	LayoutInflater inflater = getLayoutInflater();
+
+		//	flipper = (ViewFlipper) findViewById(R.id.flipper);
+		//	flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+		//	flipper.setOutAnimation(this, R.anim.push_left_out);
+
+		//	searchView = (LinearLayout) this.findViewById(R.id.searchview);
+		//	detailView = (ScrollView) this.findViewById(R.id.detailview);
+
+		//	reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
+		//	flipper.addView(reviewView); 
 
 		addView = (ScrollView) this.findViewById(R.id.addtocellarview); //inflater.inflate(R.layout.addtocellar, (ViewGroup)flipper, false);
-	//	flipper.addView(addView);
-		
+		//	flipper.addView(addView);
+
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
-	//	final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
-	//	final LinearLayout topWinesBtnHolder = (LinearLayout) findViewById(R.id.topwinesbuttons);
-		
-	//		if (! displaySearch)
-	//		{
-	//			searchholder.setVisibility(View.GONE);         
-	//		}
-		
-	/*	if (! displayTopWinesBtns)
+		//	final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
+		//	final LinearLayout topWinesBtnHolder = (LinearLayout) findViewById(R.id.topwinesbuttons);
+
+		//		if (! displaySearch)
+		//		{
+		//			searchholder.setVisibility(View.GONE);         
+		//		}
+
+		/*	if (! displayTopWinesBtns)
 		{
 			topWinesBtnHolder.setVisibility(View.GONE);
 		}	
 		else
 		{
 			topWinesBtnHolder.setVisibility(View.VISIBLE);
-			
+
 			final Button popButton = (Button)findViewById(R.id.popularBtn);
 			final Button mwButton = (Button)findViewById(R.id.mostWantedBtn);
 			final Button featButton = (Button)findViewById(R.id.featuredBtn);
-			
+
 			popButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
@@ -232,11 +232,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					progressDlg.show();
 					DryncAddToCellar.this.startTopWineQueryOperation(DryncProvider.TOP_POPULAR);
 					DryncAddToCellar.this.lastSelectedTopWine = DryncProvider.TOP_POPULAR;
-					
+
 					detailSelectedTopWineButton(popButton, featButton, mwButton);
-					
+
 				}});
-			
+
 			featButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
@@ -247,10 +247,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					progressDlg.show();
 					DryncAddToCellar.this.startTopWineQueryOperation(DryncProvider.TOP_FEATURED);
 					DryncAddToCellar.this.lastSelectedTopWine = DryncProvider.TOP_FEATURED;
-					
+
 					detailSelectedTopWineButton(popButton, featButton, mwButton);
 				}});
-			
+
 			mwButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
@@ -261,22 +261,22 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					progressDlg.show();
 					DryncAddToCellar.this.startTopWineQueryOperation(DryncProvider.TOP_WANTED);
 					DryncAddToCellar.this.lastSelectedTopWine = DryncProvider.TOP_WANTED;
-					
+
 					detailSelectedTopWineButton(popButton, featButton, mwButton);
-					
+
 				}});
-			
+
 			if (DryncAddToCellar.this.lastSelectedTopWine == -1)
 				popButton.performClick();
 		}
-		
+
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
-		
+
 		if (lastQuery != null)
 		{
 			searchfield.setText(lastQuery);
 		}
-		
+
 		searchfield.setOnKeyListener(new OnKeyListener() {
 
 			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
@@ -294,7 +294,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			        }
 			        return false;
 			}});
-		
+
 		if (displaySearch)
 		{
 			View tstLayout = inflater.inflate(R.layout.searchinstructions,
@@ -308,10 +308,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			toast.setView(tstLayout);
 			toast.show();
 		}*/
-		
+
 		launchAddToCellar(bottle);
 	}
-	
+
 	/*private TabHost getTabHost()
 	{
 		Activity obj = this;
@@ -320,12 +320,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		{
 			obj = obj.getParent();
 		}
-		
+
 		if (obj != null)
 		{
 			thost = (TabHost)((TabActivity)obj).getTabHost();
 		}
-		
+
 		return null;
 	}*/
 
@@ -356,14 +356,14 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 			RelativeLayout revListHolder = (RelativeLayout)detailView.findViewById(R.id.reviewSection);
 			TextView reviewCount = (TextView)detailView.findViewById(R.id.reviewCount);
-			
+
 			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalval);
 			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
 			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
-			
+
 			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
-			
+
 			revListHolder.removeAllViews();
 			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -416,7 +416,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
 					" Reviews" : " Review";
 			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
-			
+
 			if (addInfoView != null)
 				addInfoView.setText("" + "Additional Info");
 
@@ -435,22 +435,22 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			varietalView.setText(bottle.getGrape());
 			styleView.setText(bottle.getStyle());
 			regionView.setText(bottle.getRegion());
-			
+
 			Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
 			searchBtn.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
 					showPrevious();				
 				}});
-			
+
 			Button addBtn = (Button) this.findViewById(R.id.addBtn);
 			addBtn.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
 					DryncAddToCellar.this.launchAddToCellar();	
 				}});
-			
-			
+
+
 
 			if (btnTweet != null)
 			{
@@ -501,13 +501,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				ArrayList<Source> sources = mBottle.getSources();
 				int lastAdded = -1;
 				ArrayList<String> trackUsedSrc = new ArrayList<String>();
-				
+
 				for (int i=0,n=sources.size();i<n;i++)
 				{
 					final Source source = sources.get(i);
 					if (trackUsedSrc.contains(source.getName()))
 						continue;
-						
+
 					Button buyButton = new Button(this);
 					buyButton.setId(i);
 					buyButton.setText("Buy from " + source.getName());
@@ -526,37 +526,37 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					{
 						lp.addRule(RelativeLayout.BELOW, lastAdded);
 					}
-					
+
 					buyButton.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) 
 						{
 							// TODO: @mbrindam - add "leaving drink" dialog here.
-							
+
 							Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(source.getUrl()));
 							startActivity(myIntent);
 						}
 					});
-					
+
 					lastAdded = i;
 					trackUsedSrc.add(source.getName());
 					buyBtnSection.addView(buyButton, lp);
 				}
 			}
-		
+
 			rebuildDetail = false;
 		}
 		showNext();
 	}*/
-	
+
 	private void launchAddToCellar(Bottle bottle) {
-		
+
 		mBottle = bottle;
-		
+
 		// mBottle should be set by the detail view, if not, return;
 		if (mBottle == null)
 			return;
-		
-		
+
+
 		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
 		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
 		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
@@ -572,160 +572,177 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
 		final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
-		
+
 		ArrayAdapter<String> yearSpnAdapter = null;
 		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
 		ArrayAdapter<CharSequence> styleSpnAdapter = null;
 		ArrayAdapter<CharSequence> regionSpnAdapter = null;
 		int year = 1800;
-		
+
 		if (buildOnceAddToCellar)
 		{
 			ArrayList<String> _allYears = new ArrayList<String>();
-		       
+
 			Date date = new Date();
 			Calendar cal = new GregorianCalendar();
 			cal.setTime(date);
 			year = cal.get(Calendar.YEAR);
-			
-	        for (int i=1800,n=year+3;i<n;i++){
-	            _allYears.add("" + i);
-	        }
 
-	        yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
-	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	        yearVal.setAdapter(yearSpnAdapter); 
-	        
-	       // varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
-	      //  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	      //  varietalVal.setAdapter(varietalSpnAdapter); 
-	        
-	       // regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
-	       // regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	      //  regionVal.setAdapter(regionSpnAdapter); 
-	        
-	        styleSpnAdapter = ArrayAdapter.createFromResource(
-	                this, R.array.style_array, android.R.layout.simple_spinner_item);
-	        styleSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
-	        styleVal.setAdapter(styleSpnAdapter);
-	        
-	        Button addToCellarBtn = (Button)addView.findViewById(R.id.addToCellar);
-	        if (addToCellarBtn != null)
-	        {
-	        	addToCellarBtn.setOnClickListener(new OnClickListener(){
+			for (int i=1800,n=year+3;i<n;i++){
+				_allYears.add("" + i);
+			}
 
-					public void onClick(View v) {
-						//populate cork object
-						Cork cork = new Cork();
-						cork.setName(nameVal.getEditableText().toString());
-						cork.setBottle_Id(mBottle.getBottle_Id());
-						cork.setYear(mBottle.getYear());
-						cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
-						cork.setCork_created_at(System.currentTimeMillis());
-						cork.setGrape(varietalVal.getEditableText().toString());
-						cork.setRegion(regionVal.getEditableText().toString());
-						cork.setCork_rating(ratingbar.getRating());
-						cork.setDescription(tastingNotesVal.getEditableText().toString());
-						cork.setLocation(locationVal.getEditableText().toString());
-						cork.setCork_want(wantVal.isChecked());
-						cork.setCork_drank(drankVal.isChecked());
-						int ownCount = 0;
+			yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
+			yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			yearVal.setAdapter(yearSpnAdapter); 
+
+			// varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
+			//  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			//  varietalVal.setAdapter(varietalSpnAdapter); 
+
+			// regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
+			// regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			//  regionVal.setAdapter(regionSpnAdapter); 
+
+			styleSpnAdapter = ArrayAdapter.createFromResource(
+					this, R.array.style_array, android.R.layout.simple_spinner_item);
+			styleSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
+			styleVal.setAdapter(styleSpnAdapter);
+
+			Button addToCellarBtn = (Button)addView.findViewById(R.id.addToCellar);
+			Button saveBtn = (Button)addView.findViewById(R.id.saveBtn);
+
+			OnClickListener saveListener = 	new OnClickListener(){
+
+				public void onClick(View v) {
+					//populate cork object
+					Cork cork = new Cork();
+					cork.setName(nameVal.getEditableText().toString());
+					cork.setBottle_Id(mBottle.getBottle_Id());
+					cork.setYear(mBottle.getYear());
+					cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
+					cork.setCork_created_at(System.currentTimeMillis());
+					cork.setGrape(varietalVal.getEditableText().toString());
+					cork.setRegion(regionVal.getEditableText().toString());
+					cork.setCork_rating(ratingbar.getRating());
+					cork.setDescription(tastingNotesVal.getEditableText().toString());
+					cork.setLocation(locationVal.getEditableText().toString());
+					cork.setCork_want(wantVal.isChecked());
+					cork.setCork_drank(drankVal.isChecked());
+					int ownCount = 0;
+					
+					try
+					{
 						if (ownVal.getEditableText().toString() != "")
 						{
 							ownCount = Integer.parseInt(ownVal.getEditableText().toString());
 						}
-						
-						cork.setCork_bottle_count(ownCount);
-						
-						if (ownCount > 0)
-							cork.setCork_own(true);
-						else
-							cork.setCork_own(false);
+					}
+					catch (NumberFormatException e)
+					{
+						ownCount = 0;
+					}
 
-						// persist to database.
-						dbAdapter.open();
-						long result = dbAdapter.insertCork(cork);
-						dbAdapter.close();
-						Log.d("AddToCellar", "Yearselected: " + cork.getYear());
-						if (result >= 0)
-						{
-							// successful
-							Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
-									getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
-							successfulAdd.show();
-							DryncAddToCellar.this.finish();
-						}
-						else
-						{
-							// failure
-							Toast failureAdd = Toast.makeText(DryncAddToCellar.this, 
-									getResources().getString(R.string.failurecellaradd), Toast.LENGTH_LONG);
-							failureAdd.show();
-						}
-					}});
-	        }
-	        
-			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
-			if (cancelBtn != null)
-			{
-				cancelBtn.setOnClickListener(new OnClickListener(){
+					cork.setCork_bottle_count(ownCount);
 
-					public void onClick(View v) {
-						// in order 
+					if (ownCount > 0)
+						cork.setCork_own(true);
+					else
+						cork.setCork_own(false);
+
+					// persist to database.
+					dbAdapter.open();
+					long result = dbAdapter.insertCork(cork);
+					dbAdapter.close();
+					Log.d("AddToCellar", "Yearselected: " + cork.getYear());
+					if (result >= 0)
+					{
+						// successful
+						Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
+								getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
+						successfulAdd.show();
 						DryncAddToCellar.this.finish();
-					/*	flipper.setInAnimation(AnimationUtils.loadAnimation(DryncAddToCellar.this, R.anim.push_right_in));
+					}
+					else
+					{
+						// failure
+						Toast failureAdd = Toast.makeText(DryncAddToCellar.this, 
+								getResources().getString(R.string.failurecellaradd), Toast.LENGTH_LONG);
+						failureAdd.show();
+					}
+				}};
+
+				if (addToCellarBtn != null)
+				{
+					addToCellarBtn.setOnClickListener(saveListener);
+				}	
+
+				if (saveBtn != null)
+				{
+					saveBtn.setOnClickListener(saveListener);
+				}
+
+				Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
+				if (cancelBtn != null)
+				{
+					cancelBtn.setOnClickListener(new OnClickListener(){
+
+						public void onClick(View v) {
+							// in order 
+							DryncAddToCellar.this.finish();
+							/*	flipper.setInAnimation(AnimationUtils.loadAnimation(DryncAddToCellar.this, R.anim.push_right_in));
 						flipper.setOutAnimation(DryncAddToCellar.this, R.anim.push_right_out);
-						
+
 						View view = flipper.findViewById(R.id.detailview);
 						int detailViewIdx = flipper.indexOfChild(view);
 						flipper.setDisplayedChild(detailViewIdx);	
-						
+
 						flipper.setInAnimation(AnimationUtils.loadAnimation(DryncAddToCellar.this, R.anim.push_left_in));
 						flipper.setOutAnimation(DryncAddToCellar.this, R.anim.push_left_out);
-						*/
-					}});
-			}
-			
-			buildOnceAddToCellar = false;
+							 */
+						}});
+				}
+
+				buildOnceAddToCellar = false;
 		}
-		
+
 		/*if (rebuildAddToCellar)
 		{*/
-			//flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-			//flipper.setOutAnimation(this, R.anim.push_left_out);
-			
-			int position;
-			if (mBottle.getYear() > 0)
-				position = yearSpnAdapter.getPosition("" + mBottle.getYear());
-			else
-				position = yearSpnAdapter.getPosition("" + year);
-			
-			nameVal.setText(mBottle.getName());
-			yearVal.setText("" + mBottle.getYear());
-			varietalVal.setText("" + mBottle.getGrape());
-			regionVal.setText("" + mBottle.getRegion());
-			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
-			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
-				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
-			else
-				styleVal.setSelection(stylepos);
-			priceVal.setText(mBottle.getPrice());
-			wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
+		//flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
+		//flipper.setOutAnimation(this, R.anim.push_left_out);
 
-			//reviewView.scrollTo(0, 0);
+		int position;
+		if (mBottle.getYear() > 0)
+			position = yearSpnAdapter.getPosition("" + mBottle.getYear());
+		else
+			position = yearSpnAdapter.getPosition("" + year);
+
+		nameVal.setText(mBottle.getName());
+		yearVal.setText("" + mBottle.getYear());
+		varietalVal.setText("" + mBottle.getGrape());
+		regionVal.setText("" + mBottle.getRegion());
+		int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
+		if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
+			styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
+		else
+			styleVal.setSelection(stylepos);
+		priceVal.setText(mBottle.getPrice());
+		wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
+
+		//reviewView.scrollTo(0, 0);
 		//}
-		
-//		View view = flipper.findViewById(R.id.addToCellar);
+
+		//		View view = flipper.findViewById(R.id.addToCellar);
 		//flipper.bringChildToFront(view);
 		//int addToCellarIdx = flipper.indexOfChild(view);
 		//flipper.setDisplayedChild(addToCellarIdx);		
 	}
-	
+
 	/*private void launchReviews() {
 		// mBottle should be set by the detail view, if not, return;
 		if (mBottle == null)
 			return;
-		
+
 		if (rebuildReviews)
 		{
 			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
@@ -757,7 +774,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
 					" Reviews" : " Review";
 			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
-			
+
 
 			if (defaultIcon == null)
 			{
@@ -781,7 +798,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
 			listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 			listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-			
+
 			if (mReviewTable == null)
 			{
 				mReviewTable = new TableLayout(DryncAddToCellar.this);
@@ -798,34 +815,34 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			populateReviewTable(mReviewTable, mBottle);
 			rebuildReviews = false;
 		}
-		
+
 		showNext();
-		
+
 	}*/
-	
+
 	/*private void showNext()
 	{
 		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
 		flipper.setOutAnimation(this, R.anim.push_left_out);
-		
+
 		flipper.showNext();
 	}*/
-	
+
 	/*private void showPrevious()
 	{
 		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_right_in));
 		flipper.setOutAnimation(this, R.anim.push_right_out);
-	
+
 		flipper.showPrevious();
 	}*/
-	
+
 	/*class WineReviewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
 		public Bottle bottle;
 		private final LayoutInflater mInflater;
 		boolean mDone = false;
 		boolean mFlinging = false;
-		
+
 		public WineReviewAdapter(Bottle wine) {
 			bottle = wine;
 			mInflater = (LayoutInflater) DryncAddToCellar.this.getSystemService(
@@ -835,7 +852,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		public int getCount() {
 			if (bottle == null)
 				return 0;
-			
+
 			return bottle.getReviewCount();
 		}
 
@@ -850,17 +867,17 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
-			
+
 			Review review = bottle.getReview(position);
 			bindView(view, review);
-			
+
 			return view;
 		}
-		
+
 		private View createView(ViewGroup parent) {
 			View reviewItem = mInflater.inflate(
 					R.layout.reviewlistitem, parent, false);
-			
+
 			return reviewItem;
 		}
 
@@ -883,12 +900,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			{
 				//if (reviewWeb != null)
 				//	reviewWeb.clearView();
-				
+
 				reviewText.setText(review.getText());
 				//reviewText.setVisibility(View.VISIBLE);
 				//reviewWeb.setVisibility(View.INVISIBLE);
 			}
-			
+
 
 			if ((review.getUrl() == null) || (review.getUrl().equals("")))
 			{
@@ -912,7 +929,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
 					startActivity(myIntent);
 				}});
-			
+
 		}
 
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -920,16 +937,16 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		}
 	}
 
-*/
+	 */
 
-/*	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+	/*	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
 		private final List<Bottle> mWines;
 		private final LayoutInflater mInflater;
 		private final Drawable defaultIcon;
 		boolean mDone = false;
 		boolean mFlinging = false;
-		
+
 		public WineAdapter(List<Bottle> wines) {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncAddToCellar.this.getSystemService(
@@ -952,11 +969,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
-			
+
 			Log.d("DryncMain", "getview position: " + position);
-			
+
 			Bottle wine = mWines.get(position);
-			
+
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
 			{
@@ -973,10 +990,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 				}
 			}
-			
+
 			return view;
 		}
-		
+
 		private View createView(ViewGroup parent) {
 			View wineItem = mInflater.inflate(
 					R.layout.wineitem, parent, false);
@@ -1002,30 +1019,30 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					wineThumb.setImageDrawable(defaultIcon);
 				}
 			}
-			
+
 			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
 			wineNameText.setText(wine.getName());
-			
+
 			TextView priceText = (TextView) view.findViewById(R.id.priceValue);
 			priceText.setText(wine.getPrice());
-			
+
 			TextView ratingText = (TextView) view.findViewById(R.id.ratingValue);
 			ratingText.setText(wine.getRating());
-			
+
 			TextView reviewText = (TextView) view.findViewById(R.id.reviewValue);
 			reviewText.setText("" + wine.getReviewCount());
-			
+
 		}
 
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 		}
-		
+
 		private Drawable ImageOperations(Context ctx, String url) {
 			try {
 				InputStream is = (InputStream) this.fetch(url);
 				Drawable d = Drawable.createFromStream(is, "src");
-				
+
 				return d;
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -1051,14 +1068,14 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 	}
 
-	*//*protected void startQueryOperation(String query)
+	 *//*protected void startQueryOperation(String query)
 	{
 		final String curQuery = query;
-		
+
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(DryncUtils.LAST_QUERY_PREF, query);
 		editor.commit();
-		
+
 		Thread t = new Thread()
 		{
 			public void run() {
@@ -1068,7 +1085,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		};
 		t.start();
 	}*/
-	
+
 	/*protected void startTopWineQueryOperation(final int type)
 	{
 		Thread t = new Thread()
@@ -1086,7 +1103,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
 			//boolean retval = false;
-			
+
 			DryncAddToCellar.this.finish();
 			/*
 			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView) ||
@@ -1095,46 +1112,46 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				showPrevious();
 				retval = true;
 			}
-			
+
 			if (retval)
 				return true; */
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	/*private void populateReviewTable(TableLayout table, Bottle bottle)
 	{
 		table.removeAllViews();
 		//table.setFocusableInTouchMode(true);
 		//table.setClickable(true);
-		
+
 		for (int i=0,n=bottle.getReviewCount();i<n;i++)
 		{			
 			Review review = mBottle.getReview(i);
 			if (review == null)
 				continue;
-			
+
 			if (mMainInflater == null)
 			{
 				mMainInflater = (LayoutInflater) DryncAddToCellar.this.getSystemService(
 						Context.LAYOUT_INFLATER_SERVICE);
 			}
-			
+
 			final View reviewItem = mMainInflater.inflate(
 					R.layout.reviewlistitem, table, false);
-			
+
 			TextView publisherText = (TextView) reviewItem.findViewById(R.id.publisher);
 			TextView reviewText = (TextView) reviewItem.findViewById(R.id.revText);
 			TextView reviewSrc = (TextView) reviewItem.findViewById(R.id.revSource);
-			
+
 			reviewSrc.setFocusable(true);
 			reviewSrc.setClickable(true);
-			
+
 			publisherText.setText(review.getPublisher());
 			reviewText.setText(review.getText());
 			reviewSrc.setText(review.getReview_source());
-			
+
 			final Review fReview = review;
 			publisherText.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
@@ -1150,20 +1167,20 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 				}
 			});
-			
+
 			table.addView(reviewItem);
-			
+
 			if (i < n-1)
 			{
 				final View separatorItem = mMainInflater.inflate(
 						R.layout.separator, table, false);
 				table.addView(separatorItem);
 			}
-			
+
 		}
-		
+
 	}*/
-	
+
 	private Animation inFromRightAnimation() {
 
 		Animation inFromRight = new TranslateAnimation(
@@ -1178,7 +1195,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		// we need to check for changes to twitter settings.
 		if (settings != null)
 		{
@@ -1188,7 +1205,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}
 	}
-	
+
 	/*private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)
 	{
 		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
@@ -1199,7 +1216,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		{
 			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
 		}
-		
+
 		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
 		{
 			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
@@ -1208,7 +1225,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		{
 			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
 		}
-		
+
 		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
 		{
 			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
@@ -1218,7 +1235,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
 		}		
 	}*/
-	
-	
+
+
 }
 

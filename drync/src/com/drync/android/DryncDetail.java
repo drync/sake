@@ -315,11 +315,16 @@ public class DryncDetail extends DryncBaseActivity {
 				}});
 			
 			Button addBtn = (Button) this.findViewById(R.id.addBtn);
-			addBtn.setOnClickListener(new OnClickListener(){
+			Button addToCellarBtn = (Button) this.findViewById(R.id.addToCellar);
+			
+			OnClickListener addListener = new OnClickListener(){
 
 				public void onClick(View v) {
 					DryncDetail.this.launchAddToCellar();	
-				}});
+				}};
+				
+			addBtn.setOnClickListener(addListener);
+			addToCellarBtn.setOnClickListener(addListener);
 			
 			
 

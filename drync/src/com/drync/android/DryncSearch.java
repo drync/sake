@@ -1011,26 +1011,6 @@ public class DryncSearch extends DryncBaseActivity {
 		};
 		t.start();
 	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
-			boolean retval = false;
-			
-			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView) ||
-					(flipper.getCurrentView() == addView))
-			{
-				showPrevious();
-				retval = true;
-			}
-			
-			if (retval)
-				return true;
-		}
-		
-		return super.onKeyDown(keyCode, event);
-	}
 	
 	private void populateReviewTable(TableLayout table, Bottle bottle)
 	{

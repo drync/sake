@@ -3,6 +3,7 @@ package com.drync.android;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,11 +34,33 @@ public abstract class DryncBaseActivity extends Activity {
 		return result;
 	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			//boolean retval = false;
+
+			DryncBaseActivity.this.finish();
+			/*
+			if ((flipper.getCurrentView() == detailView) || (flipper.getCurrentView() == reviewView) ||
+					(flipper.getCurrentView() == addView))
+			{
+				showPrevious();
+				retval = true;
+			}
+
+			if (retval)
+				return true; */
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+	
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case TOP_WINE_ID:
         {
-        	Intent twIntent = new Intent(this, DryncSearch.class);
+        	Intent twIntent = new Intent(this, DryncTopWines.class);
     		twIntent.putExtra("displaySearch", false);
     		twIntent.putExtra("displayTopWinesBtns", true);
     		twIntent.putExtra("topType", DryncProvider.TOP_FEATURED);
