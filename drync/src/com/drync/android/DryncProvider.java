@@ -1,5 +1,6 @@
 package com.drync.android;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,8 +11,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,20 +26,32 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.restlet.Client;
+import org.restlet.data.ChallengeResponse;
+import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Protocol;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.drync.android.objects.Bottle;
+import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 
@@ -192,6 +209,11 @@ public class DryncProvider {
 		return bottleList;
 	}
 	
+	public List<Cork> getCorks(Context context, String deviceId)
+	{
+		HttpHost target = new HttpHost(SERVER_HOST, SERVER_PORT, "http");
+		return getCorks(context, target, deviceId);
+	}
 	
 	/**
 	 * Call the REST service to retrieve the first matching promotion based
@@ -200,9 +222,10 @@ public class DryncProvider {
 	 * @param keywords - comma delimited keywords. May contain spaces.
 	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
 	 */
-	private List<Bottle> getCorks(HttpHost target, String deviceId) {
-		ArrayList<Bottle> bottleList = new ArrayList<Bottle>();
-		
+	private List<Cork> getCorks(Context context, HttpHost target, String deviceId) {
+		ArrayList<Cork> bottleList = new ArrayList<Cork>();
+		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
+		dbAdapter.open();
 		Document doc = null;
 		HttpClient client = new DefaultHttpClient();
 		
@@ -216,6 +239,7 @@ public class DryncProvider {
 		bldr.append(devId);
 		
 		Log.d("DryncPrvdr", "Loading Corks: " + bldr.toString());
+		
 		HttpGet get = new HttpGet(bldr.toString());
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -230,9 +254,10 @@ public class DryncProvider {
 				{
 					Node bottleNode = bottles.item(j);
 
-					Bottle bottle = parseBottleFromNode(bottleNode);
+					Cork bottle = parseCorkFromNode(bottleNode);
 					if (bottle != null)
 					{
+						dbAdapter.updateCork((Cork) bottle);
 						bottleList.add(bottle);
 					}
 				}
@@ -242,6 +267,9 @@ public class DryncProvider {
 		} finally {
 
 		}
+		
+		dbAdapter.close();
+		
 		return bottleList;
 	}
 	
@@ -366,7 +394,8 @@ public class DryncProvider {
 				{
 					Node node = nodeList.item(i);
 					String value = this.getNodeValue(node);
-					if("name".equals(node.getNodeName())) {
+					parseBottlePortions(node, value, bottle);
+					/*if("name".equals(node.getNodeName())) {
 						bottle.setName(value);
 					} else if("year".equals(node.getNodeName())) {
 						bottle.setYear(Integer.parseInt(value));
@@ -414,7 +443,7 @@ public class DryncProvider {
 							}
 						}
 					}// else skip for now.
-
+*/
 				} catch (NumberFormatException e)
 				{
 					// skip for now.
@@ -427,6 +456,132 @@ public class DryncProvider {
 			return null;
 	}
 	
+	private Cork parseCorkFromNode(Node corkNode)
+	{
+		
+		if (corkNode != null)
+		{
+			Cork bottle=new Cork();
+			NodeList nodeList = corkNode.getChildNodes();
+			int len = nodeList.getLength();
+			for(int i=0; i<len; i++) {
+				try
+				{
+					Node node = nodeList.item(i);
+					String value = this.getNodeValue(node);
+					parseBottlePortions(node, value, bottle);
+					/*if("name".equals(node.getNodeName())) {
+						bottle.setName(value);
+					} else if("year".equals(node.getNodeName())) {
+						bottle.setYear(Integer.parseInt(value));
+					} else if("region".equals(node.getNodeName())) {
+						bottle.setRegion(value);
+					} else if("region_path".equals(node.getNodeName())) {
+						bottle.setRegion_path(value);
+					} else if("style".equals(node.getNodeName())) {
+						bottle.setStyle(value);
+					} else if ("label_thumb".equals(node.getNodeName())) {
+						bottle.setLabel_thumb(value);
+					} else if ("price".equals(node.getNodeName())) {
+						bottle.setPrice(value);
+					} else if ("rating".equals(node.getNodeName())) {
+						bottle.setRating(value);
+					} else if ("grape".equals(node.getNodeName())) {
+						bottle.setGrape(value);
+					} else if ("reviews".equals(node.getNodeName())) {
+						Node reviews = node;
+						NodeList reviewChildren = reviews.getChildNodes();
+						int rcLen = reviewChildren.getLength();
+						for (int k=0;k<rcLen;k++)
+						{
+							if (reviewChildren.item(k).getNodeName().equals("review"))
+							{
+								Node reviewNode = reviewChildren.item(k);
+								
+								Review parsedReview = parseReviewFromNode(reviewNode);
+								bottle.addReview(parsedReview);
+							}
+						}
+					} else if ("sources".equals(node.getNodeName())) {
+						Node sources = node;
+						NodeList srcChildren = sources.getChildNodes();
+						int rcLen = srcChildren.getLength();
+						for (int k=0;k<rcLen;k++)
+						{
+							if (srcChildren.item(k).getNodeName().equals("source"))
+							{
+								Node srcNode = srcChildren.item(k);
+
+								Source parsedSource = parseSourceFromNode(srcNode);
+								
+								bottle.addSource(parsedSource);
+							}
+						}
+					}// else skip for now.
+*/
+				} catch (NumberFormatException e)
+				{
+					// skip for now.
+				}
+			}
+			
+			return bottle;
+		} // end if (bottleNode != null)
+		else
+			return null;
+	}
+	
+	private void parseBottlePortions(Node node, String value, Bottle bottle)
+	{
+		if("name".equals(node.getNodeName())) {
+			bottle.setName(value);
+		} else if("year".equals(node.getNodeName())) {
+			bottle.setYear(Integer.parseInt(value));
+		} else if("region".equals(node.getNodeName())) {
+			bottle.setRegion(value);
+		} else if("region_path".equals(node.getNodeName())) {
+			bottle.setRegion_path(value);
+		} else if("style".equals(node.getNodeName())) {
+			bottle.setStyle(value);
+		} else if ("label_thumb".equals(node.getNodeName())) {
+			bottle.setLabel_thumb(value);
+		} else if ("price".equals(node.getNodeName())) {
+			bottle.setPrice(value);
+		} else if ("rating".equals(node.getNodeName())) {
+			bottle.setRating(value);
+		} else if ("grape".equals(node.getNodeName())) {
+			bottle.setGrape(value);
+		} else if ("reviews".equals(node.getNodeName())) {
+			Node reviews = node;
+			NodeList reviewChildren = reviews.getChildNodes();
+			int rcLen = reviewChildren.getLength();
+			for (int k=0;k<rcLen;k++)
+			{
+				if (reviewChildren.item(k).getNodeName().equals("review"))
+				{
+					Node reviewNode = reviewChildren.item(k);
+					
+					Review parsedReview = parseReviewFromNode(reviewNode);
+					bottle.addReview(parsedReview);
+				}
+			}
+		} else if ("sources".equals(node.getNodeName())) {
+			Node sources = node;
+			NodeList srcChildren = sources.getChildNodes();
+			int rcLen = srcChildren.getLength();
+			for (int k=0;k<rcLen;k++)
+			{
+				if (srcChildren.item(k).getNodeName().equals("source"))
+				{
+					Node srcNode = srcChildren.item(k);
+
+					Source parsedSource = parseSourceFromNode(srcNode);
+					
+					bottle.addSource(parsedSource);
+				}
+			}
+		}// else skip for now.
+	}
 	private Review parseReviewFromNode(Node reviewNode) {
 		Review review = new Review();
 		
@@ -490,5 +645,99 @@ public class DryncProvider {
 			return children.item(0).getNodeValue();
 		} else
 			return null;
+	}
+
+	public static HttpResponse doPost(String  url, Map<String, String> kvPairs, String devId)
+	throws ClientProtocolException, IOException, URISyntaxException {
+		URI uri = new URI(url);
+		HttpClient httpclient = new DefaultHttpClient();
+		
+		((DefaultHttpClient) httpclient).getCredentialsProvider().setCredentials(
+				new AuthScope(null, -1), 
+				new UsernamePasswordCredentials("preview", "drync_web"));
+	
+		HttpPost httppost = new HttpPost(uri);
+		//httppost.addHeader("Accept", "text/iphone");
+
+		if (kvPairs != null && kvPairs.isEmpty() == false) {
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+					kvPairs.size());
+			String k, v;
+			Iterator<String> itKeys = kvPairs.keySet().iterator();
+			while (itKeys.hasNext()) {
+				k = itKeys.next();
+				v = kvPairs.get(k);
+				nameValuePairs.add(new BasicNameValuePair(k, v));
+			}
+			
+		}
+		HttpResponse response;
+		response = httpclient.execute(httppost);
+		return response;
+	} 
+	
+	public static boolean postCreate(Cork cork, String deviceId)
+	{
+		// Define our Restlet client resources.  
+		String clientResourceUrl = "http://" + USING_SERVER_HOST + "/corks";
+		
+		try {
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);
+			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() == 200)
+				return true;
+			else
+				return false;
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+		/*ClientResource itemsResource = new ClientResource(  
+				clientResourceUrl);
+		
+		ChallengeResponse authentication = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "preview", "drync_web");
+		itemsResource.setChallengeResponse(authentication);
+
+		ClientResource itemResource = null;
+		Representation rpre = cork.getRepresentation(deviceId);
+		Representation r = itemsResource.post(rpre); 
+	
+		Log.d("DryncProvider", itemsResource.getStatus().getDescription(), itemsResource.getStatus().getThrowable());
+		
+		return itemsResource.getStatus().isSuccess();*/
+	}
+
+	public  static String convertStreamToString(InputStream is) throws IOException {
+		/*
+		 * To convert the InputStream to String we use the BufferedReader.readLine()
+		 * method. We iterate until the BufferedReader return null which means
+		 * there's no more data to read. Each line will appended to a StringBuilder
+		 * and returned as String.
+		 */
+		if (is != null) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line).append("\n");
+				}
+			} finally {
+				is.close();
+			}
+			return sb.toString();
+		} else {       
+			return "";
+		}
 	}
 }

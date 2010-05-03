@@ -1,5 +1,11 @@
 package com.drync.android.objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.restlet.data.Form;
+import org.restlet.representation.Representation;
+
 public class Cork extends Bottle
 {   
     long _id;
@@ -124,6 +130,36 @@ public class Cork extends Bottle
 	}
 	public void setCork_bottle_count(int corkBottleCount) {
 		cork_bottle_count = corkBottleCount;
+	}
+
+	public Map<String, String> getRepresentation(String deviceId) {
+		HashMap<String,String> form = new HashMap<String, String>();  
+		form.put("_method", "post");  
+		form.put("format", "xml");
+		form.put("device_id", deviceId);
+		form.put("prod", "wine-free");
+		form.put("cork[description]", this.getDescription());
+		form.put("cork[rating]", "" + this.getCork_rating());
+		form.put("cork[bottle_id]", "" + this.getBottle_Id());
+		//form.add("cork[label_inline]" + this.getCork_label());
+		form.put("cork[grape]", this.getGrape());
+		form.put("cork[region]", this.getRegion());
+		form.put("cork[bottle_count]", "" + this.getCork_bottle_count());
+		form.put("cork[uuid]", this.getCork_uuid());
+		form.put("cork[drank]", Boolean.toString(this.isCork_drank()));
+		form.put("cork[user_year]", "" + this.getCork_year());
+		form.put("cork[own]", Boolean.toString(this.isCork_own()));
+		//form.add("cork[user_name"])
+		form.put("cork[want]", Boolean.toString(this.isCork_want()));
+		form.put("cork[user_price]", this.getCork_price());
+		form.put("cork[location]", this.getLocation());
+		/*
+    * cork[user_style]
+   * cork[label_inline]
+    * cork[user_name]
+   	 */
+		
+		return form;
 	}
 	
 }

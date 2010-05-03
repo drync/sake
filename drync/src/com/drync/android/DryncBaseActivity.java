@@ -75,22 +75,9 @@ public abstract class DryncBaseActivity extends Activity {
         }
         case CELLAR_ID:
         {
-        	StringBuilder bldr = new StringBuilder();
-        	bldr.append("Copyright © 2009, IZOS\n");
-        	bldr.append("\nMany thanks to meritbadge.org\n for their content!\n");
-        	bldr.append("Used without permission.\n\nAd Proceeds will be donated to\n");
-            bldr.append("http://www.scoutingfriends.org/"); 
-        	
-        	Dialog dlg = new Dialog(this);
-        	LayoutInflater inf = dlg.getLayoutInflater();
-        	View abtView = inf.inflate(R.layout.about, null);
-        	TextView tv = (TextView) abtView.findViewById(R.id.text1);
-        	tv.setText(bldr.toString());
-        	dlg.addContentView(abtView, new LinearLayout.LayoutParams(500, 200));
-        	
-        	dlg.show();
-        	
-        	return true;
+        	Intent setIntent = new Intent(this, DryncCellar.class);
+        	startActivity(setIntent);
+        	break;
         }
         }
        
