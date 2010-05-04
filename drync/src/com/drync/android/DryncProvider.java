@@ -537,6 +537,8 @@ public class DryncProvider {
 			bottle.setName(value);
 		} else if("year".equals(node.getNodeName())) {
 			bottle.setYear(Integer.parseInt(value));
+		} else if("bottle_id".equals(node.getNodeName())) {
+			bottle.setBottle_Id(Integer.parseInt(value));
 		} else if("region".equals(node.getNodeName())) {
 			bottle.setRegion(value);
 		} else if("region_path".equals(node.getNodeName())) {
