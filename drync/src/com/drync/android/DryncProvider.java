@@ -679,13 +679,13 @@ public class DryncProvider {
 	public static boolean postCreate(Cork cork, String deviceId)
 	{
 		// Define our Restlet client resources.  
-		String clientResourceUrl = "http://" + USING_SERVER_HOST + "/corks";
+		String clientResourceUrl = String.format("http://%s:%d/corks", USING_SERVER_HOST,SERVER_PORT);
 		
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
 			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
-			if (response.getStatusLine().getStatusCode() == 200)
+			if (response.getStatusLine().getStatusCode() < 400)
 				return true;
 			else
 				return false;
