@@ -64,7 +64,7 @@ public class DryncProvider {
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
 	
-	static String CORKLISTURL = "corks/?format=xml&device_id=";
+	static String CORKLISTURL = "/corks?format=xml&device_id=";
 	
 	public static final int TOP_POPULAR = 0;
 	static final String TOP_POPULAR_URL = "/top/popular.xml";
@@ -211,7 +211,7 @@ public class DryncProvider {
 	
 	public List<Cork> getCorks(Context context, String deviceId)
 	{
-		HttpHost target = new HttpHost(SERVER_HOST, SERVER_PORT, "http");
+		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		return getCorks(context, target, deviceId);
 	}
 	

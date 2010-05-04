@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Drync!</string>
-    <string name="app_name">Drync</string>
+    <string name="app_name">Drync Wine</string>
+    <string name="cellar_name">Drync Wine - Cellar</string>
     <string name="find_your_wine">Find your wine.</string>
     <string name="fyw1">Drinking a wine you like?  Drync scours millions of listings to find the wine you're drinking along with reviews, ratings and prices.</string>
     <string name="fyw2">Quickly jot a note about a wine you're drinking.  Search and add it to your cellar when you've got more time.</string>

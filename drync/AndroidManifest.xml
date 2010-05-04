@@ -25,7 +25,7 @@
                   android:label="@string/app_name">
         </activity>
         <activity android:name=".DryncCellar"
-                  android:label="@string/app_name">
+                  android:label="@string/cellar_name">
         </activity>
         <activity android:name=".DryncDetail"
                   android:label="@string/app_name">
