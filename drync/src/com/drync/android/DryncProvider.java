@@ -649,7 +649,7 @@ public class DryncProvider {
 
 	public static HttpResponse doPost(String  url, Map<String, String> kvPairs, String devId)
 	throws ClientProtocolException, IOException, URISyntaxException {
-		URI uri = new URI(url);
+		URI uri = new URI(String.format("%s?format=xml&device_id=%s",url,devId));
 		HttpClient httpclient = new DefaultHttpClient();
 		
 		((DefaultHttpClient) httpclient).getCredentialsProvider().setCredentials(
@@ -669,7 +669,7 @@ public class DryncProvider {
 				v = kvPairs.get(k);
 				nameValuePairs.add(new BasicNameValuePair(k, v));
 			}
-			
+		    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		}
 		HttpResponse response;
 		response = httpclient.execute(httppost);
