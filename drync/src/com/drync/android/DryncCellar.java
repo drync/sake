@@ -894,7 +894,7 @@ public class DryncCellar extends DryncBaseActivity {
 		Thread t = new Thread()
 		{
 			public void run() {
-				mResults = DryncProvider.getInstance().getCorks(DryncCellar.this.getBaseContext(), deviceId);
+				mResults = DryncProvider.getInstance().getCorksFromFile();
 				mHandler.post(mUpdateResults);
 			}
 		};

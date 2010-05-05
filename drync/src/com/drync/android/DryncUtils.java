@@ -29,6 +29,8 @@ public class DryncUtils {
 	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
 	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
 	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";
+	public static final String UUID_KEY = "UuidKey";
+	public static final String LAST_UUID_VAL = "lastUuidVal";
 
 	private static boolean checkForDebugMode() 
 	{
@@ -104,6 +106,24 @@ public class DryncUtils {
 		}
 
 		return DryncUtils.CACHE_DIRECTORY;
+	}
+	
+	public static String nextUuid(Activity activity)
+	{
+		Random rand = new Random(System.currentTimeMillis());
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		String uuid_key = settings.getString(DryncUtils.UUID_KEY, null);
+		
+		if (uuid_key == null)
+		{
+			uuid_key = "" + rand.nextInt(99999999);
+			Editor editor = settings.edit();
+			editor.putString(DryncUtils.UUID_KEY, uuid_key);
+			editor.commit();
+		}
+		
+		Long uuid_val = System.currentTimeMillis();
+		return uuid_key + uuid_val;
 	}
 	
 	public static String getDeviceId(ContentResolver resolver, Activity activity)

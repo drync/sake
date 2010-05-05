@@ -629,6 +629,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					cork.setLocation(locationVal.getEditableText().toString());
 					cork.setCork_want(wantVal.isChecked());
 					cork.setCork_drank(drankVal.isChecked());
+					cork.setCork_uuid(DryncUtils.nextUuid(DryncAddToCellar.this));
 					int ownCount = 0;
 					
 					try
@@ -657,6 +658,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						Toast successfulPost = Toast.makeText(DryncAddToCellar.this, 
 								"Successful post.", Toast.LENGTH_LONG);
 						successfulPost.show();
+						Thread t = new Thread()
+						{
+							public void run() {
+								DryncProvider.getInstance().getCorksToFile(DryncAddToCellar.this, deviceId);
+							}
+						};
+						t.start();
 					}
 					else
 					{

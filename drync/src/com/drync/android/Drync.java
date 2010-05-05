@@ -136,6 +136,16 @@ public class Drync extends Activity {
         
         String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
         String register = DryncProvider.getInstance().startupPost(deviceId);
+        
+        final String threadDeviceId = deviceId;
+        Thread t = new Thread()
+        {
+			public void run() {
+				DryncProvider.getInstance().getCorksToFile(Drync.this, threadDeviceId);
+			}
+		};
+		t.start();
+		
         registerTxt = register;
      // Restore preferences
         SharedPreferences settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);

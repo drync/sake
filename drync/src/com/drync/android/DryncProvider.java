@@ -3,7 +3,9 @@ package com.drync.android;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -215,6 +217,99 @@ public class DryncProvider {
 		return getCorks(context, target, deviceId);
 	}
 	
+	private HttpResponse doCorksGet(Context context, HttpHost target, String deviceId) throws ClientProtocolException, IOException
+	{
+		HttpClient client = new DefaultHttpClient();
+
+		// set up deviceId
+		String devId = deviceId;
+		if ((deviceId == null) || (deviceId.equals("")))
+			devId = "test";			
+
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(CORKLISTURL);
+		bldr.append(devId);
+
+		Log.d("DryncPrvdr", "Loading Corks: " + bldr.toString());
+
+		HttpGet get = new HttpGet(bldr.toString());
+		
+		HttpResponse response = client.execute(target, get);
+		
+		return response;
+	}
+
+	public boolean getCorksToFile(Context context, String deviceId) {
+		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
+		return getCorksToFile(context, target, deviceId);
+	}
+	
+	private boolean getCorksToFile(Context context, HttpHost target, String deviceId) {
+		
+		boolean wroteContent = false;
+		InputStream is = null;
+
+		try {
+			HttpResponse response = doCorksGet(context, target, deviceId);
+			HttpEntity entity = response.getEntity();
+
+			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			//DocumentBuilder builder = factory.newDocumentBuilder();
+
+			StatusLine sl = response.getStatusLine();
+			if (sl.getStatusCode() != 200)
+				return false;
+
+			if (entity != null) 
+			{
+				// read in content
+				is = entity.getContent();
+
+				final char[] buffer = new char[0x10000];
+				StringBuilder out = new StringBuilder();
+				Reader in = new InputStreamReader(is, "UTF-8");
+				int read;
+				do 
+				{
+					read = in.read(buffer, 0, buffer.length);
+					if (read>0) {
+						String stringcontent = new String(buffer);
+						if (! stringcontent.trim().equals(""))
+						{
+							out.append(buffer, 0, read);
+							wroteContent = true;
+						}
+					}
+				}
+				while (read>=0);
+
+				// write out to file.
+				if ((out.toString() != null) &&
+						(! out.toString().equals("")) && wroteContent)
+				{
+					String filename = DryncUtils.getCacheDir() + "cellar.xml";
+					File outputFile = new File(filename);
+					//use buffering
+					Writer output = new BufferedWriter(new FileWriter(outputFile));
+					try {
+						//FileWriter always assumes default encoding is OK!
+						output.write( out.toString() );
+					}
+					finally {
+						output.close();
+					}
+					
+					return true;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 	/**
 	 * Call the REST service to retrieve the first matching promotion based
 	 * on the give keywords. If none found, return null.
@@ -227,24 +322,12 @@ public class DryncProvider {
 		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
 		dbAdapter.open();
 		Document doc = null;
-		HttpClient client = new DefaultHttpClient();
 		
-		// set up deviceId
-		String devId = deviceId;
-		if ((deviceId == null) || (deviceId.equals("")))
-				devId = "test";			
-		
-		StringBuilder bldr = new StringBuilder();
-		bldr.append(CORKLISTURL);
-		bldr.append(devId);
-		
-		Log.d("DryncPrvdr", "Loading Corks: " + bldr.toString());
-		
-		HttpGet get = new HttpGet(bldr.toString());
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			HttpEntity entity = client.execute(target, get).getEntity();
+			HttpResponse response = doCorksGet(context, target, deviceId);
+			HttpEntity entity = response.getEntity();
 
 			doc = builder.parse(entity.getContent());
 			NodeList bottles = doc.getElementsByTagName("bottle");
@@ -269,6 +352,40 @@ public class DryncProvider {
 		}
 		
 		dbAdapter.close();
+		
+		return bottleList;
+	}
+	
+	public List<Cork> getCorksFromFile() {
+		ArrayList<Cork> bottleList = new ArrayList<Cork>();
+		Document doc = null;
+		
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+
+			FileInputStream fin = new FileInputStream(DryncUtils.getCacheDir() + "cellar.xml");
+			
+			doc = builder.parse(fin);
+			NodeList bottles = doc.getElementsByTagName("bottle");
+
+			if(bottles!=null) {
+				for(int j=0,m=bottles.getLength();j<m;j++)
+				{
+					Node bottleNode = bottles.item(j);
+
+					Cork bottle = parseCorkFromNode(bottleNode);
+					if (bottle != null)
+					{
+						bottleList.add(bottle);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 		
 		return bottleList;
 	}
@@ -316,7 +433,6 @@ public class DryncProvider {
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
-
 
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
