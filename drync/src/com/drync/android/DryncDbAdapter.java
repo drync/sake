@@ -1,5 +1,8 @@
 package com.drync.android;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.drync.android.objects.Cork;
 
 import android.content.ContentValues;
@@ -168,11 +171,18 @@ public class DryncDbAdapter
         return db.delete(DATABASE_TABLE, KEY_ROWID + 
         		"=" + rowId, null) > 0;
     }
+    
+    public int clearCorks()
+    {
+    	return db.delete(DATABASE_TABLE, null, null);
+    }
 
     //---retrieves all the titles---
-    public Cursor getAllCorks() 
+    public List<Cork> getAllCorks() 
     {
-        return db.query(DATABASE_TABLE, new String[] {
+    	List<Cork> corks = new ArrayList<Cork>();
+    	
+        Cursor cur =  db.query(DATABASE_TABLE, new String[] {
         		KEY_ROWID,
         	    KEY_CORK_ID,
         	    KEY_CORK_UUID,
@@ -206,6 +216,47 @@ public class DryncDbAdapter
                 null, 
                 null, 
                 null);
+        
+        cur.moveToFirst();
+        while (cur.isAfterLast() == false) {
+            Cork cork = buildCork(cur);
+            corks.add(cork);
+       	    cur.moveToNext();
+        }
+
+        return corks;
+    }
+    
+    private Cork buildCork(Cursor cur)
+    {
+    	Cork cork = new Cork();
+    	cork.set_id(cur.getLong(cur.getColumnIndex(KEY_ROWID)));
+    	cork.setCork_id(cur.getLong(cur.getColumnIndex(KEY_CORK_ID)));
+    	cork.setCork_uuid(cur.getString(cur.getColumnIndex(KEY_CORK_UUID)));
+    	cork.setDescription(cur.getString(cur.getColumnIndex(KEY_DESCRIPTION)));
+    	cork.setLocation(cur.getString(cur.getColumnIndex(KEY_LOCATION)));
+    	cork.setCork_rating(cur.getFloat(cur.getColumnIndex(KEY_CORK_RATING)));
+    	cork.setCork_want(cur.getInt(cur.getColumnIndex(KEY_CORK_WANT)) == 0 ? false : true);
+    	cork.setCork_own(cur.getInt(cur.getColumnIndex(KEY_CORK_OWN)) == 0 ? false : true);
+    	cork.setCork_drank(cur.getInt(cur.getColumnIndex(KEY_CORK_DRANK)) == 0 ? false : true);
+    	cork.setCork_ordered(cur.getInt(cur.getColumnIndex(KEY_CORK_ORDERED)) == 0 ? false : true);
+    	cork.setCork_price(cur.getString(cur.getColumnIndex(KEY_CORK_PRICE)));
+    	cork.setCork_year(cur.getInt(cur.getColumnIndex(KEY_CORK_YEAR)));
+    	cork.setCork_poi(cur.getString(cur.getColumnIndex(KEY_CORK_POI)));
+    	
+    	cork.setBottle_Id(cur.getLong(cur.getColumnIndex(KEY_BOTTLE_ID)));
+    	cork.setName(cur.getString(cur.getColumnIndex(KEY_NAME)));
+    	cork.setYear(cur.getInt(cur.getColumnIndex(KEY_YEAR)));
+    	cork.setRegion_path(cur.getString(cur.getColumnIndex(KEY_REGION_PATH)));
+    	cork.setRegion(cur.getString(cur.getColumnIndex(KEY_REGION)));
+    	cork.setGrape(cur.getString(cur.getColumnIndex(KEY_GRAPE)));
+    	cork.setLabel(cur.getString(cur.getColumnIndex(KEY_LABEL)));
+    	cork.setLabel_thumb(cur.getString(cur.getColumnIndex(KEY_LABEL_THUMB)));
+    	cork.setPrice(cur.getString(cur.getColumnIndex(KEY_PRICE)));
+    	cork.setRating(cur.getString(cur.getColumnIndex(KEY_RATING)));
+    	cork.setReviewCount(cur.getInt(cur.getColumnIndex(KEY_REVIEWCOUNT)));  
+    	
+    	return cork;
     }
 
     //---retrieves a particular title---

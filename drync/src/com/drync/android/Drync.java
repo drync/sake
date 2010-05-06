@@ -141,7 +141,7 @@ public class Drync extends Activity {
         Thread t = new Thread()
         {
 			public void run() {
-				DryncProvider.getInstance().getCorksToFile(Drync.this, threadDeviceId);
+				DryncProvider.getInstance().getCorks(Drync.this, threadDeviceId);
 			}
 		};
 		t.start();

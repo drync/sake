@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -894,8 +895,12 @@ public class DryncCellar extends DryncBaseActivity {
 		Thread t = new Thread()
 		{
 			public void run() {
-				mResults = DryncProvider.getInstance().getCorksFromFile();
+				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncCellar.this);
+				dbAdapter.open();
+				mResults = dbAdapter.getAllCorks();
+				
 				mHandler.post(mUpdateResults);
+				dbAdapter.close();
 			}
 		};
 		t.start();

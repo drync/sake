@@ -321,6 +321,8 @@ public class DryncProvider {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
 		dbAdapter.open();
+		dbAdapter.clearCorks();
+		
 		Document doc = null;
 		
 		try {
@@ -340,7 +342,7 @@ public class DryncProvider {
 					Cork bottle = parseCorkFromNode(bottleNode);
 					if (bottle != null)
 					{
-						dbAdapter.updateCork((Cork) bottle);
+						dbAdapter.insertCork((Cork) bottle);
 						bottleList.add(bottle);
 					}
 				}

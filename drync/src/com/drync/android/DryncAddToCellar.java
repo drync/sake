@@ -661,20 +661,20 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						Thread t = new Thread()
 						{
 							public void run() {
-								DryncProvider.getInstance().getCorksToFile(DryncAddToCellar.this, deviceId);
+								DryncProvider.getInstance().getCorks(DryncAddToCellar.this, deviceId);
 							}
 						};
 						t.start();
 					}
 					else
 					{
-						// successful
+						// failed
 						Toast failedPost = Toast.makeText(DryncAddToCellar.this, 
 								"Failed post.", Toast.LENGTH_LONG);
 						failedPost.show();
 					}
 					// persist to database.
-					dbAdapter.open();
+					/*dbAdapter.open();
 					long result = dbAdapter.insertCork(cork);
 					dbAdapter.close();
 					Log.d("AddToCellar", "Yearselected: " + cork.getYear());
@@ -692,7 +692,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						Toast failureAdd = Toast.makeText(DryncAddToCellar.this, 
 								getResources().getString(R.string.failurecellaradd), Toast.LENGTH_LONG);
 						failureAdd.show();
-					}
+					}*/
 				}};
 
 				if (addToCellarBtn != null)
