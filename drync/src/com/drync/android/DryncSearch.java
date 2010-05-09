@@ -18,6 +18,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
@@ -31,6 +34,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -175,6 +180,8 @@ public class DryncSearch extends DryncBaseActivity {
 		Bundle extras = getIntent().getExtras();
 		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
 		this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
+		
+		startCellarUpdateThread();
 		
 		LayoutInflater inflater = getLayoutInflater();
 		
@@ -1127,5 +1134,78 @@ public class DryncSearch extends DryncBaseActivity {
 			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
 		}		
 	}
+	
+	private void startCellarUpdateThread()
+	{
+		ScheduledExecutorService ex = Executors.newSingleThreadScheduledExecutor();
+		
+		final Runnable cellarUpdateThread = new Runnable()
+		{
+			public void run()
+			{
+				ConnectivityManager cmgr = 
+					(ConnectivityManager) DryncSearch.this.getSystemService(
+							Context.CONNECTIVITY_SERVICE);
+				
+				NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+				NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				
+				if (((mobileinfo != null) && 
+					 (mobileinfo.isConnected())) ||
+					((wifiinfo != null) && (wifiinfo.isConnected())))
+				{
+					DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncSearch.this);
+					dbAdapter.open();
+					
+					List<Cork> corks = dbAdapter.getAllCorksNeedingUpdates();
+					
+					for (Cork cork : corks)
+					{
+						boolean postSuccess = false;
+					
+						// re-try post.
+						if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
+						{
+							postSuccess = DryncProvider.postCreate(cork, deviceId);
+						}
+						else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
+						{
+							postSuccess = DryncProvider.postDelete(cork, deviceId);
+						}
+						else if (cork.getUpdateType() == Cork.UPDATE_TYPE_UPDATE)
+						{
+						
+						}
+						
+						if (postSuccess) // set 'needsUpdate' to false(0) and updateType to 0
+						{
+							if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
+							{
+								dbAdapter.deleteCork(cork.get_id());
+							}
+							else
+							{
+								cork.setNeedsServerUpdate(false);
+								cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
+							
+								dbAdapter.updateCork(cork, false, Cork.UPDATE_TYPE_NONE);
+							}
+						}
+						dbAdapter.close();
+					}
+				//	Arraylist<Cork> getAllCorksNeedingUpdates()
+				}
+				else
+				{
+					return;
+				}
+			}
+		};
+				
+		
+		ex.scheduleAtFixedRate(cellarUpdateThread, 10, 60, TimeUnit.SECONDS);
+
+	}
+	
 }
 

@@ -44,6 +44,9 @@ public class DryncDbAdapter
     public static final String KEY_RATING = "rating";
     public static final String KEY_REVIEWCOUNT = "reviewCount";
     
+    public static final String KEY_NEEDSSERVERUPDATE = "needsServerUpdate";
+    public static final String KEY_UPDATETYPE = "updateType";
+    
     public static final String KEY_COUNT = "count";
     private static final String TAG = "DBAdapter";
     
@@ -79,7 +82,9 @@ public class DryncDbAdapter
         + "label_thumb text, "
         + "price text, "
         + "rating real, "
-        + "reviewCount integer" 
+        + "reviewCount integer, "
+        + "needsServerUpdate integer, "
+        + "updateType integer "
         + ");";
         
     private final Context context; 
@@ -134,6 +139,11 @@ public class DryncDbAdapter
     //---insert a title into the database---
     public long insertCork(Cork cork)
     {
+    	return insertCork(cork, false, 0);
+    }
+    
+    public long insertCork(Cork cork, boolean needsUpdate, int updateType)
+    {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_CORK_ID, cork.getCork_id());
         initialValues.put(KEY_CORK_UUID, cork.getCork_uuid());
@@ -162,6 +172,8 @@ public class DryncDbAdapter
         initialValues.put(KEY_PRICE, cork.getPrice());
         initialValues.put(KEY_RATING, cork.getRating());
         initialValues.put(KEY_REVIEWCOUNT, cork.getReviewCount());
+        initialValues.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
+        initialValues.put(KEY_UPDATETYPE, updateType);
         return db.insert(DATABASE_TABLE, "", initialValues);
     }
 
@@ -179,6 +191,69 @@ public class DryncDbAdapter
 
     //---retrieves all the titles---
     public List<Cork> getAllCorks() 
+    {
+    	return getAllCorks(false);
+    }
+    
+    public List<Cork> getAllCorks(boolean includePendingDeletes) 
+    {
+    	List<Cork> corks = new ArrayList<Cork>();
+    	String querymod = KEY_NEEDSSERVERUPDATE + "!=" + 1 + " AND " + KEY_UPDATETYPE + "!=" + Cork.UPDATE_TYPE_DELETE;
+    	
+    	if (includePendingDeletes)
+    	{
+    		querymod = null;
+    	}
+    	
+        Cursor cur =  db.query(DATABASE_TABLE, new String[] {
+        		KEY_ROWID,
+        	    KEY_CORK_ID,
+        	    KEY_CORK_UUID,
+        	    KEY_DESCRIPTION,
+        	    KEY_LOCATION,
+        	    KEY_CORK_RATING,
+        	    KEY_CORK_WANT,
+        	    KEY_CORK_OWN,
+        	    KEY_CORK_DRANK,
+        	    KEY_CORK_ORDERED,
+        	    KEY_CORK_PRICE,
+        	    KEY_CORK_YEAR,
+        	    KEY_CORK_POI,
+        	    KEY_CORK_BOTTLE_COUNT,
+        	    KEY_CORK_CREATED_AT,
+        	    KEY_CORK_LABEL,
+        	    
+        	    KEY_BOTTLE_ID,
+        	    KEY_NAME,
+        	    KEY_YEAR,
+        	    KEY_REGION_PATH,
+        	    KEY_REGION,
+        	    KEY_GRAPE,
+        	    KEY_LABEL,
+        	    KEY_LABEL_THUMB,
+        	    KEY_PRICE,
+        	    KEY_RATING,
+        	    KEY_REVIEWCOUNT,
+        	    KEY_NEEDSSERVERUPDATE,
+        	    KEY_UPDATETYPE}, 
+        	    querymod, 
+                null, 
+                null, 
+                null, 
+                null);
+        
+        cur.moveToFirst();
+        while (cur.isAfterLast() == false) {
+            Cork cork = buildCork(cur);
+            corks.add(cork);
+       	    cur.moveToNext();
+        }
+
+        return corks;
+    }
+    
+  //---retrieves all the titles---
+    public List<Cork> getAllCorksNeedingUpdates() 
     {
     	List<Cork> corks = new ArrayList<Cork>();
     	
@@ -210,8 +285,10 @@ public class DryncDbAdapter
         	    KEY_LABEL_THUMB,
         	    KEY_PRICE,
         	    KEY_RATING,
-        	    KEY_REVIEWCOUNT}, 
-                null, 
+        	    KEY_REVIEWCOUNT, 
+        	    KEY_NEEDSSERVERUPDATE,
+        	    KEY_UPDATETYPE}, 
+        	    KEY_NEEDSSERVERUPDATE + "=" + 1,  
                 null, 
                 null, 
                 null, 
@@ -254,11 +331,60 @@ public class DryncDbAdapter
     	cork.setLabel_thumb(cur.getString(cur.getColumnIndex(KEY_LABEL_THUMB)));
     	cork.setPrice(cur.getString(cur.getColumnIndex(KEY_PRICE)));
     	cork.setRating(cur.getString(cur.getColumnIndex(KEY_RATING)));
-    	cork.setReviewCount(cur.getInt(cur.getColumnIndex(KEY_REVIEWCOUNT)));  
+    	cork.setReviewCount(cur.getInt(cur.getColumnIndex(KEY_REVIEWCOUNT))); 
+    	cork.setNeedsServerUpdate(
+    			cur.getInt(cur.getColumnIndex(KEY_NEEDSSERVERUPDATE)) == 0 ? false : true);
+    	cork.setUpdateType(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)));
     	
     	return cork;
     }
 
+    public Cursor getCorkByUUID(long uuId) throws SQLException 
+    {
+    	Cursor mCursor =
+            db.query(true, DATABASE_TABLE, new String[] {
+               		KEY_ROWID,
+            	    KEY_CORK_ID,
+            	    KEY_CORK_UUID,
+            	    KEY_DESCRIPTION,
+            	    KEY_LOCATION,
+            	    KEY_CORK_RATING,
+            	    KEY_CORK_WANT,
+            	    KEY_CORK_OWN,
+            	    KEY_CORK_DRANK,
+            	    KEY_CORK_ORDERED,
+            	    KEY_CORK_PRICE,
+            	    KEY_CORK_YEAR,
+            	    KEY_CORK_POI,
+            	    KEY_CORK_BOTTLE_COUNT,
+            	    KEY_CORK_CREATED_AT,
+            	    KEY_CORK_LABEL,
+            	    
+            	    KEY_BOTTLE_ID,
+            	    KEY_NAME,
+            	    KEY_YEAR,
+            	    KEY_REGION_PATH,
+            	    KEY_REGION,
+            	    KEY_GRAPE,
+            	    KEY_LABEL,
+            	    KEY_LABEL_THUMB,
+            	    KEY_PRICE,
+            	    KEY_RATING,
+            	    KEY_REVIEWCOUNT,
+            	    KEY_NEEDSSERVERUPDATE,
+            	    KEY_UPDATETYPE
+            		}, 
+            		KEY_CORK_UUID + "=" + uuId, 
+            		null,
+            		null, 
+            		null, 
+            		null, 
+            		null);
+    if (mCursor != null) {
+        mCursor.moveToFirst();
+    }
+    return mCursor;
+    }
     //---retrieves a particular title---
     public Cursor getCork(long rowId) throws SQLException 
     {
@@ -291,7 +417,9 @@ public class DryncDbAdapter
                 	    KEY_LABEL_THUMB,
                 	    KEY_PRICE,
                 	    KEY_RATING,
-                	    KEY_REVIEWCOUNT
+                	    KEY_REVIEWCOUNT,
+                	    KEY_NEEDSSERVERUPDATE,
+                	    KEY_UPDATETYPE
                 		}, 
                 		KEY_ROWID + "=" + rowId, 
                 		null,
@@ -307,6 +435,11 @@ public class DryncDbAdapter
 
     //---updates a cork---
     public boolean updateCork(Cork cork) 
+    {
+    	return updateCork(cork, false, 0);
+    }
+    
+    public boolean updateCork(Cork cork, boolean needsUpdate, int updateType) 
     {
         ContentValues args = new ContentValues();
         args.put(KEY_ROWID, cork.get_id());
@@ -337,8 +470,10 @@ public class DryncDbAdapter
         args.put(KEY_PRICE, cork.getPrice());
         args.put(KEY_RATING, cork.getRating());
         args.put(KEY_REVIEWCOUNT, cork.getReviewCount());
+        args.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
+        args.put(KEY_UPDATETYPE, updateType);
         return db.update(DATABASE_TABLE, args, 
-                         KEY_ROWID + "=" + cork.get_id(), null) > 0;
+        		KEY_CORK_UUID + "=" + cork.getCork_uuid(), null) > 0;
     }
 }
 

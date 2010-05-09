@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -834,6 +835,35 @@ public class DryncProvider {
 		Log.d("DryncProvider", itemsResource.getStatus().getDescription(), itemsResource.getStatus().getThrowable());
 		
 		return itemsResource.getStatus().isSuccess();*/
+	}
+
+	public static boolean postDelete(Cork cork, String deviceId)
+	{
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/corks/%s", USING_SERVER_HOST,SERVER_PORT, cork.getCork_id());
+		HashMap<String,String> form = new HashMap<String, String>();  
+		form.put("_method", "delete");
+		form.put("format", "xml");
+		try {
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, form, deviceId);
+			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+				return true;
+			else
+				return false;
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	public  static String convertStreamToString(InputStream is) throws IOException {

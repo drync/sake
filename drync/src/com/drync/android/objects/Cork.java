@@ -21,7 +21,33 @@ public class Cork extends Bottle
     boolean cork_ordered = false;
     int cork_year;
     String cork_poi;
-    public String getCork_poi() {
+    
+    boolean needsServerUpdate = false;
+    int updateType = 0;
+    
+    public static final int UPDATE_TYPE_NONE = 0;
+    public static final int UPDATE_TYPE_UPDATE = 1;
+    public static final int UPDATE_TYPE_INSERT = 2;
+    public static final int UPDATE_TYPE_DELETE = 3;
+    
+    
+    public boolean isNeedsServerUpdate() {
+		return needsServerUpdate;
+	}
+
+	public void setNeedsServerUpdate(boolean needsServerUpdate) {
+		this.needsServerUpdate = needsServerUpdate;
+	}
+
+	public int getUpdateType() {
+		return updateType;
+	}
+
+	public void setUpdateType(int updateType) {
+		this.updateType = updateType;
+	}
+
+	public String getCork_poi() {
 		return cork_poi;
 	}
 
