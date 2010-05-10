@@ -186,7 +186,18 @@ public class DryncDbAdapter
     
     public int clearCorks()
     {
-    	return db.delete(DATABASE_TABLE, null, null);
+    	return clearCorks(false);
+    }
+    
+    public int clearCorks(boolean excludeThoseNeedingUpdate)
+    {
+    	String whereClause = null;
+    	if (excludeThoseNeedingUpdate)
+    	{
+    		whereClause = KEY_NEEDSSERVERUPDATE + "<>1";
+    	}
+    	
+    	return db.delete(DATABASE_TABLE, whereClause, null);
     }
 
     //---retrieves all the titles---
@@ -248,6 +259,8 @@ public class DryncDbAdapter
             corks.add(cork);
        	    cur.moveToNext();
         }
+        
+        cur.close();
 
         return corks;
     }
@@ -301,6 +314,8 @@ public class DryncDbAdapter
        	    cur.moveToNext();
         }
 
+        cur.close();
+        
         return corks;
     }
     

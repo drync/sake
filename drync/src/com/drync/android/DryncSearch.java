@@ -1143,61 +1143,70 @@ public class DryncSearch extends DryncBaseActivity {
 		{
 			public void run()
 			{
-				ConnectivityManager cmgr = 
-					(ConnectivityManager) DryncSearch.this.getSystemService(
-							Context.CONNECTIVITY_SERVICE);
-				
-				NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-				NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-				
-				if (((mobileinfo != null) && 
-					 (mobileinfo.isConnected())) ||
-					((wifiinfo != null) && (wifiinfo.isConnected())))
+				try
 				{
-					DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncSearch.this);
-					dbAdapter.open();
-					
-					List<Cork> corks = dbAdapter.getAllCorksNeedingUpdates();
-					
-					for (Cork cork : corks)
+
+					ConnectivityManager cmgr = 
+						(ConnectivityManager) DryncSearch.this.getSystemService(
+								Context.CONNECTIVITY_SERVICE);
+
+					NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+					NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+					if (((mobileinfo != null) && 
+							(mobileinfo.isConnected())) ||
+							((wifiinfo != null) && (wifiinfo.isConnected())))
 					{
-						boolean postSuccess = false;
-					
-						// re-try post.
-						if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
+						DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncSearch.this);
+						dbAdapter.open();
+
+						List<Cork> corks = dbAdapter.getAllCorksNeedingUpdates();
+
+						for (Cork cork : corks)
 						{
-							postSuccess = DryncProvider.postCreate(cork, deviceId);
-						}
-						else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
-						{
-							postSuccess = DryncProvider.postDelete(cork, deviceId);
-						}
-						else if (cork.getUpdateType() == Cork.UPDATE_TYPE_UPDATE)
-						{
-						
-						}
-						
-						if (postSuccess) // set 'needsUpdate' to false(0) and updateType to 0
-						{
-							if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
+							boolean postSuccess = false;
+
+							// re-try post.
+							if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
 							{
-								dbAdapter.deleteCork(cork.get_id());
+								postSuccess = DryncProvider.postCreate(cork, deviceId);
 							}
-							else
+							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
 							{
-								cork.setNeedsServerUpdate(false);
-								cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
-							
-								dbAdapter.updateCork(cork, false, Cork.UPDATE_TYPE_NONE);
+								postSuccess = DryncProvider.postDelete(cork, deviceId);
 							}
+							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_UPDATE)
+							{
+
+							}
+
+							if (postSuccess) // set 'needsUpdate' to false(0) and updateType to 0
+							{
+								if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
+								{
+									dbAdapter.deleteCork(cork.get_id());
+								}
+								else
+								{
+									cork.setNeedsServerUpdate(false);
+									cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
+
+									dbAdapter.updateCork(cork, false, Cork.UPDATE_TYPE_NONE);
+								}
+							}
+
 						}
 						dbAdapter.close();
+						//	Arraylist<Cork> getAllCorksNeedingUpdates()
 					}
-				//	Arraylist<Cork> getAllCorksNeedingUpdates()
+					else
+					{
+						return;
+					}
 				}
-				else
+				catch (Exception e)
 				{
-					return;
+					e.printStackTrace();
 				}
 			}
 		};

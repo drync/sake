@@ -322,7 +322,7 @@ public class DryncProvider {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
 		dbAdapter.open();
-		dbAdapter.clearCorks();
+		dbAdapter.clearCorks(true);
 		
 		Document doc = null;
 		
@@ -589,55 +589,13 @@ public class DryncProvider {
 					Node node = nodeList.item(i);
 					String value = this.getNodeValue(node);
 					parseBottlePortions(node, value, bottle);
-					/*if("name".equals(node.getNodeName())) {
-						bottle.setName(value);
-					} else if("year".equals(node.getNodeName())) {
-						bottle.setYear(Integer.parseInt(value));
-					} else if("region".equals(node.getNodeName())) {
-						bottle.setRegion(value);
-					} else if("region_path".equals(node.getNodeName())) {
-						bottle.setRegion_path(value);
-					} else if("style".equals(node.getNodeName())) {
-						bottle.setStyle(value);
-					} else if ("label_thumb".equals(node.getNodeName())) {
-						bottle.setLabel_thumb(value);
-					} else if ("price".equals(node.getNodeName())) {
-						bottle.setPrice(value);
-					} else if ("rating".equals(node.getNodeName())) {
-						bottle.setRating(value);
-					} else if ("grape".equals(node.getNodeName())) {
-						bottle.setGrape(value);
-					} else if ("reviews".equals(node.getNodeName())) {
-						Node reviews = node;
-						NodeList reviewChildren = reviews.getChildNodes();
-						int rcLen = reviewChildren.getLength();
-						for (int k=0;k<rcLen;k++)
-						{
-							if (reviewChildren.item(k).getNodeName().equals("review"))
-							{
-								Node reviewNode = reviewChildren.item(k);
-								
-								Review parsedReview = parseReviewFromNode(reviewNode);
-								bottle.addReview(parsedReview);
-							}
-						}
-					} else if ("sources".equals(node.getNodeName())) {
-						Node sources = node;
-						NodeList srcChildren = sources.getChildNodes();
-						int rcLen = srcChildren.getLength();
-						for (int k=0;k<rcLen;k++)
-						{
-							if (srcChildren.item(k).getNodeName().equals("source"))
-							{
-								Node srcNode = srcChildren.item(k);
+					if("cork_id".equals(node.getNodeName())) {
+						bottle.setCork_id(Long.parseLong(value));
+					} else if("cork_uuid".equals(node.getNodeName())) {
+						bottle.setCork_uuid(value);
+					} 
+					// else skip for now.
 
-								Source parsedSource = parseSourceFromNode(srcNode);
-								
-								bottle.addSource(parsedSource);
-							}
-						}
-					}// else skip for now.
-*/
 				} catch (NumberFormatException e)
 				{
 					// skip for now.
@@ -843,11 +801,14 @@ public class DryncProvider {
 		String clientResourceUrl = String.format("http://%s:%d/corks/%s", USING_SERVER_HOST,SERVER_PORT, cork.getCork_id());
 		HashMap<String,String> form = new HashMap<String, String>();  
 		form.put("_method", "delete");
-		form.put("format", "xml");
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, form, deviceId);
-			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
-			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getEntity() != null)
+			{
+				String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+				Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			}
+			
 			if (response.getStatusLine().getStatusCode() < 400)
 				return true;
 			else
@@ -860,6 +821,9 @@ public class DryncProvider {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		
