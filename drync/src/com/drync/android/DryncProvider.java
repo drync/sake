@@ -322,29 +322,31 @@ public class DryncProvider {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
 		dbAdapter.open();
-		dbAdapter.clearCorks(true);
-		
 		Document doc = null;
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			HttpResponse response = doCorksGet(context, target, deviceId);
-			HttpEntity entity = response.getEntity();
+			
+			if (response.getStatusLine().getStatusCode() < 400)
+			{
+				HttpEntity entity = response.getEntity();
 
-			doc = builder.parse(entity.getContent());
-			NodeList bottles = doc.getElementsByTagName("bottle");
+				doc = builder.parse(entity.getContent());
+				NodeList bottles = doc.getElementsByTagName("bottle");
 
-			if(bottles!=null) {
-				for(int j=0,m=bottles.getLength();j<m;j++)
-				{
-					Node bottleNode = bottles.item(j);
-
-					Cork bottle = parseCorkFromNode(bottleNode);
-					if (bottle != null)
+				if(bottles!=null) {
+					for(int j=0,m=bottles.getLength();j<m;j++)
 					{
-						dbAdapter.insertCork((Cork) bottle);
-						bottleList.add(bottle);
+						Node bottleNode = bottles.item(j);
+
+						Cork bottle = parseCorkFromNode(bottleNode);
+						if (bottle != null)
+						{
+							dbAdapter.insertOrUpdateCork((Cork)bottle);
+							bottleList.add(bottle);
+						}
 					}
 				}
 			}

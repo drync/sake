@@ -136,6 +136,32 @@ public class DryncDbAdapter
         DBHelper.close();
     }
     
+    public long insertOrUpdateCork(Cork cork)
+    {
+    	Cork localCopy = this.getCorkByUUID(cork.getCork_uuid());
+    	if (localCopy == null) // then it's easy:
+    	{
+    		// if cork is not present, insert.
+    		return this.insertCork(cork);
+    	}
+    	else
+    	{
+    		// if cork is present and marked for needsServerUpdate, keep local.
+    		// however, if updateType is UPDATE_TYPE_NONE, take server version.
+    		if (localCopy.isNeedsServerUpdate() && (localCopy.getUpdateType() != Cork.UPDATE_TYPE_NONE))
+    		{
+    			return localCopy.get_id();
+    		}
+    		else  // if cork is present and NOT marked for needsServerUpdate, mod for server version.
+    		{
+    			cork.set_id(localCopy.get_id());
+    			this.updateCork(cork);
+    			
+    			return cork.get_id();
+    		}
+    	}
+    }
+    
     //---insert a title into the database---
     public long insertCork(Cork cork)
     {
@@ -354,7 +380,7 @@ public class DryncDbAdapter
     	return cork;
     }
 
-    public Cursor getCorkByUUID(long uuId) throws SQLException 
+    public Cork getCorkByUUID(String uuId) throws SQLException 
     {
     	Cursor mCursor =
             db.query(true, DATABASE_TABLE, new String[] {
@@ -389,16 +415,25 @@ public class DryncDbAdapter
             	    KEY_NEEDSSERVERUPDATE,
             	    KEY_UPDATETYPE
             		}, 
-            		KEY_CORK_UUID + "=" + uuId, 
+            		KEY_CORK_UUID + "='" + uuId + "'", 
             		null,
             		null, 
             		null, 
             		null, 
             		null);
-    if (mCursor != null) {
+    if (mCursor != null && mCursor.getCount() > 0) {
+    
         mCursor.moveToFirst();
+        Cork returnCork = null;
+        if (mCursor.getColumnCount() > 0)
+        {
+        	returnCork = buildCork(mCursor);	
+        }
+        mCursor.close();
+        
+        return returnCork; 
     }
-    return mCursor;
+    return null;
     }
     //---retrieves a particular title---
     public Cursor getCork(long rowId) throws SQLException 
@@ -451,7 +486,7 @@ public class DryncDbAdapter
     //---updates a cork---
     public boolean updateCork(Cork cork) 
     {
-    	return updateCork(cork, false, 0);
+    	return updateCork(cork, cork.isNeedsServerUpdate(), cork.getUpdateType());
     }
     
     public boolean updateCork(Cork cork, boolean needsUpdate, int updateType) 
@@ -487,8 +522,11 @@ public class DryncDbAdapter
         args.put(KEY_REVIEWCOUNT, cork.getReviewCount());
         args.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
         args.put(KEY_UPDATETYPE, updateType);
-        return db.update(DATABASE_TABLE, args, 
-        		KEY_CORK_UUID + "=" + cork.getCork_uuid(), null) > 0;
+        
+        int rowsModified = db.update(DATABASE_TABLE, args, 
+        		KEY_ROWID + "=" + cork.get_id(), null);
+        
+        return rowsModified > 0;
     }
 }
 

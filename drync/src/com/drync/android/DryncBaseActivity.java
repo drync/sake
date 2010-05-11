@@ -18,6 +18,8 @@ public abstract class DryncBaseActivity extends Activity {
 	public static final int TOP_WINE_ID = Menu.FIRST + 2;
 	public static final int SETTINGS_ID = Menu.FIRST + 3;
 	
+	public static final int ADDTOCELLAR_RESULT = 1;
+	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -75,13 +77,35 @@ public abstract class DryncBaseActivity extends Activity {
         }
         case CELLAR_ID:
         {
-        	Intent setIntent = new Intent(this, DryncCellar.class);
-        	startActivity(setIntent);
+        	startDryncCellarActivity();
         	break;
         }
         }
        
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch (requestCode) {
+        case ADDTOCELLAR_RESULT:
+            // This is the standard resultCode that is sent back if the
+            // activity crashed or didn't doesn't supply an explicit result.
+            if (resultCode == RESULT_CANCELED){
+                // do nothing.
+            } 
+            else {
+                this.startDryncCellarActivity();
+            }
+        default:
+            break;
+    }
+	}
+
+	protected void startDryncCellarActivity()
+    {
+    	Intent setIntent = new Intent(this, DryncCellar.class);
+    	startActivity(setIntent);
     }
 
 }

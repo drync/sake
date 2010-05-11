@@ -1179,6 +1179,10 @@ public class DryncSearch extends DryncBaseActivity {
 							{
 
 							}
+							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_NONE)
+							{
+								postSuccess = true;  // just fix it.
+							}
 
 							if (postSuccess) // set 'needsUpdate' to false(0) and updateType to 0
 							{
@@ -1191,11 +1195,12 @@ public class DryncSearch extends DryncBaseActivity {
 									cork.setNeedsServerUpdate(false);
 									cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
 
-									dbAdapter.updateCork(cork, false, Cork.UPDATE_TYPE_NONE);
+									dbAdapter.updateCork(cork);
 								}
 							}
 
 						}
+						
 						dbAdapter.close();
 						//	Arraylist<Cork> getAllCorksNeedingUpdates()
 					}

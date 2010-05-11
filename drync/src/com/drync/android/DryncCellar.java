@@ -79,8 +79,6 @@ import com.drync.android.ui.RemoteImageView;
 
 public class DryncCellar extends DryncBaseActivity {
 
-	
-	
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Cork> mResults = null;
@@ -96,8 +94,6 @@ public class DryncCellar extends DryncBaseActivity {
 	boolean displayTopWinesBtns = false;
 	
 	int lastSelectedTopWine = -1;
-	
-	
 	
 	private TableLayout mReviewTable;
 	

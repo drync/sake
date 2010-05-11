@@ -652,47 +652,28 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						cork.setCork_own(false);
 
 					boolean postSuccess = DryncProvider.postCreate(cork, deviceId);
-					if (postSuccess)
+					if (!postSuccess)
 					{
-						// successful
-						Toast successfulPost = Toast.makeText(DryncAddToCellar.this, 
-								"Successful post.", Toast.LENGTH_LONG);
-						successfulPost.show();
-						Thread t = new Thread()
-						{
-							public void run() {
-								DryncProvider.getInstance().getCorks(DryncAddToCellar.this, deviceId);
-							}
-						};
-						t.start();
-					}
-					else
-					{
-						// failed
-						Toast failedPost = Toast.makeText(DryncAddToCellar.this, 
-								"Failed post.", Toast.LENGTH_LONG);
-						failedPost.show();
+						// failed post, post later.
+						
+						cork.setNeedsServerUpdate(true);
+						cork.setUpdateType(Cork.UPDATE_TYPE_INSERT);	
 					}
 					// persist to database.
-					/*dbAdapter.open();
+					dbAdapter.open();
 					long result = dbAdapter.insertCork(cork);
 					dbAdapter.close();
-					Log.d("AddToCellar", "Yearselected: " + cork.getYear());
+					
 					if (result >= 0)
 					{
 						// successful
 						Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
 								getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
 						successfulAdd.show();
-						DryncAddToCellar.this.finish();
+						
 					}
-					else
-					{
-						// failure
-						Toast failureAdd = Toast.makeText(DryncAddToCellar.this, 
-								getResources().getString(R.string.failurecellaradd), Toast.LENGTH_LONG);
-						failureAdd.show();
-					}*/
+					DryncAddToCellar.this.setResult(RESULT_OK);
+					DryncAddToCellar.this.finish();
 				}};
 
 				if (addToCellarBtn != null)

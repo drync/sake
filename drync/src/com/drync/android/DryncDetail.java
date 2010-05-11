@@ -431,7 +431,7 @@ public class DryncDetail extends DryncBaseActivity {
 		
 		Intent twIntent = new Intent(this, DryncAddToCellar.class);
 		twIntent.putExtra("bottle", mBottle);
-		startActivity(twIntent);  
+		startActivityForResult(twIntent, ADDTOCELLAR_RESULT);  
 		
 		/*final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
 		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
