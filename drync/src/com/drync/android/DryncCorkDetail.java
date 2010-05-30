@@ -345,6 +345,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 					boolean success = dbAdapter.deleteCork(mBottle.get_id());
 					dbAdapter.close();
 					
+					DryncCorkDetail.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
 					DryncCorkDetail.this.finish();
 					
 				}});

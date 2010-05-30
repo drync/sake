@@ -363,6 +363,7 @@ public class DryncDbAdapter
     	cork.setCork_poi(cur.getString(cur.getColumnIndex(KEY_CORK_POI)));
     	
     	cork.setBottle_Id(cur.getLong(cur.getColumnIndex(KEY_BOTTLE_ID)));
+    	cork.setCork_label(cur.getString(cur.getColumnIndex(KEY_CORK_LABEL)));
     	cork.setName(cur.getString(cur.getColumnIndex(KEY_NAME)));
     	cork.setYear(cur.getInt(cur.getColumnIndex(KEY_YEAR)));
     	cork.setRegion_path(cur.getString(cur.getColumnIndex(KEY_REGION_PATH)));

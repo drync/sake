@@ -90,6 +90,9 @@ public class DryncCellar extends DryncBaseActivity {
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
 	
+	public static final int CORKDETAIL_RESULT = 1;
+	public static final int CELLAR_NEEDS_REFRESH = 5;
+	
 	boolean displayFilter = true;
 	boolean displayCellarFilterBtns = false;
 	
@@ -121,6 +124,26 @@ public class DryncCellar extends DryncBaseActivity {
 				progressDlg.dismiss();
 		}
 	};
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch (requestCode) {
+        case CORKDETAIL_RESULT:
+            // This is the standard resultCode that is sent back if the
+            // activity crashed or didn't doesn't supply an explicit result.
+            if (resultCode == RESULT_CANCELED){
+                // do nothing.
+            } 
+            else if ( resultCode == CELLAR_NEEDS_REFRESH )
+            {
+            	this.doCellarQuery();
+            }
+            else {
+                //this.startDryncCellarActivity();
+            }
+        default:
+            break;
+    }
+	}
 	
 	
 	private void updateResultsInUi() {
@@ -228,7 +251,7 @@ public class DryncCellar extends DryncBaseActivity {
 	private void launchCork(Cork bottle) {
 		Intent twIntent = new Intent(this, DryncCorkDetail.class);
 		twIntent.putExtra("bottle", bottle);
-		startActivity(twIntent);  
+		startActivityForResult(twIntent, CORKDETAIL_RESULT);  
 		/*if (mBottle != bottle)
 		{
 			rebuildDetail = true;
@@ -845,7 +868,7 @@ public class DryncCellar extends DryncBaseActivity {
 			}
 			
 			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
-			wineNameText.setText(wine.getName());
+			wineNameText.setText(wine.getCork_label());
 			Float corkRating = wine.getCork_rating();
 			ratingVal.setText(((corkRating == null) || (corkRating == 0)) ? "NR" : "" + wine.getCork_rating());
 			Integer corkYear = wine.getCork_year();
