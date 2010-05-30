@@ -31,6 +31,9 @@
         <activity android:name=".DryncDetail"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name=".DryncCorkDetail"
+                  android:label="@string/app_name">
+        </activity>
         <activity android:name=".DryncDetailReviews"
                   android:label="@string/app_name">
         </activity>

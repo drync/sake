@@ -80,7 +80,7 @@ public class DryncUtils {
 		try {
 			return getCacheDir(null);
 		} catch (DryncConfigException e) {
-			Log.e("DryncUtil", e.getMessage());
+			Log.e("DryncUtil", "DryncConfigException: " + e.getMessage());
 		}
 		
 		return /* this is probably where it should go, so let's let it work, at least: */

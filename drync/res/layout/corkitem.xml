@@ -1,0 +1,112 @@
+<WineItemRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip">
+    
+    <com.drync.android.ui.RemoteImageView
+        android:id="@+id/corkThumb"
+        android:layout_width="57px"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dip"
+        android:scaleType="centerInside"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+         />
+
+		<RelativeLayout 
+			    android:id="@+id/thirdLine"
+        		android:orientation="horizontal"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:paddingRight="10px"
+        		android:layout_marginTop="5px"
+        		android:layout_toRightOf="@id/corkThumb"
+        		android:layout_alignParentBottom="true"
+        		android:layout_alignParentRight="true">
+        		
+        		<TextView  
+        		    android:id="@+id/myNotesLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:text="my notes: " />
+            	<TextView  
+            	    android:id="@+id/myNotesValue"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/myNotesLabel"
+            		android:text="111" />
+            </RelativeLayout>
+            
+            <RelativeLayout 
+			    android:id="@+id/secondLine"
+        		android:orientation="horizontal"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		android:paddingRight="10px"
+        		android:layout_marginTop="5px"
+        		android:layout_toRightOf="@id/corkThumb"
+        		android:layout_alignParentRight="true"
+			android:layout_above="@id/thirdLine" >
+        		
+        		<TextView  
+        		    android:id="@+id/yearLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:text="year:" />
+            	<TextView  
+            	    android:id="@+id/yearValue"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/yearLabel"
+            		android:text="111" />
+            		
+            		<TextView  
+        		    android:id="@+id/ratingLabel"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#000000" 
+            		android:textSize="9px"           
+            		android:singleLine="true"
+            		android:paddingRight="5px"
+            		android:paddingLeft="10px"
+            		android:layout_toRightOf="@id/yearValue"
+            		android:text="rating:" />
+            	<TextView  
+            	    android:id="@+id/ratingValue"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:textColor="#FFFFFF"            
+            		android:singleLine="true"
+            		android:textSize="9px"
+            		android:layout_toRightOf="@id/ratingLabel" />
+            	
+            </RelativeLayout>
+            
+        <TextView
+        	android:id="@+id/wineName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:typeface="serif"
+			android:layout_toRightOf="@id/corkThumb"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentTop="true"
+			android:ellipsize="marquee"
+			android:layout_above="@id/secondLine" />
+        
+</WineItemRelativeLayout>

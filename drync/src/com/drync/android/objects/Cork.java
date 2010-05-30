@@ -6,7 +6,10 @@ import java.util.Map;
 import org.restlet.data.Form;
 import org.restlet.representation.Representation;
 
-public class Cork extends Bottle
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Cork extends Bottle implements Parcelable
 {   
     long _id;
     long cork_id;
@@ -14,12 +17,12 @@ public class Cork extends Bottle
     String description;
     String location;
     String cork_price;
-    float cork_rating;
+    Float cork_rating = null;
     boolean cork_want = false;
     boolean cork_drank = false;
     boolean cork_own = false;
     boolean cork_ordered = false;
-    int cork_year;
+    Integer cork_year = null;
     String cork_poi;
     
     boolean needsServerUpdate = false;
@@ -115,16 +118,16 @@ public class Cork extends Bottle
 	public void setCork_price(String corkPrice) {
 		cork_price = corkPrice;
 	}
-	public int getCork_year() {
+	public Integer getCork_year() {
 		return cork_year;
 	}
-	public void setCork_year(int corkYear) {
+	public void setCork_year(Integer corkYear) {
 		cork_year = corkYear;
 	}
-	public float getCork_rating() {
+	public Float getCork_rating() {
 		return cork_rating;
 	}
-	public void setCork_rating(float corkRating) {
+	public void setCork_rating(Float corkRating) {
 		cork_rating = corkRating;
 	}
 	public boolean isCork_want() {
@@ -187,5 +190,70 @@ public class Cork extends Bottle
 		
 		return form;
 	}
+	
+	public static final Parcelable.Creator<Bottle> CREATOR = new Parcelable.Creator<Bottle>() {
+        public Cork createFromParcel(Parcel in) {
+            return new Cork(in);
+        }
+
+        public Cork[] newArray(int size) {
+            return new Cork[size];
+        }
+    };
+    
+    public Cork(Parcel in) {
+		super();
+		readFromParcel(in);
+	}
+    
+    @Override
+	public void writeToParcel(Parcel out, int flags) {
+		super.writeToParcel(out, flags);
+		out.writeLong(_id);
+		out.writeInt(cork_bottle_count);
+		out.writeLong(cork_created_at);
+		out.writeInt(cork_drank ? 1 : 0);
+		out.writeLong(cork_id);
+		out.writeString(cork_label);
+		out.writeInt(cork_ordered ? 1 : 0);
+		out.writeInt(cork_own ? 1 : 0);
+		out.writeString(cork_poi);
+		out.writeString(cork_price);
+		out.writeFloat(cork_rating);
+		out.writeString(cork_uuid);
+		out.writeInt(cork_want ? 1 : 0);
+		out.writeInt(cork_year);
+		out.writeString(description);
+		out.writeString(location);
+		out.writeInt(needsServerUpdate ? 1 : 0);
+		out.writeInt(updateType);
+	}
+
+	public void readFromParcel(Parcel in)
+    {
+    	super.readFromParcel(in);
+    	_id = in.readLong();
+    	cork_bottle_count = in.readInt();
+    	cork_created_at = in.readLong();
+    	cork_drank = in.readInt() == 0 ? false : true;
+    	cork_id = in.readLong();
+    	cork_label = in.readString();
+    	cork_ordered = in.readInt() == 0 ? false : true;
+    	cork_own = in.readInt() == 0 ? false : true;
+    	cork_poi = in.readString();
+    	cork_price = in.readString();
+    	cork_rating = in.readFloat();
+    	cork_uuid = in.readString();
+    	cork_want = in.readInt() == 0 ? false : true;
+    	cork_year = in.readInt();
+    	description = in.readString();
+    	location = in.readString();
+    	needsServerUpdate = in.readInt() == 0 ? false : true;
+    	updateType = in.readInt();
+    	
+    	
+    }
+
+	
 	
 }

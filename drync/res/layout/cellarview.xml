@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cellarview"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="wrap_content" android:visibility="visible"
+	android:background="@drawable/wood2">
+
+	<LinearLayout android:id="@+id/searchHolder"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<EditText android:id="@+id/searchentry" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:background="@android:drawable/editbox_background"
+			android:drawableLeft="@drawable/glass" android:layout_marginTop="3dip"
+			android:drawablePadding="5dip" />
+	</LinearLayout>
+	
+	<LinearLayout android:id="@+id/cellarfilterbuttons"
+		android:visibility="invisible" android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:paddingLeft="5px" android:paddingRight="5px"
+		android:background="#410701">
+
+		<Button android:id="@+id/myWinesBtn" android:textColor="#FFFFFF"
+			android:layout_width="50dip" android:layout_height="20dip"
+			android:textSize="9px" android:background="@drawable/qn_woodbutton"
+			android:layout_gravity="center" android:typeface="normal"
+			android:textStyle="normal" android:layout_weight=".15" android:text="My Wines" />
+
+		<Button android:id="@+id/iDrankBtn" android:textColor="#FFFFFF"
+			android:layout_width="50dip" android:layout_height="20dip"
+			android:textSize="9px" android:background="@drawable/qn_woodbutton"
+			android:layout_gravity="center" android:typeface="normal"
+			android:textStyle="normal" android:layout_weight=".15" android:text="I Drank" />
+
+		<Button android:id="@+id/iOwnBtn" android:textColor="#FFFFFF"
+			android:layout_width="50dip" android:layout_height="20dip"
+			android:textSize="9px" android:background="@drawable/qn_woodbutton"
+			android:layout_gravity="center" android:typeface="normal"
+			android:textStyle="normal" android:layout_marginTop="15px"
+			android:layout_marginBottom="15px" android:layout_weight=".15"
+			android:text="I Own" />
+		
+		<Button android:id="@+id/iWantBtn" android:textColor="#FFFFFF"
+			android:layout_width="50dip" android:layout_height="20dip"
+			android:textSize="9px" android:background="@drawable/qn_woodbutton"
+			android:layout_gravity="center" android:typeface="normal"
+			android:textStyle="normal" android:layout_marginTop="15px"
+			android:layout_marginBottom="15px" android:layout_weight=".15"
+			android:text="I Want" />
+	</LinearLayout>
+
+	
+
+	<LinearLayout android:id="@+id/corklistholder"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="1" />
+</LinearLayout>
