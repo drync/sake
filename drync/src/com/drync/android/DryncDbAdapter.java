@@ -70,7 +70,7 @@ public class DryncDbAdapter
         + "cork_year integer, "
         + "cork_poi text, "
         + "cork_bottle_count integer, "
-        + "cork_created_at integer, "
+        + "cork_created_at text, "
         + "cork_label text, "
         + "bottle_id integer, "
         + "name text, "
@@ -361,6 +361,7 @@ public class DryncDbAdapter
     	cork.setCork_price(cur.getString(cur.getColumnIndex(KEY_CORK_PRICE)));
     	cork.setCork_year(cur.getInt(cur.getColumnIndex(KEY_CORK_YEAR)));
     	cork.setCork_poi(cur.getString(cur.getColumnIndex(KEY_CORK_POI)));
+    	cork.setCork_created_at(cur.getString(cur.getColumnIndex(KEY_CORK_CREATED_AT)));
     	
     	cork.setBottle_Id(cur.getLong(cur.getColumnIndex(KEY_BOTTLE_ID)));
     	cork.setCork_label(cur.getString(cur.getColumnIndex(KEY_CORK_LABEL)));

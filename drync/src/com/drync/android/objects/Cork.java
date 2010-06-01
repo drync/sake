@@ -58,15 +58,15 @@ public class Cork extends Bottle implements Parcelable
 		cork_poi = corkPoi;
 	}
 
-	public long getCork_created_at() {
+	public String getCork_created_at() {
 		return cork_created_at;
 	}
 
-	public void setCork_created_at(long corkCreatedAt) {
+	public void setCork_created_at(String corkCreatedAt) {
 		cork_created_at = corkCreatedAt;
 	}
 	int cork_bottle_count = 0;
-    long cork_created_at;
+    String cork_created_at;
     String cork_label;
     
     
@@ -167,6 +167,7 @@ public class Cork extends Bottle implements Parcelable
 		form.put("format", "xml");
 		form.put("device_id", deviceId);
 		form.put("prod", "wine-free");
+		form.put("cork[name]", this.getName());
 		form.put("cork[description]", this.getDescription());
 		form.put("cork[rating]", "" + this.getCork_rating());
 		form.put("cork[bottle_id]", "" + this.getBottle_Id());
@@ -211,7 +212,7 @@ public class Cork extends Bottle implements Parcelable
 		super.writeToParcel(out, flags);
 		out.writeLong(_id);
 		out.writeInt(cork_bottle_count);
-		out.writeLong(cork_created_at);
+		out.writeString(cork_created_at);
 		out.writeInt(cork_drank ? 1 : 0);
 		out.writeLong(cork_id);
 		out.writeString(cork_label);
@@ -234,7 +235,7 @@ public class Cork extends Bottle implements Parcelable
     	super.readFromParcel(in);
     	_id = in.readLong();
     	cork_bottle_count = in.readInt();
-    	cork_created_at = in.readLong();
+    	cork_created_at = in.readString();
     	cork_drank = in.readInt() == 0 ? false : true;
     	cork_id = in.readLong();
     	cork_label = in.readString();

@@ -617,12 +617,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				public void onClick(View v) {
 					//populate cork object
 					Cork cork = new Cork();
-					cork.setCork_label(nameVal.getEditableText().toString());
-					cork.setName(mBottle.getName());
+					cork.setName(nameVal.getEditableText().toString());
 					cork.setBottle_Id(mBottle.getBottle_Id());
 					cork.setYear(mBottle.getYear());
 					cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
-					cork.setCork_created_at(System.currentTimeMillis());
+					//cork.setCork_created_at(System.currentTimeMillis());
 					cork.setGrape(varietalVal.getEditableText().toString());
 					cork.setRegion(regionVal.getEditableText().toString());
 					cork.setCork_rating(ratingbar.getRating());

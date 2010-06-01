@@ -593,7 +593,7 @@ public class DryncSearch extends DryncBaseActivity {
 						cork.setBottle_Id(mBottle.getBottle_Id());
 						cork.setYear(mBottle.getYear());
 						cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
-						cork.setCork_created_at(System.currentTimeMillis());
+						//cork.setCork_created_at(System.currentTimeMillis());
 						cork.setGrape(varietalVal.getEditableText().toString());
 						cork.setRegion(regionVal.getEditableText().toString());
 						cork.setCork_rating(ratingbar.getRating());

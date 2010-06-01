@@ -8,7 +8,7 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:background="@drawable/wood2">
-
+				
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:paddingLeft="5px" android:paddingRight="5px"
@@ -39,6 +39,23 @@
 
 		</LinearLayout>
 
+		<RelativeLayout android:id="@+id/dateAddedSec"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:paddingRight="10px"
+				android:layout_marginTop="2px"
+				android:layout_alignParentRight="true">
+
+				<TextView android:id="@+id/dateAddedLabel" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:textColor="#000000"
+					android:textSize="10px" android:singleLine="true" android:layout_marginLeft="10px"
+					android:paddingRight="5px" android:text="Added: " />
+				
+				<TextView android:id="@+id/dateAddedValue" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:textColor="#FFFFFF"
+					android:singleLine="true" android:textSize="10px"
+					android:layout_toRightOf="@id/dateAddedLabel" android:text="May 10, 2010 11:25 PM"/>
+			</RelativeLayout>
+		
 		<RelativeLayout android:id="@+id/gendetail"
 			android:layout_width="fill_parent" android:layout_height="80px"
 			android:padding="6dip">

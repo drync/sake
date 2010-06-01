@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -232,6 +233,8 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
 			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
 			
+			TextView addedView = (TextView) detailView.findViewById(R.id.dateAddedValue);
+			
 			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
 			
@@ -278,6 +281,8 @@ public class DryncCorkDetail extends DryncBaseActivity {
 					}});
 			}
 
+					
+			addedView.setText(mBottle.getCork_created_at());
 			nameView.setText(mBottle.getName());
 			titleView.setText(mBottle.getName());
 			int year = mBottle.getYear();

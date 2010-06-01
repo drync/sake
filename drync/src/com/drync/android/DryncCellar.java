@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.animation.AccelerateInterpolator;
@@ -70,6 +72,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.RelativeLayout.LayoutParams;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
@@ -92,6 +95,8 @@ public class DryncCellar extends DryncBaseActivity {
 	
 	public static final int CORKDETAIL_RESULT = 1;
 	public static final int CELLAR_NEEDS_REFRESH = 5;
+	private static final int EDIT_ID = 0;
+	private static final int DELETE_ID = 1;
 	
 	boolean displayFilter = true;
 	boolean displayCellarFilterBtns = false;
@@ -156,6 +161,7 @@ public class DryncCellar extends DryncBaseActivity {
 			mList.setCacheColorHint(0);
 			
 			listholder.addView(mList);
+			registerForContextMenu(mList);
 		}
 		
 		if (mAdapter == null)
@@ -171,6 +177,8 @@ public class DryncCellar extends DryncBaseActivity {
 				}
 				
 			});
+			
+			//mList.setOnLongClickListener(l)
 		}
 		else
 		{
@@ -180,6 +188,47 @@ public class DryncCellar extends DryncBaseActivity {
 
 		mAdapter.notifyDataSetChanged();
 		
+	}
+
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, EDIT_ID, 0, "Edit");
+		menu.add(0, DELETE_ID, 0,  "Delete");
+	}
+
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		//case EDIT_ID:
+		//	editNote(info.id);
+		//	return true;
+		case DELETE_ID:
+			deleteCork(mAdapter.mWines.get(info.position));
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	private void deleteCork(Cork cork) {
+		
+		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
+		
+		boolean postSuccess = DryncProvider.postDelete(cork, deviceId);
+		if (!postSuccess)
+		{
+			// failed post, post later.
+			
+			cork.setNeedsServerUpdate(true);
+			cork.setUpdateType(Cork.UPDATE_TYPE_DELETE);	
+		}
+		// persist to database.
+		dbAdapter.open();
+		boolean success = dbAdapter.deleteCork(cork.get_id());
+		dbAdapter.close();
+		
+		DryncCellar.this.startCellarOperation();	
 	}
 
 	SharedPreferences settings;
@@ -868,7 +917,7 @@ public class DryncCellar extends DryncBaseActivity {
 			}
 			
 			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
-			wineNameText.setText(wine.getCork_label());
+			wineNameText.setText(wine.getName());
 			Float corkRating = wine.getCork_rating();
 			ratingVal.setText(((corkRating == null) || (corkRating == 0)) ? "NR" : "" + wine.getCork_rating());
 			Integer corkYear = wine.getCork_year();

@@ -595,7 +595,11 @@ public class DryncProvider {
 						bottle.setCork_id(Long.parseLong(value));
 					} else if("cork_uuid".equals(node.getNodeName())) {
 						bottle.setCork_uuid(value);
-					} 
+					} else if ("cork_created_at".equals(node.getNodeName())) {
+						bottle.setCork_created_at(value);
+					} else if ("description".equals(node.getNodeName())) {
+						bottle.setDescription(value);
+					}
 					// else skip for now.
 
 				} catch (NumberFormatException e)
