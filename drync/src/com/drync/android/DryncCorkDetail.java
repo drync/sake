@@ -222,16 +222,16 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView titleView = (TextView) detailView.findViewById(R.id.detailTitle);
 			TextView yearView = (TextView) detailView.findViewById(R.id.yearValue);
 			TextView ratingView = (TextView) detailView.findViewById(R.id.avgRatingValue);
-			TextView priceView = (TextView) detailView.findViewById(R.id.priceValue);
 			TextView ratingCount = (TextView) detailView.findViewById(R.id.reviewCount);
 			TextView addInfoView = (TextView) detailView.findViewById(R.id.addlInfoHdr);
 
 			RelativeLayout revListHolder = (RelativeLayout)detailView.findViewById(R.id.reviewSection);
 			TextView reviewCount = (TextView)detailView.findViewById(R.id.reviewCount);
 			
-			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalval);
-			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
-			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
+			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalValue);
+			TextView styleView = (TextView) detailView.findViewById(R.id.styleValue);
+			TextView regionView = (TextView) detailView.findViewById(R.id.regionValue);
+			TextView priceView = (TextView) detailView.findViewById(R.id.priceValue);
 			
 			TextView addedView = (TextView) detailView.findViewById(R.id.dateAddedValue);
 			
@@ -308,8 +308,10 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				riv.setRemoteImage(labelThumb, defaultIcon);
 			}
 
-			varietalView.setText(bottle.getGrape());
-			styleView.setText(bottle.getStyle());
+			String varietal = bottle.getGrape();
+			varietalView.setText(((varietal == null) || (varietal.equals("null")) || (varietal.equals(""))) ? "Unspecified" : varietal);
+			String style = bottle.getStyle();
+			styleView.setText(((style == null) || (style.equals("null")) || (style.equals(""))) ? "Unspecified" : style);
 			regionView.setText(bottle.getRegion());
 			
 			Button cellarBtn = (Button) this.findViewById(R.id.cellarBtn);
