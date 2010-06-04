@@ -601,6 +601,12 @@ public class DryncProvider {
 						bottle.setDescription(value);
 					} else if ("grape".equals(node.getNodeName())) {
 						bottle.setGrape(value);
+					} else if ("cork_rating".equals(node.getNodeName())) {
+						bottle.setCork_rating(Float.parseFloat(value));
+					} else if ("location".equals(node.getNodeName())) {
+						bottle.setLocation(value);
+					} else if ("public_note".equals(node.getNodeName())) {
+						//bottle.set
 					}
 					// else skip for now.
 

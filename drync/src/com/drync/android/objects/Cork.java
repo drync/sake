@@ -24,8 +24,16 @@ public class Cork extends Bottle implements Parcelable
     boolean cork_ordered = false;
     Integer cork_year = null;
     String cork_poi;
+    String public_note = null;
     
-    boolean needsServerUpdate = false;
+    public String getPublic_note() {
+		return public_note;
+	}
+
+	public void setPublic_note(String publicNote) {
+		public_note = publicNote;
+	}
+	boolean needsServerUpdate = false;
     int updateType = 0;
     
     public static final int UPDATE_TYPE_NONE = 0;
@@ -183,6 +191,7 @@ public class Cork extends Bottle implements Parcelable
 		form.put("cork[want]", Boolean.toString(this.isCork_want()));
 		form.put("cork[user_price]", this.getCork_price());
 		form.put("cork[location]", this.getLocation());
+		form.put("cork[public_note]", this.getPublic_note());
 		/*
     * cork[user_style]
    * cork[label_inline]
@@ -226,6 +235,7 @@ public class Cork extends Bottle implements Parcelable
 		out.writeInt(cork_year);
 		out.writeString(description);
 		out.writeString(location);
+		out.writeString(public_note);
 		out.writeInt(needsServerUpdate ? 1 : 0);
 		out.writeInt(updateType);
 	}
@@ -249,12 +259,8 @@ public class Cork extends Bottle implements Parcelable
     	cork_year = in.readInt();
     	description = in.readString();
     	location = in.readString();
+    	public_note = in.readString();
     	needsServerUpdate = in.readInt() == 0 ? false : true;
     	updateType = in.readInt();
-    	
-    	
     }
-
-	
-	
 }

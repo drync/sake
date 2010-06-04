@@ -223,10 +223,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView yearView = (TextView) detailView.findViewById(R.id.yearValue);
 			TextView ratingView = (TextView) detailView.findViewById(R.id.avgRatingValue);
 			TextView ratingCount = (TextView) detailView.findViewById(R.id.reviewCount);
-			TextView addInfoView = (TextView) detailView.findViewById(R.id.addlInfoHdr);
-
-			RelativeLayout revListHolder = (RelativeLayout)detailView.findViewById(R.id.reviewSection);
-			TextView reviewCount = (TextView)detailView.findViewById(R.id.reviewCount);
+			TextView tastingNoteLbl = (TextView) detailView.findViewById(R.id.tastingNoteLbl);
 			
 			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalValue);
 			TextView styleView = (TextView) detailView.findViewById(R.id.styleValue);
@@ -235,52 +232,14 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			
 			TextView addedView = (TextView) detailView.findViewById(R.id.dateAddedValue);
 			
+			RatingBar ratingBar = (RatingBar) detailView.findViewById(R.id.clrRatingVal);
+			
+			TextView locationVal = (TextView) detailView.findViewById(R.id.locationVal);
+			TextView tastingNoteVal = (TextView) detailView.findViewById(R.id.tastingNoteVal);
+			TextView privateNoteVal = (TextView) detailView.findViewById(R.id.privateNoteVal);
+			
 			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
-			
-			revListHolder.removeAllViews();
-			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			revListHolder.addView(reviewCount, rcparams);
-
-
-			for (int i=0,n=mBottle.getReviewCount();i<n;i++)
-			{
-				if (i >= 1)
-					break;
-
-				Review review = mBottle.getReview(i);
-				if (review == null)
-					continue;
-
-				if (mMainInflater == null)
-				{
-					mMainInflater = (LayoutInflater) DryncCorkDetail.this.getSystemService(
-							Context.LAYOUT_INFLATER_SERVICE);
-				}
-
-				final View reviewItem = mMainInflater.inflate(
-						R.layout.reviewitem, revListHolder, false);
-
-				TextView reviewText = (TextView) reviewItem.findViewById(R.id.reviewText);
-
-				reviewText.setText(review.getText());
-
-				RelativeLayout.LayoutParams revItemparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-				revItemparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-				revItemparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-
-				revListHolder.addView(reviewItem, revItemparams);
-
-				TextView readReviewTxt = (TextView) reviewItem.findViewById(R.id.readreviewtext);
-				final Review fReview = review;
-				readReviewTxt.setOnClickListener(new OnClickListener(){
-					public void onClick(View v) {
-						DryncCorkDetail.this.launchReviews(DryncCorkDetail.this.mBottle);
-					}});
-			}
-
 					
 			addedView.setText(mBottle.getCork_created_at());
 			nameView.setText(mBottle.getName());
@@ -289,13 +248,18 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			yearView.setText("" + year);
 			ratingView.setText(mBottle.getRating());
 			priceView.setText(mBottle.getPrice());
-			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
-					" Reviews" : " Review";
-			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
 			
-			if (addInfoView != null)
-				addInfoView.setText("" + "Additional Info");
-
+			ratingBar.setRating(mBottle.getCork_rating());
+			
+			String location = mBottle.getLocation();
+			locationVal.setText(((location == null) || (location.equals(""))) ? "n/a" : location);
+			
+			String privateNote = mBottle.getDescription();
+			privateNoteVal.setText(((privateNote == null) || (privateNote == "")) ? "" : privateNote);
+			
+			String publicNote = mBottle.getPublic_note();
+			tastingNoteVal.setText(((publicNote == null) || (publicNote == "")) ? "" : publicNote);
+			
 			if (defaultIcon == null)
 			{
 				defaultIcon = getResources().getDrawable(R.drawable.icon);

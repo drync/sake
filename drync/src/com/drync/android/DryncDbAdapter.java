@@ -31,6 +31,7 @@ public class DryncDbAdapter
     public static final String KEY_CORK_BOTTLE_COUNT = "cork_bottle_count";
     public static final String KEY_CORK_CREATED_AT = "cork_created_at";
     public static final String KEY_CORK_LABEL = "cork_label";
+    public static final String KEY_PUBLIC_NOTE = "public_note";
     
     public static final String KEY_BOTTLE_ID = "bottle_id";
     public static final String KEY_NAME = "name";
@@ -72,6 +73,7 @@ public class DryncDbAdapter
         + "cork_bottle_count integer, "
         + "cork_created_at text, "
         + "cork_label text, "
+        + "public_note text, "
         + "bottle_id integer, "
         + "name text, "
         + "year integer, "
@@ -186,6 +188,7 @@ public class DryncDbAdapter
         initialValues.put(KEY_CORK_BOTTLE_COUNT, cork.getCork_bottle_count());
         initialValues.put(KEY_CORK_CREATED_AT, cork.getCork_created_at());
         initialValues.put(KEY_CORK_LABEL, cork.getCork_label());
+        initialValues.put(KEY_PUBLIC_NOTE, cork.getPublic_note());
 
         initialValues.put(KEY_BOTTLE_ID, cork.getBottle_Id());
         initialValues.put(KEY_NAME, cork.getName());
@@ -259,6 +262,7 @@ public class DryncDbAdapter
         	    KEY_CORK_BOTTLE_COUNT,
         	    KEY_CORK_CREATED_AT,
         	    KEY_CORK_LABEL,
+        	    KEY_PUBLIC_NOTE,
         	    
         	    KEY_BOTTLE_ID,
         	    KEY_NAME,
@@ -313,6 +317,7 @@ public class DryncDbAdapter
         	    KEY_CORK_BOTTLE_COUNT,
         	    KEY_CORK_CREATED_AT,
         	    KEY_CORK_LABEL,
+        	    KEY_PUBLIC_NOTE,
         	    
         	    KEY_BOTTLE_ID,
         	    KEY_NAME,
@@ -365,6 +370,7 @@ public class DryncDbAdapter
     	
     	cork.setBottle_Id(cur.getLong(cur.getColumnIndex(KEY_BOTTLE_ID)));
     	cork.setCork_label(cur.getString(cur.getColumnIndex(KEY_CORK_LABEL)));
+    	cork.setPublic_note(cur.getString(cur.getColumnIndex(KEY_PUBLIC_NOTE)));
     	cork.setName(cur.getString(cur.getColumnIndex(KEY_NAME)));
     	cork.setYear(cur.getInt(cur.getColumnIndex(KEY_YEAR)));
     	cork.setRegion_path(cur.getString(cur.getColumnIndex(KEY_REGION_PATH)));
@@ -402,6 +408,7 @@ public class DryncDbAdapter
             	    KEY_CORK_BOTTLE_COUNT,
             	    KEY_CORK_CREATED_AT,
             	    KEY_CORK_LABEL,
+            	    KEY_PUBLIC_NOTE,
             	    
             	    KEY_BOTTLE_ID,
             	    KEY_NAME,
@@ -458,6 +465,7 @@ public class DryncDbAdapter
                 	    KEY_CORK_BOTTLE_COUNT,
                 	    KEY_CORK_CREATED_AT,
                 	    KEY_CORK_LABEL,
+                	    KEY_PUBLIC_NOTE,
                 	    
                 	    KEY_BOTTLE_ID,
                 	    KEY_NAME,
@@ -510,6 +518,7 @@ public class DryncDbAdapter
         args.put(KEY_CORK_BOTTLE_COUNT, cork.getCork_bottle_count());
         args.put(KEY_CORK_CREATED_AT, cork.getCork_created_at());
         args.put(KEY_CORK_LABEL, cork.getCork_label());
+        args.put(KEY_PUBLIC_NOTE, cork.getPublic_note());
 
         args.put(KEY_BOTTLE_ID, cork.getBottle_Id());
         args.put(KEY_NAME, cork.getName());
