@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -53,7 +54,7 @@ public class DryncDbAdapter
     
     private static final String DATABASE_NAME = "drync";
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -119,9 +120,20 @@ public class DryncDbAdapter
         {
             Log.w(TAG, "Upgrading database from version " + oldVersion 
                     + " to "
-                    + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS titles");
-            onCreate(db);
+                    + newVersion);
+            
+            
+            if (oldVersion <= 5)
+            {
+            	try
+            	{
+            		db.execSQL("ALTER TABLE corks ADD COLUMN public_note text;");
+            	}
+            	catch (SQLiteException e)
+            	{
+            		//ignore
+            	}
+            }
         }
     }    
     
