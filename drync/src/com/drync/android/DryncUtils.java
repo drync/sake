@@ -25,6 +25,7 @@ public class DryncUtils {
 	public static final String DEVICE_ID = "deviceId";
 	public static final String SHOW_INTRO_PREF = "showIntro";
 	public static final String LAST_QUERY_PREF = "lastQuery";
+	public static final String LAST_FILTER_PREF = "lastFilter";
 	public static final String TWITTER_USERNAME_PREF = "twitter_username";
 	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
 	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";

@@ -244,6 +244,67 @@
 				android:ellipsize="none" android:singleLine="false" android:text="Test Test Test Test Test Test Test Test Test Test Test Test Test" />
 
 		</RelativeLayout>
+			
+		<RelativeLayout android:id="@+id/drankOwnWantSection"
+			android:layout_width="fill_parent" android:layout_alignParentTop="true" android:background="@drawable/topbotborder"
+			android:layout_alignParentLeft="true" android:layout_height="fill_parent" 
+			android:layout_marginLeft="10px" android:layout_marginTop="-2px" android:layout_marginRight="10px">
+
+			 <CheckBox android:id="@+id/drankCheckbox"
+        		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        				android:layout_alignParentRight="true" android:textSize="12px"
+        				android:focusable="false" android:clickable="false" 
+        				android:text="I Drank"  />
+        				
+        	<CheckBox android:id="@+id/wantCheckbox"
+        		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        				android:layout_alignParentLeft="true" android:textSize="12px"
+        				android:focusable="false" android:clickable="false" 
+        				android:text="I Want"  />
+			
+			<CheckBox android:id="@+id/ownCheckbox"
+        		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+        				android:textSize="12px"
+        				android:focusable="false" android:clickable="false" 
+        				android:text="I Own 0"  />        				
+
+		</RelativeLayout>
+		
+		<!-- Review section -->
+
+		<!-- <RelativeLayout android:id="@+id/reviewSection" android:background="@drawable/topbotborder"
+			android:layout_width="fill_parent" android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+			android:layout_marginLeft="10px" android:layout_marginTop="-2px" 
+			android:layout_marginRight="10px"> -->
+
+			<TextView android:id="@+id/reviewCount" android:background="@drawable/topbotborder"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
+				android:layout_marginRight="10px" android:textSize="12px"  
+				android:gravity="left" android:textColor="#000000" android:typeface="sans"
+				android:ellipsize="none" android:singleLine="true" android:text="0 REVIEWS" />
+			
+			<TextView android:id="@+id/communityReviewNotes" android:background="@drawable/topbotborder"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
+				android:layout_marginRight="10px" 
+				android:gravity="left" android:textSize="12px" android:textColor="#000000" android:typeface="sans"
+				android:singleLine="false" android:maxLines="2" android:ellipsize="end"
+				 android:text="CommunityReview" />
+				 
+		     <TextView android:id="@+id/readAllReviews" android:background="@drawable/topbotborder"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
+				android:layout_marginRight="10px" 
+				android:gravity="left" android:textSize="12px" android:textColor="#000000" android:typeface="sans"
+				android:singleLine="true" android:ellipsize="end"  android:layout_centerVertical="true"
+				 android:text="Read All Reviews..." android:drawableRight="@drawable/glass"/>
+
+		
 		<RelativeLayout android:id="@+id/cellarBtnSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
 			android:layout_alignParentLeft="true" android:layout_height="fill_parent"
@@ -253,7 +314,7 @@
 			<Button android:id="@+id/editInCellar" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_alignParentTop="true"
 				android:gravity="center" android:background="@drawable/dryncbutton"
-				android:textColor="#FFFFFF" android:text="Add to Cellar" />
+				android:textColor="#FFFFFF" android:text="Edit" />
 			
 			<Button android:id="@+id/share" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_below="@id/editInCellar"

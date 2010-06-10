@@ -55,6 +55,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -222,7 +223,6 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView titleView = (TextView) detailView.findViewById(R.id.detailTitle);
 			TextView yearView = (TextView) detailView.findViewById(R.id.yearValue);
 			TextView ratingView = (TextView) detailView.findViewById(R.id.avgRatingValue);
-			TextView ratingCount = (TextView) detailView.findViewById(R.id.reviewCount);
 			TextView tastingNoteLbl = (TextView) detailView.findViewById(R.id.tastingNoteLbl);
 			
 			TextView varietalView = (TextView) detailView.findViewById(R.id.varietalValue);
@@ -238,9 +238,19 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView tastingNoteVal = (TextView) detailView.findViewById(R.id.tastingNoteVal);
 			TextView privateNoteVal = (TextView) detailView.findViewById(R.id.privateNoteVal);
 			
+			TextView reviewCount = (TextView) detailView.findViewById(R.id.reviewCount);
+			TextView communityTastingReviews = (TextView) detailView.findViewById(R.id.communityReviewNotes);
+			TextView readAllReviews = (TextView) detailView.findViewById(R.id.readAllReviews);
+			
 			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
 					
+			CheckBox drankCheckbox = (CheckBox)detailView.findViewById(R.id.drankCheckbox);
+			CheckBox ownCheckbox = (CheckBox)detailView.findViewById(R.id.ownCheckbox);
+			CheckBox wantCheckbox = (CheckBox)detailView.findViewById(R.id.wantCheckbox);
+			
+			Button btnShare = (Button) detailView.findViewById(R.id.share);
+			
 			addedView.setText(mBottle.getCork_created_at());
 			nameView.setText(mBottle.getName());
 			titleView.setText(mBottle.getName());
@@ -260,6 +270,14 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			String publicNote = mBottle.getPublic_note();
 			tastingNoteVal.setText(((publicNote == null) || (publicNote == "")) ? "" : publicNote);
 			
+			drankCheckbox.setChecked(mBottle.isCork_drank());
+			ownCheckbox.setChecked(mBottle.isCork_own());
+			int ownCnt = mBottle.getCork_bottle_count();
+			if ((ownCnt <= 0) || mBottle.isCork_own())
+				ownCnt = 0;
+			ownCheckbox.setText("I Own " + ownCnt);
+			wantCheckbox.setChecked(mBottle.isCork_want());
+			
 			if (defaultIcon == null)
 			{
 				defaultIcon = getResources().getDrawable(R.drawable.icon);
@@ -277,6 +295,13 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			String style = bottle.getStyle();
 			styleView.setText(((style == null) || (style.equals("null")) || (style.equals(""))) ? "Unspecified" : style);
 			regionView.setText(bottle.getRegion());
+			
+			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
+					" Reviews" : " Review";
+			reviewCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
+			
+			//communityTastingReviews
+			//readAllReviews.setC
 			
 			Button cellarBtn = (Button) this.findViewById(R.id.cellarBtn);
 			cellarBtn.setOnClickListener(new OnClickListener(){
@@ -321,7 +346,27 @@ public class DryncCorkDetail extends DryncBaseActivity {
 					
 				}});
 			
-			
+			if (btnShare != null)
+			{
+				btnShare.setOnClickListener(new OnClickListener()
+				{
+
+					public void onClick(View arg0) {
+						/* Create the Intent */  
+						final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);  
+
+						/* Fill it with Data */  
+						emailIntent.setType("plain/text");  
+						emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"to@email.com"});  
+						emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject");  
+						emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Text");  
+
+						/* Send it off to the Activity-Chooser */  
+						DryncCorkDetail.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+					}
+
+				});
+			}
 
 			if (btnTweet != null)
 			{
