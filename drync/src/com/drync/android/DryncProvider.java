@@ -606,7 +606,17 @@ public class DryncProvider {
 					} else if ("location".equals(node.getNodeName())) {
 						bottle.setLocation(value);
 					} else if ("public_note".equals(node.getNodeName())) {
-						//bottle.set
+						bottle.setPublic_note(value);
+					} else if ("cork_bottle_count".equals(node.getNodeName())) {
+						bottle.setCork_bottle_count(Integer.parseInt(value));
+					} else if ("cork_want".equals(node.getNodeName())) {
+						bottle.setCork_want(Boolean.valueOf(value));
+				    } else if ("cork_own".equals(node.getNodeName())) {
+						bottle.setCork_own(Boolean.valueOf(value));
+				    } else if ("cork_drank".equals(node.getNodeName())) {
+						bottle.setCork_drank(Boolean.valueOf(value));
+					} else if ("cork_price".equals(node.getNodeName())) {
+						bottle.setCork_price(value);
 					}
 					// else skip for now.
 

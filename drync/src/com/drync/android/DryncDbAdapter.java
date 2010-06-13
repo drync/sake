@@ -373,6 +373,7 @@ public class DryncDbAdapter
     	cork.setCork_rating(cur.getFloat(cur.getColumnIndex(KEY_CORK_RATING)));
     	cork.setCork_want(cur.getInt(cur.getColumnIndex(KEY_CORK_WANT)) == 0 ? false : true);
     	cork.setCork_own(cur.getInt(cur.getColumnIndex(KEY_CORK_OWN)) == 0 ? false : true);
+    	cork.setCork_bottle_count(cur.getInt(cur.getColumnIndex(KEY_CORK_BOTTLE_COUNT)));
     	cork.setCork_drank(cur.getInt(cur.getColumnIndex(KEY_CORK_DRANK)) == 0 ? false : true);
     	cork.setCork_ordered(cur.getInt(cur.getColumnIndex(KEY_CORK_ORDERED)) == 0 ? false : true);
     	cork.setCork_price(cur.getString(cur.getColumnIndex(KEY_CORK_PRICE)));

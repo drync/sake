@@ -32,6 +32,8 @@
 	
 	<string name="successfulcellaradd">You have successfully added this wine to your cellar.</string>
 	<string name="failurecellaradd">This wine could not be added to your cellar.</string>
+	<string name="successfulcellarupdate">You have successfully updated this wine in your cellar.</string>
+	<string name="failurecellarupdate">This wine could not be updated in your cellar.</string>
 	
 	<string name="noreviewurl">There is no link attached to this review.</string>
 	
