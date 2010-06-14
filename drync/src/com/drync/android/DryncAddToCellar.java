@@ -47,6 +47,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -446,17 +447,19 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			atcTitle.setText("Edit Cork");
 		}
 		
+		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
+		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
+		
 		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
 		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
 		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
 		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
 
-		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
-		final EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
 		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
+		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
 		final EditText locationVal = (EditText)addView.findViewById(R.id.atcLocationVal);
 		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
@@ -503,26 +506,39 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 			OnClickListener saveListener = 	new OnClickListener(){
 
+				EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
+				EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
+				Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
+				
 				public void onClick(View v) {
 					//populate cork object
-					Cork cork = new Cork();
+					Cork cork = null;
 					if (isEdit)
 					{
-						cork.set_id(((Cork)mBottle).get_id());
+						cork = ((Cork)mBottle);
 					}
+					else
+					{
+						cork = new Cork();
+						cork.setCork_uuid(DryncUtils.nextUuid(DryncAddToCellar.this));
+						cork.setBottle_Id(mBottle.getBottle_Id());
+						cork.setYear(mBottle.getYear());
+					}
+					cork.setCork_price(priceVal.getEditableText().toString());
 					cork.setName(nameVal.getEditableText().toString());
-					cork.setBottle_Id(mBottle.getBottle_Id());
-					cork.setYear(mBottle.getYear());
 					cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
 					//cork.setCork_created_at(System.currentTimeMillis());
 					cork.setGrape(varietalVal.getEditableText().toString());
 					cork.setRegion(regionVal.getEditableText().toString());
 					cork.setCork_rating(ratingbar.getRating());
-					cork.setDescription(tastingNotesVal.getEditableText().toString());
+					cork.setPublic_note(tastingNotesVal.getEditableText().toString());
+					cork.setDescription(privateNotesVal.getEditableText().toString());
 					cork.setLocation(locationVal.getEditableText().toString());
 					cork.setCork_want(wantVal.isChecked());
 					cork.setCork_drank(drankVal.isChecked());
-					cork.setCork_uuid(DryncUtils.nextUuid(DryncAddToCellar.this));
+					//cork.setStyle(styleVal.getSelectedItem().toString());
+					String styleText = (String) styleVal.getAdapter().getItem(styleVal.getSelectedItemPosition()).toString();
+					cork.setStyle(styleText);
 					int ownCount = 0;
 					
 					try
@@ -546,13 +562,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 					if (isEdit)
 					{
-						/*boolean postSuccess = DryncProvider.postCreate(cork, deviceId);
-						if (!postSuccess)*/
+						boolean postSuccess = DryncProvider.postUpdate(cork, deviceId);
+						if (!postSuccess)
 						{
 							// failed post, post later.
 
 							cork.setNeedsServerUpdate(true);
 							cork.setUpdateType(Cork.UPDATE_TYPE_UPDATE);	
+						}
+						else
+						{
+							cork.setNeedsServerUpdate(false);
+							cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
 						}
 						// persist to database.
 						dbAdapter.open();
@@ -571,7 +592,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 					else
 					{
-						boolean postSuccess = DryncProvider.postCreate(cork, deviceId);
+						boolean postSuccess = DryncProvider.postCreateOrUpdate(cork, deviceId);
 						if (!postSuccess)
 						{
 							// failed post, post later.
@@ -654,20 +675,37 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			priceVal.setText((price == null || price.equals("")) ? mBottle.getPrice() : price);
 			RatingBar ratingBar = (RatingBar)addView.findViewById(R.id.atcRatingVal);
 			ratingBar.setRating(((Cork)mBottle).getCork_rating());
+			
+			// set style field:
+			styleVal.setSelection(styleSpnAdapter.getPosition(((Cork)mBottle).getStyle().toString()));
+			
+			tastingNotesVal.setText(((Cork)mBottle).getPublic_note());
+			privateNotesVal.setText(((Cork)mBottle).getDescription());
+			locationVal.setText(((Cork)mBottle).getLocation());
+			
+			wantVal.setChecked(((Cork)mBottle).isCork_want());
+			drankVal.setChecked(((Cork)mBottle).isCork_drank());
+			ownVal.setText("" + ((Cork)mBottle).getCork_bottle_count());
+			
+			varietalVal.setText("" + ((Cork)mBottle).getGrape());
+			
 		}
 		else
 		{
 			yearVal.setText("" + mBottle.getYear());
 			priceVal.setText(mBottle.getPrice());
 			
+			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
+			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
+				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
+			else
+				styleVal.setSelection(stylepos);
+			
+			varietalVal.setText("" + mBottle.getGrape());
+			
 		}
-		varietalVal.setText("" + mBottle.getGrape());
+		
 		regionVal.setText("" + mBottle.getRegion());
-		int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
-		if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
-			styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
-		else
-			styleVal.setSelection(stylepos);
 		
 		wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
 

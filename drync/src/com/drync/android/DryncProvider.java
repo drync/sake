@@ -779,13 +779,53 @@ public class DryncProvider {
 		return response;
 	} 
 	
-	public static boolean postCreate(Cork cork, String deviceId)
+	public static boolean postCreateOrUpdate(Cork cork, String deviceId)
 	{
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks", USING_SERVER_HOST,SERVER_PORT);
 		
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);
+			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+				return true;
+			else
+				return false;
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+		/*ClientResource itemsResource = new ClientResource(  
+				clientResourceUrl);
+		
+		ChallengeResponse authentication = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "preview", "drync_web");
+		itemsResource.setChallengeResponse(authentication);
+
+		ClientResource itemResource = null;
+		Representation rpre = cork.getRepresentation(deviceId);
+		Representation r = itemsResource.post(rpre); 
+	
+		Log.d("DryncProvider", itemsResource.getStatus().getDescription(), itemsResource.getStatus().getThrowable());
+		
+		return itemsResource.getStatus().isSuccess();*/
+	}
+	
+	public static boolean postUpdate(Cork cork, String deviceId)
+	{
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/corks/%s", USING_SERVER_HOST,SERVER_PORT,cork.getCork_id());
+		
+		try {
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId, true), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
 			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
 			if (response.getStatusLine().getStatusCode() < 400)

@@ -1169,7 +1169,7 @@ public class DryncSearch extends DryncBaseActivity {
 							// re-try post.
 							if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
 							{
-								postSuccess = DryncProvider.postCreate(cork, deviceId);
+								postSuccess = DryncProvider.postCreateOrUpdate(cork, deviceId);
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
 							{
@@ -1177,7 +1177,7 @@ public class DryncSearch extends DryncBaseActivity {
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_UPDATE)
 							{
-
+								postSuccess = DryncProvider.postUpdate(cork, deviceId);
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_NONE)
 							{

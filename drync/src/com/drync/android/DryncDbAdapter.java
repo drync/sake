@@ -40,6 +40,7 @@ public class DryncDbAdapter
     public static final String KEY_REGION_PATH = "region_path";
     public static final String KEY_REGION = "region";
     public static final String KEY_GRAPE = "grape";
+    public static final String KEY_STYLE = "style";
     public static final String KEY_LABEL = "label";
     public static final String KEY_LABEL_THUMB = "label_thumb";
     public static final String KEY_PRICE = "price";
@@ -54,7 +55,7 @@ public class DryncDbAdapter
     
     private static final String DATABASE_NAME = "drync";
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -81,6 +82,7 @@ public class DryncDbAdapter
         + "region_path text, "
         + "region text, "
         + "grape text, "
+        + "style text, "
         + "label text, "
         + "label_thumb text, "
         + "price text, "
@@ -123,11 +125,11 @@ public class DryncDbAdapter
                     + newVersion);
             
             
-            if (oldVersion <= 5)
+            if (oldVersion <= 6)
             {
             	try
             	{
-            		db.execSQL("ALTER TABLE corks ADD COLUMN public_note text;");
+            		db.execSQL("ALTER TABLE corks ADD COLUMN style text;");
             	}
             	catch (SQLiteException e)
             	{
@@ -208,6 +210,7 @@ public class DryncDbAdapter
         initialValues.put(KEY_REGION_PATH, cork.getRegion_path());
         initialValues.put(KEY_REGION, cork.getRegion());
         initialValues.put(KEY_GRAPE, cork.getGrape());
+        initialValues.put(KEY_STYLE, cork.getStyle());
         initialValues.put(KEY_LABEL, cork.getLabel());
         initialValues.put(KEY_LABEL_THUMB, cork.getLabel_thumb());
         initialValues.put(KEY_PRICE, cork.getPrice());
@@ -250,12 +253,12 @@ public class DryncDbAdapter
     public List<Cork> getAllCorks(boolean includePendingDeletes) 
     {
     	List<Cork> corks = new ArrayList<Cork>();
-    	String querymod = KEY_NEEDSSERVERUPDATE + "!=" + 1 + " AND " + KEY_UPDATETYPE + "!=" + Cork.UPDATE_TYPE_DELETE;
+    	/*String[] querymod = {KEY_NEEDSSERVERUPDATE + "!=" + 1, KEY_UPDATETYPE + "!=" + Cork.UPDATE_TYPE_DELETE};
     	
     	if (includePendingDeletes)
     	{
     		querymod = null;
-    	}
+    	}*/
     	
         Cursor cur =  db.query(DATABASE_TABLE, new String[] {
         		KEY_ROWID,
@@ -282,6 +285,7 @@ public class DryncDbAdapter
         	    KEY_REGION_PATH,
         	    KEY_REGION,
         	    KEY_GRAPE,
+        	    KEY_STYLE,
         	    KEY_LABEL,
         	    KEY_LABEL_THUMB,
         	    KEY_PRICE,
@@ -289,7 +293,7 @@ public class DryncDbAdapter
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE}, 
-        	    querymod, 
+        	    null, 
                 null, 
                 null, 
                 null, 
@@ -297,6 +301,15 @@ public class DryncDbAdapter
         
         cur.moveToFirst();
         while (cur.isAfterLast() == false) {
+        	if (! includePendingDeletes)
+        	{
+        		// using where wasn't working properly, so we're doing this in code for now.
+        		if ((cur.getInt(cur.getColumnIndex(KEY_NEEDSSERVERUPDATE)) == 1) && 
+        			(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)) == Cork.UPDATE_TYPE_DELETE))
+        		{
+        			continue;
+        		}
+        	}
             Cork cork = buildCork(cur);
             corks.add(cork);
        	    cur.moveToNext();
@@ -337,6 +350,7 @@ public class DryncDbAdapter
         	    KEY_REGION_PATH,
         	    KEY_REGION,
         	    KEY_GRAPE,
+        	    KEY_STYLE,
         	    KEY_LABEL,
         	    KEY_LABEL_THUMB,
         	    KEY_PRICE,
@@ -389,6 +403,7 @@ public class DryncDbAdapter
     	cork.setRegion_path(cur.getString(cur.getColumnIndex(KEY_REGION_PATH)));
     	cork.setRegion(cur.getString(cur.getColumnIndex(KEY_REGION)));
     	cork.setGrape(cur.getString(cur.getColumnIndex(KEY_GRAPE)));
+    	cork.setStyle(cur.getString(cur.getColumnIndex(KEY_STYLE)));
     	cork.setLabel(cur.getString(cur.getColumnIndex(KEY_LABEL)));
     	cork.setLabel_thumb(cur.getString(cur.getColumnIndex(KEY_LABEL_THUMB)));
     	cork.setPrice(cur.getString(cur.getColumnIndex(KEY_PRICE)));
@@ -429,6 +444,7 @@ public class DryncDbAdapter
             	    KEY_REGION_PATH,
             	    KEY_REGION,
             	    KEY_GRAPE,
+            	    KEY_STYLE,
             	    KEY_LABEL,
             	    KEY_LABEL_THUMB,
             	    KEY_PRICE,
@@ -486,6 +502,7 @@ public class DryncDbAdapter
                 	    KEY_REGION_PATH,
                 	    KEY_REGION,
                 	    KEY_GRAPE,
+                	    KEY_STYLE,
                 	    KEY_LABEL,
                 	    KEY_LABEL_THUMB,
                 	    KEY_PRICE,
@@ -539,6 +556,7 @@ public class DryncDbAdapter
         args.put(KEY_REGION_PATH, cork.getRegion_path());
         args.put(KEY_REGION, cork.getRegion());
         args.put(KEY_GRAPE, cork.getGrape());
+        args.put(KEY_STYLE, cork.getStyle());
         args.put(KEY_LABEL, cork.getLabel());
         args.put(KEY_LABEL_THUMB, cork.getLabel_thumb());
         args.put(KEY_PRICE, cork.getPrice());

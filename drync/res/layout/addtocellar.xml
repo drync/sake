@@ -167,6 +167,27 @@
 			</TableLayout>
 		
 					<!-- Other Information section -->
+			<RelativeLayout android:id="@+id/locationSection"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+
+			 	<TextView android:id="@+id/locationHdr"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Location Bought or Drank:" /> 
+					
+				<EditText android:id="@+id/atcLocationVal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:paddingTop="5px" android:background="@drawable/rndborder" 
+					android:layout_below="@id/locationHdr" android:singleLine="true" />	
+			
+			</RelativeLayout>
+			
 			<RelativeLayout android:id="@+id/notesSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
@@ -187,26 +208,26 @@
 					android:layout_below="@id/tastingNoteHdr" android:singleLine="false" />	
 				
 			</RelativeLayout>
-
-			<RelativeLayout android:id="@+id/locationSection"
+			
+			<RelativeLayout android:id="@+id/notesSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px">
 
-			 	<TextView android:id="@+id/locationHdr"
+			 	<TextView android:id="@+id/privateNoteHdr"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:layout_alignParentLeft="true"
 					android:layout_gravity="left" android:layout_marginLeft="10px"
 					android:layout_marginRight="10px" android:layout_marginTop="20px"
 					android:gravity="left" android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
-					android:singleLine="true" android:text="Location Bought or Drank:" /> 
+					android:singleLine="true" android:text="Private Note:" /> 
 					
-				<EditText android:id="@+id/atcLocationVal"
+				<EditText android:id="@+id/atcPrivateNoteVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:paddingTop="5px" android:background="@drawable/rndborder" 
-					android:layout_below="@id/locationHdr" android:singleLine="true" />	
-			
+					android:layout_below="@id/privateNoteHdr" android:singleLine="false" />	
+				
 			</RelativeLayout>
 			
     		<RelativeLayout android:id="@+id/tallySection"

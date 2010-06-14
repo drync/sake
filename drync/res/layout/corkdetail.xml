@@ -275,17 +275,11 @@
 		
 		<!-- Review section -->
 
-		<!-- <RelativeLayout android:id="@+id/reviewSection" android:background="@drawable/topbotborder"
-			android:layout_width="fill_parent" android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true" android:layout_height="fill_parent"
-			android:layout_marginLeft="10px" android:layout_marginTop="-2px" 
-			android:layout_marginRight="10px"> -->
-
-			<TextView android:id="@+id/reviewCount" android:background="@drawable/topbotborder"
+	 	<!-- 	<TextView android:id="@+id/reviewCount" android:background="@drawable/topbotborder"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
 				android:layout_marginRight="10px" android:textSize="12px"  
-				android:gravity="left" android:textColor="#000000" android:typeface="sans"
+				android:gravity="left" android:textColor="#000000" android:typeface="sans" android:visibility="invisible"
 				android:ellipsize="none" android:singleLine="true" android:text="0 REVIEWS" />
 			
 			<TextView android:id="@+id/communityReviewNotes" android:background="@drawable/topbotborder"
@@ -293,16 +287,16 @@
 				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
 				android:layout_marginRight="10px" 
 				android:gravity="left" android:textSize="12px" android:textColor="#000000" android:typeface="sans"
-				android:singleLine="false" android:maxLines="2" android:ellipsize="end"
+				android:singleLine="false" android:maxLines="2" android:ellipsize="end" android:visibility="invisible"
 				 android:text="CommunityReview" />
 				 
 		     <TextView android:id="@+id/readAllReviews" android:background="@drawable/topbotborder"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_marginLeft="10px" android:layout_marginTop="-2px"
-				android:layout_marginRight="10px" 
+				android:layout_marginRight="10px" android:visibility="invisible"
 				android:gravity="left" android:textSize="12px" android:textColor="#000000" android:typeface="sans"
 				android:singleLine="true" android:ellipsize="end"  android:layout_centerVertical="true"
-				 android:text="Read All Reviews..." android:drawableRight="@drawable/glass"/>
+				 android:text="Read All Reviews..." android:drawableRight="@drawable/glass"/> -->
 
 		
 		<RelativeLayout android:id="@+id/cellarBtnSection"

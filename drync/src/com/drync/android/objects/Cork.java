@@ -170,8 +170,18 @@ public class Cork extends Bottle implements Parcelable
 	}
 
 	public Map<String, String> getRepresentation(String deviceId) {
-		HashMap<String,String> form = new HashMap<String, String>();  
-		form.put("_method", "post");  
+		return getRepresentation(deviceId, false);
+	}
+	public Map<String, String> getRepresentation(String deviceId, boolean isUpdate) {
+		HashMap<String,String> form = new HashMap<String, String>(); 
+		if (isUpdate)
+		{
+			form.put("_method", "put");
+		}
+		else
+		{
+			form.put("_method", "post");
+		}
 		form.put("format", "xml");
 		form.put("device_id", deviceId);
 		form.put("prod", "wine-free");
@@ -192,6 +202,7 @@ public class Cork extends Bottle implements Parcelable
 		form.put("cork[user_price]", this.getCork_price());
 		form.put("cork[location]", this.getLocation());
 		form.put("cork[public_note]", this.getPublic_note());
+		form.put("cork[style]", this.getStyle());
 		/*
     * cork[user_style]
    * cork[label_inline]
