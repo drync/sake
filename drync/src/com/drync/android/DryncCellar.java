@@ -29,11 +29,14 @@ import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -41,6 +44,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -203,6 +207,34 @@ private ProgressDialog progressDlg = null;
 		DryncCellar.this.startCellarOperation();	
 	}
 
+	protected void startQueryOperation(String query)
+	{
+		startQueryOperation(DryncDbAdapter.FILTER_TYPE_NONE, query);
+	}
+	
+	protected void startQueryOperation(int filterType, String query)
+	{
+		final String curQuery = query;
+		final int curFilterType = filterType;
+		
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(DryncUtils.LAST_FILTER_PREF, query);
+		editor.commit();
+		
+		Thread t = new Thread()
+		{
+			public void run() {
+				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncCellar.this);
+				dbAdapter.open();
+				mResults = dbAdapter.getFilteredCorks(curFilterType, curQuery);
+				
+				mHandler.post(mUpdateResults);
+				dbAdapter.close();
+			}
+		};
+		t.start();
+	}
+	
 	SharedPreferences settings;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -238,14 +270,63 @@ private ProgressDialog progressDlg = null;
 		{
 			cellarFilterButtons.setVisibility(View.VISIBLE);
 			
-			final Button popButton = (Button)findViewById(R.id.myWinesBtn);
+			final EditText searchfield = (EditText) findViewById(R.id.searchentry);
+			final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
 			final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
 			final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
 			final Button iWantButton = (Button)findViewById(R.id.iWantBtn);
 			
+			myWinesButton.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					String searchterm = searchfield.getText().toString();
+					progressDlg =  new ProgressDialog(DryncCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving corks...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					startQueryOperation(DryncDbAdapter.FILTER_TYPE_NONE, searchterm);
+				}});
+			
+			iOwnButton.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					String searchterm = searchfield.getText().toString();
+					progressDlg =  new ProgressDialog(DryncCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving corks...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					startQueryOperation(DryncDbAdapter.FILTER_TYPE_OWN, searchterm);
+				}});
+			
+			iWantButton.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					String searchterm = searchfield.getText().toString();
+					progressDlg =  new ProgressDialog(DryncCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving corks...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					startQueryOperation(DryncDbAdapter.FILTER_TYPE_WANT, searchterm);
+				}});
+			
+			iDrankButton.setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					String searchterm = searchfield.getText().toString();
+					progressDlg =  new ProgressDialog(DryncCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Retrieving corks...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					startQueryOperation(DryncDbAdapter.FILTER_TYPE_DRANK, searchterm);
+				}});
 		}
 		
-		doCellarQuery();
+		progressDlg =  new ProgressDialog(DryncCellar.this);
+		progressDlg.setTitle("Dryncing...");
+		progressDlg.setMessage("Retrieving corks...");
+		progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDlg.show();
+		this.startQueryOperation(lastFilter);
 		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
 		
@@ -253,6 +334,38 @@ private ProgressDialog progressDlg = null;
 		{
 			searchfield.setText(lastFilter);
 		}
+		
+		ImageButton clrFilterBtn = (ImageButton)findViewById(R.id.clearFilterBtn);
+		clrFilterBtn.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View arg0) {
+				//TODO: @mbrindam prompt to clear filter
+				searchfield.setText("");
+				progressDlg =  new ProgressDialog(DryncCellar.this);
+				progressDlg.setTitle("Dryncing...");
+				progressDlg.setMessage("Retrieving corks...");
+				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDlg.show();
+				DryncCellar.this.startQueryOperation("");
+			}});
+		
+		searchfield.setOnKeyListener(new OnKeyListener() {
+
+			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
+				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+			            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+			        	String searchterm = searchfield.getText().toString();
+
+						progressDlg =  new ProgressDialog(DryncCellar.this);
+						progressDlg.setTitle("Dryncing...");
+						progressDlg.setMessage("Retrieving corks...");
+						progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						progressDlg.show();
+						DryncCellar.this.startQueryOperation(searchterm);
+						return true;
+			        }
+			        return false;
+			}});
 	}
 
 	private void launchCork(Cork bottle) {

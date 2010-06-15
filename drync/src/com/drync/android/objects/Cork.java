@@ -41,7 +41,6 @@ public class Cork extends Bottle implements Parcelable
     public static final int UPDATE_TYPE_INSERT = 2;
     public static final int UPDATE_TYPE_DELETE = 3;
     
-    
     public boolean isNeedsServerUpdate() {
 		return needsServerUpdate;
 	}

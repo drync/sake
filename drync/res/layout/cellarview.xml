@@ -11,10 +11,14 @@
 		android:layout_height="fill_parent">
 
 		<EditText android:id="@+id/searchentry" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_weight="1"
+			android:layout_height="wrap_content" android:layout_weight=".95"
 			android:background="@android:drawable/editbox_background"
 			android:drawableLeft="@drawable/glass" android:layout_marginTop="3dip"
-			android:drawablePadding="5dip" />
+			android:drawablePadding="5dip"  />
+			
+		<ImageButton android:id="@+id/clearFilterBtn" android:textColor="#FFFFFF"
+			android:layout_width="6px" android:layout_height="fill_parent" android:background="@drawable/rndborderfulltransparent"
+			android:layout_gravity="right" android:layout_weight=".05" android:src="@drawable/icon_clear" />
 	</LinearLayout>
 	
 	<LinearLayout android:id="@+id/cellarfilterbuttons"

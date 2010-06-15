@@ -102,7 +102,86 @@ public class DryncDbAdapter
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
     }
+    
+    public List<Cork> search(String query) {
+    	return search(query, false);
+    }
         
+    public List<Cork> search(String query, boolean includePendingDeletes) {
+    	
+    	List<Cork> corks = new ArrayList<Cork>();
+    	
+    	String whereclause = 
+			"description LIKE '%" + query + "%' OR " +
+			"location LIKE '%" + query + "%' OR " + 
+			"cork_label LIKE '%" + query + "%' OR " +
+			"public_note LIKE '%" + query + "%' OR " +
+			"name LIKE '%" + query + "%' OR " +
+			"year LIKE '%" + query + "%' OR " + 
+			"region LIKE '%" + query + "%' OR " +
+			"grape LIKE '%" + query + "%' OR " + 
+			"style LIKE '%" + query + "%'";
+    
+    	Cursor cur =  db.query(DATABASE_TABLE, new String[] {
+        		KEY_ROWID,
+        	    KEY_CORK_ID,
+        	    KEY_CORK_UUID,
+        	    KEY_DESCRIPTION,
+        	    KEY_LOCATION,
+        	    KEY_CORK_RATING,
+        	    KEY_CORK_WANT,
+        	    KEY_CORK_OWN,
+        	    KEY_CORK_DRANK,
+        	    KEY_CORK_ORDERED,
+        	    KEY_CORK_PRICE,
+        	    KEY_CORK_YEAR,
+        	    KEY_CORK_POI,
+        	    KEY_CORK_BOTTLE_COUNT,
+        	    KEY_CORK_CREATED_AT,
+        	    KEY_CORK_LABEL,
+        	    KEY_PUBLIC_NOTE,
+        	    
+        	    KEY_BOTTLE_ID,
+        	    KEY_NAME,
+        	    KEY_YEAR,
+        	    KEY_REGION_PATH,
+        	    KEY_REGION,
+        	    KEY_GRAPE,
+        	    KEY_STYLE,
+        	    KEY_LABEL,
+        	    KEY_LABEL_THUMB,
+        	    KEY_PRICE,
+        	    KEY_RATING,
+        	    KEY_REVIEWCOUNT,
+        	    KEY_NEEDSSERVERUPDATE,
+        	    KEY_UPDATETYPE}, 
+        	    whereclause, 
+        	    null, 
+                null, 
+                null, 
+                null);
+        
+        cur.moveToFirst();
+        while (cur.isAfterLast() == false) {
+        	if (! includePendingDeletes)
+        	{
+        		// using where wasn't working properly, so we're doing this in code for now.
+        		if ((cur.getInt(cur.getColumnIndex(KEY_NEEDSSERVERUPDATE)) == 1) && 
+        			(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)) == Cork.UPDATE_TYPE_DELETE))
+        		{
+        			continue;
+        		}
+        	}
+            Cork cork = buildCork(cur);
+            corks.add(cork);
+       	    cur.moveToNext();
+        }
+        
+        cur.close();
+
+        return corks;
+	}
+    
     private static class DatabaseHelper extends SQLiteOpenHelper 
     {
         DatabaseHelper(Context context) 
@@ -115,6 +194,9 @@ public class DryncDbAdapter
         {
             db.execSQL(DATABASE_CREATE);
         }
+        
+        
+
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, 
@@ -248,6 +330,53 @@ public class DryncDbAdapter
     public List<Cork> getAllCorks() 
     {
     	return getAllCorks(false);
+    }
+    
+    public static final int FILTER_TYPE_NONE = 0;
+    public static final int FILTER_TYPE_OWN = 1;
+    public static final int FILTER_TYPE_DRANK = 2;
+    public static final int FILTER_TYPE_WANT = 3;
+    
+    public List<Cork> getFilteredCorks(int filterType, String strFilter)
+    {
+    	ArrayList<Cork> filteredCorks = new ArrayList<Cork>();
+    	
+    	List<Cork> corks = null;
+    	
+    	if ((strFilter != null) && (!strFilter.equals("")))
+    		corks = search(strFilter);
+    	else
+    		corks = getAllCorks();
+    	
+    	if (filterType == FILTER_TYPE_NONE)
+    		return corks;
+    	else
+    	{
+    		for (Cork cork : corks)
+    		{
+    			if ((filterType == FILTER_TYPE_OWN) && (cork.isCork_own()))
+    			{
+    				filteredCorks.add(cork);
+    			}
+    			else if ((filterType == FILTER_TYPE_WANT) && (cork.isCork_want()))
+    			{
+    				filteredCorks.add(cork);
+    			}
+    			else if ((filterType == FILTER_TYPE_DRANK) && (cork.isCork_drank()))
+    			{
+    				filteredCorks.add(cork);
+    			}
+    			
+    		}
+    	}
+    	
+    	return filteredCorks;
+    }
+    
+    private void createFTS3Table()
+    {
+    	String createStr = "CREATE  VIRTUAL TABLE TableName USING " +
+    			"FTS3(description TEXT, location text, cork_label text, public_note text, name text, year integer, region text, grape text, style text)";
     }
     
     public List<Cork> getAllCorks(boolean includePendingDeletes) 
