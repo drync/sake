@@ -1,5 +1,5 @@
 package com.drync.android;
 
-public class DryncTopWines extends DryncSearch {
+public class DryncTopWines extends DryncBaseSearch {
 
 }

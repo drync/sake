@@ -180,24 +180,9 @@ public class DryncDetail extends DryncBaseActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
-		//this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
-		//this.displayTopWinesBtns = extras != null ? extras.getBoolean("displayTopWinesBtns") : false;
 		
-		//LayoutInflater inflater = getLayoutInflater();
-		
-		/*flipper = (ViewFlipper) findViewById(R.id.flipper);
-		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-		flipper.setOutAnimation(this, R.anim.push_left_out);*/
-		
-		//searchView = (LinearLayout) this.findViewById(R.id.searchview);
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
 	
-		//reviewView = (ScrollView) inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
-		//flipper.addView(reviewView); 
-
-//		addView = (ScrollView) inflater.inflate(R.layout.addtocellar, (ViewGroup)flipper, false);
-	//	flipper.addView(addView);
-		
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		launchBottle(bottle);
 	}
@@ -213,9 +198,6 @@ public class DryncDetail extends DryncBaseActivity {
 		if (rebuildDetail)
 		{
 			mBottle = bottle;
-
-			//flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-			//flipper.setOutAnimation(this, R.anim.push_left_out);
 
 			detailView.scrollTo(0, 0);
 
@@ -451,232 +433,14 @@ public class DryncDetail extends DryncBaseActivity {
 		Intent twIntent = new Intent(this, DryncAddToCellar.class);
 		twIntent.putExtra("bottle", mBottle);
 		startActivityForResult(twIntent, ADDTOCELLAR_RESULT);  
-		
-		/*final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
-		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
-		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
-		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
-
-		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
-		final EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
-		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
-		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
-		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
-		
-		ArrayAdapter<String> yearSpnAdapter = null;
-		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
-		ArrayAdapter<CharSequence> styleSpnAdapter = null;
-		ArrayAdapter<CharSequence> regionSpnAdapter = null;
-		int year = 1800;
-		
-		if (buildOnceAddToCellar)
-		{
-			ArrayList<String> _allYears = new ArrayList<String>();
-		       
-			Date date = new Date();
-			Calendar cal = new GregorianCalendar();
-			cal.setTime(date);
-			year = cal.get(Calendar.YEAR);
-			
-	        for (int i=1800,n=year+3;i<n;i++){
-	            _allYears.add("" + i);
-	        }
-
-	        yearSpnAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, _allYears);
-	        yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	        yearVal.setAdapter(yearSpnAdapter); 
-	        
-	       // varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
-	      //  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	      //  varietalVal.setAdapter(varietalSpnAdapter); 
-	        
-	       // regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
-	       // regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	      //  regionVal.setAdapter(regionSpnAdapter); 
-	        
-	        styleSpnAdapter = ArrayAdapter.createFromResource(
-	                this, R.array.style_array, android.R.layout.simple_spinner_item);
-	        styleSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); 
-	        styleVal.setAdapter(styleSpnAdapter);
-	        
-	        Button addToCellarBtn = (Button)addView.findViewById(R.id.addToCellar);
-	        if (addToCellarBtn != null)
-	        {
-	        	addToCellarBtn.setOnClickListener(new OnClickListener(){
-
-					public void onClick(View v) {
-						Cork cork = new Cork();
-						cork.setName(nameVal.getEditableText().toString());
-						cork.setBottle_Id(mBottle.getBottle_Id());
-						cork.setYear(mBottle.getYear());
-						cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
-						cork.setCork_created_at(System.currentTimeMillis());
-						cork.setGrape(varietalVal.getEditableText().toString());
-						cork.setRegion(regionVal.getEditableText().toString());
-						cork.setCork_rating(ratingbar.getRating());
-						dbAdapter.open();
-						dbAdapter.insertCork(cork);
-						dbAdapter.close();
-						Log.d("AddToCellar", "Yearselected: " + cork.getYear());
-					}});
-	        }
-	        
-			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
-			if (cancelBtn != null)
-			{
-				cancelBtn.setOnClickListener(new OnClickListener(){
-
-					public void onClick(View v) {
-						// in order 
-						flipper.setInAnimation(AnimationUtils.loadAnimation(DryncDetail.this, R.anim.push_right_in));
-						flipper.setOutAnimation(DryncDetail.this, R.anim.push_right_out);
-						
-						View view = flipper.findViewById(R.id.detailview);
-						int detailViewIdx = flipper.indexOfChild(view);
-						flipper.setDisplayedChild(detailViewIdx);	
-						
-						flipper.setInAnimation(AnimationUtils.loadAnimation(DryncDetail.this, R.anim.push_left_in));
-						flipper.setOutAnimation(DryncDetail.this, R.anim.push_left_out);
-						
-					}});
-			}
-			
-			buildOnceAddToCellar = false;
-		}
-		
-		if (rebuildAddToCellar)
-		{
-			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-			flipper.setOutAnimation(this, R.anim.push_left_out);
-			
-			int position;
-			if (mBottle.getYear() > 0)
-				position = yearSpnAdapter.getPosition("" + mBottle.getYear());
-			else
-				position = yearSpnAdapter.getPosition("" + year);
-			
-			nameVal.setText(mBottle.getName());
-			yearVal.setText("" + mBottle.getYear());
-			varietalVal.setText("" + mBottle.getGrape());
-			regionVal.setText("" + mBottle.getRegion());
-			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
-			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
-				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
-			else
-				styleVal.setSelection(stylepos);
-			priceVal.setText(mBottle.getPrice());
-			wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
-
-			reviewView.scrollTo(0, 0);
-		}
-		
-		View view = flipper.findViewById(R.id.addToCellar);
-		//flipper.bringChildToFront(view);
-		int addToCellarIdx = flipper.indexOfChild(view);
-		flipper.setDisplayedChild(addToCellarIdx);		*/
 	}
 	
 	private void launchReviews(Bottle bottle) {
 		Intent twIntent = new Intent(this, DryncDetailReviews.class);
 		twIntent.putExtra("bottle", bottle);
 		startActivity(twIntent);  
-		
-		// mBottle should be set by the detail view, if not, return;
-		/*if (mBottle == null)
-			return;
-		
-		if (rebuildReviews)
-		{
-			flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-			flipper.setOutAnimation(this, R.anim.push_left_out);
-
-			reviewView.scrollTo(0, 0);
-
-			TextView nameView = (TextView) reviewView.findViewById(R.id.reviewWineName);
-			TextView titleView = (TextView) reviewView.findViewById(R.id.reviewTitle);
-			TextView yearView = (TextView) reviewView.findViewById(R.id.yearValue);
-			TextView ratingView = (TextView) reviewView.findViewById(R.id.avgRatingValue);
-			TextView priceView = (TextView) reviewView.findViewById(R.id.priceValue);
-			TextView ratingCount = (TextView) reviewView.findViewById(R.id.reviewCount);
-			RelativeLayout revListHolder = (RelativeLayout)reviewView.findViewById(R.id.reviewSection);
-			TextView reviewCount = (TextView)reviewView.findViewById(R.id.reviewCount);
-
-			revListHolder.removeAllViews();
-			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			revListHolder.addView(reviewCount, rcparams);
-
-			nameView.setText(mBottle.getName());
-			titleView.setText(mBottle.getName());
-			int year = mBottle.getYear();
-			yearView.setText("" + year);
-			ratingView.setText(mBottle.getRating());
-			priceView.setText(mBottle.getPrice());
-			String reviewPlurality = ((mBottle.getReviewCount() <= 0) || (mBottle.getReviewCount() > 1)) ?
-					" Reviews" : " Review";
-			ratingCount.setText("" + mBottle.getReviewCount() + reviewPlurality);
-			
-
-			if (defaultIcon == null)
-			{
-				defaultIcon = getResources().getDrawable(R.drawable.icon);
-			}
-
-			RemoteImageView riv = (RemoteImageView) reviewView.findViewById(R.id.reviewWineThumb);
-			if (riv != null)
-			{
-				String labelThumb = mBottle.getLabel_thumb();
-				riv.setRemoteImage(labelThumb, defaultIcon);
-			}
-
-			Button doneBtn = (Button) this.findViewById(R.id.doneBtn);
-			doneBtn.setOnClickListener(new OnClickListener(){
-
-				public void onClick(View v) {
-					//showPrevious();			
-				}});
-
-			RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-			listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-			listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
-			
-			if (mReviewTable == null)
-			{
-				mReviewTable = new TableLayout(DryncDetail.this);
-				mReviewTable.setBackgroundResource(R.drawable.rndborder);
-
-				revListHolder.addView(mReviewTable, listparams);
-
-			}
-			else
-			{
-				revListHolder.addView(mReviewTable, listparams);
-			}
-
-			populateReviewTable(mReviewTable, mBottle);
-			rebuildReviews = false;
-		}*/
-		
-		//showNext();
-		
 	}
 	
-	/*private void showNext()
-	{
-		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
-		flipper.setOutAnimation(this, R.anim.push_left_out);
-		
-		flipper.showNext();
-	}*/
-	
-	/*private void showPrevious()
-	{
-		flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_right_in));
-		flipper.setOutAnimation(this, R.anim.push_right_out);
-	
-		flipper.showPrevious();
-	}*/
 	
 	class WineReviewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
@@ -757,21 +521,6 @@ public class DryncDetail extends DryncBaseActivity {
 			{
 				//readReviewTxt.setTextColor(Color.BLACK);
 			}
-
-			/*final Review fReview = review;
-			readReviewTxt.setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					if ((fReview.getUrl() == null) || (fReview.getUrl().equals("")))
-					{
-						Toast noReviewTst = Toast.makeText(DryncMain.this, "There is no extended review for this item.", Toast.LENGTH_LONG);
-						noReviewTst.show();
-						return;
-					}
-
-					Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
-					startActivity(myIntent);
-				}});*/
-			
 		}
 
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -950,78 +699,6 @@ public class DryncDetail extends DryncBaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private void populateReviewTable(TableLayout table, Bottle bottle)
-	{
-		table.removeAllViews();
-		//table.setFocusableInTouchMode(true);
-		//table.setClickable(true);
-		
-		for (int i=0,n=bottle.getReviewCount();i<n;i++)
-		{			
-			Review review = mBottle.getReview(i);
-			if (review == null)
-				continue;
-			
-			if (mMainInflater == null)
-			{
-				mMainInflater = (LayoutInflater) DryncDetail.this.getSystemService(
-						Context.LAYOUT_INFLATER_SERVICE);
-			}
-			
-			final View reviewItem = mMainInflater.inflate(
-					R.layout.reviewlistitem, table, false);
-			
-			TextView publisherText = (TextView) reviewItem.findViewById(R.id.publisher);
-			TextView reviewText = (TextView) reviewItem.findViewById(R.id.revText);
-			TextView reviewSrc = (TextView) reviewItem.findViewById(R.id.revSource);
-			
-			reviewSrc.setFocusable(true);
-			reviewSrc.setClickable(true);
-			
-			publisherText.setText(review.getPublisher());
-			reviewText.setText(review.getText());
-			reviewSrc.setText(review.getReview_source());
-			
-			final Review fReview = review;
-			publisherText.setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					if (fReview.getUrl() != null)
-					{
-						Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fReview.getUrl()));
-						startActivity(myIntent);
-					}	
-					else
-					{
-						Toast noReviewUrl = Toast.makeText(DryncDetail.this, getResources().getString(R.string.noreviewurl), Toast.LENGTH_LONG);
-						noReviewUrl.show();
-					}
-				}
-			});
-			
-			table.addView(reviewItem);
-			
-			if (i < n-1)
-			{
-				final View separatorItem = mMainInflater.inflate(
-						R.layout.separator, table, false);
-				table.addView(separatorItem);
-			}
-			
-		}
-		
-	}
-	
-	private Animation inFromRightAnimation() {
-
-		Animation inFromRight = new TranslateAnimation(
-				Animation.RELATIVE_TO_PARENT, +1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-				Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f
-		);
-		inFromRight.setDuration(500);
-		inFromRight.setInterpolator(new AccelerateInterpolator());
-		return inFromRight;
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -1034,36 +711,6 @@ public class DryncDetail extends DryncBaseActivity {
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}
-	}
-	
-	private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)
-	{
-		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
-		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}
-		
-		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
-		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}
-		
-		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
-		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}		
 	}
 }
 

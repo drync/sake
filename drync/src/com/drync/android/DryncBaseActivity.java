@@ -80,6 +80,12 @@ public abstract class DryncBaseActivity extends Activity {
         	startDryncCellarActivity();
         	break;
         }
+        case SEARCH_ID:
+        {
+        	Intent setIntent = new Intent(this, DryncSearch.class);
+        	startActivity(setIntent);
+        	break;
+        }
         }
        
         return super.onOptionsItemSelected(item);
