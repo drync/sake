@@ -1109,29 +1109,29 @@ public class DryncSearch extends DryncBaseActivity {
 	{
 		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}
 		
 		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}
 		
 		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}		
 	}
 	
@@ -1216,10 +1216,7 @@ public class DryncSearch extends DryncBaseActivity {
 			}
 		};
 				
-		
 		ex.scheduleAtFixedRate(cellarUpdateThread, 10, 60, TimeUnit.SECONDS);
-
 	}
-	
 }
 

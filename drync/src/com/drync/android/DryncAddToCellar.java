@@ -8,75 +8,41 @@
  */
 package com.drync.android;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
-import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.TwitterException;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.database.sqlite.SQLiteConstraintException;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import android.widget.WineItemRelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView.OnEditorActionListener;
 
-import com.drync.android.helpers.CSVReader;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
-import com.drync.android.objects.Review;
-import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
 
 
@@ -114,10 +80,6 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 
 	Drawable defaultIcon = null;
-
-	private String userTwitterUsername = null;
-	private String userTwitterPassword = null;
-
 	/*final Runnable mUpdateResults = new Runnable()
 	{
 		public void run()
@@ -170,16 +132,6 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addtocellar);
-
-		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
-		// we need to check for changes to twitter settings.
-		if (settings != null)
-		{
-			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
-			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
-			if (encryptedTwitterPw != null)
-				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
 
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
@@ -1161,61 +1113,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 	}*/
 
-	private Animation inFromRightAnimation() {
-
-		Animation inFromRight = new TranslateAnimation(
-				Animation.RELATIVE_TO_PARENT, +1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-				Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f
-		);
-		inFromRight.setDuration(500);
-		inFromRight.setInterpolator(new AccelerateInterpolator());
-		return inFromRight;
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		// we need to check for changes to twitter settings.
-		if (settings != null)
-		{
-			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
-			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
-			if (encryptedTwitterPw != null)
-				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
 	}
-
-	/*private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)
-	{
-		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
-		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}
-
-		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
-		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}
-
-		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
-		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
-		}
-		else
-		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
-		}		
-	}*/
-
-
 }
 

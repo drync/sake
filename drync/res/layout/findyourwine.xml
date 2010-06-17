@@ -98,7 +98,7 @@
         android:textColor="#FFFFFF"
         android:layout_width="125dip"
         android:layout_height="fill_parent"
-        android:background="@drawable/qn_woodbutton"
+        android:background="@drawable/mybutton_background"
         android:layout_gravity="center_horizontal"
         android:typeface="normal"
         android:textStyle="bold"

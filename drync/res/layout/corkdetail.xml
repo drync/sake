@@ -15,8 +15,8 @@
 			android:background="#410701">
 
 			<Button android:id="@+id/cellarBtn" android:textColor="#FFFFFF"
-				android:layout_width="50dip" android:layout_height="20dip"
-				android:textSize="9px" android:background="@drawable/qn_woodbutton"
+				android:layout_width="80dip" android:layout_height="30dip"
+				android:textSize="9px" android:background="@drawable/mybutton_background"
 				android:layout_gravity="center" android:typeface="normal"
 				android:textStyle="normal" android:layout_weight=".15" android:text="Cellar" />
 
@@ -30,11 +30,11 @@
 				android:layout_weight=".70" />
 
 			<Button android:id="@+id/editBtn" android:textColor="#FFFFFF"
-				android:layout_width="50dip" android:layout_height="20dip"
-				android:textSize="9px" android:background="@drawable/qn_woodbutton"
+				android:layout_width="70dip" android:layout_height="30dip"
+				android:textSize="9px" android:background="@drawable/mybutton_background"
 				android:layout_gravity="center" android:typeface="normal"
-				android:textStyle="normal" android:layout_marginTop="15px"
-				android:layout_marginBottom="15px" android:layout_weight=".15"
+				android:textStyle="normal" android:layout_marginTop="5px"
+				android:layout_marginBottom="5px" android:layout_weight=".15"
 				android:text="Edit" />
 
 		</LinearLayout>
@@ -312,12 +312,12 @@
 			
 			<Button android:id="@+id/share" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_below="@id/editInCellar"
-				android:background="@drawable/qn_woodbutton" android:textColor="#FFFFFF"
+				android:background="@drawable/dryncbutton" android:textColor="#FFFFFF"
 				android:gravity="center" android:text="Share" />
 				
 				<Button android:id="@+id/deleteBtn" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" 
-				android:gravity="center" android:background="@drawable/qn_woodbutton"
+				android:gravity="center" android:background="@drawable/dryncbutton"
 				android:textColor="#FFFFFF" android:text="Delete"
 			    android:layout_below="@id/share" />
 
@@ -331,7 +331,7 @@
 
 			<Button android:id="@+id/tweet" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_alignParentTop="true"
-				android:gravity="center" android:background="@drawable/qn_woodbutton"
+				android:gravity="center" android:background="@drawable/dryncbutton"
 				android:textColor="#FFFFFF" android:text="Twitter: I am drinking this wine"
 				android:drawableLeft="@drawable/twitter" android:paddingLeft="20px" />
 		</RelativeLayout>

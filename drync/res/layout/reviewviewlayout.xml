@@ -15,10 +15,11 @@
 				android:background="#410701">
 
 				<Button android:id="@+id/doneBtn" android:textColor="#FFFFFF"
-					android:layout_width="50dip" android:layout_height="20dip"
-					android:textSize="9px" android:background="@drawable/qn_woodbutton"
+					android:layout_width="80dip" android:layout_height="30dip"
+					android:textSize="9px" android:background="@drawable/mybutton_background"
 					android:layout_gravity="center" android:typeface="normal"
-					android:textStyle="normal" android:layout_weight=".15"
+					android:textStyle="normal" android:layout_weight=".15" android:layout_marginTop="5px"
+				android:layout_marginBottom="5px"
 					android:text="Done" />
 
 				<TextView android:id="@+id/reviewTitle"
