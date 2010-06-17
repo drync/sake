@@ -327,6 +327,29 @@ public class DryncDetail extends DryncBaseActivity {
 			addBtn.setOnClickListener(addListener);
 			addToCellarBtn.setOnClickListener(addListener);
 			
+			Button btnShare = (Button) detailView.findViewById(R.id.share);
+			
+			if (btnShare != null)
+			{
+				btnShare.setOnClickListener(new OnClickListener()
+				{
+
+					public void onClick(View arg0) {
+						/* Create the Intent */  
+						final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);  
+
+						/* Fill it with Data */  
+						emailIntent.setType("plain/text");  
+						emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"to@email.com"});  
+						emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject");  
+						emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Text");  
+
+						/* Send it off to the Activity-Chooser */  
+						DryncDetail.this.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+					}
+
+				});
+			}
 			
 
 			if (btnTweet != null)
