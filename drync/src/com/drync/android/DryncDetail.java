@@ -41,10 +41,12 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -302,6 +304,23 @@ public class DryncDetail extends DryncBaseActivity {
 				String labelThumb = mBottle.getLabel_thumb();
 				riv.setRemoteImage(labelThumb, defaultIcon);
 			}
+			
+			riv.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View v) {
+					Dialog dialog = new Dialog(DryncDetail.this);
+					dialog.setCancelable(true);
+					dialog.setCanceledOnTouchOutside(true);
+
+					dialog.setContentView(R.layout.imagezoom);
+					dialog.setTitle("Label:");
+
+					ImageView image = (ImageView) dialog.findViewById(R.id.image);
+					image.setImageDrawable(((RemoteImageView)v).getDrawable());
+					dialog.show();
+				}
+
+				});
 
 			varietalView.setText(bottle.getGrape());
 			styleView.setText(bottle.getStyle());

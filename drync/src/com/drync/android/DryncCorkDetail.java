@@ -17,6 +17,7 @@ import java.util.List;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -248,6 +250,24 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				String labelThumb = mBottle.getLabel_thumb();
 				riv.setRemoteImage(labelThumb, defaultIcon);
 			}
+			
+			riv.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View v) {
+					Dialog dialog = new Dialog(DryncCorkDetail.this);
+					dialog.setCancelable(true);
+					dialog.setCanceledOnTouchOutside(true);
+
+					dialog.setContentView(R.layout.imagezoom);
+					dialog.setTitle("Label:");
+
+					ImageView image = (ImageView) dialog.findViewById(R.id.image);
+					image.setImageDrawable(((RemoteImageView)v).getDrawable());
+					dialog.show();
+				}
+
+				});
+
 
 			String varietal = bottle.getGrape();
 			varietalView.setText(((varietal == null) || (varietal.equals("null")) || (varietal.equals(""))) ? "Unspecified" : varietal);

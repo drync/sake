@@ -6,7 +6,7 @@
 	android:layout_height="wrap_content" android:visibility="visible"
 	android:background="@drawable/wood2">
 		
-	<LinearLayout android:id="@+id/searchHolder"
+	<LinearLayout android:id="@+id/searchHolder" android:background="@drawable/rndbordertransparent"
 		android:orientation="horizontal" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 
@@ -18,7 +18,7 @@
 			
 		<ImageButton android:id="@+id/clearFilterBtn" android:textColor="#FFFFFF"
 			android:layout_width="6px" android:layout_height="fill_parent" android:background="@drawable/rndborderfulltransparent"
-			android:layout_gravity="right" android:layout_weight=".05" android:src="@drawable/icon_clear" />
+			android:layout_gravity="right" android:layout_weight=".10" android:src="@drawable/icon_clear" />
 	</LinearLayout>
 	
 	<LinearLayout android:id="@+id/cellarfilterbuttons"

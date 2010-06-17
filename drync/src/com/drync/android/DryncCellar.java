@@ -62,6 +62,7 @@ public class DryncCellar extends DryncBaseActivity {
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Cork> mResults = null;
+	int lastSelectedCellar = -1;
 
 private ProgressDialog progressDlg = null;
 	private String deviceId;
@@ -76,8 +77,6 @@ private ProgressDialog progressDlg = null;
 	
 	boolean displayFilter = true;
 	boolean displayCellarFilterBtns = false;
-	
-	int lastSelectedTopWine = -1;
 	
 	private TableLayout mReviewTable;
 	
@@ -284,7 +283,10 @@ private ProgressDialog progressDlg = null;
 					progressDlg.setMessage("Retrieving corks...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
+					lastSelectedCellar = DryncDbAdapter.FILTER_TYPE_NONE;
 					startQueryOperation(DryncDbAdapter.FILTER_TYPE_NONE, searchterm);
+					
+					DryncCellar.this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
 				}});
 			
 			iOwnButton.setOnClickListener(new OnClickListener(){
@@ -295,7 +297,10 @@ private ProgressDialog progressDlg = null;
 					progressDlg.setMessage("Retrieving corks...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
+					lastSelectedCellar = DryncDbAdapter.FILTER_TYPE_OWN;
 					startQueryOperation(DryncDbAdapter.FILTER_TYPE_OWN, searchterm);
+					
+					DryncCellar.this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
 				}});
 			
 			iWantButton.setOnClickListener(new OnClickListener(){
@@ -306,7 +311,10 @@ private ProgressDialog progressDlg = null;
 					progressDlg.setMessage("Retrieving corks...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
+					lastSelectedCellar = DryncDbAdapter.FILTER_TYPE_WANT;
 					startQueryOperation(DryncDbAdapter.FILTER_TYPE_WANT, searchterm);
+					
+					DryncCellar.this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
 				}});
 			
 			iDrankButton.setOnClickListener(new OnClickListener(){
@@ -317,16 +325,18 @@ private ProgressDialog progressDlg = null;
 					progressDlg.setMessage("Retrieving corks...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
+					lastSelectedCellar = DryncDbAdapter.FILTER_TYPE_DRANK;
 					startQueryOperation(DryncDbAdapter.FILTER_TYPE_DRANK, searchterm);
+					
+					DryncCellar.this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
 				}});
+			
+			if (lastSelectedCellar == -1)
+			{
+				searchfield.setText(lastFilter);
+				myWinesButton.performClick();
+			}
 		}
-		
-		progressDlg =  new ProgressDialog(DryncCellar.this);
-		progressDlg.setTitle("Dryncing...");
-		progressDlg.setMessage("Retrieving corks...");
-		progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progressDlg.show();
-		this.startQueryOperation(lastFilter);
 		
 		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
 		
@@ -1154,34 +1164,43 @@ private ProgressDialog progressDlg = null;
 		}
 	}
 	
-	/*private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)
+	private void detailSelectedCellarButton(Button mainButton, Button ownButton, Button wantButton, Button drankButton)
 	{
-		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
+		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_NONE)
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}
 		
-		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
+		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_OWN)
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}
 		
-		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
+		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_WANT)
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton_pressed));
+			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
 		}
 		else
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.qn_woodbutton));
+			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}		
-	}*/
+		
+		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_DRANK)
+		{
+			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+		}
+		else
+		{
+			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+		}		
+	}
 }
 

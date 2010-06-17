@@ -45,7 +45,7 @@
 
 			<com.drync.android.ui.RemoteImageView
 				android:id="@+id/dtlWineThumb" android:layout_width="57px"
-				android:layout_height="57px" android:layout_marginRight="6dip"
+				android:layout_height="57px" android:layout_marginRight="6dip" android:clickable="true"
 				android:scaleType="fitCenter" android:layout_alignParentTop="true"
 				android:background="#FFFFFF" />
 
