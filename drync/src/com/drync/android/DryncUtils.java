@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import com.drync.android.objects.Bottle;
+import com.drync.android.objects.Cork;
+import com.drync.android.objects.Source;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -168,8 +172,49 @@ public class DryncUtils {
 		
 		return deviceId;
 	}
-
 	
+	public static String buildShareEmailText(Context ctx, Bottle bottle)
+	{
+		Cork cork = null;
+		if (bottle instanceof Cork)
+			cork = (Cork)bottle;
+			
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append(ctx.getResources().getString(R.string.emailsubject)).append("\n\n");
+		
+		builder.append(bottle.getName());
+		
+		if ((bottle.getRating() != null) && (!bottle.getRating().equals("")) && (!bottle.getRating().equals("n/a")))
+		{
+			builder.append("\nAvg. Rating: ").append(bottle.getRating());
+		}
+		
+		if ((cork != null) && (cork.getCork_rating() != 0))
+		{
+			builder.append("\nMy Rating: ").append(cork.getCork_rating()).append(" / 5\n");
+		}
+		
+		if( (bottle.getPrice() != null) || ! bottle.getPrice().equals(""))
+		{
+			builder.append("\nPrice: ").append(bottle.getPrice()).append("\n\n");
+		}
+		
+		if (bottle.getSources().size() > 0)
+		{
+			builder.append("You can buy this wine here: \n");
 
-
+			for (Source source : bottle.getSources())
+			{
+				builder.append(source.getUrl()).append("\n");
+			}
+		}
+		
+		builder.append("\n");
+		
+		builder.append(ctx.getResources().getString(R.string.emailfooter)).append("\n");
+		builder.append(ctx.getResources().getString(R.string.emailfooter2));
+		
+		return builder.toString();
+	}
 }

@@ -37,6 +37,10 @@
 	
 	<string name="noreviewurl">There is no link attached to this review.</string>
 	
+	<string name="emailsubject">Hi! I'm using Drync on my Android to send you this wine recommendation...</string>
+	<string name="emailfooter">Drync-Wine - research and remember wines you enjoy using your iPhone or Android Device.</string>
+	<string name="emailfooter2">To learn more visit www.drync.com</string>
+	
 	<string name="style_prompt">Choose a style</string>
     <string-array name="style_array">
         <item>Dessert</item>
@@ -49,7 +53,7 @@
     </string-array>
    
    
-   <!--  <string name="region_prompt">Choose a Region</string>
+<!-- <string name="region_prompt">Choose a Region</string>
     <string-array name="region_array">
     <item>Échezeaux</item>
 <item>Évora</item>
@@ -1113,7 +1117,7 @@
 <item>Zonda</item>
     
     </string-array> -->
-  <!--
+  
     <string name="varietal_prompt">Choose a Varietal</string>
 	<string-array name="varietal_array">
 	<item>Abouriou</item>
@@ -1563,5 +1567,5 @@
 	<item>Zéta</item>
 	<item>Österreicher</item>
 	<item>Other</item>
-	</string-array> -->
+	</string-array>
 </resources>

@@ -311,6 +311,7 @@ public class DryncProvider {
 		
 		return false;
 	}
+	
 	/**
 	 * Call the REST service to retrieve the first matching promotion based
 	 * on the give keywords. If none found, return null.
@@ -650,6 +651,10 @@ public class DryncProvider {
 			bottle.setLabel_thumb(value);
 		} else if ("price".equals(node.getNodeName())) {
 			bottle.setPrice(value);
+		} else if ("minprice".equals(node.getNodeName())) {
+			bottle.setMinprice(Float.parseFloat(value));
+		} else if ("maxprice".equals(node.getNodeName())) {
+			bottle.setMaxprice(Float.parseFloat(value));
 		} else if ("rating".equals(node.getNodeName())) {
 			bottle.setRating(value);
 		} else if ("grape".equals(node.getNodeName())) {

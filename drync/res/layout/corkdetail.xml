@@ -193,7 +193,7 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_toRightOf="@id/locationLbl"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:minWidth="50px" android:paddingRight="5px" android:gravity="right" android:textSize="12px"
+				android:minWidth="50px" android:paddingRight="5px" android:gravity="left" android:textSize="12px"
 				android:textColor="#FFFFFF" android:typeface="sans" 
 				android:ellipsize="none" android:singleLine="true" android:text="n/a" />
 

@@ -18,6 +18,29 @@ public class Bottle implements Parcelable {
 	String label;
 	String label_thumb;
 	String price;
+	float minprice = 0;
+	
+	public float getMinprice() {
+		return minprice;
+	}
+
+
+	public void setMinprice(float minprice) {
+		this.minprice = minprice;
+	}
+
+
+	public float getMaxprice() {
+		return maxprice;
+	}
+
+
+	public void setMaxprice(float maxprice) {
+		this.maxprice = maxprice;
+	}
+
+
+	float maxprice = 0;
 	String rating;
 	int reviewCount = 0;
 	
@@ -240,10 +263,13 @@ public class Bottle implements Parcelable {
 		out.writeString(label);
 		out.writeString(label_thumb);
 		out.writeString(price);
+		out.writeFloat(minprice);
+		out.writeFloat(maxprice);
 		out.writeString(rating);
 		out.writeInt(reviewCount);
 		//Review[] reviewarray = reviews.toArray(new Review[0]);
 		out.writeTypedList(reviews);
+		
 	}
 	
 	public void readFromParcel(Parcel in) {
@@ -258,10 +284,13 @@ public class Bottle implements Parcelable {
 		label = in.readString();
 		label_thumb = in.readString();
 		price = in.readString();
+		minprice = in.readFloat();
+		maxprice = in.readFloat();
 		rating = in.readString();	
 		reviewCount = in.readInt();
 		//Parcelable[] reviewsarray = in.readParcelableArray(Review.class.getClassLoader());
 		reviews = new ArrayList<Review>();
 		in.readTypedList(reviews, Review.CREATOR);//(ArrayList<Review>) Arrays.asList(reviewsarray); 
+		
 	}
 }

@@ -14,7 +14,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -27,9 +31,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -37,11 +43,11 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
-
 
 public class DryncAddToCellar extends DryncBaseActivity {
 
@@ -56,6 +62,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	boolean displayTopWinesBtns = false;
 
 	int lastSelectedTopWine = -1;
+	
+	int ownValueHolder = 0;
 
 	LinearLayout searchView;
 	ScrollView detailView;
@@ -110,7 +118,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
 		
 		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
-		final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
+		//final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
+		final AutoCompleteTextView varietalVal = (AutoCompleteTextView) addView.findViewById(R.id.atcVarietalVal);
 		final EditText regionVal = (EditText) addView.findViewById(R.id.atcRegionVal);
 		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
 
@@ -122,7 +131,59 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final EditText locationVal = (EditText)addView.findViewById(R.id.atcLocationVal);
 		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
-		final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
+		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
+		final CheckBox ownVal = (CheckBox)addView.findViewById(R.id.atcOwnCountValue);
+		final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
+		
+		ownVal.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v) {
+				Context mContext = DryncAddToCellar.this;
+				Dialog dialog = new Dialog(mContext);
+
+				dialog.setContentView(R.layout.number_picker_pref);
+				dialog.setTitle("I Own ");
+
+				final NumberPicker picker = (NumberPicker)dialog.findViewById(R.id.pref_num_picker);
+				Button okBtn = (Button)dialog.findViewById(R.id.okBtn);
+				Button cancelBtn = (Button)dialog.findViewById(R.id.cancelBtn);
+
+				picker.setCurrent(ownValueHolder);
+				final Dialog thisDialog = dialog;
+				cancelBtn.setOnClickListener(new OnClickListener(){
+
+					public void onClick(View arg0) {
+						thisDialog.cancel();
+					}});
+
+				okBtn.setOnClickListener(new OnClickListener() {
+
+					public void onClick(View v) {
+						ownValueHolder = picker.getCurrent();
+						ownLbl.setText("I Own " + picker.getCurrent());
+						thisDialog.cancel();
+					}});
+				
+				dialog.show();
+				
+				dialog.setOnCancelListener(new Dialog.OnCancelListener(){
+
+					public void onCancel(DialogInterface dialog) {
+						if (ownValueHolder > 0)
+						{
+							ownVal.setChecked(true);
+						}
+						else
+						{
+							ownVal.setChecked(false);
+						}
+					}});
+			}
+
+
+
+		});
+		
 
 		ArrayAdapter<String> yearSpnAdapter = null;
 		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
@@ -147,9 +208,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			yearVal.setAdapter(yearSpnAdapter); 
 
-			// varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
-			//  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			//  varietalVal.setAdapter(varietalSpnAdapter); 
+			 varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
+			  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			  varietalVal.setAdapter(varietalSpnAdapter); 
 
 			// regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
 			// regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -200,17 +261,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					cork.setStyle(styleText);
 					int ownCount = 0;
 					
-					try
-					{
-						if (ownVal.getEditableText().toString() != "")
-						{
-							ownCount = Integer.parseInt(ownVal.getEditableText().toString());
-						}
-					}
-					catch (NumberFormatException e)
-					{
-						ownCount = 0;
-					}
+					ownCount = ownValueHolder;
 
 					cork.setCork_bottle_count(ownCount);
 
@@ -329,7 +380,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			
 			wantVal.setChecked(((Cork)mBottle).isCork_want());
 			drankVal.setChecked(((Cork)mBottle).isCork_drank());
-			ownVal.setText("" + ((Cork)mBottle).getCork_bottle_count());
+			
+			ownValueHolder = ((Cork)mBottle).getCork_bottle_count();
+			ownVal.setChecked(ownValueHolder > 0);
+			ownLbl.setText("I Own " + ((Cork)mBottle).getCork_bottle_count());
 			
 			varietalVal.setText("" + ((Cork)mBottle).getGrape());
 			
