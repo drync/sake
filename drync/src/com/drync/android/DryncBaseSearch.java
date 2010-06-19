@@ -297,6 +297,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	private void launchBottle(Bottle bottle) {
 		Intent twIntent = new Intent(this, DryncDetail.class);
 		twIntent.putExtra("bottle", bottle);
+		if (this.displayTopWinesBtns)
+			twIntent.putExtra("launchedFromTopWines", true);
 		startActivity(twIntent);  
 	}
 	

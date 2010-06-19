@@ -39,6 +39,8 @@
         </activity>
         <activity android:name=".DryncSettings">
         </activity>
+        <activity android:name=".DryncMyAccountActivity">
+        </activity>
         
     </application>
     <uses-sdk android:minSdkVersion="3" />

@@ -114,6 +114,8 @@ public class DryncDetail extends DryncBaseActivity {
 	
 	private String userTwitterUsername = null;
 	private String userTwitterPassword = null;
+	
+	boolean launchedFromTopWines = false; 
 
 	final Runnable mUpdateResults = new Runnable()
 	{
@@ -180,6 +182,7 @@ public class DryncDetail extends DryncBaseActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
+		launchedFromTopWines = ((extras != null) && (extras.containsKey("launchedFromTopWines"))) ? extras.getBoolean("launchedFromTopWines") : false;
 		
 		detailView = (ScrollView) this.findViewById(R.id.detailview);
 	
@@ -309,6 +312,11 @@ public class DryncDetail extends DryncBaseActivity {
 			regionView.setText(bottle.getRegion());
 			
 			Button searchBtn = (Button) this.findViewById(R.id.searchBtn);
+			if (launchedFromTopWines)
+			{
+				searchBtn.setText("Back");
+			}
+			
 			searchBtn.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
@@ -404,7 +412,7 @@ public class DryncDetail extends DryncBaseActivity {
 				for (int i=0,n=sources.size();i<n;i++)
 				{
 					final Source source = sources.get(i);
-					if (trackUsedSrc.contains(source.getName()))
+					if ((trackUsedSrc.contains(source.getName())) || (! source.getName().toLowerCase().equals("wine.com")))
 						continue;
 						
 					Button buyButton = new Button(this);
@@ -412,7 +420,7 @@ public class DryncDetail extends DryncBaseActivity {
 					buyButton.setText("Buy from " + source.getName());
 					buyButton.setTextColor(Color.WHITE);
 					buyButton.setGravity(Gravity.CENTER);
-					buyButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.qn_woodbutton));
+					buyButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.dryncbutton));
 					buyButton.setPadding(20, 0, 0, 0);
 					Drawable leftDrawable = getResources().getDrawable(R.drawable.safari_white);
 					buyButton.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, null, null, null);

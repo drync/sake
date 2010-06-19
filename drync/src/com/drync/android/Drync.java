@@ -142,6 +142,7 @@ public class Drync extends Activity {
         {
 			public void run() {
 				DryncProvider.getInstance().getCorks(Drync.this, threadDeviceId);
+				DryncProvider.getInstance().myAcctGet(threadDeviceId);
 			}
 		};
 		t.start();

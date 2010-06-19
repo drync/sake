@@ -62,10 +62,14 @@ public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
 	static String DEV_SERVER_HOST="10.0.2.2";
-	static String USING_SERVER_HOST=TEST_SERVER_HOST;
+	static String USING_SERVER_HOST=SERVER_HOST;
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
+	
+	static String PRODUCT_ID_PAID = "wine";
+	static String PRODUCT_ID_FREE = "wine-free";
+	static String PRODUCT_ID = PRODUCT_ID_PAID;
 	
 	static String CORKLISTURL = "/corks?format=xml&device_id=";
 	
@@ -425,7 +429,7 @@ public class DryncProvider {
 		post.addHeader("Accept", "text/iphone");
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 		nvps.add(new BasicNameValuePair("device_id", devId));
-		nvps.add(new BasicNameValuePair("prod", "wine-free"));
+		nvps.add(new BasicNameValuePair("prod", PRODUCT_ID));
 
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -497,6 +501,101 @@ public class DryncProvider {
 					is.close();
 				} catch (IOException e) {
 					Log.w("StartupPost", "Error posting or reading Startup Post", e);
+				}
+		}
+
+		return null;
+	}
+	
+	public String myAcctGet(String deviceId) {
+		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
+		return myAcctGet(target, deviceId);
+	}
+	
+	public String myAcctGet(HttpHost target, String deviceId) {
+		String filename = DryncUtils.getCacheDir() + "myacct.html";
+		
+		File myacctfile = new File(filename);
+		
+		StringBuilder urlGet1 = new StringBuilder("/register");
+		urlGet1.append("?device_id=");
+		Document doc = null;
+		HttpClient client = new DefaultHttpClient();
+
+		// set up deviceId
+		String devId = deviceId;
+		String fake = "UDID-droid-fake-888888888888888888888888888890";
+		if ((deviceId == null) || (deviceId.equals("")))
+			devId = "UDID-droid-fake-" + System.currentTimeMillis();
+
+		urlGet1.append(devId).append("&prod=").append(PRODUCT_ID);
+		
+		Log.d("DryncPrvdr", "Get My Account Page: " + urlGet1.toString());
+		HttpGet get = new HttpGet(urlGet1.toString());
+		get.addHeader("X-UDID", devId);
+		get.addHeader("Accept", "text/iphone");
+		
+		boolean wroteContent = false;
+		InputStream is = null;
+		try {
+			HttpResponse response = client.execute(target, get);
+			HttpEntity entity = response.getEntity();
+
+			StatusLine sl = response.getStatusLine();
+			if (sl.getStatusCode() != 200)
+				return null;
+
+			if (entity != null) {
+				is = entity.getContent();
+
+				final char[] buffer = new char[0x10000];
+				StringBuilder out = new StringBuilder();
+				Reader in = new InputStreamReader(is, "UTF-8");
+				int read;
+				do 
+				{
+					read = in.read(buffer, 0, buffer.length);
+					if (read>0) {
+						String stringcontent = new String(buffer);
+						if (! stringcontent.trim().equals(""))
+						{
+							out.append(buffer, 0, read);
+							wroteContent = true;
+						}
+					}
+				}
+				while (read>=0);
+
+				if ((out.toString() != null) &&
+						(! out.toString().equals("")) && wroteContent)
+				{
+					
+					File outputFile = new File(filename);
+					//use buffering
+					Writer output = new BufferedWriter(new FileWriter(outputFile));
+					try {
+						//FileWriter always assumes default encoding is OK!
+						output.write( out.toString() );
+					}
+					finally {
+						output.close();
+					}
+
+				}
+				return out.toString();
+			}
+		}
+		catch( Exception e)
+		{
+			Log.e("StartupGet", "Error getting my account page", e);
+		}
+		finally
+		{
+			if (is != null)
+				try {
+					is.close();
+				} catch (IOException e) {
+					Log.w("StartupGet", "Error posting or reading Startup Get", e);
 				}
 		}
 

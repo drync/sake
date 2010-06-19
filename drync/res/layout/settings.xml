@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/settingsflipper" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/settingsflipper" android:layout_width="fill_parent" android:orientation="vertical"
+	android:layout_height="fill_parent" android:background="@drawable/wood2">
 
 	<LinearLayout android:id="@+id/twittersettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:visibility="visible"
-		android:background="@drawable/wood2">
+		android:layout_height="wrap_content" android:visibility="visible">
 
 		<RelativeLayout android:id="@+id/twitterSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
@@ -68,7 +67,11 @@
 	
 	<LinearLayout android:id="@+id/accountsettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:visibility="visible"
-		android:background="@drawable/wood2">
+		android:layout_height="50px" android:visibility="visible">
+		
+		<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="fill_parent" 
+				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
+				android:text="My Account" android:textColor="#FFFFFF"
+				android:gravity="center" android:background="@drawable/dryncbutton"/>
 	</LinearLayout>
-</ViewFlipper>
+</LinearLayout>

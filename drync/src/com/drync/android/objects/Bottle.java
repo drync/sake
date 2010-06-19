@@ -269,6 +269,7 @@ public class Bottle implements Parcelable {
 		out.writeInt(reviewCount);
 		//Review[] reviewarray = reviews.toArray(new Review[0]);
 		out.writeTypedList(reviews);
+		out.writeTypedList(sources);
 		
 	}
 	
@@ -291,6 +292,7 @@ public class Bottle implements Parcelable {
 		//Parcelable[] reviewsarray = in.readParcelableArray(Review.class.getClassLoader());
 		reviews = new ArrayList<Review>();
 		in.readTypedList(reviews, Review.CREATOR);//(ArrayList<Review>) Arrays.asList(reviewsarray); 
-		
+		sources = new ArrayList<Source>();
+		in.readTypedList(sources, Source.CREATOR);
 	}
 }

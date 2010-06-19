@@ -7,7 +7,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
@@ -17,6 +19,8 @@ public class DryncSettings extends DryncBaseActivity {
 	EditText usernameEdit;
 	EditText passwordEdit;
 	ToggleButton cellarTweetBtn;
+	
+	Button myAcctButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,8 @@ public class DryncSettings extends DryncBaseActivity {
 	     usernameEdit = (EditText)this.findViewById(R.id.usernameVal);
 	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal);
 	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal);
+	     
+	     myAcctButton = (Button)this.findViewById(R.id.acctSettingsBtn);
 	     
 	     String username = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, "");
 	     usernameEdit.setText(username);
@@ -41,6 +47,16 @@ public class DryncSettings extends DryncBaseActivity {
 	     
 	     boolean cellarTweet = settings.getBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, false);
 	     cellarTweetBtn.setChecked(cellarTweet);
+	     
+	     
+	     myAcctButton.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				Intent intent = new Intent();
+    			intent.setClass(DryncSettings.this, DryncMyAccountActivity.class);
+    			startActivity(intent);
+				
+			}});
 	     
 	}
 
