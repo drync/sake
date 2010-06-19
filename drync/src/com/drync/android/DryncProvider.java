@@ -32,11 +32,14 @@ import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
@@ -327,6 +330,7 @@ public class DryncProvider {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
 		dbAdapter.open();
+		dbAdapter.clearCorks(true);
 		Document doc = null;
 		
 		try {
@@ -358,10 +362,10 @@ public class DryncProvider {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
+			dbAdapter.close();
 		}
 		
-		dbAdapter.close();
+		
 		
 		return bottleList;
 	}
@@ -521,7 +525,9 @@ public class DryncProvider {
 		urlGet1.append("?device_id=");
 		Document doc = null;
 		HttpClient client = new DefaultHttpClient();
-
+		CookieStore cookieStore = new BasicCookieStore();
+		((DefaultHttpClient)client).setCookieStore(cookieStore);
+		
 		// set up deviceId
 		String devId = deviceId;
 		String fake = "UDID-droid-fake-888888888888888888888888888890";
@@ -541,10 +547,15 @@ public class DryncProvider {
 			HttpResponse response = client.execute(target, get);
 			HttpEntity entity = response.getEntity();
 
+			List<Cookie> cookies = cookieStore.getCookies();
+			DryncUtils.setCookieStore(cookieStore);
+			
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
 				return null;
-
+			
+			
+			
 			if (entity != null) {
 				is = entity.getContent();
 
@@ -702,7 +713,8 @@ public class DryncProvider {
 					} else if ("grape".equals(node.getNodeName())) {
 						bottle.setGrape(value);
 					} else if ("cork_rating".equals(node.getNodeName())) {
-						bottle.setCork_rating(Float.parseFloat(value));
+						if (value != null)
+							bottle.setCork_rating(Float.parseFloat(value));
 					} else if ("location".equals(node.getNodeName())) {
 						bottle.setLocation(value);
 					} else if ("public_note".equals(node.getNodeName())) {

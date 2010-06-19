@@ -916,6 +916,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			public void run()
 			{
+				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncBaseSearch.this);
 				try
 				{
 
@@ -930,7 +931,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 							(mobileinfo.isConnected())) ||
 							((wifiinfo != null) && (wifiinfo.isConnected())))
 					{
-						DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncBaseSearch.this);
+						
 						dbAdapter.open();
 
 						List<Cork> corks = dbAdapter.getAllCorksNeedingUpdates();
@@ -974,7 +975,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 						}
 						
-						dbAdapter.close();
+						
 						//	Arraylist<Cork> getAllCorksNeedingUpdates()
 					}
 					else
@@ -985,6 +986,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				catch (Exception e)
 				{
 					e.printStackTrace();
+				}
+				finally
+				{
+					dbAdapter.close();
 				}
 			}
 		};

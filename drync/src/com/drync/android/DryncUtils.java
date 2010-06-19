@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 
+import org.apache.http.client.CookieStore;
+
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Source;
@@ -23,7 +25,17 @@ public class DryncUtils {
 	private static StringBuilder builder = new StringBuilder();
 	private static String CACHE_DIRECTORY = null;
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
+	public static CookieStore cookieStore;
 	
+	
+	public static CookieStore getCookieStore() {
+		return cookieStore;
+	}
+
+	public static void setCookieStore(CookieStore cookieStore) {
+		DryncUtils.cookieStore = cookieStore;
+	}
+
 	private static String deviceId = null;
 	
 	//Shared Prefs

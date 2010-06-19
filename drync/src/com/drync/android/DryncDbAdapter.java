@@ -547,60 +547,67 @@ public class DryncDbAdapter
 
     public Cork getCorkByUUID(String uuId) throws SQLException 
     {
-    	Cursor mCursor =
-            db.query(true, DATABASE_TABLE, new String[] {
-               		KEY_ROWID,
-            	    KEY_CORK_ID,
-            	    KEY_CORK_UUID,
-            	    KEY_DESCRIPTION,
-            	    KEY_LOCATION,
-            	    KEY_CORK_RATING,
-            	    KEY_CORK_WANT,
-            	    KEY_CORK_OWN,
-            	    KEY_CORK_DRANK,
-            	    KEY_CORK_ORDERED,
-            	    KEY_CORK_PRICE,
-            	    KEY_CORK_YEAR,
-            	    KEY_CORK_POI,
-            	    KEY_CORK_BOTTLE_COUNT,
-            	    KEY_CORK_CREATED_AT,
-            	    KEY_CORK_LABEL,
-            	    KEY_PUBLIC_NOTE,
-            	    
-            	    KEY_BOTTLE_ID,
-            	    KEY_NAME,
-            	    KEY_YEAR,
-            	    KEY_REGION_PATH,
-            	    KEY_REGION,
-            	    KEY_GRAPE,
-            	    KEY_STYLE,
-            	    KEY_LABEL,
-            	    KEY_LABEL_THUMB,
-            	    KEY_PRICE,
-            	    KEY_RATING,
-            	    KEY_REVIEWCOUNT,
-            	    KEY_NEEDSSERVERUPDATE,
-            	    KEY_UPDATETYPE
-            		}, 
-            		KEY_CORK_UUID + "='" + uuId + "'", 
-            		null,
-            		null, 
-            		null, 
-            		null, 
-            		null);
-    if (mCursor != null && mCursor.getCount() > 0) {
-    
-        mCursor.moveToFirst();
-        Cork returnCork = null;
-        if (mCursor.getColumnCount() > 0)
-        {
-        	returnCork = buildCork(mCursor);	
-        }
-        mCursor.close();
-        
-        return returnCork; 
-    }
-    return null;
+    	Cursor mCursor = null;
+    	try
+    	{
+    		mCursor =
+    			db.query(true, DATABASE_TABLE, new String[] {
+    					KEY_ROWID,
+    					KEY_CORK_ID,
+    					KEY_CORK_UUID,
+    					KEY_DESCRIPTION,
+    					KEY_LOCATION,
+    					KEY_CORK_RATING,
+    					KEY_CORK_WANT,
+    					KEY_CORK_OWN,
+    					KEY_CORK_DRANK,
+    					KEY_CORK_ORDERED,
+    					KEY_CORK_PRICE,
+    					KEY_CORK_YEAR,
+    					KEY_CORK_POI,
+    					KEY_CORK_BOTTLE_COUNT,
+    					KEY_CORK_CREATED_AT,
+    					KEY_CORK_LABEL,
+    					KEY_PUBLIC_NOTE,
+
+    					KEY_BOTTLE_ID,
+    					KEY_NAME,
+    					KEY_YEAR,
+    					KEY_REGION_PATH,
+    					KEY_REGION,
+    					KEY_GRAPE,
+    					KEY_STYLE,
+    					KEY_LABEL,
+    					KEY_LABEL_THUMB,
+    					KEY_PRICE,
+    					KEY_RATING,
+    					KEY_REVIEWCOUNT,
+    					KEY_NEEDSSERVERUPDATE,
+    					KEY_UPDATETYPE
+    			}, 
+    			KEY_CORK_UUID + "='" + uuId + "'", 
+    			null,
+    			null, 
+    			null, 
+    			null, 
+    			null);
+    		if (mCursor != null && mCursor.getCount() > 0) {
+
+    			mCursor.moveToFirst();
+    			Cork returnCork = null;
+    			if (mCursor.getColumnCount() > 0)
+    			{
+    				returnCork = buildCork(mCursor);	
+    			}
+    			return returnCork; 
+    		}
+    		return null;
+    	}
+    	finally
+    	{
+    		if (mCursor != null)
+    			mCursor.close();
+    	}
     }
     //---retrieves a particular title---
     public Cursor getCork(long rowId) throws SQLException 
@@ -649,6 +656,7 @@ public class DryncDbAdapter
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
+        mCursor.close();
         return mCursor;
     }
 
@@ -698,6 +706,6 @@ public class DryncDbAdapter
         		KEY_ROWID + "=" + cork.get_id(), null);
         
         return rowsModified > 0;
-    }
+    }   
 }
 
