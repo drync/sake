@@ -14,9 +14,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 import android.app.ProgressDialog;
@@ -43,6 +46,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ClearableSearch;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -59,6 +63,7 @@ import com.drync.android.ui.RemoteImageView;
 
 public class DryncCellar extends DryncBaseActivity {
 
+	public static final String LOG_IDENTIFIER = "DryncCellar";
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Cork> mResults = null;
@@ -141,6 +146,7 @@ private ProgressDialog progressDlg = null;
 		
 		if (mAdapter == null)
 		{
+			Collections.sort(mResults, new CorkComparator());
 			mAdapter = new CorkAdapter(mResults);
 			mList.setAdapter(mAdapter);
 			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -158,6 +164,7 @@ private ProgressDialog progressDlg = null;
 		else
 		{
 			mAdapter.mWines.clear();
+			mAdapter.viewHash.clear();
 			mAdapter.mWines.addAll(mResults);
 		}
 
@@ -269,7 +276,7 @@ private ProgressDialog progressDlg = null;
 		{
 			cellarFilterButtons.setVisibility(View.VISIBLE);
 			
-			final EditText searchfield = (EditText) findViewById(R.id.searchentry);
+			final ClearableSearch searchControl = (ClearableSearch) findViewById(R.id.clrsearch);
 			final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
 			final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
 			final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
@@ -277,7 +284,7 @@ private ProgressDialog progressDlg = null;
 			
 			myWinesButton.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					String searchterm = searchfield.getText().toString();
+					String searchterm = searchControl.getEditableText().toString();
 					progressDlg =  new ProgressDialog(DryncCellar.this);
 					progressDlg.setTitle("Dryncing...");
 					progressDlg.setMessage("Retrieving corks...");
@@ -291,7 +298,7 @@ private ProgressDialog progressDlg = null;
 			
 			iOwnButton.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					String searchterm = searchfield.getText().toString();
+					String searchterm = searchControl.getEditableText().toString();
 					progressDlg =  new ProgressDialog(DryncCellar.this);
 					progressDlg.setTitle("Dryncing...");
 					progressDlg.setMessage("Retrieving corks...");
@@ -305,7 +312,7 @@ private ProgressDialog progressDlg = null;
 			
 			iWantButton.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					String searchterm = searchfield.getText().toString();
+					String searchterm = searchControl.getEditableText().toString();
 					progressDlg =  new ProgressDialog(DryncCellar.this);
 					progressDlg.setTitle("Dryncing...");
 					progressDlg.setMessage("Retrieving corks...");
@@ -319,7 +326,7 @@ private ProgressDialog progressDlg = null;
 			
 			iDrankButton.setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					String searchterm = searchfield.getText().toString();
+					String searchterm = searchControl.getEditableText().toString();
 					progressDlg =  new ProgressDialog(DryncCellar.this);
 					progressDlg.setTitle("Dryncing...");
 					progressDlg.setMessage("Retrieving corks...");
@@ -333,19 +340,19 @@ private ProgressDialog progressDlg = null;
 			
 			if (lastSelectedCellar == -1)
 			{
-				searchfield.setText(lastFilter);
+				
+				searchControl.setText(lastFilter);
 				myWinesButton.performClick();
 			}
 		}
-		
-		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
+		final ClearableSearch clearableSearchCtrl = (ClearableSearch)findViewById(R.id.clrsearch);
 		
 		if (lastFilter != null)
 		{
-			searchfield.setText(lastFilter);
+			clearableSearchCtrl.setText(lastFilter);
 		}
 		
-		ImageButton clrFilterBtn = (ImageButton)findViewById(R.id.clearFilterBtn);
+		/* ImageButton clrFilterBtn = (ImageButton)findViewById(R.id.clearFilterBtn);
 		clrFilterBtn.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
@@ -357,9 +364,24 @@ private ProgressDialog progressDlg = null;
 				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progressDlg.show();
 				DryncCellar.this.startQueryOperation("");
-			}});
+			}});*/
 		
-		searchfield.setOnKeyListener(new OnKeyListener() {
+		clearableSearchCtrl.setOnCommitListener(new ClearableSearch.OnCommitListener(){
+
+			public boolean onCommit(View arg0, String text) {
+				String searchterm = text;
+				
+				progressDlg =  new ProgressDialog(DryncCellar.this);
+				progressDlg.setTitle("Dryncing...");
+				progressDlg.setMessage("Retrieving corks...");
+				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDlg.show();
+				DryncCellar.this.startQueryOperation(searchterm);
+				return true;
+			}
+
+			});
+		/*searchfield.setOnKeyListener(new OnKeyListener() {
 
 			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
 				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -375,7 +397,7 @@ private ProgressDialog progressDlg = null;
 						return true;
 			        }
 			        return false;
-			}});
+			}});*/
 	}
 
 	private void launchCork(Cork bottle) {
@@ -391,6 +413,8 @@ private ProgressDialog progressDlg = null;
 		private final Drawable defaultIcon;
 		boolean mDone = false;
 		boolean mFlinging = false;
+		
+		Hashtable<String, View> viewHash = new Hashtable<String, View>(); 
 		
 		public CorkAdapter(List<Cork> mResults) {
 			mWines = mResults;
@@ -412,12 +436,12 @@ private ProgressDialog progressDlg = null;
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = (convertView != null) ? (View) convertView :
+			Cork wine = mWines.get(position);
+			View oldView = viewHash.get(wine.getCork_uuid());
+			View view = (oldView != null) ?  oldView :
 				createView(parent);
 			
-			Log.d("DryncMain", "getview position: " + position);
-			
-			Cork wine = mWines.get(position);
+			viewHash.put(wine.getCork_uuid(), view);
 			
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
@@ -601,6 +625,17 @@ private ProgressDialog progressDlg = null;
 		{
 			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
 		}		
+	}
+	
+	private class CorkComparator implements Comparator<Cork>
+	{
+		public int compare(Cork object1, Cork object2) {
+			Long obj1Id = object1.getCork_id();
+			Long obj2Id = object2.getCork_id();
+			
+			return obj1Id.compareTo(obj2Id);
+		}
+		
 	}
 }
 

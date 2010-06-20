@@ -59,6 +59,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ClearableSearch;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -74,6 +75,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
+import android.widget.ClearableSearch.OnCommitListener;
 import android.widget.RelativeLayout.LayoutParams;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
@@ -82,6 +84,8 @@ import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
 
 public class DryncBaseSearch extends DryncBaseActivity {
+	
+	public static final String LOG_IDENTIFIER = "DryncBaseSearch";
 
 	private ListView mList;
 	final Handler mHandler = new Handler();
@@ -186,7 +190,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		
-		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
+		final ClearableSearch searchholder = (ClearableSearch) findViewById(R.id.clrsearch);
+		
+		searchholder.setCommitOnClear(false);
+		
 		final LinearLayout topWinesBtnHolder = (LinearLayout) findViewById(R.id.topwinesbuttons);
 		
 		if (! displaySearch)
@@ -254,29 +261,23 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				popButton.performClick();
 		}
 		
-		final EditText searchfield = (EditText) findViewById(R.id.searchentry);
-		
 		if (lastQuery != null)
 		{
-			searchfield.setText(lastQuery);
+			searchholder.setText(lastQuery);
 		}
 		
-		searchfield.setOnKeyListener(new OnKeyListener() {
+		searchholder.setOnCommitListener(new OnCommitListener(){
 
-			public boolean onKey(View arg0, int keyCode, KeyEvent event) {
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-			            (keyCode == KeyEvent.KEYCODE_ENTER)) {
-			        	String searchterm = searchfield.getText().toString();
+			public boolean onCommit(View arg0, String text) {
+				String searchterm = searchholder.getEditableText().toString();
 
-						progressDlg =  new ProgressDialog(DryncBaseSearch.this);
-						progressDlg.setTitle("Dryncing...");
-						progressDlg.setMessage("Retrieving wines...");
-						progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-						progressDlg.show();
-						DryncBaseSearch.this.startQueryOperation(searchterm);
-						return true;
-			        }
-			        return false;
+				progressDlg =  new ProgressDialog(DryncBaseSearch.this);
+				progressDlg.setTitle("Dryncing...");
+				progressDlg.setMessage("Retrieving wines...");
+				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDlg.show();
+				DryncBaseSearch.this.startQueryOperation(searchterm);
+				return true;
 			}});
 		
 		if (displaySearch)
@@ -664,7 +665,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			View view = (convertView != null) ? (View) convertView :
 				createView(parent);
 			
-			Log.d("DryncMain", "getview position: " + position);
+			Log.d(LOG_IDENTIFIER, "getview position: " + position);
 			
 			Bottle wine = mWines.get(position);
 			
