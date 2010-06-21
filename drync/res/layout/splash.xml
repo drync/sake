@@ -5,6 +5,6 @@
     android:layout_height="fill_parent"
     >
     <ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
-    android:layout_height="fill_parent" android:src="@drawable/default22"
+    android:layout_height="fill_parent" android:src="@drawable/default_pro_droid"
     android:layout_gravity="center"/>
 </LinearLayout>
