@@ -101,11 +101,6 @@ public class DryncMyAccountActivity extends Activity {
 	    		DryncMyAccountActivity.this.finish();
 	    		return true;
 	    	}
-	    	
-	    	if (url.contains("registration_request[device_id]"))
-	    	{
-	    		url.replaceAll("registration_request[device_id]=\\d*&", "bingo&");
-	    	}
 
 	        view.loadUrl(url);
 	        return true;
