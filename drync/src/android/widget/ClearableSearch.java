@@ -74,12 +74,18 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     public ClearableSearch(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+    
+    protected void inflateLayout(Context context)
+    {
+    	LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.clearablesearch, this, true);
+    }
 
     @SuppressWarnings({"UnusedDeclaration"})
     public ClearableSearch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.clearablesearch, this, true);
+        
+        inflateLayout(context);
         
         mText = (EditText) findViewById(R.id.searchentry);
         clearButton = (ImageButton)findViewById(R.id.clearFilterBtn);

@@ -18,8 +18,7 @@ public abstract class DryncBaseActivity extends Activity {
 	public static final int TOP_WINE_ID = Menu.FIRST + 2;
 	public static final int SETTINGS_ID = Menu.FIRST + 3;
 	
-	public static final int ADDTOCELLAR_RESULT = 1;
-	
+	public static final int ADDTOCELLAR_RESULT = 1;	
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);

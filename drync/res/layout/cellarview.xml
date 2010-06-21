@@ -21,8 +21,8 @@
 			android:layout_gravity="right" android:layout_weight=".10" android:src="@drawable/icon_clear" />
 	</LinearLayout> -->
 	
-	<android.widget.ClearableSearch android:id="@+id/clrsearch" android:layout_width="fill_parent"
-	android:layout_height="fill_parent"></android.widget.ClearableSearch>
+	<android.widget.TwoBtnClearableSearch android:id="@+id/clrsearch" android:layout_width="fill_parent"
+	android:layout_height="fill_parent"></android.widget.TwoBtnClearableSearch>
 	
 	<LinearLayout android:id="@+id/cellarfilterbuttons"
 		android:visibility="invisible" android:orientation="horizontal"

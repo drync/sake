@@ -9,10 +9,10 @@ import android.os.Parcelable;
 public class Bottle implements Parcelable {
 	long bottle_id;
 	String name;
-	int year;
+	int year = 2000;
 	String region_path;
-	String region;
-	String grape;
+	String region = "";
+	String grape = "";
 	String style;
 	String winery_name;
 	String label;

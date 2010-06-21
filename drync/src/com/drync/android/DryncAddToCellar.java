@@ -372,7 +372,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			ratingBar.setRating(((Cork)mBottle).getCork_rating());
 			
 			// set style field:
-			styleVal.setSelection(styleSpnAdapter.getPosition(((Cork)mBottle).getStyle().toString()));
+			if (((Cork)mBottle).getStyle() != null)
+				styleVal.setSelection(styleSpnAdapter.getPosition(((Cork)mBottle).getStyle().toString()));
 			
 			tastingNotesVal.setText(((Cork)mBottle).getPublic_note());
 			privateNotesVal.setText(((Cork)mBottle).getDescription());

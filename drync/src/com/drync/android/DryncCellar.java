@@ -54,6 +54,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.TwoBtnClearableSearch;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -215,11 +216,15 @@ private ProgressDialog progressDlg = null;
 
 	protected void startQueryOperation(String query)
 	{
+		Log.d(LOG_IDENTIFIER, "Querying: '" + query + "'");
+		
 		startQueryOperation(DryncDbAdapter.FILTER_TYPE_NONE, query);
 	}
 	
 	protected void startQueryOperation(int filterType, String query)
 	{
+		Log.d(LOG_IDENTIFIER, "Querying: '" + query + "' filter type: " + filterType);
+		
 		final String curQuery = query;
 		final int curFilterType = filterType;
 		
@@ -276,7 +281,7 @@ private ProgressDialog progressDlg = null;
 		{
 			cellarFilterButtons.setVisibility(View.VISIBLE);
 			
-			final ClearableSearch searchControl = (ClearableSearch) findViewById(R.id.clrsearch);
+			final TwoBtnClearableSearch searchControl = (TwoBtnClearableSearch) findViewById(R.id.clrsearch);
 			final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
 			final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
 			final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
@@ -345,28 +350,24 @@ private ProgressDialog progressDlg = null;
 				myWinesButton.performClick();
 			}
 		}
-		final ClearableSearch clearableSearchCtrl = (ClearableSearch)findViewById(R.id.clrsearch);
+		final TwoBtnClearableSearch clearableSearchCtrl = (TwoBtnClearableSearch)findViewById(R.id.clrsearch);
 		
 		if (lastFilter != null)
 		{
 			clearableSearchCtrl.setText(lastFilter);
 		}
 		
-		/* ImageButton clrFilterBtn = (ImageButton)findViewById(R.id.clearFilterBtn);
-		clrFilterBtn.setOnClickListener(new OnClickListener() {
+		ImageButton addBtn = clearableSearchCtrl.getAddButton();
+		
+		addBtn.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View arg0) {
-				//TODO: @mbrindam prompt to clear filter
-				searchfield.setText("");
-				progressDlg =  new ProgressDialog(DryncCellar.this);
-				progressDlg.setTitle("Dryncing...");
-				progressDlg.setMessage("Retrieving corks...");
-				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progressDlg.show();
-				DryncCellar.this.startQueryOperation("");
-			}});*/
+				Intent twIntent = new Intent(DryncCellar.this, DryncAddToCellar.class);
+				twIntent.putExtra("bottle", new Bottle());
+				startActivityForResult(twIntent, ADDTOCELLAR_RESULT);  
+			}});
 		
-		clearableSearchCtrl.setOnCommitListener(new ClearableSearch.OnCommitListener(){
+		clearableSearchCtrl.setOnCommitListener(new TwoBtnClearableSearch.OnCommitListener(){
 
 			public boolean onCommit(View arg0, String text) {
 				String searchterm = text;
