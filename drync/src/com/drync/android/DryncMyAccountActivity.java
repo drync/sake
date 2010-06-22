@@ -73,23 +73,25 @@ public class DryncMyAccountActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		CookieStore cookieStore = DryncUtils.getCookieStore();
-		CookieManager cookieManager = CookieManager.getInstance();
-		cookieManager.removeSessionCookie();
-		List<Cookie> cookies = cookieStore.getCookies();
-		for (Cookie cookie : cookies)
+		if (cookieStore != null)
 		{
-			StringBuilder cookieUrl = new StringBuilder("http://");
-			cookieUrl.append(cookie.getDomain()).append("/");
-			StringBuilder cookieString = new StringBuilder();
-			cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; domain=").append(
-					cookie.getDomain());
-			
-			cookieManager.setCookie(cookieUrl.toString(), cookieString.toString());
-			CookieSyncManager.getInstance().sync(); 
+			CookieManager cookieManager = CookieManager.getInstance();
+			cookieManager.removeSessionCookie();
+			List<Cookie> cookies = cookieStore.getCookies();
+			for (Cookie cookie : cookies)
+			{
+				StringBuilder cookieUrl = new StringBuilder("http://");
+				cookieUrl.append(cookie.getDomain()).append("/");
+				StringBuilder cookieString = new StringBuilder();
+				cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; domain=").append(
+						cookie.getDomain());
+
+				cookieManager.setCookie(cookieUrl.toString(), cookieString.toString());
+				CookieSyncManager.getInstance().sync(); 
+			}
 		}
-		
 		CookieSyncManager.getInstance().startSync();
 	}
 
