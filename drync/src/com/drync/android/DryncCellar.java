@@ -170,9 +170,10 @@ private ProgressDialog progressDlg = null;
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
-		//case EDIT_ID:
-		//	editNote(info.id);
-		//	return true;
+		case EDIT_ID:
+			Intent twIntent = new Intent(DryncCellar.this, DryncAddToCellar.class);
+			twIntent.putExtra("cork", mAdapter.mWines.get(info.position));
+			startActivityForResult(twIntent, ADDTOCELLAR_RESULT);  
 		case DELETE_ID:
 			deleteCork(mAdapter.mWines.get(info.position));
 			return true;
