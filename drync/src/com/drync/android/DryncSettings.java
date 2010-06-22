@@ -31,7 +31,7 @@ public class DryncSettings extends DryncBaseActivity {
 	     
 	     usernameEdit = (EditText)this.findViewById(R.id.usernameVal);
 	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal);
-	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal);
+	   //  cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal);
 	     
 	     myAcctButton = (Button)this.findViewById(R.id.acctSettingsBtn);
 	     
@@ -45,8 +45,8 @@ public class DryncSettings extends DryncBaseActivity {
 	     else
 	    	 passwordEdit.setText(password);
 	     
-	     boolean cellarTweet = settings.getBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, false);
-	     cellarTweetBtn.setChecked(cellarTweet);
+	     /*boolean cellarTweet = settings.getBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, false);
+	     cellarTweetBtn.setChecked(cellarTweet);*/
 	     
 	     
 	     myAcctButton.setOnClickListener(new OnClickListener(){
