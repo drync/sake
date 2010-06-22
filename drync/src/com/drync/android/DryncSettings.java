@@ -77,8 +77,8 @@ public class DryncSettings extends DryncBaseActivity {
 			editor.putString(DryncUtils.TWITTER_PASSWORD_PREF, encryptedPw);
 		}
 		
-		boolean cellarTweet = cellarTweetBtn.isChecked();
-			editor.putBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, cellarTweet);
+		//boolean cellarTweet = cellarTweetBtn.isChecked();
+			//editor.putBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, cellarTweet);
 		
 		editor.commit();
 	}
