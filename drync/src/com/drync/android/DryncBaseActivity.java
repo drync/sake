@@ -1,5 +1,7 @@
 package com.drync.android;
 
+import com.flurry.android.FlurryAgent;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -112,5 +114,18 @@ public abstract class DryncBaseActivity extends Activity {
     	Intent setIntent = new Intent(this, DryncCellar.class);
     	startActivity(setIntent);
     }
+	
+	public void onStart()
+	{
+	   super.onStart();
+	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");
+	   
+	}
+	
+	public void onStop()
+	{
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
 
 }
