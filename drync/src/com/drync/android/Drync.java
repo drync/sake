@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.client.CookieStore;
+import org.apache.http.cookie.Cookie;
 
 import com.drync.android.helpers.CSVReader;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,11 +28,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class Drync extends Activity {
 
@@ -125,18 +134,22 @@ public class Drync extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        CookieSyncManager.createInstance(this);
+		CookieSyncManager.getInstance().startSync();
+		
         // call this to initialize the cache directory
         try {
 			DryncUtils.getCacheDir(this);
 		} catch (DryncConfigException e) {
 			Log.d("Drync", "Error initializing the CacheDirectory. - " + e.getMessage());
 		}
+		
         setContentView(R.layout.splash);
         splash = (ImageView) findViewById(R.id.splashscreen);
         
         String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
         String register = DryncProvider.getInstance().startupPost(deviceId);
-        
+
         final String threadDeviceId = deviceId;
         Thread t = new Thread()
         {
@@ -148,6 +161,7 @@ public class Drync extends Activity {
 		t.start();
 		
         registerTxt = register;
+        
      // Restore preferences
         SharedPreferences settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
         boolean showIntro = settings.getBoolean(DryncUtils.SHOW_INTRO_PREF, true);
@@ -165,6 +179,11 @@ public class Drync extends Activity {
         
         splashHandler.sendMessageDelayed(msg, SPLASHTIME);
     }
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	}
+
 	
 	@Override
     protected void onStop(){
@@ -211,8 +230,39 @@ public class Drync extends Activity {
 	    }
 
 		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			// TODO Auto-generated method stub
+			super.onPageStarted(view, url, favicon);
+		}
+
+		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
+			
+			CookieSyncManager.getInstance().sync();
+			
+			if (url.endsWith("#___1__"))
+			{
+				Toast acctCreated = Toast.makeText(Drync.this, "Your account has been created.", Toast.LENGTH_LONG);
+				acctCreated.show();
+				
+				Thread thread = new Thread()
+				{
+
+					@Override
+					public void run() {
+						super.run();
+						// redo this to reset cookies.
+						DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(Drync.this.getContentResolver(), Drync.this));
+					}
+				};
+				
+				thread.start();
+				
+				Message msg = new Message();
+    			msg.what = Drync.STARTMAIN;
+    			Drync.this.splashHandler.sendMessage(msg);
+			}
 		}
 
 		@Override
@@ -226,4 +276,36 @@ public class Drync extends Activity {
 			super.onUnhandledKeyEvent(view, event);
 		}
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		CookieStore cookieStore = DryncUtils.getCookieStore();
+		if (cookieStore != null)
+		{
+			CookieManager cookieManager = CookieManager.getInstance();
+			cookieManager.removeSessionCookie();
+			List<Cookie> cookies = cookieStore.getCookies();
+			for (Cookie cookie : cookies)
+			{
+				StringBuilder cookieUrl = new StringBuilder("http://");
+				cookieUrl.append(cookie.getDomain()).append("/");
+				StringBuilder cookieString = new StringBuilder();
+				cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; domain=").append(
+						cookie.getDomain());
+
+				cookieManager.setCookie(cookieUrl.toString(), cookieString.toString());
+				CookieSyncManager.getInstance().sync(); 
+			}
+		}
+		CookieSyncManager.getInstance().startSync();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		CookieSyncManager.getInstance().stopSync();
+	}
+
 }

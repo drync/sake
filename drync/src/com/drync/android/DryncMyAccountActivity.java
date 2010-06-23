@@ -9,12 +9,15 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Message;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class DryncMyAccountActivity extends Activity {
 
@@ -112,6 +115,27 @@ public class DryncMyAccountActivity extends Activity {
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
 			CookieSyncManager.getInstance().sync();
+			
+			if (url.endsWith("#___1__"))
+			{
+				Toast acctCreated = Toast.makeText(DryncMyAccountActivity.this, "Your account has been created.", Toast.LENGTH_LONG);
+				acctCreated.show();
+				
+				Thread thread = new Thread()
+				{
+
+					@Override
+					public void run() {
+						super.run();
+						// redo this to reset cookies.
+						DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(DryncMyAccountActivity.this.getContentResolver(), DryncMyAccountActivity.this));
+					}
+				};
+				
+				thread.start();
+				
+				DryncMyAccountActivity.this.finish();
+			}
 		}
 
 		@Override
@@ -120,4 +144,8 @@ public class DryncMyAccountActivity extends Activity {
 			super.onReceivedError(view, errorCode, description, failingUrl);
 		}
 	}
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+		  super.onConfigurationChanged(newConfig);
+		}
 }

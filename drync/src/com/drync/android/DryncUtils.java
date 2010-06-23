@@ -87,10 +87,13 @@ public class DryncUtils {
 	
 	public static String decryptTwitterPassword(String encrypted)
 	{
-		try {
-			return SimpleCrypto.decrypt(DryncUtils.TWITTER_PW_ENCRYPT_SEED, encrypted);
-		} catch (Exception e) {
-			Log.e("DryncUtil", "Could not decrypt password!", e);
+		if ((encrypted != null) && (! encrypted.equals("")))
+		{
+			try {
+				return SimpleCrypto.decrypt(DryncUtils.TWITTER_PW_ENCRYPT_SEED, encrypted);
+			} catch (Exception e) {
+				Log.e("DryncUtil", "Could not decrypt password!", e);
+			}
 		}
 		return null;
 	}
