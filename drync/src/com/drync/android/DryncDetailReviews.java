@@ -121,13 +121,13 @@ public class DryncDetailReviews extends DryncBaseActivity {
 		
 		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+		/*if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 		
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
@@ -518,13 +518,13 @@ public class DryncDetailReviews extends DryncBaseActivity {
 		super.onResume();
 		
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+		/*if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 	}
 }
 

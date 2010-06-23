@@ -870,13 +870,13 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		super.onResume();
 		
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+		/*if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 	}
 	
 	private void detailSelectedTopWineButton(Button popButton, Button featButton, Button mwButton)

@@ -44,10 +44,10 @@ public class DryncUtils {
 	public static final String SHOW_INTRO_PREF = "showIntro";
 	public static final String LAST_QUERY_PREF = "lastQuery";
 	public static final String LAST_FILTER_PREF = "lastFilter";
-	public static final String TWITTER_USERNAME_PREF = "twitter_username";
+	/*public static final String TWITTER_USERNAME_PREF = "twitter_username";
 	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
 	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
-	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";
+	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";*/
 	public static final String UUID_KEY = "UuidKey";
 	public static final String LAST_UUID_VAL = "lastUuidVal";
 
@@ -75,7 +75,7 @@ public class DryncUtils {
 		return builder.toString();
 	}
 
-	public static String encryptTwitterPassword(String password)
+	/*public static String encryptTwitterPassword(String password)
 	{
 		try {
 			return SimpleCrypto.encrypt(DryncUtils.TWITTER_PW_ENCRYPT_SEED, password);
@@ -83,9 +83,9 @@ public class DryncUtils {
 			Log.e("DryncUtil", "Could not encrypt password!", e);
 		}
 		return null;
-	}
+	}*/
 	
-	public static String decryptTwitterPassword(String encrypted)
+	/*public static String decryptTwitterPassword(String encrypted)
 	{
 		if ((encrypted != null) && (! encrypted.equals("")))
 		{
@@ -96,7 +96,7 @@ public class DryncUtils {
 			}
 		}
 		return null;
-	}
+	}*/
 	public static String getCacheDir()
 	{
 		try {

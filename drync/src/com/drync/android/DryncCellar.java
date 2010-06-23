@@ -568,13 +568,13 @@ private ProgressDialog progressDlg = null;
 		super.onResume();
 		
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+	/*	if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 	}
 	
 	private void detailSelectedCellarButton(Button mainButton, Button ownButton, Button wantButton, Button drankButton)

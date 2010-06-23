@@ -4,7 +4,7 @@
 	android:id="@+id/settingsflipper" android:layout_width="fill_parent" android:orientation="vertical"
 	android:layout_height="fill_parent" android:background="@drawable/wood2">
 
-	<LinearLayout android:id="@+id/twittersettings"
+	<!-- <LinearLayout android:id="@+id/twittersettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="visible">
 
@@ -47,9 +47,9 @@
 				android:inputType="textPassword" android:textSize="16px"
 				android:layout_toRightOf="@id/passwordLbl"
 				android:layout_alignBaseline="@id/passwordLbl" android:singleLine="true"
-				android:layout_alignLeft="@id/usernameVal" />
+				android:layout_alignLeft="@id/usernameVal" /> 
 
-		<!-- 	<TextView android:id="@+id/cellarTweetsLbl"
+			<TextView android:id="@+id/cellarTweetsLbl"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true" android:layout_below="@id/passwordLbl"
 				android:textColor="#000000" android:textSize="18px" 
@@ -60,10 +60,10 @@
 				android:layout_width="wrap_content" android:layout_height="20px" 
 				android:layout_below="@id/passwordVal" android:layout_marginTop="10px"
 				android:layout_toRightOf="@id/cellarTweetsLbl" android:layout_marginLeft="10px" 
-				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" /> -->
+				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" /> 
 		
-		</RelativeLayout> 
-	</LinearLayout>
+	 	</RelativeLayout> 
+	</LinearLayout> -->
 	
 	<LinearLayout android:id="@+id/accountsettings"
 		android:orientation="vertical" android:layout_width="fill_parent"

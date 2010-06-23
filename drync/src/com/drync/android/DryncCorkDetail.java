@@ -145,13 +145,13 @@ public class DryncCorkDetail extends DryncBaseActivity {
 		
 		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+		/*if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 		
 		Bundle extras = getIntent().getExtras();
 		Cork cork = (Cork) (extras != null ? extras.getParcelable("bottle") : null);
@@ -197,7 +197,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			
 			//TextView reviewCount = (TextView) detailView.findViewById(R.id.reviewCount);
 			
-			Button btnTweet = (Button)detailView.findViewById(R.id.tweet);
+			/*Button btnTweet = (Button)detailView.findViewById(R.id.tweet);*/
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
 					
 			CheckBox drankCheckbox = (CheckBox)detailView.findViewById(R.id.drankCheckbox);
@@ -344,7 +344,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				});
 			}
 
-			if (btnTweet != null)
+			/*if (btnTweet != null)
 			{
 				btnTweet.setOnClickListener(new OnClickListener()
 				{
@@ -384,7 +384,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 							}
 						}
 					}});
-			}
+			}*/
 
 			if (buyBtnSection != null)
 			{
@@ -731,13 +731,13 @@ public class DryncCorkDetail extends DryncBaseActivity {
 		super.onResume();
 		
 		// we need to check for changes to twitter settings.
-		if (settings != null)
+		/*if (settings != null)
 		{
 			userTwitterUsername = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, null);
 			String encryptedTwitterPw = settings.getString(DryncUtils.TWITTER_PASSWORD_PREF, null);
 			if (encryptedTwitterPw != null)
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
-		}
+		}*/
 	}
 }
 

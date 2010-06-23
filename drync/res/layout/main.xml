@@ -264,7 +264,7 @@
 				
 			</RelativeLayout>		
 			
-			<RelativeLayout android:id="@+id/socialSection"
+			<!-- <RelativeLayout android:id="@+id/socialSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
 				android:layout_marginTop="25px"
@@ -275,7 +275,7 @@
 				android:gravity="center" android:background="@drawable/mybutton_background" 
 				android:textColor="#FFFFFF" android:text="Twitter: I am drinking this wine" 
 				android:drawableLeft="@drawable/twitter" android:paddingLeft="20px" />
-			</RelativeLayout>
+			</RelativeLayout> -->
 			
 			<RelativeLayout android:id="@+id/buySection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
