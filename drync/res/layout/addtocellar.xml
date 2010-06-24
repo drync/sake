@@ -51,7 +51,7 @@
 					android:background="#FFFFFF" />
 
 				<EditText android:id="@+id/atcWineName" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:layout_weight="1"
+					android:layout_height="wrap_content" android:layout_weight="0"
 					android:layout_toRightOf="@id/atcWineThumb" android:singleLine="false"
 					android:layout_alignParentRight="true"
 					android:layout_alignParentTop="true"  />
@@ -76,8 +76,9 @@
 					android:singleLine="true" android:text="Year" />
 					
 				<AutoCompleteTextView android:id="@+id/atcYearVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:layout_toRightOf="@id/atcYearLbl" android:layout_alignParentRight="true"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:maxWidth="100dip" android:minWidth="100dip"
+					android:layout_toRightOf="@id/atcYearLbl" 
 					android:singleLine="true" android:layout_alignBaseline="@id/atcYearLbl"  />
 					
 				<TextView android:id="@+id/atcPriceLbl"
@@ -90,9 +91,10 @@
 					android:singleLine="true" android:text="Price" />
 					
 				<EditText android:id="@+id/atcPriceVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:layout_below="@id/atcYearVal"
-					android:layout_toRightOf="@id/atcPriceLbl" android:layout_alignParentRight="true"
+					android:maxWidth="100dip" android:minWidth="100dip"
+					android:layout_toRightOf="@id/atcPriceLbl" 
 					android:singleLine="true" android:layout_alignLeft="@id/atcYearVal" 
 					android:layout_alignBaseline="@id/atcPriceLbl"/>
 
@@ -117,8 +119,9 @@
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:singleLine="true" android:gravity="left"  />  -->
 					
-					<AutoCompleteTextView android:id="@+id/atcVarietalVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					<AutoCompleteTextView android:id="@+id/atcVarietalVal" 
+					android:maxWidth="200dip" android:minWidth="100dip"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:singleLine="true" android:gravity="left"  />	
 				</TableRow>
 				
@@ -130,7 +133,8 @@
 					/>
 					
 					<Spinner android:id="@+id/atcStyleVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:maxWidth="200dip" android:minWidth="100dip"
 					android:gravity="left" android:drawSelectorOnTop="true"
 					android:prompt="@string/style_prompt"  />	
 				</TableRow>
@@ -143,7 +147,8 @@
 					/>
 					
 					<EditText android:id="@+id/atcRegionVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:maxWidth="200dip" android:minWidth="100dip"
 					android:singleLine="true" android:gravity="left"  />	
 				</TableRow>
 			
@@ -186,7 +191,8 @@
 					android:singleLine="true" android:text="Location Bought or Drank:" /> 
 					
 				<EditText android:id="@+id/atcLocationVal"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:maxWidth="200dip" android:minWidth="100dip"
 					android:paddingTop="5px" android:background="@drawable/rndborder" 
 					android:layout_below="@id/locationHdr" android:singleLine="true" />	
 			
