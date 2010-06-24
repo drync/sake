@@ -155,25 +155,22 @@
 		</RelativeLayout>
 		
 		<!-- Rating Style Section -->
-			<TableLayout android:id="@+id/clrRtgSection"
+			<LinearLayout android:id="@+id/clrRtgSection" android:orientation="vertical"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
-				android:layout_alignParentLeft="true" android:layout_height="wrap_content" android:paddingTop="10px"
-				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:stretchColumns="1">
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginBottom="20dip">
 				
-				<TableRow>
-					<TextView android:id="@+id/clrRatingLbl"
+				<TextView android:id="@+id/clrRatingLbl" android:layout_width="fill_parent" android:layout_height="wrap_content"
 						android:text="Rating:"  android:textColor="#000000" android:textSize="12px"
 					android:typeface="sans" android:ellipsize="none" android:gravity="left"
 					android:singleLine="true" 
 					/> 
-				</TableRow>
 				
-				<TableRow>
-					<RatingBar android:id="@+id/clrRatingVal" android:numStars="5"         
-					style="@style/Qype.RatingBarSmall" android:gravity="center" android:isIndicator="true"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"/>	
-				</TableRow>
-			</TableLayout>
+				<RatingBar android:id="@+id/clrRatingVal" android:numStars="5"         
+					style="?android:attr/ratingBarStyle" android:gravity="center" android:isIndicator="true"
+					android:layout_width="wrap_content" android:layout_height="fill_parent"/>	
+				
+			</LinearLayout>
 
 		<!-- Other Information section -->
 		<RelativeLayout android:id="@+id/locationSection"
