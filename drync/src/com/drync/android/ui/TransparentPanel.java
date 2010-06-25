@@ -12,11 +12,15 @@ public class TransparentPanel extends LinearLayout {
 
 	public TransparentPanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.setClickable(true);
 	}
 
 	public TransparentPanel(Context context) {
 		super(context);
+		this.setClickable(true);
 	}
+	
+	
 
     protected void dispatchDraw(Canvas canvas) {
 

@@ -46,14 +46,18 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -108,6 +112,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	private TableLayout mReviewTable;
 	
 	LinearLayout searchView;
+	EditText searchEntry;
 	ScrollView detailView;
 	ScrollView reviewView;
 	ScrollView addView;
@@ -128,7 +133,15 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			updateResultsInUi();
 			if (progressDlg != null)
+			{
 				progressDlg.dismiss();
+				if (searchEntry != null)
+				{
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(searchEntry.getWindowToken(), 0);
+				}
+
+			}
 		}
 	};
 	
@@ -170,6 +183,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	}
 
 	SharedPreferences settings;
+	public static boolean bail = false;
+	public static Thread longToastThread = null;
+	public static Toast instToast = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -191,6 +208,33 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		
 		final ClearableSearch searchholder = (ClearableSearch) findViewById(R.id.clrsearch);
+		
+		searchEntry = (EditText)findViewById(R.id.searchentry);
+		
+		/*searchEntry.setOnTouchListener(new OnTouchListener(){
+
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				bail = true;
+				
+				try {
+					if (longToastThread != null)
+					{
+						longToastThread.join(0);
+					}
+					if (instToast != null)
+						instToast.cancel();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return false;
+			}});
+		searchEntry.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View arg0) {
+				
+				
+			}});*/
 		
 		searchholder.setCommitOnClear(false);
 		
@@ -284,15 +328,48 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			View tstLayout = inflater.inflate(R.layout.searchinstructions,
 					(ViewGroup) findViewById(R.id.search_toast_layout));
+			
+			/*tstLayout.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					bail = true;
+					
+				}
+			});*/
 
-			Toast toast = new Toast(getApplicationContext()) {
+			instToast = new Toast(getApplicationContext()) {
 
 			};
-			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-			toast.setDuration(10);
-			toast.setView(tstLayout);
-			toast.show();
+			instToast.setGravity(Gravity.CENTER_VERTICAL, 0, -40);
+			instToast.setDuration(10);
+			instToast.setView(tstLayout);
+			fireLongToast(instToast);
 		}
+	}
+	
+	
+	
+	private void fireLongToast(Toast toastToShow) {
+
+		final Toast toast = toastToShow;
+		longToastThread = new Thread() {
+			public void run() {
+				int count = 0;
+				bail = false;
+				try {
+					while (!bail && count < 6) {
+						toast.show();
+						sleep(1850);
+						count++;
+
+						// do some logic that breaks out of the while loop
+					}
+				} catch (Exception e) {
+					Log.e("LongToast", "", e);
+				}
+			}
+		};
+		longToastThread.start();
 	}
 
 	private void launchBottle(Bottle bottle) {
@@ -770,6 +847,20 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(DryncUtils.LAST_QUERY_PREF, query);
 		editor.commit();
+		
+		bail = true;
+		
+		try {
+			if (longToastThread != null)
+			{
+				longToastThread.join(0);
+			}
+			if (instToast != null)
+				instToast.cancel();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Thread t = new Thread()
 		{
