@@ -4,7 +4,7 @@
     android:id="@+id/cellarview"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="wrap_content" android:visibility="visible"
-	android:background="@drawable/wood2">
+	android:background="@drawable/wood">
 		
 	<!--  <LinearLayout android:id="@+id/searchHolder" android:background="@drawable/rndbordertransparent"
 		android:orientation="horizontal" android:layout_width="fill_parent"
