@@ -409,7 +409,7 @@ private ProgressDialog progressDlg = null;
 			mWines = mResults;
 			mInflater = (LayoutInflater) DryncCellar.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 
 		public int getCount() {

@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,6 +32,7 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -175,6 +177,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		else
 		{
 			mAdapter.mWines.clear();
+			mAdapter.viewHash.clear();
 			mAdapter.mWines.addAll(mResults);
 		}
 
@@ -210,31 +213,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		final ClearableSearch searchholder = (ClearableSearch) findViewById(R.id.clrsearch);
 		
 		searchEntry = (EditText)findViewById(R.id.searchentry);
-		
-		/*searchEntry.setOnTouchListener(new OnTouchListener(){
-
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				bail = true;
-				
-				try {
-					if (longToastThread != null)
-					{
-						longToastThread.join(0);
-					}
-					if (instToast != null)
-						instToast.cancel();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return false;
-			}});
-		searchEntry.setOnClickListener(new OnClickListener(){
-
-			public void onClick(View arg0) {
-				
-				
-			}});*/
 		
 		searchholder.setCommitOnClear(false);
 		
@@ -324,30 +302,26 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				return true;
 			}});
 		
-		if (displaySearch)
+		if (displaySearch && !bail)
 		{
 			View tstLayout = inflater.inflate(R.layout.searchinstructions,
 					(ViewGroup) findViewById(R.id.search_toast_layout));
 			
-			/*tstLayout.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					bail = true;
-					
-				}
-			});*/
-
 			instToast = new Toast(getApplicationContext()) {
 
 			};
-			instToast.setGravity(Gravity.CENTER_VERTICAL, 0, -40);
+			
+			int yOffset = 0;
+			if (getResources().getConfiguration().orientation ==
+				Configuration.ORIENTATION_PORTRAIT) { 
+				yOffset = -40;
+			}
+			instToast.setGravity(Gravity.CENTER_VERTICAL, 0, yOffset);
 			instToast.setDuration(10);
 			instToast.setView(tstLayout);
 			fireLongToast(instToast);
 		}
 	}
-	
-	
 	
 	private void fireLongToast(Toast toastToShow) {
 
@@ -355,7 +329,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		longToastThread = new Thread() {
 			public void run() {
 				int count = 0;
-				bail = false;
+				// do not reset 'bail'... if it's been shown, let it be.
 				try {
 					while (!bail && count < 6) {
 						toast.show();
@@ -550,7 +524,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 			if (defaultIcon == null)
 			{
-				defaultIcon = getResources().getDrawable(R.drawable.icon);
+				defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 			}
 
 			RemoteImageView riv = (RemoteImageView) reviewView.findViewById(R.id.reviewWineThumb);
@@ -718,12 +692,13 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		private final Drawable defaultIcon;
 		boolean mDone = false;
 		boolean mFlinging = false;
+		Hashtable<Long, View> viewHash = new Hashtable<Long, View>(); 
 		
 		public WineAdapter(List<Bottle> wines) {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncBaseSearch.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 
 		public int getCount() {
@@ -739,16 +714,18 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = (convertView != null) ? (View) convertView :
+			Bottle wine = mWines.get(position);
+			View oldView = viewHash.get(wine.getBottle_Id());
+			View view = (oldView != null) ?  oldView :
 				createView(parent);
 			
-			Log.d(LOG_IDENTIFIER, "getview position: " + position);
+			viewHash.put(wine.getBottle_Id(), view);
 			
-			Bottle wine = mWines.get(position);
 			
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
 			{
+				Log.d(LOG_IDENTIFIER, "getview position: " + position);
 				bindView(view, wine);
 
 				if (view != null)

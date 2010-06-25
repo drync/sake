@@ -280,7 +280,7 @@ public class DryncDetail extends DryncBaseActivity {
 
 			if (defaultIcon == null)
 			{
-				defaultIcon = getResources().getDrawable(R.drawable.icon);
+				defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 			}
 
 			RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);
@@ -572,7 +572,7 @@ public class DryncDetail extends DryncBaseActivity {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncDetail.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 
 		public int getCount() {

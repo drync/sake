@@ -241,7 +241,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			
 			if (defaultIcon == null)
 			{
-				defaultIcon = getResources().getDrawable(R.drawable.icon);
+				defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 			}
 
 			RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);

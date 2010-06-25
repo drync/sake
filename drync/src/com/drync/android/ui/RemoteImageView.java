@@ -100,7 +100,7 @@ public class RemoteImageView extends ImageView {
 			queue.enqueue(mThread, HTTPQueue.PRIORITY_HIGH);
 		}
 		// set default until the queued fetch returns
-		setImageResource(R.drawable.icon);
+		setImageResource(R.drawable.bottlenoimage);
 	}
 
 	private void setFromLocal() {

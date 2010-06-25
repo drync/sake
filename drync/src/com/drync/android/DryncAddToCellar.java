@@ -95,7 +95,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		if (defaultIcon == null)
 		{
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 		
 		addView = (ScrollView) this.findViewById(R.id.addtocellarview); 

@@ -175,7 +175,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 
 			if (defaultIcon == null)
 			{
-				defaultIcon = getResources().getDrawable(R.drawable.icon);
+				defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 			}
 
 			RemoteImageView riv = (RemoteImageView) reviewView.findViewById(R.id.reviewWineThumb);
@@ -327,7 +327,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncDetailReviews.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
-			defaultIcon = getResources().getDrawable(R.drawable.icon);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 
 		public int getCount() {
