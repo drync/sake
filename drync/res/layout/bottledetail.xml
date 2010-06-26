@@ -12,11 +12,11 @@
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:paddingLeft="5px" android:paddingRight="5px"
-			android:background="#410701">
+			android:background="@drawable/btnhdrbg">
 
 			<Button android:id="@+id/searchBtn" android:textColor="#FFFFFF"
 				android:layout_width="90dip" android:layout_height="30dip"
-				android:textSize="9px" android:background="@drawable/mybutton_background"
+				android:textSize="9px" android:background="@drawable/hdrbtnshade"
 				android:layout_gravity="center" android:typeface="normal"
 				android:textStyle="normal" android:layout_weight=".15" android:text="Search" />
 
@@ -30,8 +30,8 @@
 				android:layout_weight=".70" />
 
 			<Button android:id="@+id/addBtn" android:textColor="#FFFFFF"
-				android:layout_width="80dip" android:layout_height="30dip"
-				android:textSize="9px" android:background="@drawable/mybutton_background"
+				android:layout_width="80dip" android:layout_height="30dip" 
+				android:textSize="9px" android:background="@drawable/hdrbtnshade"
 				android:layout_gravity="center" android:typeface="normal"
 				android:textStyle="normal" android:layout_marginTop="5px"
 				android:layout_marginBottom="5px" android:layout_weight=".15"

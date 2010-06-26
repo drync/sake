@@ -497,7 +497,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			reviewView.scrollTo(0, 0);
 
 			TextView nameView = (TextView) reviewView.findViewById(R.id.reviewWineName);
-			TextView titleView = (TextView) reviewView.findViewById(R.id.reviewTitle);
+			//TextView titleView = (TextView) reviewView.findViewById(R.id.reviewTitle);
 			TextView yearView = (TextView) reviewView.findViewById(R.id.yearValue);
 			TextView ratingView = (TextView) reviewView.findViewById(R.id.avgRatingValue);
 			TextView priceView = (TextView) reviewView.findViewById(R.id.priceValue);
@@ -512,7 +512,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			revListHolder.addView(reviewCount, rcparams);
 
 			nameView.setText(mBottle.getName());
-			titleView.setText(mBottle.getName());
+			//titleView.setText(mBottle.getName());
 			int year = mBottle.getYear();
 			yearView.setText("" + year);
 			ratingView.setText(mBottle.getRating());
