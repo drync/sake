@@ -9,36 +9,37 @@
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:background="@drawable/wood">
 			
-			<LinearLayout android:orientation="horizontal"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:paddingLeft="5px" android:paddingRight="5px"
-				android:background="#410701">
+			<RelativeLayout android:id="@+id/headerSec"
+				android:layout_width="fill_parent" android:layout_height="40dip"
+				android:paddingLeft="5px" android:paddingRight="5px" android:layout_alignParentTop="true"
+				android:background="@drawable/btnhdrbg">
 
 				<Button android:id="@+id/cancelBtn" android:textColor="#FFFFFF"
-					android:layout_width="90dip" android:layout_height="30dip"
-					android:textSize="9px" android:background="@drawable/mybutton_background"
-					android:layout_gravity="center" android:typeface="normal"
-					android:textStyle="normal" android:layout_weight=".15"
-					android:text="Cancel" />
+				android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:minWidth="60dip" android:maxWidth="60dip"
+				android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+				android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:typeface="normal" android:textStyle="normal"
+				android:layout_marginTop="5dip" android:layout_marginBottom="5dip"
+				android:text="Cancel" />
+				
+				<Button android:id="@+id/saveBtn" android:textColor="#FFFFFF"
+				android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:minWidth="60dip" android:maxWidth="60dip" android:layout_alignParentRight="true"
+				android:layout_centerVertical="true" android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:typeface="normal" android:textStyle="normal" android:layout_marginTop="5dip"
+				android:layout_marginBottom="5dip" android:text="Save" />
 
 				<TextView android:id="@+id/addToCellarTitle"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:layout_gravity="center" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:marqueeRepeatLimit="marquee_forever"
-					android:focusable="true" android:textStyle="bold" android:gravity="center"
-					android:textColor="#FFFFFF" android:typeface="sans"
-					android:ellipsize="end" android:singleLine="true"
-					android:layout_weight=".70" android:text="Add to Cellar" />
-					
-				<Button android:id="@+id/saveBtn" android:textColor="#FFFFFF"
-					android:layout_width="80dip" android:layout_height="30dip"
-					android:textSize="9px" android:background="@drawable/mybutton_background"
-					android:layout_gravity="center" android:typeface="normal"
-					android:textStyle="normal" android:layout_marginTop="5px"
-					android:layout_marginBottom="5px" android:layout_weight=".15"
-					android:text="Save" />
-
-			</LinearLayout>
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:layout_toRightOf="@id/cancelBtn" android:layout_toLeftOf="@id/saveBtn"
+				android:layout_gravity="center" android:layout_marginLeft="10px"
+				android:layout_marginRight="10px" android:marqueeRepeatLimit="marquee_forever"
+				android:focusable="true" android:textStyle="bold" android:gravity="center"
+				android:textColor="#FFFFFF" android:typeface="sans"
+				android:ellipsize="end" android:singleLine="true"
+				android:layout_centerVertical="true" />
+			</RelativeLayout>
 
 		 	<RelativeLayout android:id="@+id/gendetail"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
