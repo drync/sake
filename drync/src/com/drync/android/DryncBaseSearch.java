@@ -849,6 +849,15 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		t.start();
 	}
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		bail = true;
+		if (instToast != null)
+			instToast.cancel();
+		
+	}
+
 	protected void startTopWineQueryOperation(final int type)
 	{
 		Thread t = new Thread()
