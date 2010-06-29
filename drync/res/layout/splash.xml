@@ -12,11 +12,11 @@
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_alignParentRight="true" android:layout_alignParentBottom="true"
 				android:layout_gravity="left" 
-				android:layout_marginRight="20px" android:layout_marginBottom="10px"
+				android:layout_marginRight="10px" android:layout_marginBottom="10px"
 				android:focusable="false" android:textStyle="bold" android:gravity="left"
 				android:textColor="#49290C" android:shadowColor="#D29656" android:shadowDx = "1.2"
 			    android:shadowDy = "1.2" android:shadowRadius="0.1"
-			    android:textSize="15.0dp" android:typeface="sans"
-				android:singleLine="true" android:text="1.0beta" android:paddingRight="20px"
+			    android:textSize="20.0dp" android:typeface="sans"
+				android:singleLine="true" android:text="1.0beta" android:paddingRight="10px"
 				android:layout_centerVertical="true" /> 
 </RelativeLayout>
