@@ -16,6 +16,9 @@ import com.flurry.android.FlurryAgent;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -35,6 +38,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Drync extends Activity {
@@ -42,9 +47,9 @@ public class Drync extends Activity {
 	private static final int STOPSPLASH = 0;
 	private static final int STARTMAIN = 1;
 	private static final int REGISTER = 2;
-	private static final long SPLASHTIME = 3000;
+	private static final long SPLASHTIME = 6000;
 
-	private static ImageView splash;
+	private static RelativeLayout splash;
 	private static LinearLayout register;
 	private static String registerTxt;
 	private static WebView regWebView;
@@ -139,8 +144,19 @@ public class Drync extends Activity {
 		}
 
 		setContentView(R.layout.splash);
-		splash = (ImageView) findViewById(R.id.splashscreen);
+		splash = (RelativeLayout) findViewById(R.id.splashscreen);
 
+		PackageManager pm = this.getPackageManager();
+		try {
+			PackageInfo pi = pm.getPackageInfo("com.drync.android", 0);
+			TextView version = (TextView)findViewById(R.id.version);
+			if ((version != null) && (pi != null))
+				version.setText(pi.versionName);
+			
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		String register = DryncProvider.getInstance().startupPost(deviceId);
 
@@ -235,7 +251,7 @@ public class Drync extends Activity {
 
 			CookieSyncManager.getInstance().sync();
 
-			if (url.endsWith("#___1__")) {
+			/*if (url.endsWith("#___1__")) {
 				Toast acctCreated = Toast.makeText(Drync.this,
 						"Your account has been created.", Toast.LENGTH_LONG);
 				acctCreated.show();
@@ -252,12 +268,12 @@ public class Drync extends Activity {
 					}
 				};
 
-				thread.start();
+				thread.start();*/
 
-				Message msg = new Message();
+				/*Message msg = new Message();
 				msg.what = Drync.STARTMAIN;
-				Drync.this.splashHandler.sendMessage(msg);
-			}
+				Drync.this.splashHandler.sendMessage(msg);*/
+			//}
 		}
 
 		@Override
