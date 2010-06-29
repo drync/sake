@@ -266,7 +266,8 @@ public class DryncDetail extends DryncBaseActivity {
 			}
 
 			nameView.setText(mBottle.getName());
-			titleView.setText(mBottle.getName());
+			if (titleView != null)
+				titleView.setText(mBottle.getName());
 			int year = mBottle.getYear();
 			yearView.setText("" + year);
 			ratingView.setText(mBottle.getRating());
