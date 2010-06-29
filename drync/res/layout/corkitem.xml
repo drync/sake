@@ -29,7 +29,8 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:textColor="#000000" 
-            		android:textSize="9px"           
+					android:textSize="10.0sp"
+					android:textStyle="bold"     
             		android:singleLine="true"
             		android:paddingRight="5px"
             		android:text="my notes: " />
@@ -39,7 +40,8 @@
             		android:layout_height="wrap_content"
             		android:textColor="#FFFFFF"            
             		android:singleLine="true"
-            		android:textSize="9px"
+					android:textSize="10.0sp"
+					android:textStyle="bold"     
             		android:layout_toRightOf="@id/myNotesLabel"
             		android:text="111" />
             </RelativeLayout>
@@ -60,7 +62,8 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:textColor="#000000" 
-            		android:textSize="9px"           
+					android:textSize="10.0sp"
+					android:textStyle="bold"          
             		android:singleLine="true"
             		android:paddingRight="5px"
             		android:text="year:" />
@@ -70,7 +73,8 @@
             		android:layout_height="wrap_content"
             		android:textColor="#FFFFFF"            
             		android:singleLine="true"
-            		android:textSize="9px"
+					android:textSize="10.0sp"
+					android:textStyle="bold"     
             		android:layout_toRightOf="@id/yearLabel"
             		android:text="111" />
             		
@@ -79,7 +83,8 @@
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
             		android:textColor="#000000" 
-            		android:textSize="9px"           
+					android:textSize="10.0sp"
+					android:textStyle="bold"                
             		android:singleLine="true"
             		android:paddingRight="5px"
             		android:paddingLeft="10px"
@@ -91,7 +96,8 @@
             		android:layout_height="wrap_content"
             		android:textColor="#FFFFFF"            
             		android:singleLine="true"
-            		android:textSize="9px"
+					android:textSize="10.0sp"
+					android:textStyle="bold"     
             		android:layout_toRightOf="@id/ratingLabel" />
             	
             </RelativeLayout>
@@ -103,6 +109,8 @@
             android:layout_weight="1"
             android:textColor="#FFFFFF"
             android:typeface="serif"
+            android:textSize="13.0sp"
+            android:textStyle="bold"
 			android:layout_toRightOf="@id/corkThumb"
 			android:layout_alignParentRight="true"
 			android:layout_alignParentTop="true"

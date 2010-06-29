@@ -581,38 +581,38 @@ private ProgressDialog progressDlg = null;
 	{
 		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_NONE)
 		{
-			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			mainButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}
 		
 		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_OWN)
 		{
-			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			ownButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}
 		
 		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_WANT)
 		{
-			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			wantButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}		
 		
 		if (this.lastSelectedCellar == DryncDbAdapter.FILTER_TYPE_DRANK)
 		{
-			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			drankButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}		
 	}
 	

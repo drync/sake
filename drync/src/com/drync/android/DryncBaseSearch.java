@@ -951,29 +951,29 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	{
 		if (this.lastSelectedTopWine == DryncProvider.TOP_POPULAR)
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			popButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}
 		
 		if (this.lastSelectedTopWine == DryncProvider.TOP_FEATURED)
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			featButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}
 		
 		if (this.lastSelectedTopWine == DryncProvider.TOP_WANTED)
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.woodbutton_pressed));
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshadepressed));
 		}
 		else
 		{
-			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.dryncbutton));
+			mwButton.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.hdrbtnshade));
 		}		
 	}
 	
