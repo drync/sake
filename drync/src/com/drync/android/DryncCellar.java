@@ -32,9 +32,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -74,6 +76,7 @@ private ProgressDialog progressDlg = null;
 	private TableLayout mReviewTable;
 	
 	LinearLayout cellarView;
+	EditText searchEntry;
 	ScrollView detailView;
 	ScrollView reviewView;
 	ScrollView addView;
@@ -94,7 +97,14 @@ private ProgressDialog progressDlg = null;
 		{
 			updateResultsInUi();
 			if (progressDlg != null)
+			{
 				progressDlg.dismiss();
+				if (searchEntry != null)
+				{
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(searchEntry.getWindowToken(), 0);
+				}
+			}
 		}
 	};
 	
@@ -254,6 +264,7 @@ private ProgressDialog progressDlg = null;
 		
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
+		searchEntry = (EditText)findViewById(R.id.searchentry);
 		final LinearLayout cellarFilterButtons = (LinearLayout) findViewById(R.id.cellarfilterbuttons);
 		
 		if (! displayFilter)
