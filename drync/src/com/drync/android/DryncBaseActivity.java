@@ -22,17 +22,36 @@ public abstract class DryncBaseActivity extends Activity {
 	
 	public static final int ADDTOCELLAR_RESULT = 1;	
 	
+	public abstract int getMenuItemToSkip();
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		
-		menu.add(0, SEARCH_ID, 0, R.string.search).
-		setIcon(getResources().getDrawable(R.drawable.tab_icon_search));
-		menu.add(0, CELLAR_ID, 0, R.string.cellar).
-		setIcon(getResources().getDrawable(R.drawable.tab_icon_cellar));
-		menu.add(0, TOP_WINE_ID, 0, R.string.topwines).
-		setIcon(getResources().getDrawable(R.drawable.tab_icon_topwines));
-		menu.add(0, SETTINGS_ID, 0, R.string.settings).
-		setIcon(getResources().getDrawable(R.drawable.tab_icon_settings));
+		int skipMenuItem = getMenuItemToSkip();
+		
+		if (skipMenuItem != SEARCH_ID)
+		{
+			menu.add(0, SEARCH_ID, 0, R.string.search).
+			setIcon(getResources().getDrawable(R.drawable.tab_icon_search));
+		}
+		
+		if (skipMenuItem != CELLAR_ID)
+		{
+			menu.add(0, CELLAR_ID, 0, R.string.cellar).
+			setIcon(getResources().getDrawable(R.drawable.tab_icon_cellar));
+		}
+		
+		if (skipMenuItem != TOP_WINE_ID)
+		{
+			menu.add(0, TOP_WINE_ID, 0, R.string.topwines).
+			setIcon(getResources().getDrawable(R.drawable.tab_icon_topwines));
+		}
+		
+		if (skipMenuItem != SETTINGS_ID)
+		{
+			menu.add(0, SETTINGS_ID, 0, R.string.settings).
+			setIcon(getResources().getDrawable(R.drawable.tab_icon_settings));
+		}
 		
 		return result;
 	}

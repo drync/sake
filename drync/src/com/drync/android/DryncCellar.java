@@ -379,7 +379,7 @@ private ProgressDialog progressDlg = null;
 				progressDlg.setMessage("Retrieving corks...");
 				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progressDlg.show();
-				DryncCellar.this.startQueryOperation(searchterm);
+				DryncCellar.this.startQueryOperation(DryncCellar.this.lastSelectedCellar, searchterm);
 				return true;
 			}
 
@@ -662,6 +662,11 @@ private ProgressDialog progressDlg = null;
 		super.onSaveInstanceState(outState);
 		outState.putParcelableArrayList("mResults", (ArrayList<Cork>) mResults);
 		outState.putInt("lastSelectedCellar", lastSelectedCellar);
+	}
+	
+	@Override
+	public int getMenuItemToSkip() {
+		return this.CELLAR_ID;
 	}
 }
 

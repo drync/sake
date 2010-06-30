@@ -525,5 +525,10 @@ public class DryncDetailReviews extends DryncBaseActivity {
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}*/
 	}
+	
+	@Override
+	public int getMenuItemToSkip() {
+		return -1;
+	}
 }
 

@@ -76,4 +76,9 @@ public class DryncSettings extends DryncBaseActivity {
 		
 		editor.commit(); */
 	}
+	
+	@Override
+	public int getMenuItemToSkip() {
+		return SETTINGS_ID;
+	}
 }

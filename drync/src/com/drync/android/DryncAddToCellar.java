@@ -441,5 +441,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	protected void onResume() {
 		super.onResume();
 	}
+
+	@Override
+	public int getMenuItemToSkip() {
+		return -1;
+	}
 }
 

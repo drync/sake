@@ -1089,5 +1089,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				
 		ex.scheduleAtFixedRate(cellarUpdateThread, 10, 60, TimeUnit.SECONDS);
 	}
+	
+	@Override
+	public int getMenuItemToSkip() {
+		return SEARCH_ID;
+	}
 }
 
