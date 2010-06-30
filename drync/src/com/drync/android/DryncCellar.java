@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -96,7 +97,8 @@ private ProgressDialog progressDlg = null;
 		public void run()
 		{
 			updateResultsInUi();
-			if (progressDlg != null)
+			
+			if ((progressDlg != null) && (progressDlg.isShowing()))
 			{
 				progressDlg.dismiss();
 				if (searchEntry != null)
@@ -170,14 +172,14 @@ private ProgressDialog progressDlg = null;
 		
 	}
 
-	public void onCreateContextMenu(ContextMenu menu, View v,
+	/*public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, EDIT_ID, 0, "Edit");
 		menu.add(0, DELETE_ID, 0,  "Delete");
-	}
+	}*/
 
-	public boolean onContextItemSelected(MenuItem item) {
+	/*public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
 		case EDIT_ID:
@@ -190,7 +192,7 @@ private ProgressDialog progressDlg = null;
 		default:
 			return super.onContextItemSelected(item);
 		}
-	}
+	}*/
 
 	private void deleteCork(Cork cork) {
 		
@@ -346,7 +348,8 @@ private ProgressDialog progressDlg = null;
 			{
 				
 				searchControl.setText(lastFilter);
-				myWinesButton.performClick();
+				if ((savedInstanceState == null) || (! savedInstanceState.containsKey("mResults")))
+					myWinesButton.performClick();
 			}
 		}
 		final TwoBtnClearableSearch clearableSearchCtrl = (TwoBtnClearableSearch)findViewById(R.id.clrsearch);
@@ -636,6 +639,29 @@ private ProgressDialog progressDlg = null;
 			return obj1Id.compareTo(obj2Id);
 		}
 		
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		mResults = savedInstanceState.getParcelableArrayList("mResults");
+		lastSelectedCellar = savedInstanceState.getInt("lastSelectedCellar");
+		
+		final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
+		final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
+		final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
+		final Button iWantButton = (Button)findViewById(R.id.iWantBtn);
+		
+		this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
+		
+		updateResultsInUi();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putParcelableArrayList("mResults", (ArrayList<Cork>) mResults);
+		outState.putInt("lastSelectedCellar", lastSelectedCellar);
 	}
 }
 

@@ -41,6 +41,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
@@ -323,6 +324,20 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 	}
 	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		mResults = savedInstanceState.getParcelableArrayList("mResults");
+		updateResultsInUi();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putParcelableArrayList("mResults", (ArrayList<Bottle>) mResults);
+		
+	}
+
 	private void fireLongToast(Toast toastToShow) {
 
 		final Toast toast = toastToShow;

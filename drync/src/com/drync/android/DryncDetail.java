@@ -349,7 +349,6 @@ public class DryncDetail extends DryncBaseActivity {
 
 						/* Fill it with Data */  
 						emailIntent.setType("plain/text");  
-						emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"to@email.com"});  
 						emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.emailsubject));  
 						emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, DryncUtils.buildShareEmailText(DryncDetail.this, mBottle));  
 
