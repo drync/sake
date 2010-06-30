@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.widget;
+package com.drync.android.widget;
 
 import com.drync.android.R;
 

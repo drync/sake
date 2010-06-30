@@ -35,7 +35,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -48,6 +47,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
+import com.drync.android.widget.NumberPicker;
 
 public class DryncAddToCellar extends DryncBaseActivity {
 

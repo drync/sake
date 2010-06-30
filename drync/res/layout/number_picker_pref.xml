@@ -22,7 +22,7 @@
     android:padding="10dip"
     >
     
-    <android.widget.NumberPicker
+    <com.drync.android.widget.NumberPicker
         android:id="@+id/pref_num_picker"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />

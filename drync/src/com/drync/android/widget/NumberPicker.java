@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.widget;
+package com.drync.android.widget;
 
 import com.drync.android.R;
 
@@ -106,11 +106,65 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
     private boolean mDecrement;
 
     public NumberPicker(Context context) {
-        this(context, null);
+    	super(context);
+        setOrientation(VERTICAL);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.number_picker, this, true);
+        mHandler = new Handler();
+        InputFilter inputFilter = new NumberPickerInputFilter();
+        mNumberInputFilter = new NumberRangeKeyListener();
+        mIncrementButton = (NumberPickerButton) findViewById(R.id.increment);
+        mIncrementButton.setOnClickListener(this);
+        mIncrementButton.setOnLongClickListener(this);
+        mIncrementButton.setNumberPicker(this);
+        mDecrementButton = (NumberPickerButton) findViewById(R.id.decrement);
+        mDecrementButton.setOnClickListener(this);
+        mDecrementButton.setOnLongClickListener(this);
+        mDecrementButton.setNumberPicker(this);
+
+        mText = (EditText) findViewById(R.id.timepicker_input);
+        mText.setOnFocusChangeListener(this);
+        mText.setFilters(new InputFilter[] {inputFilter});
+        mText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+
+        if (!isEnabled()) {
+            setEnabled(false);
+        }
+
+        mStart = DEFAULT_MIN;
+        mEnd = DEFAULT_MAX;
+
     }
 
     public NumberPicker(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    	super(context, attrs);
+        setOrientation(VERTICAL);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.number_picker, this, true);
+        mHandler = new Handler();
+        InputFilter inputFilter = new NumberPickerInputFilter();
+        mNumberInputFilter = new NumberRangeKeyListener();
+        mIncrementButton = (NumberPickerButton) findViewById(R.id.increment);
+        mIncrementButton.setOnClickListener(this);
+        mIncrementButton.setOnLongClickListener(this);
+        mIncrementButton.setNumberPicker(this);
+        mDecrementButton = (NumberPickerButton) findViewById(R.id.decrement);
+        mDecrementButton.setOnClickListener(this);
+        mDecrementButton.setOnLongClickListener(this);
+        mDecrementButton.setNumberPicker(this);
+
+        mText = (EditText) findViewById(R.id.timepicker_input);
+        mText.setOnFocusChangeListener(this);
+        mText.setFilters(new InputFilter[] {inputFilter});
+        mText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+
+        if (!isEnabled()) {
+            setEnabled(false);
+        }
+
+        mStart = DEFAULT_MIN;
+        mEnd = DEFAULT_MAX;
+
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
