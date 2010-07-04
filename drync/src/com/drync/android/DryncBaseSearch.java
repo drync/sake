@@ -727,25 +727,34 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		public long getItemId(int position) {
 			return position;
 		}
+		
+		class ViewHolder {
+            TextView name;
+            TextView rating;
+            TextView price;
+            TextView review;
+            RemoteImageView icon;
+        }
 
 		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;
+			
 			Bottle wine = mWines.get(position);
-			View oldView = viewHash.get(wine.getBottle_Id());
-			View view = (oldView != null) ?  oldView :
+			//View oldView = viewHash.get(wine.getBottle_Id());
+			View view = (convertView != null) ?  convertView :
 				createView(parent);
 			
-			viewHash.put(wine.getBottle_Id(), view);
-			
+			//viewHash.put(wine.getBottle_Id(), view);
 			
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
-			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
-			{
+			//if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
+			//{
 				Log.d(LOG_IDENTIFIER, "getview position: " + position);
 				bindView(view, wine);
 
 				if (view != null)
 				{
-					RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+					RemoteImageView wineThumb = ((ViewHolder)view.getTag()).icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
 					if (wineThumb != null && !mFlinging)
 					{
 
@@ -753,7 +762,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 							wineThumb.loadImage();
 					}
 				}
-			}
+			//}
 			
 			return view;
 		}
@@ -761,13 +770,24 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		private View createView(ViewGroup parent) {
 			View wineItem = mInflater.inflate(
 					R.layout.wineitem, parent, false);
+			
+			ViewHolder holder = new ViewHolder();
+			holder.name = (TextView) wineItem.findViewById(R.id.wineName);
+			holder.icon = (RemoteImageView) wineItem.findViewById(R.id.wineThumb);
+			holder.price = (TextView) wineItem.findViewById(R.id.priceValue);
+			holder.rating = (TextView) wineItem.findViewById(R.id.ratingValue);
+			holder.review = (TextView) wineItem.findViewById(R.id.reviewValue);
+			
+			wineItem.setTag(holder);
+			
 			return wineItem;
 		}
 
 		private void bindView(View view, Bottle wine) {
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
+			ViewHolder holder = (ViewHolder)view.getTag();
 			wiv.setBottle(wine);
-			RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+			RemoteImageView wineThumb = holder.icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
 			if (wineThumb != null  && !mFlinging )
 			{
 				if (wine.getLabel_thumb() != null)
@@ -784,16 +804,16 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				}
 			}
 			
-			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
+			TextView wineNameText = holder.name; //(TextView) view.findViewById(R.id.wineName);
 			wineNameText.setText(wine.getName());
 			
-			TextView priceText = (TextView) view.findViewById(R.id.priceValue);
+			TextView priceText = holder.price; //(TextView) view.findViewById(R.id.priceValue);
 			priceText.setText(wine.getPrice());
 			
-			TextView ratingText = (TextView) view.findViewById(R.id.ratingValue);
+			TextView ratingText = holder.rating; //(TextView) view.findViewById(R.id.ratingValue);
 			ratingText.setText(wine.getRating());
 			
-			TextView reviewText = (TextView) view.findViewById(R.id.reviewValue);
+			TextView reviewText = holder.review; //(TextView) view.findViewById(R.id.reviewValue);
 			reviewText.setText("" + wine.getReviewCount());
 			
 		}

@@ -1,20 +1,48 @@
 package com.drync.android;
 
+import java.util.List;
+
+import android.app.ActivityManager;
+import android.app.ProgressDialog;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 public class DryncSettings extends DryncBaseActivity {
 
 	SharedPreferences settings;
+	final Handler mHandler = new Handler();
+	private ProgressDialog progressDlg = null;
+	
+	final Runnable mUpdateResults = new Runnable()
+	{
+		public void run()
+		{
+			updateResults();
+			if (progressDlg != null)
+			{
+				progressDlg.dismiss();
+			}
+		}
+
+		private void updateResults() {
+			
+		}
+	};
+	
 	/*EditText usernameEdit;
 	EditText passwordEdit;
 	ToggleButton cellarTweetBtn;*/
 	
 	Button myAcctButton;
+	Button resetButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +56,7 @@ public class DryncSettings extends DryncBaseActivity {
 	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal); */
 	     
 	     myAcctButton = (Button)this.findViewById(R.id.acctSettingsBtn);
-	     
+	     resetButton = (Button)this.findViewById(R.id.resetBtn);
 	   /*  String username = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, "");
 	     usernameEdit.setText(username);
 	     
@@ -48,12 +76,40 @@ public class DryncSettings extends DryncBaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent();
     			intent.setClass(DryncSettings.this, DryncMyAccountActivity.class);
-    			startActivity(intent);
+    			startActivityForResult(intent, MYACCOUNT_RESULT);
 				
 			}});
 	     
+	     this.resetButton.setOnClickListener(new OnClickListener(){
+	    		 public void onClick(View v)
+	    		 {
+	    			 progressDlg =  new ProgressDialog(DryncSettings.this);
+						progressDlg.setTitle("Dryncing...");
+						progressDlg.setMessage("Updating Settings...");
+						progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						progressDlg.show();
+	    			 resetSettings();
+	    		 }});
+	     
 	}
 
+	public void resetSettings()
+	{
+		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
+		
+		final String threadDeviceId = deviceId;
+		Thread t = new Thread() {
+			public void run() {
+				DryncProvider.getInstance()
+						.getCorks(DryncSettings.this, threadDeviceId);
+				DryncProvider.getInstance().myAcctGet(threadDeviceId);
+				
+				mHandler.post(mUpdateResults);
+			}
+		};
+		t.start();
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();

@@ -3,15 +3,10 @@ package com.drync.android;
 import com.flurry.android.FlurryAgent;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public abstract class DryncBaseActivity extends Activity {
 	
@@ -21,6 +16,7 @@ public abstract class DryncBaseActivity extends Activity {
 	public static final int SETTINGS_ID = Menu.FIRST + 3;
 	
 	public static final int ADDTOCELLAR_RESULT = 1;	
+	public static final int MYACCOUNT_RESULT = 2;
 	
 	public abstract int getMenuItemToSkip();
 	
@@ -123,6 +119,12 @@ public abstract class DryncBaseActivity extends Activity {
             else {
                 this.startDryncCellarActivity();
             }
+            break;
+        case MYACCOUNT_RESULT:
+        {
+        	
+    		break;
+        }
         default:
             break;
     }
@@ -133,6 +135,7 @@ public abstract class DryncBaseActivity extends Activity {
     	Intent setIntent = new Intent(this, DryncCellar.class);
     	startActivity(setIntent);
     }
+	
 	
 	public void onStart()
 	{
@@ -146,5 +149,4 @@ public abstract class DryncBaseActivity extends Activity {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
 	}
-
 }

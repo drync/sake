@@ -67,11 +67,17 @@
 	
 	<LinearLayout android:id="@+id/accountsettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
-		android:layout_height="50px" android:visibility="visible">
+		android:layout_height="fill_parent" android:visibility="visible">
 		
-		<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="fill_parent" 
+		<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="My Account" android:textColor="#FFFFFF"
 				android:gravity="center" android:background="@drawable/dryncbutton"/>
+		
+		<Button android:id="@+id/resetBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
+				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
+				android:text="Reset Settings" android:textColor="#FFFFFF"
+				android:gravity="center" android:background="@drawable/dryncbutton"/>
+				
 	</LinearLayout>
 </LinearLayout>

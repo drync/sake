@@ -52,7 +52,6 @@
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
         		android:paddingRight="10px"
-        		android:layout_marginTop="5px"
         		android:layout_toRightOf="@id/corkThumb"
         		android:layout_alignParentRight="true"
 			android:layout_above="@id/thirdLine" >
@@ -110,6 +109,7 @@
             android:textColor="#FFFFFF"
             android:typeface="serif"
             android:textSize="13.0sp"
+            android:paddingBottom="-10px"
             android:textStyle="bold"
 			android:layout_toRightOf="@id/corkThumb"
 			android:layout_alignParentRight="true"

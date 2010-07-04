@@ -19,6 +19,7 @@
 			android:layout_height="wrap_content" android:textColor="#000000"
 			android:textStyle="bold" android:typeface="serif" android:textSize="10.0sp"
 			android:singleLine="true" android:paddingRight="5px" android:text="reviews:" />
+			
 		<TextView android:id="@+id/reviewValue" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:textColor="#FFFFFF"
 			android:singleLine="true" android:textStyle="bold" android:typeface="serif"
@@ -51,7 +52,7 @@
 
 	<TextView android:id="@+id/wineName" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_weight="1"
-		android:textColor="#FFFFFF" android:textStyle="bold" android:typeface="serif"
+		android:textColor="#FFFFFF" android:textStyle="bold" android:typeface="serif" android:paddingBottom="-5px"
 		android:textSize="13.0sp" android:layout_toRightOf="@id/wineThumb" 
 		android:layout_alignParentRight="true" android:layout_alignParentTop="true"
 		android:ellipsize="marquee" android:layout_above="@id/secondLine" />

@@ -26,8 +26,17 @@ public class DryncUtils {
 	private static String CACHE_DIRECTORY = null;
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
 	public static CookieStore cookieStore;
+	public static long cellarLastUpdatedTimestamp = -1;
 	
 	
+	public static long getCellarLastUpdatedTimestamp() {
+		return cellarLastUpdatedTimestamp;
+	}
+
+	public static void setCellarLastUpdatedTimestamp(long cellarLastUpdatedTimestamp) {
+		DryncUtils.cellarLastUpdatedTimestamp = cellarLastUpdatedTimestamp;
+	}
+
 	public static CookieStore getCookieStore() {
 		return cookieStore;
 	}

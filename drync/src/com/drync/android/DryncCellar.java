@@ -48,6 +48,8 @@ import android.widget.TwoBtnClearableSearch;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+
+import com.drync.android.DryncBaseSearch.WineAdapter.ViewHolder;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
@@ -58,6 +60,7 @@ public class DryncCellar extends DryncBaseActivity {
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Cork> mResults = null;
+	long resultsLastSetTimestamp = -1;
 	int lastSelectedCellar = -1;
 
 private ProgressDialog progressDlg = null;
@@ -166,6 +169,7 @@ private ProgressDialog progressDlg = null;
 			mAdapter.mWines.clear();
 			mAdapter.viewHash.clear();
 			mAdapter.mWines.addAll(mResults);
+			this.resultsLastSetTimestamp = System.currentTimeMillis();
 		}
 
 		mAdapter.notifyDataSetChanged();
@@ -348,7 +352,11 @@ private ProgressDialog progressDlg = null;
 			{
 				
 				searchControl.setText(lastFilter);
-				if ((savedInstanceState == null) || (! savedInstanceState.containsKey("mResults")))
+				long lastSetTimestamp = -1;
+				if (savedInstanceState != null)
+					lastSetTimestamp = savedInstanceState.getLong("resultsLastSetTimestamp");
+				
+				if ((savedInstanceState == null) || (lastSetTimestamp < DryncUtils.getCellarLastUpdatedTimestamp()) || (! savedInstanceState.containsKey("mResults")))
 					myWinesButton.performClick();
 			}
 		}
@@ -437,29 +445,31 @@ private ProgressDialog progressDlg = null;
 		public long getItemId(int position) {
 			return position;
 		}
+		
+		class ViewHolder {
+            TextView name;
+            TextView notes;
+            TextView year;
+            TextView rating;
+            RemoteImageView icon;
+        }
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Cork wine = mWines.get(position);
-			View oldView = viewHash.get(wine.getCork_uuid());
-			View view = (oldView != null) ?  oldView :
+			View view = (convertView != null) ?  convertView :
 				createView(parent);
 			
-			viewHash.put(wine.getCork_uuid(), view);
-			
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
-			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
+			bindView(view, wine);
+
+			if (view != null)
 			{
-				bindView(view, wine);
-
-				if (view != null)
+				RemoteImageView wineThumb = ((ViewHolder)view.getTag()).icon;
+				if (wineThumb != null && !mFlinging)
 				{
-					RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.corkThumb);
-					if (wineThumb != null && !mFlinging)
-					{
 
-						if (! wineThumb.isUseDefaultOnly() && ! wineThumb.isLoaded())
-							wineThumb.loadImage();
-					}
+					if (! wineThumb.isUseDefaultOnly() && ! wineThumb.isLoaded())
+						wineThumb.loadImage();
 				}
 			}
 			
@@ -469,16 +479,27 @@ private ProgressDialog progressDlg = null;
 		private View createView(ViewGroup parent) {
 			View corkItem = mInflater.inflate(
 					R.layout.corkitem, parent, false);
+			
+			ViewHolder holder = new ViewHolder();
+			holder.name = (TextView) corkItem.findViewById(R.id.wineName);
+			holder.icon = (RemoteImageView) corkItem.findViewById(R.id.corkThumb);
+			holder.notes = (TextView) corkItem.findViewById(R.id.myNotesValue);
+			holder.rating = (TextView) corkItem.findViewById(R.id.ratingValue);
+			holder.year = (TextView) corkItem.findViewById(R.id.yearValue);
+			
+			corkItem.setTag(holder);
+			
 			return corkItem;
 		}
  
 		private void bindView(View view, Cork wine) {
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
+			ViewHolder holder = (ViewHolder) view.getTag();
 			wiv.setBottle(wine);
-			RemoteImageView corkThumb = (RemoteImageView) view.findViewById(R.id.corkThumb);
-			TextView ratingVal = (TextView) view.findViewById(R.id.ratingValue);
-			TextView yearVal = (TextView) view.findViewById(R.id.yearValue);
-			TextView notesVal = (TextView) view.findViewById(R.id.myNotesValue);
+			RemoteImageView corkThumb = holder.icon;
+			TextView ratingVal = holder.rating;
+			TextView yearVal = holder.year;
+			TextView notesVal = holder.notes;
 			
 			if (corkThumb != null  && !mFlinging )
 			{
@@ -496,7 +517,7 @@ private ProgressDialog progressDlg = null;
 				}
 			}
 			
-			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
+			TextView wineNameText = holder.name; 
 			wineNameText.setText(wine.getName());
 			Float corkRating = wine.getCork_rating();
 			ratingVal.setText(((corkRating == null) || (corkRating == 0)) ? "NR" : "" + wine.getCork_rating());
@@ -505,16 +526,6 @@ private ProgressDialog progressDlg = null;
 			yearVal.setText(stryear);
 			
 			notesVal.setText(wine.getDescription());
-			
-			/*TextView priceText = (TextView) view.findViewById(R.id.priceValue);
-			priceText.setText(wine.getPrice());
-			
-			TextView ratingText = (TextView) view.findViewById(R.id.ratingValue);
-			ratingText.setText(wine.getRating());
-			
-			TextView reviewText = (TextView) view.findViewById(R.id.reviewValue);
-			reviewText.setText("" + wine.getReviewCount());*/
-			
 		}
 
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -644,17 +655,23 @@ private ProgressDialog progressDlg = null;
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		mResults = savedInstanceState.getParcelableArrayList("mResults");
-		lastSelectedCellar = savedInstanceState.getInt("lastSelectedCellar");
+		long lastSetTimestamp = savedInstanceState.getLong("resultsLastSetTimestamp");
 		
-		final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
-		final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
-		final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
-		final Button iWantButton = (Button)findViewById(R.id.iWantBtn);
-		
-		this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
-		
-		updateResultsInUi();
+		if (lastSetTimestamp > DryncUtils.getCellarLastUpdatedTimestamp())
+		{
+			mResults = savedInstanceState.getParcelableArrayList("mResults");
+			lastSelectedCellar = savedInstanceState.getInt("lastSelectedCellar");
+			this.resultsLastSetTimestamp = savedInstanceState.getLong("resultsLastSetTimestamp");
+
+			final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
+			final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
+			final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
+			final Button iWantButton = (Button)findViewById(R.id.iWantBtn);
+
+			this.detailSelectedCellarButton(myWinesButton, iOwnButton, iWantButton, iDrankButton);
+
+			updateResultsInUi();
+		}
 	}
 
 	@Override
@@ -662,6 +679,7 @@ private ProgressDialog progressDlg = null;
 		super.onSaveInstanceState(outState);
 		outState.putParcelableArrayList("mResults", (ArrayList<Cork>) mResults);
 		outState.putInt("lastSelectedCellar", lastSelectedCellar);
+		outState.putLong("resultsLastSetTimestamp", this.resultsLastSetTimestamp);
 	}
 	
 	@Override
