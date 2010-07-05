@@ -18,6 +18,8 @@ public abstract class DryncBaseActivity extends Activity {
 	public static final int ADDTOCELLAR_RESULT = 1;	
 	public static final int MYACCOUNT_RESULT = 2;
 	
+	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
+	
 	public abstract int getMenuItemToSkip();
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,8 +89,11 @@ public abstract class DryncBaseActivity extends Activity {
         }
         case SETTINGS_ID:
         {
-        	Intent setIntent = new Intent(this, DryncSettings.class);
-        	startActivity(setIntent);
+        	/*Intent setIntent = new Intent(this, DryncSettings.class);
+        	startActivity(setIntent);*/
+        	Intent intent = new Intent();
+			intent.setClass(this, DryncMyAccountActivity.class);
+			startActivityForResult(intent, MYACCOUNT_RESULT);
         	break;
         }
         case CELLAR_ID:
@@ -140,8 +145,7 @@ public abstract class DryncBaseActivity extends Activity {
 	public void onStart()
 	{
 	   super.onStart();
-	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");
-	   
+	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");	   
 	}
 	
 	public void onStop()
