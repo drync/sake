@@ -123,7 +123,7 @@ private ProgressDialog progressDlg = null;
             } 
             else if ( resultCode == CELLAR_NEEDS_REFRESH )
             {
-            	this.doCellarQuery();
+            	doFilteredCellarQuery(DryncCellar.this.lastSelectedCellar, this.searchEntry.getText().toString());	
             }
             else {
                 //this.startDryncCellarActivity();
@@ -586,6 +586,16 @@ private ProgressDialog progressDlg = null;
 		progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressDlg.show();
 		DryncCellar.this.startCellarOperation();
+	}
+	
+	private void doFilteredCellarQuery(int filter, String query)
+	{
+		progressDlg =  new ProgressDialog(DryncCellar.this);
+		progressDlg.setTitle("Dryncing...");
+		progressDlg.setMessage("Retrieving your cellar...");
+		progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDlg.show();
+		DryncCellar.this.startQueryOperation(filter, query);
 	}
 	
 	@Override
