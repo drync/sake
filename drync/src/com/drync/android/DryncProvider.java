@@ -56,6 +56,7 @@ import org.w3c.dom.NodeList;
 import android.content.Context;
 import android.util.Log;
 
+import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
@@ -217,6 +218,72 @@ public class DryncProvider {
 		} finally {
 
 		}
+		return bottleList;
+	}
+	
+	/*public ArrayList<Bottle> parseBottlesFromXmlString(String xml)
+	{
+		Document doc = null;
+		ArrayList<Bottle> bottleList = new ArrayList<Bottle>();
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			
+			doc = builder.parse(xml);
+			NodeList bottles = doc.getElementsByTagName("bottle");
+
+			if(bottles!=null) {
+				for(int j=0,m=bottles.getLength();j<m;j++)
+				{
+					Node bottleNode = bottles.item(j);
+
+					Bottle bottle = parseBottleFromNode(bottleNode);
+					if (bottle != null)
+					{
+						bottleList.add(bottle);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return bottleList;
+	}*/
+	
+	public ArrayList<Cork> parseCorksFromXmlString(String xml)
+	{
+		ArrayList<Cork> bottleList = new ArrayList<Cork>();
+		Document doc = null;
+
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+
+			doc = builder.parse(xml);
+			NodeList bottles = doc.getElementsByTagName("bottle");
+
+			if(bottles!=null) {
+				for(int j=0,m=bottles.getLength();j<m;j++)
+				{
+					Node bottleNode = bottles.item(j);
+
+					Cork bottle = parseCorkFromNode(bottleNode);
+
+					if (bottle != null)
+					{
+						bottleList.add(bottle);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		
 		return bottleList;
 	}
 	
@@ -897,19 +964,28 @@ public class DryncProvider {
 		return response;
 	} 
 	
-	public static boolean postCreateOrUpdate(Cork cork, String deviceId)
+	public static Result<Cork> postCreateOrUpdate(Cork cork, String deviceId)
 	{
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks", USING_SERVER_HOST,SERVER_PORT);
-		
+		Result<Cork> returnVal = new Result<Cork>();
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
 			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
 			if (response.getStatusLine().getStatusCode() < 400)
-				return true;
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content);
+				returnVal.setResult(true);
+				returnVal.setContents(corks);
+				return returnVal;
+			}
 			else
-				return false;
+			{
+				returnVal.setResult(false);
+				return returnVal;
+			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -921,7 +997,8 @@ public class DryncProvider {
 			e.printStackTrace();
 		}
 		
-		return false;
+		returnVal.setResult(false);
+		return returnVal;
 		/*ClientResource itemsResource = new ClientResource(  
 				clientResourceUrl);
 		
@@ -937,19 +1014,28 @@ public class DryncProvider {
 		return itemsResource.getStatus().isSuccess();*/
 	}
 	
-	public static boolean postUpdate(Cork cork, String deviceId)
+	public static Result<Cork> postUpdate(Cork cork, String deviceId)
 	{
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks/%s", USING_SERVER_HOST,SERVER_PORT,cork.getCork_id());
-		
+		Result<Cork> returnVal = new Result<Cork>();
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId, true), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
 			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
 			if (response.getStatusLine().getStatusCode() < 400)
-				return true;
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content);
+				returnVal.setResult(true);
+				returnVal.setContents(corks);
+				return returnVal;
+			}
 			else
-				return false;
+			{
+				returnVal.setResult(false);
+				return returnVal;
+			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -961,7 +1047,8 @@ public class DryncProvider {
 			e.printStackTrace();
 		}
 		
-		return false;
+		returnVal.setResult(false);
+		return returnVal;
 		/*ClientResource itemsResource = new ClientResource(  
 				clientResourceUrl);
 		

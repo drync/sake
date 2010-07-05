@@ -44,6 +44,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
@@ -277,7 +278,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 					if (isEdit)
 					{
-						boolean postSuccess = DryncProvider.postUpdate(cork, deviceId);
+						Result<Cork> postresult = DryncProvider.postUpdate(cork, deviceId);
+						boolean postSuccess = postresult.isResult();
 						if (!postSuccess)
 						{
 							// failed post, post later.
@@ -287,6 +289,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						}
 						else
 						{
+							if (postresult.getContents().size() > 0)
+								cork = postresult.getContents().get(0);
+							
 							cork.setNeedsServerUpdate(false);
 							cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
 						}
@@ -307,7 +312,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 					else
 					{
-						boolean postSuccess = DryncProvider.postCreateOrUpdate(cork, deviceId);
+						Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(cork, deviceId);
+						boolean postSuccess = postresult.isResult();
+						
+						if (postresult.getContents().size() > 0)
+							cork = postresult.getContents().get(0);
+						
 						if (!postSuccess)
 						{
 							// failed post, post later.
@@ -317,6 +327,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						}
 						// persist to database.
 						dbAdapter.open();
+						
 						long result = dbAdapter.insertCork(cork);
 						dbAdapter.close();
 						
@@ -331,7 +342,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 
 					
-					DryncAddToCellar.this.setResult(RESULT_OK);
+					DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
 					DryncAddToCellar.this.finish();
 				}};
 

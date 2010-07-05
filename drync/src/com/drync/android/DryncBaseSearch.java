@@ -84,6 +84,8 @@ import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
 import android.widget.ClearableSearch.OnCommitListener;
 import android.widget.RelativeLayout.LayoutParams;
+
+import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
@@ -1059,7 +1061,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 							// re-try post.
 							if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
 							{
-								postSuccess = DryncProvider.postCreateOrUpdate(cork, deviceId);
+								Result<Cork> postresult = DryncProvider.postCreateOrUpdate(cork, deviceId);
+								postSuccess = postresult.isResult();
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
 							{
@@ -1067,7 +1070,11 @@ public class DryncBaseSearch extends DryncBaseActivity {
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_UPDATE)
 							{
-								postSuccess = DryncProvider.postUpdate(cork, deviceId);
+								Result<Cork> result = DryncProvider.postUpdate(cork, deviceId);
+								postSuccess = result.isResult();
+								
+								if (result.getContents().size() > 0)
+									cork = result.getContents().get(0);
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_NONE)
 							{
