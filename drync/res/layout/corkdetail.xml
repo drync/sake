@@ -172,6 +172,7 @@
 				
   			<RatingBar android:id="@+id/clrRatingVal" android:numStars="5"         
 					style="@style/wineRatingBar" android:gravity="center" android:isIndicator="true"
+					android:minHeight="66dip" android:maxHeight="66dip" android:stepSize=".50"
 					android:layout_width="wrap_content"  android:layout_height="fill_parent"/>	
 				
 			</LinearLayout>

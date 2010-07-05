@@ -156,28 +156,28 @@
 			</TableLayout>
 			
 			<!-- Rating Style Section -->
-			<TableLayout android:id="@+id/atcRtgSection"
+			<RelativeLayout android:id="@+id/atcRtgSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
-				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
-				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:stretchColumns="1">
-				
-				<TableRow>
-					<TextView android:id="@+id/atcRatingLbl"
-						android:text="Rating"  android:textColor="#000000"
-					android:typeface="sans" android:ellipsize="none" android:gravity="center"
-					android:singleLine="true" 
-					/> 
-				</TableRow>
-				
-				<TableRow>
+				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
+
+			 	<TextView android:id="@+id/atcRatingLbl"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_gravity="left" android:layout_marginLeft="10px"
+					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="left" android:textColor="#000000"
+					android:typeface="sans" android:ellipsize="none"
+					android:singleLine="true" android:text="Rating:" /> 
+					
 					<RatingBar android:id="@+id/atcRatingVal" android:numStars="5"         
-  					style="@style/wineRatingBar" android:isIndicator="false"
-					android:gravity="center" android:stepSize=".50"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"/>	
-				</TableRow>
-			</TableLayout>
-		
-					<!-- Other Information section -->
+  					style="@style/wineRatingBar" android:isIndicator="false" android:minHeight="66dip" android:maxHeight="66dip"
+					android:gravity="center" android:stepSize=".50" android:layout_below="@id/atcRatingLbl"
+					android:layout_width="wrap_content" android:layout_height="fill_parent"/>
+			
+			</RelativeLayout>
+			
+			<!-- Other Information section -->
 			<RelativeLayout android:id="@+id/locationSection"
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
