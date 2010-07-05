@@ -138,7 +138,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
 		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
 		final CheckBox ownVal = (CheckBox)addView.findViewById(R.id.atcOwnCountValue);
-		final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
+		//final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
 		
 		ownVal.setOnClickListener(new OnClickListener()
 		{
@@ -165,7 +165,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 					public void onClick(View v) {
 						ownValueHolder = picker.getCurrent();
-						ownLbl.setText("I Own " + picker.getCurrent());
+						ownVal.setText("I Own " + picker.getCurrent());
 						thisDialog.cancel();
 					}});
 				
@@ -389,7 +389,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			
 			ownValueHolder = ((Cork)mBottle).getCork_bottle_count();
 			ownVal.setChecked(ownValueHolder > 0);
-			ownLbl.setText("I Own " + ((Cork)mBottle).getCork_bottle_count());
+			ownVal.setText("I Own " + ((Cork)mBottle).getCork_bottle_count());
 			
 			varietalVal.setText("" + ((Cork)mBottle).getGrape());
 			

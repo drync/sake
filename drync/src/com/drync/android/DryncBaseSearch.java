@@ -717,7 +717,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 
 		public int getCount() {
-			return mWines.size();
+			if (mWines != null)
+				return mWines.size();
+			else
+				return 0;
 		}
 
 		public Object getItem(int position) {
