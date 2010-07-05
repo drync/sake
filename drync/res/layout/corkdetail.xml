@@ -45,27 +45,28 @@
 		<RelativeLayout android:id="@+id/dateAddedSec"
 				android:orientation="horizontal" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:paddingRight="10px"
-				android:layout_marginTop="2px"
+				android:layout_marginTop="2px" 
 				android:layout_alignParentRight="true">
 
 				<TextView android:id="@+id/dateAddedLabel" android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:textColor="#000000"
-					android:textSize="12px" android:singleLine="true" android:layout_marginLeft="10px"
+					android:layout_height="wrap_content" android:textColor="#000000" android:textStyle="bold"
+					android:textSize="12.0sp" android:singleLine="true" android:layout_marginLeft="10px"
 					android:paddingRight="5px" android:text="Added: " />
 				
 				<TextView android:id="@+id/dateAddedValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/dateAddedLabel" android:text="May 10, 2010 11:25 PM"/>
 			</RelativeLayout>
 			
 		<TextView android:id="@+id/wineName" android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:textSize="16px" android:singleLine="false" android:layout_marginLeft="10px"
+					android:layout_height="wrap_content" android:textColor="#FFFFFF" android:textStyle="bold" 
+					android:typeface="serif"
+					android:textSize="17.0sp" android:singleLine="false" android:layout_marginLeft="10px"
 					android:paddingRight="5px" />
 				
 		<RelativeLayout android:id="@+id/gendetail"
-			android:layout_width="fill_parent" android:layout_height="120px"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:padding="6dip">
 
 			<com.drync.android.ui.RemoteImageView
@@ -79,64 +80,64 @@
 				android:layout_marginTop="2px" android:layout_toRightOf="@id/dtlWineThumb"
 				android:layout_alignParentRight="true">
 
-				<TextView android:id="@+id/yearLabel" android:layout_width="wrap_content" 
+				<TextView android:id="@+id/yearLabel" android:layout_width="60dip" 
 					android:layout_height="wrap_content" android:textColor="#000000" android:minWidth="50px"
-					android:maxWidth="50px" android:gravity="right" 
-					android:textSize="12px" android:singleLine="true" android:paddingLeft="5px"
+					android:maxWidth="50px" android:gravity="right" android:textStyle="bold"
+					android:textSize="12.0sp" android:singleLine="true" android:paddingLeft="5px"
 					android:paddingRight="5px" android:text="Year:" />
 				<TextView android:id="@+id/yearValue" android:layout_width="wrap_content"
-					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:layout_height="wrap_content" android:textColor="#FFFFFF" android:textStyle="bold"
+					android:singleLine="true" android:textSize="12.0sp"
 					android:layout_toRightOf="@id/yearLabel" />
 					
-				<TextView android:id="@+id/varietalLabel" android:layout_width="wrap_content"
+				<TextView android:id="@+id/varietalLabel" android:layout_width="60dip"
 					android:layout_height="wrap_content" android:textColor="#000000" android:gravity="right"
-					android:textSize="12px" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
-					android:maxWidth="50px" android:layout_below="@id/yearLabel" 
+					android:textSize="12.0sp" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
+					android:maxWidth="50px" android:layout_below="@id/yearLabel" android:textStyle="bold"
 					android:text="Varietal:" android:layout_alignRight="@id/yearLabel"  />
 				<TextView android:id="@+id/varietalValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/varietalLabel" android:layout_below="@id/yearValue" />
 					
 				<TextView android:id="@+id/avgRatingLabel" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#000000" android:gravity="right"
-					android:textSize="12px" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
-					android:maxWidth="50px" android:layout_below="@id/varietalLabel" 
+					android:textSize="12.0sp" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
+					android:maxWidth="50px" android:layout_below="@id/varietalLabel" android:textStyle="bold"
 					android:text="Rating:" android:layout_alignRight="@id/yearLabel"  />
 				<TextView android:id="@+id/avgRatingValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/avgRatingLabel" android:layout_below="@id/varietalValue" />
 					
-				<TextView android:id="@+id/styleLabel" android:layout_width="wrap_content"
+				<TextView android:id="@+id/styleLabel" android:layout_width="60dip"
 					android:layout_height="wrap_content" android:textColor="#000000" android:gravity="right"
-					android:textSize="12px" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
-					android:maxWidth="50px" android:layout_below="@id/avgRatingLabel" 
+					android:textSize="12.0sp" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
+					android:maxWidth="50px" android:layout_below="@id/avgRatingLabel" android:textStyle="bold"
 					android:text="Style:" android:layout_alignRight="@id/yearLabel"  />
 				<TextView android:id="@+id/styleValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/styleLabel" android:layout_below="@id/avgRatingValue" />
 					
 				<TextView android:id="@+id/regionLabel" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#000000" android:gravity="right"
-					android:textSize="12px" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
-					android:maxWidth="50px" android:layout_below="@id/styleLabel" 
+					android:textSize="12.0sp" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
+					android:maxWidth="50px" android:layout_below="@id/styleLabel" android:textStyle="bold"
 					android:text="Region:" android:layout_alignRight="@id/yearLabel"  />
 				<TextView android:id="@+id/regionValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/regionLabel" android:layout_below="@id/styleValue" />
 					
 				<TextView android:id="@+id/priceLabel" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#000000" android:gravity="right"
-					android:textSize="12px" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
-					android:maxWidth="50px" android:layout_below="@id/regionLabel" 
+					android:textSize="12.0sp" android:singleLine="true" android:minWidth="50px" android:paddingRight="5px" 
+					android:maxWidth="50px" android:layout_below="@id/regionLabel" android:textStyle="bold"
 					android:text="Price:" android:layout_alignRight="@id/yearLabel"  />
 				<TextView android:id="@+id/priceValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
-					android:singleLine="true" android:textSize="12px"
+					android:singleLine="true" android:textSize="12.0sp" android:textStyle="bold"
 					android:layout_toRightOf="@id/priceLabel" android:layout_below="@id/regionValue" />
 			</RelativeLayout>
 		</RelativeLayout>
@@ -159,115 +160,115 @@
 		
 		<!-- Rating Style Section -->
 			<LinearLayout android:id="@+id/clrRtgSection" android:orientation="vertical"
-				android:layout_width="fill_parent" android:layout_alignParentTop="true"
+				android:layout_width="fill_parent" android:layout_alignParentTop="true" android:background="@drawable/rndborder"
 				android:layout_alignParentLeft="true" android:layout_height="fill_parent"
-				android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginBottom="20dip">
+				android:layout_marginLeft="10px" android:layout_marginRight="10px">
 				
 				<TextView android:id="@+id/clrRatingLbl" android:layout_width="fill_parent" android:layout_height="wrap_content"
-						android:text="Rating:"  android:textColor="#000000" android:textSize="12px"
+						android:text="Rating:"  android:textColor="#5B1207" 
 					android:typeface="sans" android:ellipsize="none" android:gravity="left"
 					android:singleLine="true" 
 					/> 
 				
   			<RatingBar android:id="@+id/clrRatingVal" android:numStars="5"         
-					style="@style/wineRatingBar" android:gravity="center" android:isIndicator="false"
-					android:layout_width="wrap_content" android:layout_height="fill_parent"/>	
+					style="@style/wineRatingBar" android:gravity="center" android:isIndicator="true"
+					android:layout_width="wrap_content"  android:layout_height="fill_parent"/>	
 				
 			</LinearLayout>
 
 		<!-- Other Information section -->
 		<RelativeLayout android:id="@+id/locationSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/topbotborder"
-			android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginTop="20px">
+			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/rndborder"
+			android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginTop="10px">
 
 			<TextView android:id="@+id/locationLbl"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true" android:layout_gravity="left"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:gravity="left" android:textSize="12px"
-				android:textColor="#000000" android:typeface="sans"
+				android:gravity="left"
+				android:textColor="#5B1207" android:typeface="sans"
 				android:ellipsize="none" android:singleLine="true" android:text="Location:" />
 				
 			<TextView android:id="@+id/locationVal"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_toRightOf="@id/locationLbl"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:minWidth="50px" android:paddingRight="5px" android:gravity="left" android:textSize="12px"
-				android:textColor="#FFFFFF" android:typeface="sans" 
+				android:minWidth="50px" android:paddingRight="5px" android:gravity="left" 
+				android:textColor="#000000" android:typeface="sans" 
 				android:ellipsize="none" android:singleLine="true" android:text="n/a" />
 
 		</RelativeLayout>
 		
 		<RelativeLayout android:id="@+id/addlInfoSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/topbotborder"
-			android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginTop="-2px">
+			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/rndborder"
+			android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_marginTop="10px">
 
 			<TextView android:id="@+id/tastingNoteLbl"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true" android:layout_gravity="left"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:textSize="12px" android:minWidth="50px" android:paddingRight="5px" android:gravity="right"
-				android:textColor="#000000" android:typeface="sans" 
+				android:minWidth="50px" android:paddingRight="5px" android:gravity="right"
+				android:textColor="#5B1207" android:typeface="sans" 
 				android:ellipsize="none" android:singleLine="false" android:text="Tasting\r\nNote:" />
 				
 			<TextView android:id="@+id/tastingNoteVal"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_toRightOf="@id/tastingNoteLbl"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:gravity="left" android:textSize="12px"
-				android:textColor="#FFFFFF" android:typeface="sans" 
+				android:gravity="left" 
+				android:textColor="#000000" android:typeface="sans" 
 				android:ellipsize="none" android:singleLine="false" android:text="Test Test Test Test Test Test Test Test Test Test Test Test Test" />
 
 		</RelativeLayout>
 	
 		<RelativeLayout android:id="@+id/privateNoteSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/topbotborder"
-			android:layout_marginLeft="10px" android:layout_marginTop="-2px" android:layout_marginRight="10px">
+			android:layout_alignParentLeft="true" android:layout_height="fill_parent" android:background="@drawable/rndborder"
+			android:layout_marginLeft="10px" android:layout_marginTop="10px" android:layout_marginRight="10px">
 
 			<TextView android:id="@+id/privateNoteLbl"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_alignParentLeft="true" android:layout_gravity="left"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
-				android:minWidth="50px" android:paddingRight="5px" android:gravity="right" android:textSize="12px"
-				android:textColor="#000000" android:typeface="sans"
+				android:minWidth="50px" android:paddingRight="5px" android:gravity="right" 
+				android:textColor="#5B1207" android:typeface="sans"
 				android:ellipsize="none" android:singleLine="false" android:text="Private\r\nNote:" />
 				
 			<TextView android:id="@+id/privateNoteVal"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:layout_gravity="left" android:layout_toRightOf="@id/privateNoteLbl"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:gravity="left" android:textSize="12px"
-				android:textColor="#FFFFFF" android:typeface="sans" 
+				android:gravity="left" 
+				android:textColor="#000000" android:typeface="sans" 
 				android:ellipsize="none" android:singleLine="false" android:text="Test Test Test Test Test Test Test Test Test Test Test Test Test" />
 
 		</RelativeLayout>
 			
 		<RelativeLayout android:id="@+id/drankOwnWantSection"
-			android:layout_width="fill_parent" android:layout_alignParentTop="true" android:background="@drawable/topbotborder"
+			android:layout_width="fill_parent" android:layout_alignParentTop="true" android:background="@drawable/rndborder"
 			android:layout_alignParentLeft="true" android:layout_height="fill_parent" 
-			android:layout_marginLeft="10px" android:layout_marginTop="-2px" android:layout_marginRight="10px">
+			android:layout_marginLeft="10px" android:layout_marginTop="10px" android:layout_marginRight="10px">
 
 			 <CheckBox android:id="@+id/drankCheckbox"
         		android:layout_width="wrap_content"
         			android:layout_height="wrap_content"
-        				android:layout_alignParentRight="true" android:textSize="12px"
+        				android:layout_alignParentRight="true"  android:textColor="#000000" 
         				android:focusable="false" android:clickable="false" 
         				android:text="I Drank"  />
         				
         	<CheckBox android:id="@+id/wantCheckbox"
         		android:layout_width="wrap_content"
-        			android:layout_height="wrap_content"
-        				android:layout_alignParentLeft="true" android:textSize="12px"
+        			android:layout_height="wrap_content" android:textColor="#000000" 
+        				android:layout_alignParentLeft="true" 
         				android:focusable="false" android:clickable="false" 
         				android:text="I Want"  />
 			
 			<CheckBox android:id="@+id/ownCheckbox"
         		android:layout_width="wrap_content"
         			android:layout_height="wrap_content" android:layout_centerHorizontal="true"
-        				android:textSize="12px"
+        				android:textColor="#000000" 
         				android:focusable="false" android:clickable="false" 
         				android:text="I Own 0"  />        				
 
