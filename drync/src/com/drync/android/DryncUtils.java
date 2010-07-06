@@ -163,12 +163,12 @@ public class DryncUtils {
 	
 	public static String getEtag(Activity activity)
 	{
-/*		if (etag == null)
+		if (etag == null)
 		{
 			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
 
 			etag = settings.getString(DryncUtils.CELLAR_ETAG, null);
-		}*/
+		}
 		return etag;
 	}
 	
@@ -176,12 +176,12 @@ public class DryncUtils {
 	{
 		DryncUtils.etag = etag;
 		
-		/*SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
 		
 		Editor editor = settings.edit();
 		editor.putString(DryncUtils.CELLAR_ETAG, DryncUtils.etag);
 		editor.commit();
-		*/
+		
 	}
 	
 	public static String getDeviceId(ContentResolver resolver, Activity activity)

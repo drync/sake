@@ -621,12 +621,12 @@ public class DryncProvider {
 		return null;
 	}
 	
-	public String myAcctGet(String deviceId) throws DryncHostException {
+	public synchronized String myAcctGet(String deviceId) throws DryncHostException {
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		return myAcctGet(target, deviceId);
 	}
 	
-	public String myAcctGet(HttpHost target, String deviceId) throws DryncHostException {
+	public synchronized String myAcctGet(HttpHost target, String deviceId) throws DryncHostException {
 		String filename = DryncUtils.getCacheDir() + "myacct.html";
 		
 		File myacctfile = new File(filename);

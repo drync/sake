@@ -27,6 +27,14 @@ public class DryncMyAccountActivity extends Activity {
 	private WebView regWebView;
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		// let's clear the stored etag so that we can refresh the cellar.
+		DryncUtils.setEtag(this, null);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
