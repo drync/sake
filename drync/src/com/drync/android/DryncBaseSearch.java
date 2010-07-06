@@ -26,12 +26,15 @@ import java.util.concurrent.TimeUnit;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -181,7 +184,22 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			mAdapter.mWines.clear();
 			mAdapter.viewHash.clear();
-			mAdapter.mWines.addAll(mResults);
+			if (mResults.size() <= 0)
+			{
+				 new AlertDialog.Builder(this)
+			      .setMessage(getResources().getString(R.string.noresults) + "\n\n" +
+			    		  getResources().getString(R.string.noresults2))
+			    		  .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+			    	           public void onClick(DialogInterface dialog, int id) {
+			    	                dialog.cancel();
+			    	           }})
+			      .show();
+			}
+			else
+			{
+				mAdapter.mWines.addAll(mResults);
+			}
+			
 		}
 
 		mAdapter.notifyDataSetChanged();
@@ -241,11 +259,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			popButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
-					progressDlg =  new ProgressDialog(DryncBaseSearch.this);
-					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Retrieving popular wines...");
-					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					progressDlg.show();
 					DryncBaseSearch.this.startTopWineQueryOperation(DryncProvider.TOP_POPULAR);
 					DryncBaseSearch.this.lastSelectedTopWine = DryncProvider.TOP_POPULAR;
 					
@@ -256,11 +269,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			featButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
-					progressDlg =  new ProgressDialog(DryncBaseSearch.this);
-					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Retrieving featured wines...");
-					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					progressDlg.show();
 					DryncBaseSearch.this.startTopWineQueryOperation(DryncProvider.TOP_FEATURED);
 					DryncBaseSearch.this.lastSelectedTopWine = DryncProvider.TOP_FEATURED;
 					
@@ -270,11 +278,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			mwButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
-					progressDlg =  new ProgressDialog(DryncBaseSearch.this);
-					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Retrieving popular wines...");
-					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					progressDlg.show();
 					DryncBaseSearch.this.startTopWineQueryOperation(DryncProvider.TOP_WANTED);
 					DryncBaseSearch.this.lastSelectedTopWine = DryncProvider.TOP_WANTED;
 					
@@ -296,11 +299,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			public boolean onCommit(View arg0, String text) {
 				String searchterm = searchholder.getEditableText().toString();
 
-				progressDlg =  new ProgressDialog(DryncBaseSearch.this);
-				progressDlg.setTitle("Dryncing...");
-				progressDlg.setMessage("Retrieving wines...");
-				progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progressDlg.show();
 				DryncBaseSearch.this.startQueryOperation(searchterm);
 				return true;
 			}});
@@ -754,7 +752,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			//if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
 			//{
-				Log.d(LOG_IDENTIFIER, "getview position: " + position);
+				//Log.d(LOG_IDENTIFIER, "getview position: " + position);
 				bindView(view, wine);
 
 				if (view != null)
@@ -867,6 +865,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		bail = true;
 		
+		
+		
 		try {
 			if (longToastThread != null)
 			{
@@ -879,14 +879,34 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			e.printStackTrace();
 		}
 		
-		Thread t = new Thread()
+		if (!hasConnectivity())
 		{
-			public void run() {
-				mResults = DryncProvider.getInstance().getMatches(deviceId, curQuery);
-				mHandler.post(mUpdateResults);
-			}
-		};
-		t.start();
+			new AlertDialog.Builder(this)
+		      .setMessage(getResources().getString(R.string.nonetsearch) + "\n\n" +
+		    		  getResources().getString(R.string.nonetsearch2))
+		    		  .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+		    	           public void onClick(DialogInterface dialog, int id) {
+		    	                dialog.cancel();
+		    	           }})
+		      .show();
+		}
+		else
+		{
+			progressDlg =  new ProgressDialog(DryncBaseSearch.this);
+			progressDlg.setTitle("Dryncing...");
+			progressDlg.setMessage("Retrieving wines...");
+			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDlg.show();
+			
+			Thread t = new Thread()
+			{
+				public void run() {
+					mResults = DryncProvider.getInstance().getMatches(deviceId, curQuery);
+					mHandler.post(mUpdateResults);
+				}
+			};
+			t.start();
+		}
 	}
 	
 	@Override
@@ -900,14 +920,54 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 	protected void startTopWineQueryOperation(final int type)
 	{
-		Thread t = new Thread()
+		String typestr = "popular";
+		String captypestr = "Popular";
+		if (type == DryncProvider.TOP_POPULAR)
 		{
-			public void run() {
-				mResults = DryncProvider.getInstance().getTopWines(deviceId, type);
-				mHandler.post(mUpdateResults);
-			}
-		};
-		t.start();
+			typestr = "popular";
+			captypestr = "Popular";
+		}
+		else if (type == DryncProvider.TOP_FEATURED)
+		{
+			typestr = "featured";
+			captypestr = "Featured";
+		}
+		else if (type == DryncProvider.TOP_WANTED)
+		{
+			typestr = "most wanted";
+			captypestr = "Most Wanted";
+		}
+		
+		if (!hasConnectivity())
+		{
+			new AlertDialog.Builder(this)
+			.setMessage(getResources().getString(R.string.nonet_twsearch) + " " + captypestr + " wines.\n\n" +
+					getResources().getString(R.string.nonetsearch2))
+					.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}})
+						.show();
+		}
+		else
+		{
+			
+			
+			progressDlg =  new ProgressDialog(DryncBaseSearch.this);
+			progressDlg.setTitle("Dryncing...");
+			progressDlg.setMessage("Retrieving " + typestr + " wines...");
+			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDlg.show();
+			
+			Thread t = new Thread()
+			{
+				public void run() {
+					mResults = DryncProvider.getInstance().getTopWines(deviceId, type);
+					mHandler.post(mUpdateResults);
+				}
+			};
+			t.start();
+		}
 	}
 	
 	private void populateReviewTable(TableLayout table, Bottle bottle)
@@ -1037,19 +1097,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncBaseSearch.this);
 				try
 				{
-
-					ConnectivityManager cmgr = 
-						(ConnectivityManager) DryncBaseSearch.this.getSystemService(
-								Context.CONNECTIVITY_SERVICE);
-
-					NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-					NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-					if (((mobileinfo != null) && 
-							(mobileinfo.isConnected())) ||
-							((wifiinfo != null) && (wifiinfo.isConnected())))
+					if (hasConnectivity())
 					{
-						
 						dbAdapter.open();
 
 						List<Cork> corks = dbAdapter.getAllCorksNeedingUpdates();

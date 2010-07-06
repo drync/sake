@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -100,9 +101,16 @@ public class DryncSettings extends DryncBaseActivity {
 		final String threadDeviceId = deviceId;
 		Thread t = new Thread() {
 			public void run() {
-				DryncProvider.getInstance()
-						.getCorks(DryncSettings.this, threadDeviceId);
-				DryncProvider.getInstance().myAcctGet(threadDeviceId);
+				
+				try {
+					DryncProvider.getInstance()
+					.getCorks(DryncSettings.this, threadDeviceId);
+					DryncProvider.getInstance().myAcctGet(threadDeviceId);
+				} catch (DryncHostException e) {
+					Log.e("DryncSettings", "Error getting my account page", e);
+				} catch (DryncXmlParseExeption e) {
+					Log.e("DryncSettings", "Error updating corks", e);
+				}
 				
 				mHandler.post(mUpdateResults);
 			}

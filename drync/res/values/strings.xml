@@ -28,6 +28,16 @@
     <string name="searchtoast2">Find your wine by typing a few words from the wine label into the search bar above.</string>
     <string name="searchtoast3">You don't need to type in all the details - just make sure you give Drync enough to work with, like "2004 inman pinot" or "chateau margaux 2001".</string>
 	
+	<string name="noresults">No matching results could be found.</string>
+	<string name="noresults2">Please try again!</string>
+	
+	<string name="nonetsearch">A Data Connection is required to perform a search.</string>
+	<string name="nonet_twsearch">A Data Connection is required to fetch the </string>
+	<string name="nonetsearch2">Please try again later when a connection is present.</string>
+	
+	<string name="nosettingsyet">Due to data connection issues, no settings have been fetched from the server yet.</string>
+	<string name="nosettingsyet2">Please try again later.</string>
+	
 	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	
 	<string name="successfulcellaradd">You have successfully added this wine to your cellar.</string>

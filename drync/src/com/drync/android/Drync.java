@@ -14,6 +14,7 @@ import com.drync.android.helpers.CSVReader;
 import com.flurry.android.FlurryAgent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -22,6 +23,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -157,18 +160,30 @@ public class Drync extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
-		String register = DryncProvider.getInstance().startupPost(deviceId);
+		String register = null;
+		if (hasConnectivity())
+		{
+			register = DryncProvider.getInstance().startupPost(deviceId);
 
-		final String threadDeviceId = deviceId;
-		Thread t = new Thread() {
-			public void run() {
-				DryncProvider.getInstance()
+			final String threadDeviceId = deviceId;
+			Thread t = new Thread() {
+				public void run() {
+					
+					try {
+						DryncProvider.getInstance()
 						.getCorks(Drync.this, threadDeviceId);
-				DryncProvider.getInstance().myAcctGet(threadDeviceId);
-			}
-		};
-		t.start();
+						DryncProvider.getInstance().myAcctGet(threadDeviceId);
+					} catch (DryncHostException e) {
+						Log.e("Drync", "DryncHostException on Startup", e);
+					} catch (DryncXmlParseExeption e) {
+						Log.e("Drync", "DryncXmlParseException on Startup", e);
+					}
+				}
+			};
+			t.start();
+		}
 
 		registerTxt = register;
 
@@ -323,6 +338,24 @@ public class Drync extends Activity {
 		super.onStart();
 		FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");
 
+	}
+	
+	public boolean hasConnectivity()
+	{
+		ConnectivityManager cmgr = 
+			(ConnectivityManager) this.getSystemService(
+					Context.CONNECTIVITY_SERVICE);
+
+		NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (((mobileinfo != null) && 
+				(mobileinfo.isConnected())) ||
+				((wifiinfo != null) && (wifiinfo.isConnected())))
+			return true;
+		
+		else
+			return false;
 	}
 
 }

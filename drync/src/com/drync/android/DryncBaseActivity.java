@@ -3,7 +3,11 @@ package com.drync.android;
 import com.flurry.android.FlurryAgent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -141,16 +145,58 @@ public abstract class DryncBaseActivity extends Activity {
     	startActivity(setIntent);
     }
 	
+	protected void doStartupFetching()
+	{
+		 // do refresh of cellar data on start of every activity...
+		   String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
+		   
+			final String threadDeviceId = deviceId;
+			Thread t = new Thread() {
+				public void run() {
+					try
+					{
+						DryncProvider.getInstance()
+							.getCorks(DryncBaseActivity.this, threadDeviceId);
+						DryncProvider.getInstance().myAcctGet(threadDeviceId);
+					}
+					catch(Exception e)
+					{
+						Log.e("An error has occurred during a periodic fetch of the cellar & My Account info.", e.getMessage());
+					}
+				}
+			};
+			t.start();
+	}
 	
 	public void onStart()
 	{
 	   super.onStart();
-	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");	   
+	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");	
+	   doStartupFetching();
+	     
 	}
 	
 	public void onStop()
 	{
 		super.onStop();
 		FlurryAgent.onEndSession(this);
+	}
+	
+	public boolean hasConnectivity()
+	{
+		ConnectivityManager cmgr = 
+			(ConnectivityManager) this.getSystemService(
+					Context.CONNECTIVITY_SERVICE);
+
+		NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (((mobileinfo != null) && 
+				(mobileinfo.isConnected())) ||
+				((wifiinfo != null) && (wifiinfo.isConnected())))
+			return true;
+		
+		else
+			return false;
 	}
 }

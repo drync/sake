@@ -15,6 +15,8 @@ import com.drync.android.objects.Source;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 import android.content.SharedPreferences;
@@ -46,6 +48,7 @@ public class DryncUtils {
 	}
 
 	private static String deviceId = null;
+	private static String etag;
 	
 	//Shared Prefs
 	public static final String PREFS_NAME = "DRYNC_PREFS";
@@ -53,6 +56,7 @@ public class DryncUtils {
 	public static final String SHOW_INTRO_PREF = "showIntro";
 	public static final String LAST_QUERY_PREF = "lastQuery";
 	public static final String LAST_FILTER_PREF = "lastFilter";
+	public static final String CELLAR_ETAG = "cellarEtag";
 	/*public static final String TWITTER_USERNAME_PREF = "twitter_username";
 	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
 	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
@@ -157,6 +161,29 @@ public class DryncUtils {
 		return uuid_key + uuid_val;
 	}
 	
+	public static String getEtag(Activity activity)
+	{
+/*		if (etag == null)
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+			etag = settings.getString(DryncUtils.CELLAR_ETAG, null);
+		}*/
+		return etag;
+	}
+	
+	public static void setEtag(Activity activity, String etag)
+	{
+		DryncUtils.etag = etag;
+		
+		/*SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putString(DryncUtils.CELLAR_ETAG, DryncUtils.etag);
+		editor.commit();
+		*/
+	}
+	
 	public static String getDeviceId(ContentResolver resolver, Activity activity)
 	{
 		if (deviceId == null)
@@ -250,5 +277,7 @@ public class DryncUtils {
 	    f.read(buffer);
 	    return new String(buffer);
 	}
+	
+	
 
 }

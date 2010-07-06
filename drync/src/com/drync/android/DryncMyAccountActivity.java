@@ -12,6 +12,8 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
+import android.view.Gravity;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
@@ -64,7 +66,14 @@ public class DryncMyAccountActivity extends Activity {
 			regWebView.loadDataWithBaseURL(sb.toString(), myacctfile, "text/html", "utf-8", null);
 			regWebView.requestFocus();
 		}
-		
+		else
+		{
+			Toast noReviewUrl = Toast.makeText(this, getResources().getString(R.string.nosettingsyet) + "\n\n" +
+					getResources().getString(R.string.nosettingsyet2) +"\n", Toast.LENGTH_LONG);
+			noReviewUrl.setGravity(Gravity.CENTER, 0, 0);
+			noReviewUrl.show();
+			this.finish();
+		}
 	}
 	
 	@Override
@@ -123,12 +132,15 @@ public class DryncMyAccountActivity extends Activity {
 				
 				Thread thread = new Thread()
 				{
-
 					@Override
 					public void run() {
 						super.run();
 						// redo this to reset cookies.
-						DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(DryncMyAccountActivity.this.getContentResolver(), DryncMyAccountActivity.this));
+						try {
+							DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(DryncMyAccountActivity.this.getContentResolver(), DryncMyAccountActivity.this));
+						} catch (DryncHostException e) {
+							Log.e("DryncMyAccountActivity", "Error resetting my account page", e);
+						}
 					}
 				};
 				

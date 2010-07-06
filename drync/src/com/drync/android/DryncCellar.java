@@ -56,6 +56,11 @@ import com.drync.android.ui.RemoteImageView;
 
 public class DryncCellar extends DryncBaseActivity {
 
+	@Override
+	protected void doStartupFetching() {
+		// skip this fetch in cellar view.
+	}
+
 	public static final String LOG_IDENTIFIER = "DryncCellar";
 	private ListView mList;
 	final Handler mHandler = new Handler();

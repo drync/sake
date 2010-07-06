@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,7 +24,9 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -52,7 +55,9 @@ import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -287,13 +292,13 @@ public class DryncProvider {
 		return bottleList;
 	}
 	
-	public List<Cork> getCorks(Context context, String deviceId)
+	public List<Cork> getCorks(Activity activity, String deviceId) throws DryncHostException, DryncXmlParseExeption
 	{
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
-		return getCorks(context, target, deviceId);
+		return getCorks(activity, target, deviceId);
 	}
 	
-	private HttpResponse doCorksGet(Context context, HttpHost target, String deviceId) throws ClientProtocolException, IOException
+	private HttpResponse doCorksGet(Activity activity, HttpHost target, String deviceId) throws DryncHostException
 	{
 		HttpClient client = new DefaultHttpClient();
 
@@ -308,25 +313,50 @@ public class DryncProvider {
 
 		Log.d("DryncPrvdr", "Loading Corks: " + bldr.toString());
 
-		HttpGet get = new HttpGet(bldr.toString());
-		
-		HttpResponse response = client.execute(target, get);
+		HttpResponse response = null;
+		try
+		{
+			HttpGet get = new HttpGet(bldr.toString());
+			if (DryncUtils.getEtag(activity) != null)
+			{
+				get.addHeader("If-None-Match", DryncUtils.getEtag(activity));
+			}
+				
+			response = client.execute(target, get);
+			Header[] eTaghdrs = response.getHeaders("ETag");
+			
+			if (eTaghdrs.length > 0)
+			{
+				String etagheader = eTaghdrs[0].getValue();
+				DryncUtils.setEtag(activity, etagheader);
+			}			
+		}
+		catch (UnknownHostException e)
+		{
+			Log.e("DryncProvider", "Caught UnknownHostException fetching corks.");
+			throw new DryncHostException(e);
+		}
+		catch (IOException e)
+		{
+			Log.e("DryncProvider", "Caught IOException fetching corks.");
+			throw new DryncHostException(e);
+		}
 		
 		return response;
 	}
 
-	public boolean getCorksToFile(Context context, String deviceId) {
+	public boolean getCorksToFile(Activity activity, String deviceId) {
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
-		return getCorksToFile(context, target, deviceId);
+		return getCorksToFile(activity, target, deviceId);
 	}
 	
-	private boolean getCorksToFile(Context context, HttpHost target, String deviceId) {
+	private boolean getCorksToFile(Activity activity, HttpHost target, String deviceId) {
 		
 		boolean wroteContent = false;
 		InputStream is = null;
 
 		try {
-			HttpResponse response = doCorksGet(context, target, deviceId);
+			HttpResponse response = doCorksGet(activity, target, deviceId);
 			HttpEntity entity = response.getEntity();
 
 			//DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -393,21 +423,30 @@ public class DryncProvider {
 	 * @param target - the target HTTP host for the REST service.
 	 * @param keywords - comma delimited keywords. May contain spaces.
 	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
+	 * @throws DryncHostException 
+	 * @throws DryncXmlParseExeption 
 	 */
-	private List<Cork> getCorks(Context context, HttpHost target, String deviceId) {
+	private List<Cork> getCorks(Activity activity, HttpHost target, String deviceId) throws DryncHostException, DryncXmlParseExeption {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
-		DryncDbAdapter dbAdapter = new DryncDbAdapter(context);
-		dbAdapter.open();
-		dbAdapter.clearCorks(true);
 		Document doc = null;
+		DryncDbAdapter dbAdapter = new DryncDbAdapter(activity);
 		
-		try {
+		HttpResponse response = null;
+		
+		try
+		{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			HttpResponse response = doCorksGet(context, target, deviceId);
+			response = doCorksGet(activity, target, deviceId);
 			
-			if (response.getStatusLine().getStatusCode() < 400)
+			if (response.getStatusLine().getStatusCode() == 304) // do nothing!
 			{
+				return null;
+			} else if (response.getStatusLine().getStatusCode() < 400)
+			{
+				dbAdapter.open();
+				dbAdapter.clearCorks(true);
+				
 				HttpEntity entity = response.getEntity();
 
 				doc = builder.parse(entity.getContent());
@@ -428,13 +467,15 @@ public class DryncProvider {
 				}
 				DryncUtils.setCellarLastUpdatedTimestamp(System.currentTimeMillis());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (DryncHostException e) { // catch & rethrow - only catching to handle the finally.
+			throw e;
+		}
+		catch(Exception e) {
+			Log.e("DryncProvider", "caught exception getting corks.");
+			throw new DryncXmlParseExeption(e);
 		} finally {
 			dbAdapter.close();
 		}
-		
-		
 		
 		return bottleList;
 	}
@@ -580,12 +621,12 @@ public class DryncProvider {
 		return null;
 	}
 	
-	public String myAcctGet(String deviceId) {
+	public String myAcctGet(String deviceId) throws DryncHostException {
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		return myAcctGet(target, deviceId);
 	}
 	
-	public String myAcctGet(HttpHost target, String deviceId) {
+	public String myAcctGet(HttpHost target, String deviceId) throws DryncHostException {
 		String filename = DryncUtils.getCacheDir() + "myacct.html";
 		
 		File myacctfile = new File(filename);
@@ -622,8 +663,6 @@ public class DryncProvider {
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
 				return null;
-			
-			
 			
 			if (entity != null) {
 				is = entity.getContent();
@@ -664,6 +703,11 @@ public class DryncProvider {
 				}
 				return out.toString();
 			}
+		}
+		catch (UnknownHostException e)
+		{
+			Log.e("StartupGet", "Caught UnknownHostException getting my account page.");
+			throw new DryncHostException(e);
 		}
 		catch( Exception e)
 		{
