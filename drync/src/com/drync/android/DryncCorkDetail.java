@@ -190,6 +190,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			TextView addedView = (TextView) detailView.findViewById(R.id.dateAddedValue);
 			
 			RatingBar ratingBar = (RatingBar) detailView.findViewById(R.id.clrRatingVal);
+			TextView ratingObserver = (TextView) detailView.findViewById(R.id.clrRatingObserver);
 			
 			TextView locationVal = (TextView) detailView.findViewById(R.id.locationVal);
 			TextView tastingNoteVal = (TextView) detailView.findViewById(R.id.tastingNoteVal);
@@ -221,6 +222,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			priceView.setText((price != null) && (!price.equals("")) ? price : mBottle.getPrice());
 			
 			ratingBar.setRating(mBottle.getCork_rating());
+			ratingObserver.setText("" + mBottle.getCork_rating());
 			
 			String location = mBottle.getLocation();
 			locationVal.setText(((location == null) || (location.equals(""))) ? "n/a" : location);

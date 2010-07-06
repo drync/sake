@@ -43,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
@@ -131,6 +132,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
+		final TextView ratingVal = (TextView) addView.findViewById(R.id.atcRatingObserver);
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
 		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
@@ -140,6 +142,14 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
 		final CheckBox ownVal = (CheckBox)addView.findViewById(R.id.atcOwnCountValue);
 		//final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
+		
+		ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
+
+			public void onRatingChanged(RatingBar ratingBar, float rating,
+					boolean fromUser) {
+				ratingVal.setText("" + rating);
+				
+			}});
 		
 		ownVal.setOnClickListener(new OnClickListener()
 		{
@@ -386,6 +396,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			priceVal.setText((price == null || price.equals("")) ? mBottle.getPrice() : price);
 			RatingBar ratingBar = (RatingBar)addView.findViewById(R.id.atcRatingVal);
 			ratingBar.setRating(((Cork)mBottle).getCork_rating());
+			ratingVal.setText("" + ((Cork)mBottle).getCork_rating());
 			
 			// set style field:
 			if (((Cork)mBottle).getStyle() != null)
@@ -417,6 +428,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				styleVal.setSelection(stylepos);
 			
 			varietalVal.setText("" + mBottle.getGrape());
+			
+			ratingVal.setText("" + 0);
 			
 		}
 		

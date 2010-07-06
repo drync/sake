@@ -169,12 +169,23 @@
 					android:typeface="sans" android:ellipsize="none" android:gravity="left"
 					android:singleLine="true" 
 					/> 
+			
+			<LinearLayout android:id="@+id/clrRatingBarSec" android:orientation="horizontal" 
+			android:layout_width="wrap_content"  android:layout_height="fill_parent" 
+			android:minHeight="66dip">
 				
   			<RatingBar android:id="@+id/clrRatingVal" android:numStars="5"         
 					style="@style/wineRatingBar" android:gravity="center" android:isIndicator="true"
 					android:minHeight="66dip" android:maxHeight="66dip" android:stepSize=".50"
 					android:layout_width="wrap_content"  android:layout_height="fill_parent"/>	
-				
+					
+					<TextView android:id="@+id/clrRatingObserver" android:layout_width="fill_parent" android:layout_height="wrap_content"
+						android:text="2.5"  android:textColor="#000000" 
+					android:typeface="sans" android:ellipsize="none" android:gravity="right" android:layout_gravity="bottom|right"
+					android:singleLine="true" android:layout_marginLeft="50dip"
+					/> 
+					
+				</LinearLayout>
 			</LinearLayout>
 
 		<!-- Other Information section -->
