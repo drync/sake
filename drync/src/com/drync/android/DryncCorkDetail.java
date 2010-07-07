@@ -745,5 +745,10 @@ public class DryncCorkDetail extends DryncBaseActivity {
 	public int getMenuItemToSkip() {
 		return -1;
 	}
+	
+	@Override
+	protected void doStartupFetching() {
+		// skip this fetch in cellar view.
+	}
 }
 

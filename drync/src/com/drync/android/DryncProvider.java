@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -292,8 +290,16 @@ public class DryncProvider {
 		return bottleList;
 	}
 	
-	public List<Cork> getCorks(Activity activity, String deviceId) throws DryncHostException, DryncXmlParseExeption
+	public synchronized List<Cork> getCorks(Activity activity, String deviceId) throws DryncHostException, DryncXmlParseExeption
 	{
+		// little safety to prevent this from happening too often.
+		if ((DryncUtils.getCellarLastUpdatedTimestamp() != -1) && 
+				(System.currentTimeMillis() - DryncUtils.getCellarLastUpdatedTimestamp()) < 20000)
+		{
+			Log.d("DryncProvider", "skip cork get, too recent to fetch it again.");
+			return null;
+		}
+		
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		return getCorks(activity, target, deviceId);
 	}
@@ -622,7 +628,17 @@ public class DryncProvider {
 	}
 	
 	public synchronized String myAcctGet(String deviceId) throws DryncHostException {
+		
+		// little safety to prevent this from happening too often.
+		if ((DryncUtils.getMyAcctGetLastUpdatedTimestamp() != -1) && 
+				(System.currentTimeMillis() - DryncUtils.getMyAcctGetLastUpdatedTimestamp()) < 60000)
+		{
+			Log.d("DryncProvider", "skip account get, too recent to fetch it again.");
+			return null;
+		}
+		
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
+		DryncUtils.setMyAcctGetLastUpdatedTimestamp(System.currentTimeMillis());
 		return myAcctGet(target, deviceId);
 	}
 	

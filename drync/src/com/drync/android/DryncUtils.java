@@ -15,8 +15,6 @@ import com.drync.android.objects.Source;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.util.Log;
 import android.content.SharedPreferences;
@@ -29,8 +27,18 @@ public class DryncUtils {
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
 	public static CookieStore cookieStore;
 	public static long cellarLastUpdatedTimestamp = -1;
+	public static long myAcctGetLastUpdatedTimestamp = -1;
 	
 	
+	public static long getMyAcctGetLastUpdatedTimestamp() {
+		return myAcctGetLastUpdatedTimestamp;
+	}
+
+	public static void setMyAcctGetLastUpdatedTimestamp(
+			long myAcctGetLastUpdatedTimestamp) {
+		DryncUtils.myAcctGetLastUpdatedTimestamp = myAcctGetLastUpdatedTimestamp;
+	}
+
 	public static long getCellarLastUpdatedTimestamp() {
 		return cellarLastUpdatedTimestamp;
 	}
