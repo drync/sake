@@ -178,9 +178,8 @@ public abstract class DryncBaseActivity extends Activity {
 	public void onStart()
 	{
 	   super.onStart();
-	   FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");	
+	   FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());	
 	   doStartupFetching();
-	     
 	}
 	
 	public void onStop()
