@@ -438,8 +438,19 @@ public class DryncBaseSearch extends DryncBaseActivity {
 						cork.setRegion(regionVal.getEditableText().toString());
 						cork.setCork_rating(ratingbar.getRating());
 						dbAdapter.open();
-						dbAdapter.insertCork(cork);
-						dbAdapter.close();
+						try {
+							dbAdapter.insertCork(cork);
+						} catch (DryncFreeCellarExceededException e) {
+							// successful
+							Toast successfulAdd = Toast.makeText(DryncBaseSearch.this, 
+									"You have reached the maximum number of wines in your free cellar.", Toast.LENGTH_LONG);
+							successfulAdd.show();
+						}
+						finally
+						{
+							dbAdapter.close();
+						}
+						
 						Log.d("AddToCellar", "Yearselected: " + cork.getYear());
 					}});
 	        }

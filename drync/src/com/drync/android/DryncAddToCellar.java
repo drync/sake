@@ -337,17 +337,31 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						}
 						// persist to database.
 						dbAdapter.open();
-						
-						long result = dbAdapter.insertCork(cork);
-						dbAdapter.close();
-						
-						if (result >= 0)
+						long result = -1;
+						try
+						{
+							result = dbAdapter.insertCork(cork);
+
+
+							if (result >= 0)
+							{
+								// successful
+								Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
+										getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
+								successfulAdd.show();
+
+							}
+						}
+						catch (DryncFreeCellarExceededException e)
 						{
 							// successful
 							Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
-									getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
+									"You have reached the maximum number of wines in your free cellar.", Toast.LENGTH_LONG);
 							successfulAdd.show();
-							
+						}
+						finally
+						{
+							dbAdapter.close();
 						}
 					}
 

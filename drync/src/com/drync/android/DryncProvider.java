@@ -462,8 +462,17 @@ public class DryncProvider {
 						Cork bottle = parseCorkFromNode(bottleNode);
 						if (bottle != null)
 						{
-							dbAdapter.insertOrUpdateCork((Cork)bottle);
-							bottleList.add(bottle);
+							long result = -1;
+							try
+							{
+								result = dbAdapter.insertOrUpdateCork((Cork)bottle);
+								if (result >= 0)
+									bottleList.add(bottle);
+							}
+							catch (DryncFreeCellarExceededException e)
+							{
+								// intentionally ignore here.
+							}
 						}
 					}
 				}

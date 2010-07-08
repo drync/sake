@@ -242,7 +242,7 @@ public class DryncDbAdapter
         DBHelper.close();
     }
     
-    public long insertOrUpdateCork(Cork cork)
+    public long insertOrUpdateCork(Cork cork) throws DryncFreeCellarExceededException
     {
     	Cork localCopy = this.getCorkByUUID(cork.getCork_uuid());
     	if (localCopy == null) // then it's easy:
@@ -269,9 +269,12 @@ public class DryncDbAdapter
     }
     
     //---insert a title into the database---
-    public long insertCork(Cork cork)
+    public long insertCork(Cork cork) throws DryncFreeCellarExceededException
     {
-    	return insertCork(cork, false, 0);
+    	if (DryncUtils.isFreeMode() && (getCorkCount() > 5))
+    		throw new DryncFreeCellarExceededException();
+    	else
+    		return insertCork(cork, false, 0);
     }
     
     public long insertCork(Cork cork, boolean needsUpdate, int updateType)
@@ -385,6 +388,57 @@ public class DryncDbAdapter
     {
     	String createStr = "CREATE  VIRTUAL TABLE TableName USING " +
     			"FTS3(description TEXT, location text, cork_label text, public_note text, name text, year integer, region text, grape text, style text)";
+    }
+    
+    public int getCorkCount()
+    {
+    	return getCorkCount(false);
+    }
+    
+    public int getCorkCount(boolean includePendingDeletes)
+    {
+    	String pendingWhere = null; //KEY_NEEDSSERVERUPDATE + " != 1 && " + KEY_UPDATETYPE + " != " + Cork.UPDATE_TYPE_DELETE;
+    	
+    	Cursor cur =  db.query(DATABASE_TABLE, new String[] {
+        		KEY_ROWID,
+        	    KEY_CORK_ID,
+        	    KEY_CORK_UUID,
+        	    KEY_DESCRIPTION,
+        	    KEY_LOCATION,
+        	    KEY_CORK_RATING,
+        	    KEY_CORK_WANT,
+        	    KEY_CORK_OWN,
+        	    KEY_CORK_DRANK,
+        	    KEY_CORK_ORDERED,
+        	    KEY_CORK_PRICE,
+        	    KEY_CORK_YEAR,
+        	    KEY_CORK_POI,
+        	    KEY_CORK_BOTTLE_COUNT,
+        	    KEY_CORK_CREATED_AT,
+        	    KEY_CORK_LABEL,
+        	    KEY_PUBLIC_NOTE,
+        	    
+        	    KEY_BOTTLE_ID,
+        	    KEY_NAME,
+        	    KEY_YEAR,
+        	    KEY_REGION_PATH,
+        	    KEY_REGION,
+        	    KEY_GRAPE,
+        	    KEY_STYLE,
+        	    KEY_LABEL,
+        	    KEY_LABEL_THUMB,
+        	    KEY_PRICE,
+        	    KEY_RATING,
+        	    KEY_REVIEWCOUNT,
+        	    KEY_NEEDSSERVERUPDATE,
+        	    KEY_UPDATETYPE}, 
+        	    includePendingDeletes ? null : pendingWhere, 
+                null, 
+                null, 
+                null, 
+                null);
+    	
+    	return cur.getCount();
     }
     
     public List<Cork> getAllCorks(boolean includePendingDeletes) 
