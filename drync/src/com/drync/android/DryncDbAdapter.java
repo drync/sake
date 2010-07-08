@@ -53,7 +53,9 @@ public class DryncDbAdapter
     public static final String KEY_COUNT = "count";
     private static final String TAG = "DBAdapter";
     
-    private static final String DATABASE_NAME = "drync";
+    private static final String DATABASE_PRO_NAME = "drync";
+    private static final String DATABASE_FREE_NAME = "dryncfree";
+    private static String DATABASE_NAME = DATABASE_PRO_NAME;
     private static final String DATABASE_TABLE = "corks";
     private static final int DATABASE_VERSION = 7;
 
@@ -100,6 +102,12 @@ public class DryncDbAdapter
     public DryncDbAdapter(Context ctx) 
     {
         this.context = ctx;
+
+    	if (DryncUtils.isFreeMode())
+    		DATABASE_NAME = DATABASE_FREE_NAME;
+    	else
+    		DATABASE_NAME = DATABASE_PRO_NAME;
+    	
         DBHelper = new DatabaseHelper(context);
     }
     

@@ -135,6 +135,10 @@ public class Drync extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// set whether this is the free app or not.
+		boolean isFree = 
+		DryncUtils.isFreeMode();
+		
 		CookieSyncManager.createInstance(this);
 		CookieSyncManager.getInstance().startSync();
 
@@ -154,7 +158,12 @@ public class Drync extends Activity {
 			PackageInfo pi = pm.getPackageInfo("com.drync.android", 0);
 			TextView version = (TextView)findViewById(R.id.version);
 			if ((version != null) && (pi != null))
-				version.setText(pi.versionName);
+			{
+				if (isFree)
+					version.setText(pi.versionName + " Free");
+				else
+					version.setText(pi.versionName);
+			}
 			
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -336,7 +345,7 @@ public class Drync extends Activity {
 
 	public void onStart() {
 		super.onStart();
-		FlurryAgent.onStartSession(this, "EVUK1M8HTX644WLK92JH");
+		FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());
 
 	}
 	

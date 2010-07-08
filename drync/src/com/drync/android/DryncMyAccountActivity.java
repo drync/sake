@@ -38,6 +38,8 @@ public class DryncMyAccountActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		DryncUtils.isFreeMode();
+		
 		setContentView(R.layout.registerweb);
 		
 		CookieSyncManager.createInstance(this);

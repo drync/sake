@@ -22,14 +22,66 @@ import android.content.SharedPreferences.Editor;
 
 public class DryncUtils {
 
+	private static final String DRYNC_FREE_FLURRY_CODE = "DQALNHL5RQ53WS3LPR45";
+	private static final String DRYNC_PRO_FLURRY_CODE = "EVUK1M8HTX644WLK92JH";
+	private static final String PRODUCT_ID_PAID = "wine";
+	private static final String PRODUCT_ID_FREE = "wine-free";
+	
+	static String productId = PRODUCT_ID_PAID;
+	
+	public static String getProductId() {
+		return productId;
+	}
+
+	public static void setProductId(String productId) {
+		DryncUtils.productId = productId;
+	}
+
+	private static String dryncFlurryCode = DRYNC_PRO_FLURRY_CODE;
+	
+	public static String getDryncFlurryCode() {
+		return dryncFlurryCode;
+	}
+
+	public static void setDryncFlurryCode(String dryncFlurryCode) {
+		DryncUtils.dryncFlurryCode = dryncFlurryCode;
+	}
+
 	private static StringBuilder builder = new StringBuilder();
 	private static String CACHE_DIRECTORY = null;
 	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
 	public static CookieStore cookieStore;
 	public static long cellarLastUpdatedTimestamp = -1;
 	public static long myAcctGetLastUpdatedTimestamp = -1;
+	public static Boolean freeMode = null;
 	
 	
+	public static boolean isFreeMode() {
+		if (freeMode == null)
+		{
+			freeMode = DryncUtils.class.getPackage().getName().contains("dryncfree");
+		}
+		
+		setFreeMode(freeMode);
+		
+		return freeMode;
+	}
+
+	public static void setFreeMode(boolean freeMode) {
+		DryncUtils.freeMode = freeMode;
+		
+		if (freeMode)
+		{
+			DryncUtils.setDryncFlurryCode(DRYNC_FREE_FLURRY_CODE);
+			DryncUtils.setProductId(PRODUCT_ID_FREE);
+		}
+		else
+		{
+			DryncUtils.setDryncFlurryCode(DRYNC_PRO_FLURRY_CODE);
+			DryncUtils.setProductId(PRODUCT_ID_PAID);
+		}
+	}
+
 	public static long getMyAcctGetLastUpdatedTimestamp() {
 		return myAcctGetLastUpdatedTimestamp;
 	}

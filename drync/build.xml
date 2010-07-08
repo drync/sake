@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="drync">
+    <property name="src" value="src"/>
+	<property name="res" value="res"/>
+	<property name="propkg" value="com.drync.android"/>
+	<property name="freepkg" value="com.dryncfree.android"/>
+
+    <target name="switchfree">
+        <replace summary="yes" dir="${src}" value="com.dryncfree.android">
+            <include name="**/*.java"/> 
+            <replacetoken>com.drync.android</replacetoken>
+        </replace>
+    	<replace summary="yes" dir="${src}" value="com.dryncfree.android">
+    	     <include name="**/*.aidl"/> 
+    	     <replacetoken>com.drync.android</replacetoken>
+    	</replace>
+    	<replace summary="yes" dir="${basedir}" value="com.dryncfree.android">
+    	    <include name="**/AndroidManifest.xml"/> 
+    	    <replacetoken>com.drync.android</replacetoken>
+    	</replace>
+    	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="Drync Wine Free">
+    	    	    <include name="**/strings.xml"/> 
+    	    	    <replacetoken>Drync Wine Pro</replacetoken>
+    	    	</replace>
+    	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="com.dryncfree.android">
+    	    	    	    <include name="**/*.xml"/> 
+    	    	    	    <replacetoken>com.drync.android</replacetoken>
+    	    	    	</replace>
+    	
+    	<move failonerror="false" verbose="true" file="src/com/drync" tofile="src/com/dryncfree"/>
+
+    	
+    </target>
+	
+	<target name="switchpro">
+	        <replace summary="yes" dir="${src}" value="com.drync.android">
+	            <include name="**/*.java"/> 
+	            <replacetoken>com.dryncfree.android</replacetoken>
+	        </replace>
+		<replace summary="yes" dir="${src}" value="com.drync.android">
+			            <include name="**/*.aidl"/> 
+			            <replacetoken>com.dryncfree.android</replacetoken>
+			        </replace>
+		<replace summary="yes" dir="${basedir}" value="com.drync.android">
+			            <include name="**/AndroidManifest.xml"/> 
+			            <replacetoken>com.dryncfree.android</replacetoken>
+			        </replace>
+		<replace summary="yes" dir="${res}" encoding="UTF-8" value="Drync Wine Pro">
+		    	    	    <include name="**/strings.xml"/> 
+		    	    	    <replacetoken>Drync Wine Free</replacetoken>
+		    	    	</replace>
+		<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="com.drync.android">
+		    	    	    	    <include name="**/*.xml"/> 
+		    	    	    	    <replacetoken>com.dryncfree.android</replacetoken>
+		    	    	    	</replace>
+		<move failonerror="false" verbose="true" file="src/com/dryncfree" tofile="src/com/drync"/>
+	</target>
+
+
+
+</project>

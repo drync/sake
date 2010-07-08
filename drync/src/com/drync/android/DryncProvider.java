@@ -75,10 +75,6 @@ public class DryncProvider {
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
 	
-	static String PRODUCT_ID_PAID = "wine";
-	static String PRODUCT_ID_FREE = "wine-free";
-	static String PRODUCT_ID = PRODUCT_ID_PAID;
-	
 	static String CORKLISTURL = "/corks?format=xml&device_id=";
 	
 	public static final int TOP_POPULAR = 0;
@@ -549,7 +545,7 @@ public class DryncProvider {
 		post.addHeader("Accept", "text/iphone");
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 		nvps.add(new BasicNameValuePair("device_id", devId));
-		nvps.add(new BasicNameValuePair("prod", PRODUCT_ID));
+		nvps.add(new BasicNameValuePair("prod", DryncUtils.getProductId()));
 
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -660,7 +656,7 @@ public class DryncProvider {
 		if ((deviceId == null) || (deviceId.equals("")))
 			devId = "UDID-droid-fake-" + System.currentTimeMillis();
 
-		urlGet1.append(devId).append("&prod=").append(PRODUCT_ID);
+		urlGet1.append(devId).append("&prod=").append(DryncUtils.getProductId());
 		
 		Log.d("DryncPrvdr", "Get My Account Page: " + urlGet1.toString());
 		HttpGet get = new HttpGet(urlGet1.toString());
