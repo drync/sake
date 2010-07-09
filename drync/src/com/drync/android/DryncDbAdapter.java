@@ -271,7 +271,7 @@ public class DryncDbAdapter
     //---insert a title into the database---
     public long insertCork(Cork cork) throws DryncFreeCellarExceededException
     {
-    	if (DryncUtils.isFreeMode() && (getCorkCount() > 5))
+    	if (DryncUtils.isFreeMode() && (getCorkCount() >= DryncUtils.FREE_CELLAR_MAX_CORKS))
     		throw new DryncFreeCellarExceededException();
     	else
     		return insertCork(cork, false, 0);

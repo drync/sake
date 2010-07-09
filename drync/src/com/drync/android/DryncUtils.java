@@ -26,6 +26,7 @@ public class DryncUtils {
 	private static final String DRYNC_PRO_FLURRY_CODE = "EVUK1M8HTX644WLK92JH";
 	private static final String PRODUCT_ID_PAID = "wine";
 	private static final String PRODUCT_ID_FREE = "wine-free";
+	public static final int FREE_CELLAR_MAX_CORKS = 10;
 	
 	static String productId = PRODUCT_ID_PAID;
 	
