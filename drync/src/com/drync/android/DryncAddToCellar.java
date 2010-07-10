@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -357,9 +358,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						catch (DryncFreeCellarExceededException e)
 						{
 							// successful
-							Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
-									"You have reached the maximum number of wines in your free cellar.", Toast.LENGTH_LONG);
-							successfulAdd.show();
+							Toast failedAdd = Toast.makeText(DryncAddToCellar.this, 
+									getResources().getString(R.string.exceededcellaradd) + 
+									"\n\n" + getResources().getString(R.string.exceededcellaradd2), Toast.LENGTH_LONG);
+							failedAdd.setGravity(Gravity.CENTER, 0, 0);
+							failedAdd.show();
 						}
 						finally
 						{

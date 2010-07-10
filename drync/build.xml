@@ -34,7 +34,7 @@
     	    	    	    <replacetoken>com.drync.android</replacetoken>
     	    	    	</replace>
     	
-    	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="@drawable/default22">
+    	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="@drawable/default_free_droid">
     	    	    	    	    <include name="**/splash.xml"/> 
     	    	    	    	    <replacetoken>@drawable/default_pro_droid</replacetoken>
     	    	    	    	</replace>
@@ -74,7 +74,7 @@
 		
 		<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="@drawable/default_pro_droid">
 		    	    	    	    	    <include name="**/splash.xml"/> 
-		    	    	    	    	    <replacetoken>@drawable/default22</replacetoken>
+		    	    	    	    	    <replacetoken>@drawable/default_free_droid</replacetoken>
 		    	    	    	    	</replace>
 		
 		<move failonerror="false" verbose="true" file="src/com/dryncfree" tofile="src/com/drync"/>
