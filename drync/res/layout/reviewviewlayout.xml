@@ -5,9 +5,8 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:scrollbarAlwaysDrawVerticalTrack="false">
 
-		<RelativeLayout
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/wood">
+		<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
 			
 			<RelativeLayout android:id="@+id/headerSec"
 				android:layout_width="fill_parent" android:layout_height="40dip"
@@ -33,8 +32,17 @@
 					android:layout_weight=".70" /> -->
 
 			</RelativeLayout>
+			
+			<com.google.ads.GoogleAdView
+    android:id="@+id/adview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
 
-		 	<RelativeLayout android:id="@+id/genreview" android:layout_below="@id/headerSec"
+			<RelativeLayout
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/wood">
+			
+		 	<RelativeLayout android:id="@+id/genreview" android:layout_alignParentTop="true"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
 				android:padding="6dip">
 
@@ -127,4 +135,5 @@
 
 			</RelativeLayout>
 		</RelativeLayout>
+		</LinearLayout>
 	</ScrollView>

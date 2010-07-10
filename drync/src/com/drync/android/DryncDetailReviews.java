@@ -132,6 +132,8 @@ public class DryncDetailReviews extends DryncBaseActivity {
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
 		
+		initializeAds();
+		
 		reviewView = (ScrollView) this.findViewById(R.id.reviewview); //inflater.inflate(R.layout.reviewviewlayout, (ViewGroup)flipper, false);
 		
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);

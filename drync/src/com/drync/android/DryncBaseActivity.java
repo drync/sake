@@ -1,6 +1,9 @@
 package com.drync.android;
 
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdSenseSpec;
+import com.google.ads.GoogleAdView;
+import com.google.ads.AdSenseSpec.AdType;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public abstract class DryncBaseActivity extends Activity {
 	
@@ -205,4 +209,49 @@ public abstract class DryncBaseActivity extends Activity {
 		else
 			return false;
 	}
+	
+	public AdSenseSpec buildAdSpec()
+	{
+		AdSenseSpec adSenseSpec =
+		    new AdSenseSpec("ca-mb-app-pub-2007025970278328")
+		    .setCompanyName("Drync LLC")
+		    .setAppName("Drync Wine Free Droid")
+		    .setKeywords(getGoogleAdSenseKeywords())
+		    .setAdType(AdType.IMAGE);
+		
+		adSenseSpec.setAdTestEnabled(true);
+		
+		return adSenseSpec;
+
+	}
+	
+	public void initializeAds()
+	{
+		GoogleAdView googleAdView = (GoogleAdView) findViewById(R.id.adview);
+		
+		if (googleAdView != null)
+		{
+			if (DryncUtils.isFreeMode())
+			{
+				AdSenseSpec adSenseSpec = this.buildAdSpec();
+				googleAdView.showAds(adSenseSpec);
+			}
+			else
+			{
+				googleAdView.setVisibility(View.GONE);
+			}
+		}
+	}
+	
+	public String getGoogleAdSenseKeywords()
+	{
+		StringBuilder bldr = new StringBuilder("wine merlot shiraz pairing chardonnay burgundy cabernet") 
+		.append(" sauvingon vineyard vine Torbreck cellar reserve zinfandel") 
+		.append(" moscato semillon muscat dom perignon blanc pinot gris vino") 
+		.append(" grape syrah brut rose red white");
+		
+		return bldr.toString();
+	}
+	
+	
 }

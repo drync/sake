@@ -5,13 +5,12 @@
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
 	android:scrollbarAlwaysDrawVerticalTrack="false">
 
-	<RelativeLayout
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:background="@drawable/wood">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
 			
 			<RelativeLayout android:id="@+id/headerSec"
 				android:layout_width="fill_parent" android:layout_height="40dip"
-				android:paddingLeft="5px" android:paddingRight="5px" android:layout_alignParentTop="true"
+				android:paddingLeft="5px" android:paddingRight="5px" 
 				android:background="@drawable/btnhdrbg">
 
 			<Button android:id="@+id/searchBtn" android:textColor="#FFFFFF"
@@ -41,8 +40,18 @@
 				android:layout_centerVertical="true" /> 
 
 		</RelativeLayout>
+		
+		<com.google.ads.GoogleAdView
+    android:id="@+id/adview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
 
-		<RelativeLayout android:id="@+id/gendetail" android:layout_below="@id/headerSec"
+		<RelativeLayout
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:background="@drawable/wood">
+			
+		
+		<RelativeLayout android:id="@+id/gendetail" android:layout_alignParentTop="true"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:padding="6dip">
 
@@ -229,4 +238,5 @@
 			android:layout_marginRight="10px">
 		</RelativeLayout>
 	</RelativeLayout>
+	</LinearLayout>
 </ScrollView>

@@ -85,6 +85,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addtocellar);
+		
+		initializeAds();
 
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);

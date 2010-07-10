@@ -271,6 +271,8 @@ private ProgressDialog progressDlg = null;
 		
 		LayoutInflater inflater = getLayoutInflater();
 		
+		initializeAds();
+		
 		cellarView = (LinearLayout) this.findViewById(R.id.cellarview);
 		
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);

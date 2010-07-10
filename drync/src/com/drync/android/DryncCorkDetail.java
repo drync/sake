@@ -153,6 +153,8 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}*/
 		
+		initializeAds();
+		
 		Bundle extras = getIntent().getExtras();
 		Cork cork = (Cork) (extras != null ? extras.getParcelable("bottle") : null);
 		

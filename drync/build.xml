@@ -19,6 +19,12 @@
     	    <include name="**/AndroidManifest.xml"/> 
     	    <replacetoken>com.drync.android</replacetoken>
     	</replace>
+    	
+    	<replace summary="yes" dir="${basedir}" value="@drawable/free_icon">
+    						            <include name="**/AndroidManifest.xml"/> 
+    						            <replacetoken>@drawable/icon</replacetoken>
+    						        </replace>
+    	
     	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="Drync Wine Free">
     	    	    <include name="**/strings.xml"/> 
     	    	    <replacetoken>Drync Wine Pro</replacetoken>
@@ -27,6 +33,11 @@
     	    	    	    <include name="**/*.xml"/> 
     	    	    	    <replacetoken>com.drync.android</replacetoken>
     	    	    	</replace>
+    	
+    	<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="@drawable/default22">
+    	    	    	    	    <include name="**/splash.xml"/> 
+    	    	    	    	    <replacetoken>@drawable/default_pro_droid</replacetoken>
+    	    	    	    	</replace>
     	
     	<move failonerror="false" verbose="true" file="src/com/drync" tofile="src/com/dryncfree"/>
 
@@ -46,6 +57,12 @@
 			            <include name="**/AndroidManifest.xml"/> 
 			            <replacetoken>com.dryncfree.android</replacetoken>
 			        </replace>
+		
+		<replace summary="yes" dir="${basedir}" value="@drawable/icon">
+					            <include name="**/AndroidManifest.xml"/> 
+					            <replacetoken>@drawable/free_icon</replacetoken>
+					        </replace>
+			
 		<replace summary="yes" dir="${res}" encoding="UTF-8" value="Drync Wine Pro">
 		    	    	    <include name="**/strings.xml"/> 
 		    	    	    <replacetoken>Drync Wine Free</replacetoken>
@@ -54,6 +71,12 @@
 		    	    	    	    <include name="**/*.xml"/> 
 		    	    	    	    <replacetoken>com.dryncfree.android</replacetoken>
 		    	    	    	</replace>
+		
+		<replace summary="yes" dir="${res}"  encoding="UTF-8"  value="@drawable/default_pro_droid">
+		    	    	    	    	    <include name="**/splash.xml"/> 
+		    	    	    	    	    <replacetoken>@drawable/default22</replacetoken>
+		    	    	    	    	</replace>
+		
 		<move failonerror="false" verbose="true" file="src/com/dryncfree" tofile="src/com/drync"/>
 	</target>
 

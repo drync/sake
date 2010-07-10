@@ -180,6 +180,8 @@ public class DryncDetail extends DryncBaseActivity {
 				userTwitterPassword = DryncUtils.decryptTwitterPassword(encryptedTwitterPw);
 		}*/
 		
+		initializeAds();
+		
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
 		launchedFromTopWines = ((extras != null) && (extras.containsKey("launchedFromTopWines"))) ? extras.getBoolean("launchedFromTopWines") : false;

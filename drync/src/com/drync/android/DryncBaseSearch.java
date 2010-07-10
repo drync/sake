@@ -94,6 +94,8 @@ import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
+import com.google.ads.AdSenseSpec;
+import com.google.ads.GoogleAdView;
 
 public class DryncBaseSearch extends DryncBaseActivity {
 	
@@ -115,8 +117,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	
 	int lastSelectedTopWine = -1;
 	
-	
-	
 	private TableLayout mReviewTable;
 	
 	LinearLayout searchView;
@@ -131,6 +131,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 	
 	Drawable defaultIcon = null;
+	
+	String searchTerm = "";
 	
 	private String userTwitterUsername = null;
 	private String userTwitterPassword = null;
@@ -219,6 +221,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		
 		String lastQuery = settings.getString(DryncUtils.LAST_QUERY_PREF, null);
+		searchTerm = lastQuery;
 		
 		Bundle extras = getIntent().getExtras();
 		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
@@ -227,6 +230,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		startCellarUpdateThread();
 		
 		LayoutInflater inflater = getLayoutInflater();
+		
+		initializeAds();
 		
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
@@ -298,6 +303,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 			public boolean onCommit(View arg0, String text) {
 				String searchterm = searchholder.getEditableText().toString();
+				
+				DryncBaseSearch.this.searchTerm = searchTerm;
 
 				DryncBaseSearch.this.startQueryOperation(searchterm);
 				return true;
@@ -1180,6 +1187,14 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		ex.scheduleAtFixedRate(cellarUpdateThread, 10, 60, TimeUnit.SECONDS);
 	}
 	
+	@Override
+	public String getGoogleAdSenseKeywords() {
+		if ((searchTerm == null) || (searchTerm.equals("")))
+			return super.getGoogleAdSenseKeywords();
+		else
+			return searchTerm;
+	}
+
 	@Override
 	public int getMenuItemToSkip() {
 		return SEARCH_ID;

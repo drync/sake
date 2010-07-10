@@ -39,4 +39,10 @@
 	<LinearLayout android:id="@+id/listholder"
 		android:orientation="horizontal" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:layout_weight="1" />
+		
+	<com.google.ads.GoogleAdView
+    android:id="@+id/adview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+		
 </LinearLayout>
