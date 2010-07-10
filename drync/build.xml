@@ -11,6 +11,12 @@
             <include name="**/*.java"/> 
             <replacetoken>com.drync.android</replacetoken>
         </replace>
+    	
+    	<replace summary="yes" dir="${src}" value="DATABASE_NAME = DATABASE_FREE_NAME">
+    	    <include name="**/*.java"/> 
+    		<replacetoken>DATABASE_NAME = DATABASE_PRO_NAME</replacetoken>
+    	</replace>
+    	
     	<replace summary="yes" dir="${src}" value="com.dryncfree.android">
     	     <include name="**/*.aidl"/> 
     	     <replacetoken>com.drync.android</replacetoken>
@@ -49,6 +55,12 @@
 	            <include name="**/*.java"/> 
 	            <replacetoken>com.dryncfree.android</replacetoken>
 	        </replace>
+		
+		<replace summary="yes" dir="${src}" value="DATABASE_NAME = DATABASE_FREE_NAME">
+		    <include name="**/*.java"/> 
+			<replacetoken>DATABASE_NAME = DATABASE_PRO_NAME</replacetoken>
+		</replace>
+	        	
 		<replace summary="yes" dir="${src}" value="com.drync.android">
 			            <include name="**/*.aidl"/> 
 			            <replacetoken>com.dryncfree.android</replacetoken>
