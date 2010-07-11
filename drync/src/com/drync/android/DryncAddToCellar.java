@@ -325,7 +325,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 					else
 					{
-						Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(cork, deviceId);
+						try
+						{
+						Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(DryncAddToCellar.this, cork, deviceId, DryncUtils.isFreeMode());
 						boolean postSuccess = postresult.isResult();
 						
 						if (postresult.getContents().size() > 0)
@@ -341,9 +343,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						// persist to database.
 						dbAdapter.open();
 						long result = -1;
-						try
-						{
-							result = dbAdapter.insertCork(cork);
+						result = dbAdapter.insertCork(cork);
 
 
 							if (result >= 0)
@@ -360,7 +360,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 							// successful
 							Toast failedAdd = Toast.makeText(DryncAddToCellar.this, 
 									getResources().getString(R.string.exceededcellaradd) + 
-									"\n\n" + getResources().getString(R.string.exceededcellaradd2), Toast.LENGTH_LONG);
+									"\n\n" + getResources().getString(R.string.exceededcellaradd2) +
+									" " + getResources().getString(R.string.exceededcellaradd3), Toast.LENGTH_LONG);
 							failedAdd.setGravity(Gravity.CENTER, 0, 0);
 							failedAdd.show();
 						}

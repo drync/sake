@@ -448,10 +448,12 @@ public class DryncBaseSearch extends DryncBaseActivity {
 						try {
 							dbAdapter.insertCork(cork);
 						} catch (DryncFreeCellarExceededException e) {
-							// successful
-							Toast successfulAdd = Toast.makeText(DryncBaseSearch.this, 
-									"You have reached the maximum number of wines in your free cellar.", Toast.LENGTH_LONG);
-							successfulAdd.show();
+							Toast failedAdd = Toast.makeText(DryncBaseSearch.this, 
+									getResources().getString(R.string.exceededcellaradd) + 
+									"\n\n" + getResources().getString(R.string.exceededcellaradd2) +
+									" " + getResources().getString(R.string.exceededcellaradd3), Toast.LENGTH_LONG);
+							failedAdd.setGravity(Gravity.CENTER, 0, 0);
+							failedAdd.show();
 						}
 						finally
 						{
@@ -1128,8 +1130,15 @@ public class DryncBaseSearch extends DryncBaseActivity {
 							// re-try post.
 							if (cork.getUpdateType() == Cork.UPDATE_TYPE_INSERT)
 							{
-								Result<Cork> postresult = DryncProvider.postCreateOrUpdate(cork, deviceId);
-								postSuccess = postresult.isResult();
+								try
+								{
+									Result<Cork> postresult = DryncProvider.postCreateOrUpdate(DryncBaseSearch.this, cork, deviceId, false);
+									postSuccess = postresult.isResult();
+								}
+								catch(DryncFreeCellarExceededException e)
+								{
+									// intentionally ignore.
+								}
 							}
 							else if (cork.getUpdateType() == Cork.UPDATE_TYPE_DELETE)
 							{

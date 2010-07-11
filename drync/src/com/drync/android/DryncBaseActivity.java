@@ -219,10 +219,9 @@ public abstract class DryncBaseActivity extends Activity {
 		    .setKeywords(getGoogleAdSenseKeywords())
 		    .setAdType(AdType.IMAGE);
 		
-		adSenseSpec.setAdTestEnabled(true);
+		adSenseSpec.setAdTestEnabled(false);
 		
 		return adSenseSpec;
-
 	}
 	
 	public void initializeAds()

@@ -1029,8 +1029,24 @@ public class DryncProvider {
 		return response;
 	} 
 	
-	public static Result<Cork> postCreateOrUpdate(Cork cork, String deviceId)
+	public static Result<Cork> postCreateOrUpdate(Context ctx, Cork cork, String deviceId, boolean testforfree) throws DryncFreeCellarExceededException
 	{
+		if (testforfree)
+		{
+			DryncDbAdapter dbAdapter = new DryncDbAdapter(ctx);
+			
+			try
+			{
+				dbAdapter.open();
+				if (DryncUtils.isFreeMode() && (dbAdapter.getCorkCount() >= DryncUtils.FREE_CELLAR_MAX_CORKS))
+					throw new DryncFreeCellarExceededException();
+				}
+				finally
+				{
+					dbAdapter.close();
+				}
+			}
+		
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks", USING_SERVER_HOST,SERVER_PORT);
 		Result<Cork> returnVal = new Result<Cork>();

@@ -46,7 +46,8 @@
 	<string name="failurecellarupdate">This wine could not be updated in your cellar.</string>
 	
 	<string name="exceededcellaradd">You have reached the maximum number of wines in your free cellar.</string>
-	<string name="exceededcellaradd2">Please consider upgrading to Drync Wine Pro in order to store additional wines!</string>
+	<string name="exceededcellaradd2">Please consider upgrading to Drync Wine </string>
+	<string name="exceededcellaradd3">Pro in order to store additional wines!</string>
 	
 	<string name="noreviewurl">There is no link attached to this review.</string>
 	

@@ -160,7 +160,7 @@ public class Drync extends Activity {
 			if ((version != null) && (pi != null))
 			{
 				if (isFree)
-					version.setText(pi.versionName + " Free");
+					version.setText(pi.versionName);
 				else
 					version.setText(pi.versionName);
 			}
