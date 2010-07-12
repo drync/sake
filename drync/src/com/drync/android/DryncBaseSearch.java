@@ -184,6 +184,9 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 		else
 		{
+			if (mAdapter.mWines == null)
+				mAdapter.mWines = new ArrayList<Bottle>();
+			
 			mAdapter.mWines.clear();
 			mAdapter.viewHash.clear();
 			if (mResults.size() <= 0)
@@ -722,20 +725,28 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
-		private final List<Bottle> mWines;
+		private List<Bottle> mWines;
 		private final LayoutInflater mInflater;
 		private final Drawable defaultIcon;
 		boolean mDone = false;
 		boolean mFlinging = false;
 		Hashtable<Long, View> viewHash = new Hashtable<Long, View>(); 
 		
+		public WineAdapter() {
+			super();
+			mWines = new ArrayList<Bottle>();
+			mInflater = (LayoutInflater) DryncBaseSearch.this.getSystemService(
+					Context.LAYOUT_INFLATER_SERVICE);
+			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
+		}
+
 		public WineAdapter(List<Bottle> wines) {
 			mWines = wines;
 			mInflater = (LayoutInflater) DryncBaseSearch.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
 			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
-
+		
 		public int getCount() {
 			if (mWines != null)
 				return mWines.size();
