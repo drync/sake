@@ -287,6 +287,15 @@ public class DryncUtils {
 		return deviceId;
 	}
 	
+	public static Boolean isRunningOnEmulator(ContentResolver resolver)
+	{
+		String sysDevId = Settings.System.getString(resolver, Settings.System.ANDROID_ID);
+		if (sysDevId == null)
+			return true;
+		
+		return false;
+	}
+	
 	public static String buildShareEmailText(Context ctx, Bottle bottle)
 	{
 		Cork cork = null;

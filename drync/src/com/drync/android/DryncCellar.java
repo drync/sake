@@ -11,6 +11,7 @@ package com.drync.android;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -510,10 +511,23 @@ private ProgressDialog progressDlg = null;
 			
 			if (corkThumb != null  && !mFlinging )
 			{
+				/*if (wine.getLocalImageResourceOnly() != null)
+				{
+					URI localURI = new URI(wine.getLocalImageResourceOnly());
+					corkThumb.setImageURI(localURI);
+				}*/
 				if (wine.getLabel_thumb() != null)
 				{
-					corkThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
-					corkThumb.setRemoteURI(wine.getLabel_thumb());
+					if (wine.getLabel_thumb().startsWith("http"))
+					{
+						corkThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+						corkThumb.setRemoteURI(wine.getLabel_thumb());
+					}
+					else
+					{
+						corkThumb.setLocalURI(wine.getLabel_thumb());
+						corkThumb.setRemoteURI(null);
+					}
 					corkThumb.setImageDrawable(defaultIcon);
 					corkThumb.setUseDefaultOnly(false);
 				}

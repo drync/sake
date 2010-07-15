@@ -19,7 +19,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,6 +82,26 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 	Drawable defaultIcon = null;
 	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if (requestCode == RemoteImageView.CAMERA_PIC_REQUEST) {  
+			   Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
+			   
+			   RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+			   
+			   if (image != null)
+			   {
+				   String newpath = image.saveNewImage(thumbnail);
+				   this.mBottle.setLocalImageResourceOnly(newpath);
+				   image.setImageBitmap(thumbnail);
+				   this.mBottle.setLabel_thumb(newpath);
+			   }
+		}  
+	}
+
 	SharedPreferences settings;
 	
 	@Override
@@ -134,6 +156,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final DryncDbAdapter dbAdapter = new DryncDbAdapter(this);
 
 		RemoteImageView wineThumb = (RemoteImageView) addView.findViewById(R.id.atcWineThumb);
+		wineThumb.setLaunchCameraOnClick(DryncAddToCellar.this, true);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final TextView ratingVal = (TextView) addView.findViewById(R.id.atcRatingObserver);
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
@@ -456,7 +479,6 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		regionVal.setText("" + mBottle.getRegion());
 		
 		wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
-
 	}
 
 	@Override

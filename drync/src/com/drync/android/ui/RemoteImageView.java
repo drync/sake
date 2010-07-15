@@ -5,13 +5,20 @@
 package com.drync.android.ui;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.drync.android.DryncUtils;
@@ -24,6 +31,33 @@ public class RemoteImageView extends ImageView {
 	private HTTPThread mThread = null;
 	boolean useDefaultOnly = false;
 	boolean loaded = false;
+	
+	public static final int CAMERA_PIC_REQUEST = 1337;
+	
+	boolean launchCameraOnClick = false;
+
+	public boolean isLaunchCameraOnClick() {
+		return launchCameraOnClick;
+	}
+
+	public void setLaunchCameraOnClick(Context ctx, boolean launchCameraOnClick) {
+		this.launchCameraOnClick = launchCameraOnClick;
+		
+		if (launchCameraOnClick)
+		{
+			final Context clickContext = ctx;
+			this.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					if (RemoteImageView.this.isLaunchCameraOnClick())
+					{
+						Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+						((Activity)clickContext).startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);  
+					}
+					
+				}});
+		}
+	}
 
 	public boolean isLoaded() {
 		return loaded;
@@ -55,7 +89,7 @@ public class RemoteImageView extends ImageView {
 
 	public void setRemoteURI(String uri) {
 		loaded = false;
-		if (uri.startsWith("http")) {
+		if ((uri != null) && (uri.startsWith("http"))) {
 			mRemote = uri;
 		}
 	}
@@ -64,6 +98,23 @@ public class RemoteImageView extends ImageView {
 		return mRemote;
 	}
 
+	public String saveNewImage(Bitmap bm)
+	{
+		String newpath = DryncUtils.getCacheDir() + "corkimage.jpg";
+
+		try {
+			FileOutputStream fos = new FileOutputStream(newpath);
+			bm.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+			fos.flush();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return newpath;
+
+	}
+	
 	public void loadImage() {
 		if ((mRemote != null) && (!useDefaultOnly)) {
 			if (mLocal == null) {
@@ -82,7 +133,7 @@ public class RemoteImageView extends ImageView {
 				queue();
 			}
 		}
-	}
+			}
 
 	@Override
 	public void finalize() {

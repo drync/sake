@@ -17,6 +17,18 @@ public class Bottle implements Parcelable {
 	String winery_name;
 	String label;
 	String label_thumb;
+	String localImageResourceOnly;
+	
+	public String getLocalImageResourceOnly() {
+		return localImageResourceOnly;
+	}
+
+
+	public void setLocalImageResourceOnly(String localImageResourceOnly) {
+		this.localImageResourceOnly = localImageResourceOnly;
+	}
+
+
 	String price;
 	float minprice = 0;
 	
@@ -270,6 +282,7 @@ public class Bottle implements Parcelable {
 		//Review[] reviewarray = reviews.toArray(new Review[0]);
 		out.writeTypedList(reviews);
 		out.writeTypedList(sources);
+		out.writeString(localImageResourceOnly);
 		
 	}
 	
@@ -294,5 +307,6 @@ public class Bottle implements Parcelable {
 		in.readTypedList(reviews, Review.CREATOR);//(ArrayList<Review>) Arrays.asList(reviewsarray); 
 		sources = new ArrayList<Source>();
 		in.readTypedList(sources, Source.CREATOR);
+		this.localImageResourceOnly = in.readString();
 	}
 }

@@ -46,6 +46,7 @@ public class DryncDbAdapter
     public static final String KEY_PRICE = "price";
     public static final String KEY_RATING = "rating";
     public static final String KEY_REVIEWCOUNT = "reviewCount";
+    public static final String KEY_LOCALIMGRESOURCE = "localImageResource";
     
     public static final String KEY_NEEDSSERVERUPDATE = "needsServerUpdate";
     public static final String KEY_UPDATETYPE = "updateType";
@@ -55,9 +56,9 @@ public class DryncDbAdapter
     
     private static final String DATABASE_PRO_NAME = "drync";
     private static final String DATABASE_FREE_NAME = "dryncfree";
-    private static String DATABASE_NAME = DATABASE_FREE_NAME;
+    private static String DATABASE_NAME = DATABASE_PRO_NAME;
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -91,7 +92,8 @@ public class DryncDbAdapter
         + "rating real, "
         + "reviewCount integer, "
         + "needsServerUpdate integer, "
-        + "updateType integer "
+        + "updateType integer, "
+        + "localImageResource text"
         + ");";
         
     private final Context context; 
@@ -106,7 +108,7 @@ public class DryncDbAdapter
     	if (DryncUtils.isFreeMode())
     		DATABASE_NAME = DATABASE_FREE_NAME;
     	else
-    		DATABASE_NAME = DATABASE_FREE_NAME;
+    		DATABASE_NAME = DATABASE_PRO_NAME;
     	
         DBHelper = new DatabaseHelper(context);
     }
@@ -162,7 +164,8 @@ public class DryncDbAdapter
         	    KEY_RATING,
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
-        	    KEY_UPDATETYPE}, 
+        	    KEY_UPDATETYPE,
+        	    KEY_LOCALIMGRESOURCE}, 
         	    whereclause, 
         	    null, 
                 null, 
@@ -215,15 +218,15 @@ public class DryncDbAdapter
                     + newVersion);
             
             
-            if (oldVersion <= 6)
+            if (oldVersion <= 7)
             {
             	try
             	{
-            		db.execSQL("ALTER TABLE corks ADD COLUMN style text;");
+            		db.execSQL("ALTER TABLE corks ADD COLUMN localImageResource text;");
             	}
             	catch (SQLiteException e)
             	{
-            		//ignore
+            		Log.e("DbAdapter", "Failure Updating Database", e);
             	}
             }
         }
@@ -311,6 +314,7 @@ public class DryncDbAdapter
         initialValues.put(KEY_REVIEWCOUNT, cork.getReviewCount());
         initialValues.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
         initialValues.put(KEY_UPDATETYPE, updateType);
+        initialValues.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
         return db.insert(DATABASE_TABLE, "", initialValues);
     }
 
@@ -431,7 +435,8 @@ public class DryncDbAdapter
         	    KEY_RATING,
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
-        	    KEY_UPDATETYPE}, 
+        	    KEY_UPDATETYPE,
+        	    KEY_LOCALIMGRESOURCE}, 
         	    includePendingDeletes ? null : pendingWhere, 
                 null, 
                 null, 
@@ -485,7 +490,8 @@ public class DryncDbAdapter
         	    KEY_RATING,
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
-        	    KEY_UPDATETYPE}, 
+        	    KEY_UPDATETYPE,
+        	    KEY_LOCALIMGRESOURCE}, 
         	    null, 
                 null, 
                 null, 
@@ -550,7 +556,8 @@ public class DryncDbAdapter
         	    KEY_RATING,
         	    KEY_REVIEWCOUNT, 
         	    KEY_NEEDSSERVERUPDATE,
-        	    KEY_UPDATETYPE}, 
+        	    KEY_UPDATETYPE,
+        	    KEY_LOCALIMGRESOURCE}, 
         	    KEY_NEEDSSERVERUPDATE + "=" + 1,  
                 null, 
                 null, 
@@ -605,6 +612,7 @@ public class DryncDbAdapter
     	cork.setNeedsServerUpdate(
     			cur.getInt(cur.getColumnIndex(KEY_NEEDSSERVERUPDATE)) == 0 ? false : true);
     	cork.setUpdateType(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)));
+    	cork.setLocalImageResourceOnly(cur.getString(cur.getColumnIndex(KEY_LOCALIMGRESOURCE)));
     	
     	return cork;
     }
@@ -647,7 +655,8 @@ public class DryncDbAdapter
     					KEY_RATING,
     					KEY_REVIEWCOUNT,
     					KEY_NEEDSSERVERUPDATE,
-    					KEY_UPDATETYPE
+    					KEY_UPDATETYPE,
+    					KEY_LOCALIMGRESOURCE
     			}, 
     			KEY_CORK_UUID + "='" + uuId + "'", 
     			null,
@@ -709,7 +718,8 @@ public class DryncDbAdapter
                 	    KEY_RATING,
                 	    KEY_REVIEWCOUNT,
                 	    KEY_NEEDSSERVERUPDATE,
-                	    KEY_UPDATETYPE
+                	    KEY_UPDATETYPE,
+                	    KEY_LOCALIMGRESOURCE
                 		}, 
                 		KEY_ROWID + "=" + rowId, 
                 		null,
@@ -765,6 +775,7 @@ public class DryncDbAdapter
         args.put(KEY_REVIEWCOUNT, cork.getReviewCount());
         args.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
         args.put(KEY_UPDATETYPE, updateType);
+        args.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
         
         int rowsModified = db.update(DATABASE_TABLE, args, 
         		KEY_ROWID + "=" + cork.get_id(), null);
