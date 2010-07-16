@@ -1022,7 +1022,7 @@ public class DryncProvider {
 				v = kvPairs.get(k);
 				nameValuePairs.add(new BasicNameValuePair(k, v));
 			}
-		    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
 		}
 		HttpResponse response;
 		response = httpclient.execute(httppost);

@@ -19,22 +19,14 @@ package android.widget;
 import com.drync.android.R;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.Spanned;
-import android.text.method.NumberKeyListener;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.View.OnLongClickListener;
-import android.widget.TextView;
-import android.widget.LinearLayout;
 import android.widget.EditText;
 
 public class ClearableSearch extends RelativeLayout implements OnClickListener,
@@ -48,6 +40,7 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     
 
     private final EditText mText;
+    private final ImageButton searchButton;
     private final ImageButton clearButton;
     private boolean commitOnClear = true;
 
@@ -89,9 +82,12 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
         
         mText = (EditText) findViewById(R.id.searchentry);
         clearButton = (ImageButton)findViewById(R.id.clearFilterBtn);
+        searchButton = (ImageButton)findViewById(R.id.searchBtn);
         
         clearButton.setOnClickListener(this);
+        searchButton.setOnClickListener(this);
         
+        mText.addTextChangedListener(new ClearableSearchTextWatcher());
         mText.setOnKeyListener(new OnKeyListener(){
 
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -134,11 +130,13 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     public void onClick(View v) {
         if (!mText.hasFocus()) mText.requestFocus();
 
-        // now perform the increment/decrement
         if (R.id.clearFilterBtn == v.getId()) {
             mText.getEditableText().clear();
             if (commitOnClear)
             	notifyCommitListeners();
+        }
+        else if (R.id.searchBtn == v.getId()) {
+                notifyCommitListeners();
         }
     }
 
@@ -172,4 +170,33 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     {
     	public boolean onCommit(View arg0, String text);
     }
+	
+	private class ClearableSearchTextWatcher implements TextWatcher
+	{
+
+		public void afterTextChanged(Editable s) {
+			if (s.length() == 0)
+			{
+				ClearableSearch.this.clearButton.setEnabled(false);
+			}
+			else
+			{
+				ClearableSearch.this.clearButton.setEnabled(true);
+			}
+			
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }

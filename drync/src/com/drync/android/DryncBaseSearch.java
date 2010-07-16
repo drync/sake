@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -170,6 +171,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		if (mAdapter == null)
 		{
+			Collections.sort(mResults, new BottleComparator());
+			
 			mAdapter = new WineAdapter(mResults);
 			mList.setAdapter(mAdapter);
 			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

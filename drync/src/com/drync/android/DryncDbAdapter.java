@@ -55,7 +55,7 @@ public class DryncDbAdapter
     
     private static final String DATABASE_PRO_NAME = "drync";
     private static final String DATABASE_FREE_NAME = "dryncfree";
-    private static String DATABASE_NAME = DATABASE_FREE_NAME;
+    private static String DATABASE_NAME = DATABASE_PRO_NAME;
     private static final String DATABASE_TABLE = "corks";
     private static final int DATABASE_VERSION = 7;
 
