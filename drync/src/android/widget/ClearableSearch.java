@@ -16,6 +16,8 @@
 
 package android.widget;
 
+import java.util.concurrent.Semaphore;
+
 import com.drync.android.R;
 
 import android.content.Context;
@@ -173,17 +175,20 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
 	
 	private class ClearableSearchTextWatcher implements TextWatcher
 	{
+		final Object o = new Object();
 
 		public void afterTextChanged(Editable s) {
 			if (s.length() == 0)
 			{
-				ClearableSearch.this.clearButton.setEnabled(false);
+				if (ClearableSearch.this.clearButton.isEnabled())
+					ClearableSearch.this.clearButton.setEnabled(false);
 			}
 			else
 			{
-				ClearableSearch.this.clearButton.setEnabled(true);
+				if (! ClearableSearch.this.clearButton.isEnabled())
+					ClearableSearch.this.clearButton.setEnabled(true);
+				
 			}
-			
 		}
 
 		public void beforeTextChanged(CharSequence s, int start, int count,
