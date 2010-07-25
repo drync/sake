@@ -32,6 +32,7 @@ public class DryncDbAdapter
     public static final String KEY_CORK_BOTTLE_COUNT = "cork_bottle_count";
     public static final String KEY_CORK_CREATED_AT = "cork_created_at";
     public static final String KEY_CORK_LABEL = "cork_label";
+    public static final String KEY_CORK_LABEL_INLINE = "cork_label_inline";
     public static final String KEY_PUBLIC_NOTE = "public_note";
     
     public static final String KEY_BOTTLE_ID = "bottle_id";
@@ -58,7 +59,7 @@ public class DryncDbAdapter
     private static final String DATABASE_FREE_NAME = "dryncfree";
     private static String DATABASE_NAME = DATABASE_PRO_NAME;
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -93,7 +94,8 @@ public class DryncDbAdapter
         + "reviewCount integer, "
         + "needsServerUpdate integer, "
         + "updateType integer, "
-        + "localImageResource text"
+        + "localImageResource text,"
+        + "cork_label_inline text"
         + ");";
         
     private final Context context; 
@@ -106,7 +108,7 @@ public class DryncDbAdapter
         this.context = ctx;
 
     	if (DryncUtils.isFreeMode())
-    		DATABASE_NAME = DATABASE_FREE_NAME;
+    		DATABASE_NAME = DATABASE_PRO_NAME;
     	else
     		DATABASE_NAME = DATABASE_PRO_NAME;
     	
@@ -121,16 +123,18 @@ public class DryncDbAdapter
     	
     	List<Cork> corks = new ArrayList<Cork>();
     	
-    	String whereclause = 
-			"description LIKE '%" + query + "%' OR " +
+    	String whereclause = null;
+    	if ((query != null) && (!query.equals("")))
+    	{
+			whereclause = "description LIKE '%" + query + "%' OR " +
 			"location LIKE '%" + query + "%' OR " + 
-			"cork_label LIKE '%" + query + "%' OR " +
 			"public_note LIKE '%" + query + "%' OR " +
 			"name LIKE '%" + query + "%' OR " +
 			"year LIKE '%" + query + "%' OR " + 
 			"region LIKE '%" + query + "%' OR " +
 			"grape LIKE '%" + query + "%' OR " + 
 			"style LIKE '%" + query + "%'";
+    	}
     
     	Cursor cur =  db.query(DATABASE_TABLE, new String[] {
         		KEY_ROWID,
@@ -165,7 +169,9 @@ public class DryncDbAdapter
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
-        	    KEY_LOCALIMGRESOURCE}, 
+        	    KEY_LOCALIMGRESOURCE,
+        	    KEY_CORK_LABEL_INLINE
+        	    }, 
         	    whereclause, 
         	    null, 
                 null, 
@@ -229,6 +235,18 @@ public class DryncDbAdapter
             		Log.e("DbAdapter", "Failure Updating Database", e);
             	}
             }
+            if (oldVersion <= 8)
+            {
+            	try
+            	{
+            		db.execSQL("ALTER TABLE corks ADD COLUMN cork_label_inline text;");
+            	}
+            	catch (SQLiteException e)
+            	{
+            		Log.e("DbAdapter", "Failure Updating Database", e);
+            	}
+            }
+            
         }
     }    
     
@@ -315,6 +333,7 @@ public class DryncDbAdapter
         initialValues.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
         initialValues.put(KEY_UPDATETYPE, updateType);
         initialValues.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
+        initialValues.put(KEY_CORK_LABEL_INLINE, cork.getCork_labelInline());
         return db.insert(DATABASE_TABLE, "", initialValues);
     }
 
@@ -436,7 +455,8 @@ public class DryncDbAdapter
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
-        	    KEY_LOCALIMGRESOURCE}, 
+        	    KEY_LOCALIMGRESOURCE,
+        	    KEY_CORK_LABEL_INLINE}, 
         	    includePendingDeletes ? null : pendingWhere, 
                 null, 
                 null, 
@@ -491,7 +511,8 @@ public class DryncDbAdapter
         	    KEY_REVIEWCOUNT,
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
-        	    KEY_LOCALIMGRESOURCE}, 
+        	    KEY_LOCALIMGRESOURCE,
+        	    KEY_CORK_LABEL_INLINE}, 
         	    null, 
                 null, 
                 null, 
@@ -557,7 +578,8 @@ public class DryncDbAdapter
         	    KEY_REVIEWCOUNT, 
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
-        	    KEY_LOCALIMGRESOURCE}, 
+        	    KEY_LOCALIMGRESOURCE,
+        	    KEY_CORK_LABEL_INLINE}, 
         	    KEY_NEEDSSERVERUPDATE + "=" + 1,  
                 null, 
                 null, 
@@ -613,6 +635,7 @@ public class DryncDbAdapter
     			cur.getInt(cur.getColumnIndex(KEY_NEEDSSERVERUPDATE)) == 0 ? false : true);
     	cork.setUpdateType(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)));
     	cork.setLocalImageResourceOnly(cur.getString(cur.getColumnIndex(KEY_LOCALIMGRESOURCE)));
+    	cork.setCork_labelInline(cur.getString(cur.getColumnIndex(KEY_CORK_LABEL_INLINE)));
     	
     	return cork;
     }
@@ -656,7 +679,8 @@ public class DryncDbAdapter
     					KEY_REVIEWCOUNT,
     					KEY_NEEDSSERVERUPDATE,
     					KEY_UPDATETYPE,
-    					KEY_LOCALIMGRESOURCE
+    					KEY_LOCALIMGRESOURCE,
+    					KEY_CORK_LABEL_INLINE
     			}, 
     			KEY_CORK_UUID + "='" + uuId + "'", 
     			null,
@@ -719,7 +743,8 @@ public class DryncDbAdapter
                 	    KEY_REVIEWCOUNT,
                 	    KEY_NEEDSSERVERUPDATE,
                 	    KEY_UPDATETYPE,
-                	    KEY_LOCALIMGRESOURCE
+                	    KEY_LOCALIMGRESOURCE,
+                	    KEY_CORK_LABEL_INLINE
                 		}, 
                 		KEY_ROWID + "=" + rowId, 
                 		null,
@@ -776,6 +801,8 @@ public class DryncDbAdapter
         args.put(KEY_NEEDSSERVERUPDATE, needsUpdate ? 1 : 0);
         args.put(KEY_UPDATETYPE, updateType);
         args.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
+        args.put(KEY_CORK_LABEL_INLINE, cork.getCork_labelInline());
+        
         
         int rowsModified = db.update(DATABASE_TABLE, args, 
         		KEY_ROWID + "=" + cork.get_id(), null);

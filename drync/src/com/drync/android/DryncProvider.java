@@ -2,6 +2,7 @@ package com.drync.android;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URI;
@@ -48,11 +50,13 @@ import org.restlet.Client;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Protocol;
+import org.restlet.engine.io.ReaderInputStream;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
@@ -251,7 +255,7 @@ public class DryncProvider {
 		return bottleList;
 	}*/
 	
-	public ArrayList<Cork> parseCorksFromXmlString(String xml)
+	public ArrayList<Cork> parseCorksFromXmlString(String xml, String tagname)
 	{
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		Document doc = null;
@@ -260,8 +264,11 @@ public class DryncProvider {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			doc = builder.parse(xml);
-			NodeList bottles = doc.getElementsByTagName("bottle");
+		    StringReader reader = new StringReader(xml);
+		    InputSource isrc = new InputSource(reader);
+		    
+			doc = builder.parse(isrc);
+			NodeList bottles = doc.getElementsByTagName(tagname);
 
 			if(bottles!=null) {
 				for(int j=0,m=bottles.getLength();j<m;j++)
@@ -863,12 +870,15 @@ public class DryncProvider {
 						bottle.setCork_drank(Boolean.valueOf(value));
 					} else if ("cork_price".equals(node.getNodeName())) {
 						bottle.setCork_price(value);
+					} else if ("cork_label".equals(node.getNodeName())) {
+						bottle.setCork_label(value);
 					}
 					// else skip for now.
 
 				} catch (NumberFormatException e)
 				{
 					// skip for now.
+					e.printStackTrace();
 				}
 			}
 			
@@ -883,9 +893,11 @@ public class DryncProvider {
 		if("name".equals(node.getNodeName())) {
 			bottle.setName(value);
 		} else if("year".equals(node.getNodeName())) {
-			bottle.setYear(Integer.parseInt(value));
+			if (value != null)
+				bottle.setYear(Integer.parseInt(value));
 		} else if("bottle_id".equals(node.getNodeName())) {
-			bottle.setBottle_Id(Integer.parseInt(value));
+			if (value != null)
+				bottle.setBottle_Id(Integer.parseInt(value));
 		} else if("region".equals(node.getNodeName())) {
 			bottle.setRegion(value);
 		} else if("region_path".equals(node.getNodeName())) {
@@ -1057,7 +1069,7 @@ public class DryncProvider {
 			if (response.getStatusLine().getStatusCode() < 400)
 			{
 				DryncProvider dp = DryncProvider.getInstance();
-				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content);
+				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content, "cork");
 				returnVal.setResult(true);
 				returnVal.setContents(corks);
 				return returnVal;
@@ -1107,7 +1119,7 @@ public class DryncProvider {
 			if (response.getStatusLine().getStatusCode() < 400)
 			{
 				DryncProvider dp = DryncProvider.getInstance();
-				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content);
+				ArrayList<Cork> corks = dp.parseCorksFromXmlString(content, "cork");
 				returnVal.setResult(true);
 				returnVal.setContents(corks);
 				return returnVal;

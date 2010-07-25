@@ -251,8 +251,29 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			RemoteImageView riv = (RemoteImageView) findViewById(R.id.dtlWineThumb);
 			if (riv != null)
 			{
-				String labelThumb = mBottle.getLabel_thumb();
-				riv.setRemoteImage(labelThumb, defaultIcon);
+				boolean skipRemainingThumbProcessing = false;
+				
+				if (mBottle.getLocalImageResourceOnly() != null)
+				{
+					Drawable d = Drawable.createFromPath(mBottle.getLocalImageResourceOnly());
+					if (d != null) {
+						riv.setImageDrawable(d);
+						skipRemainingThumbProcessing = true;
+					}
+
+				}
+				
+				if (!skipRemainingThumbProcessing)
+				{
+					String labelThumb = null;
+
+					if ((mBottle.getCork_label() != null) && (! mBottle.getCork_label().equals("")))
+						labelThumb = mBottle.getCork_label();
+					else
+						labelThumb = mBottle.getLabel_thumb();
+
+					riv.setRemoteImage(labelThumb, defaultIcon);
+				}
 			}
 			
 			riv.setOnClickListener(new OnClickListener() {
@@ -450,6 +471,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 		startActivityForResult(twIntent, ADDTOCELLAR_RESULT);  
 	}
 	
+	
 	/*private void launchReviews(Bottle bottle) {
 		Intent twIntent = new Intent(this, DryncDetailReviews.class);
 		twIntent.putExtra("bottle", bottle);
@@ -534,6 +556,38 @@ public class DryncCorkDetail extends DryncBaseActivity {
 
 
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+
+		switch (requestCode) {
+		case ADDTOCELLAR_RESULT:
+			// This is the standard resultCode that is sent back if the
+			// activity crashed or didn't doesn't supply an explicit result.
+			if (resultCode == RESULT_CANCELED){
+				// do nothing.
+			} 
+			else {
+				/*if (resultCode == DryncCellar.CELLAR_NEEDS_REFRESH)
+	            	{
+	            		this.doStartupFetching(false);
+	            	}*/
+				this.startDryncCellarActivity();
+			}
+			break;
+		case MYACCOUNT_RESULT:
+		{
+
+			break;
+		}
+		default:
+			break;
+		}
+		
+		super.onActivityResult(requestCode, resultCode, data);
+
+	}
+
 	class WineAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
 		private final List<Cork> mWines;
@@ -600,7 +654,37 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
 			if (wineThumb != null  && !mFlinging )
 			{
-				if (wine.getLabel_thumb() != null)
+				String corkThumbUrl = null;
+				if ((wine.getLabel_thumb() != null) || ((Cork)wine).getCork_label() != null)
+				{
+					if ((wine.getLabel_thumb() != null) && (! wine.getLabel_thumb().equals("")))
+						corkThumbUrl = wine.getLabel_thumb();
+					
+					if ((((Cork)wine).getCork_label() != null) && (! ((Cork)wine).getCork_label().equals("")))
+						corkThumbUrl = ((Cork)wine).getCork_label();
+				}
+				
+				if (corkThumbUrl != null)
+				{
+					if (corkThumbUrl.startsWith("http"))
+					{
+						wineThumb.setLocalURI(DryncUtils.getCacheFileName(corkThumbUrl));
+						wineThumb.setRemoteURI(corkThumbUrl);
+					}
+					else
+					{
+						wineThumb.setLocalURI(corkThumbUrl);
+						wineThumb.setRemoteURI(null);
+					}
+					wineThumb.setImageDrawable(defaultIcon);
+					wineThumb.setUseDefaultOnly(false);
+				}
+				else
+				{
+					wineThumb.setUseDefaultOnly(true);
+					wineThumb.setImageDrawable(defaultIcon);
+				}
+				/*if (wine.getLabel_thumb() != null)
 				{
 					wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
@@ -611,7 +695,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				{
 					wineThumb.setUseDefaultOnly(true);
 					wineThumb.setImageDrawable(defaultIcon);
-				}
+				}*/
 			}
 			
 			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);

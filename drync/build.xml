@@ -56,9 +56,9 @@
 	            <replacetoken>com.dryncfree.android</replacetoken>
 	        </replace>
 		
-		<replace summary="yes" dir="${src}" value="DATABASE_NAME = DATABASE_FREE_NAME">
+		<replace summary="yes" dir="${src}" value="DATABASE_NAME = DATABASE_PRO_NAME">
 		    <include name="**/*.java"/> 
-			<replacetoken>DATABASE_NAME = DATABASE_PRO_NAME</replacetoken>
+			<replacetoken>DATABASE_NAME = DATABASE_FREE_NAME</replacetoken>
 		</replace>
 	        	
 		<replace summary="yes" dir="${src}" value="com.drync.android">

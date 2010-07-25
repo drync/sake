@@ -8,6 +8,8 @@
  */
 package com.drync.android;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +32,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -48,6 +51,7 @@ import android.widget.ViewFlipper;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 
+import com.drync.android.helpers.Base64;
 import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
@@ -62,6 +66,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	private String deviceId;
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
+	
+	private ProgressDialog progressDlg = null;
 
 	boolean displaySearch = true;
 	boolean displayTopWinesBtns = false;
@@ -69,6 +75,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	int lastSelectedTopWine = -1;
 	
 	int ownValueHolder = 0;
+	
+	String localImageResourcePath = null;
+	String imageBase64Representation = null;
 
 	LinearLayout searchView;
 	ScrollView detailView;
@@ -82,23 +91,45 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 	Drawable defaultIcon = null;
 	
+	final Runnable mHandleLongTransaction = new Runnable()
+	{
+		public void run()
+		{
+			
+			if (progressDlg != null)
+			{
+				progressDlg.dismiss();
+			}
+			
+			DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
+			DryncAddToCellar.this.finish();
+		}
+	};
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if (requestCode == RemoteImageView.CAMERA_PIC_REQUEST) {  
-			   Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
-			   
-			   RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
-			   
-			   if (image != null)
-			   {
-				   String newpath = image.saveNewImage(thumbnail);
-				   this.mBottle.setLocalImageResourceOnly(newpath);
-				   image.setImageBitmap(thumbnail);
-				   this.mBottle.setLabel_thumb(newpath);
-			   }
+			Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
+
+			RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+
+			if (image != null)
+			{
+				String newpath = image.saveNewImage(thumbnail);
+				DryncAddToCellar.this.localImageResourcePath = newpath;
+				image.setImageBitmap(thumbnail);
+				
+				String base64encoding = null;
+				try {
+					base64encoding = Base64.encodeFromFile(newpath);
+					DryncAddToCellar.this.imageBase64Representation = base64encoding;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}  
 	}
 
@@ -286,6 +317,17 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						cork.setBottle_Id(mBottle.getBottle_Id());
 						cork.setYear(mBottle.getYear());
 					}
+					//this.mBottle.setLocalImageResourceOnly(newpath);
+					//this.mBottle.setLabel_thumb(newpath);
+					//cork.setLabel_thumb(DryncAddToCellar.this.localImageResourcePath);
+					if ((DryncAddToCellar.this.localImageResourcePath != null) && 
+					   (!DryncAddToCellar.this.localImageResourcePath.equals("")))
+					{
+						cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+					
+					}
+					cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+					
 					cork.setCork_price(priceVal.getEditableText().toString());
 					cork.setName(nameVal.getEditableText().toString());
 					cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString()));
@@ -312,91 +354,37 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					else
 						cork.setCork_own(false);
 
-					if (isEdit)
-					{
-						Result<Cork> postresult = DryncProvider.postUpdate(cork, deviceId);
-						boolean postSuccess = postresult.isResult();
-						if (!postSuccess)
-						{
-							// failed post, post later.
-
-							cork.setNeedsServerUpdate(true);
-							cork.setUpdateType(Cork.UPDATE_TYPE_UPDATE);	
-						}
-						else
-						{
-							if (postresult.getContents().size() > 0)
-								cork = postresult.getContents().get(0);
-							
-							cork.setNeedsServerUpdate(false);
-							cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
-						}
-						// persist to database.
-						dbAdapter.open();
-						boolean result = dbAdapter.updateCork(cork);
-						dbAdapter.close();
-						
-						if (result)
-						{
-							// successful
-							Toast successfulUpdate = Toast.makeText(DryncAddToCellar.this, 
-									getResources().getString(R.string.successfulcellarupdate), Toast.LENGTH_LONG);
-							successfulUpdate.show();
-							
-						}
-						
-					}
-					else
-					{
-						try
-						{
-						Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(DryncAddToCellar.this, cork, deviceId, DryncUtils.isFreeMode());
-						boolean postSuccess = postresult.isResult();
-						
-						if (postresult.getContents().size() > 0)
-							cork = postresult.getContents().get(0);
-						
-						if (!postSuccess)
-						{
-							// failed post, post later.
-
-							cork.setNeedsServerUpdate(true);
-							cork.setUpdateType(Cork.UPDATE_TYPE_INSERT);	
-						}
-						// persist to database.
-						dbAdapter.open();
-						long result = -1;
-						result = dbAdapter.insertCork(cork);
-
-
-							if (result >= 0)
-							{
-								// successful
-								Toast successfulAdd = Toast.makeText(DryncAddToCellar.this, 
-										getResources().getString(R.string.successfulcellaradd), Toast.LENGTH_LONG);
-								successfulAdd.show();
-
-							}
-						}
-						catch (DryncFreeCellarExceededException e)
-						{
-							// successful
-							Toast failedAdd = Toast.makeText(DryncAddToCellar.this, 
-									getResources().getString(R.string.exceededcellaradd) + 
-									"\n\n" + getResources().getString(R.string.exceededcellaradd2) +
-									" " + getResources().getString(R.string.exceededcellaradd3), Toast.LENGTH_LONG);
-							failedAdd.setGravity(Gravity.CENTER, 0, 0);
-							failedAdd.show();
-						}
-						finally
-						{
-							dbAdapter.close();
-						}
-					}
-
+					final Cork saveCork = cork;
 					
-					DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
-					DryncAddToCellar.this.finish();
+					progressDlg =  new ProgressDialog(DryncAddToCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Saving cork...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					
+					Thread saveThread = new Thread()
+					{
+						public void run()
+						{
+							boolean result = false;
+							if (isEdit)
+							{
+								result = doEditSave(saveCork, dbAdapter);
+							}
+							else
+							{
+								result = doCreateSave(saveCork, dbAdapter);
+							}
+							
+							
+							//doStartupFetching(true);
+								
+							
+							mHandler.post(mHandleLongTransaction);
+						}
+					};
+					
+					saveThread.start();
 				}};
 
 				if (addToCellarBtn != null)
@@ -441,6 +429,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			ratingBar.setRating(((Cork)mBottle).getCork_rating());
 			ratingVal.setText("" + ((Cork)mBottle).getCork_rating());
 			
+			DryncAddToCellar.this.localImageResourcePath = ((Cork)mBottle).getLocalImageResourceOnly();
+			DryncAddToCellar.this.imageBase64Representation = ((Cork)mBottle).getCork_labelInline();
+			
 			// set style field:
 			if (((Cork)mBottle).getStyle() != null)
 				styleVal.setSelection(styleSpnAdapter.getPosition(((Cork)mBottle).getStyle().toString()));
@@ -478,7 +469,33 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		
 		regionVal.setText("" + mBottle.getRegion());
 		
-		wineThumb.setRemoteImage(mBottle.getLabel_thumb(), defaultIcon);
+		boolean skipRemainingThumbProcessing = false;
+		
+		if (mBottle.getLocalImageResourceOnly() != null)
+		{
+			Drawable d = Drawable.createFromPath(mBottle.getLocalImageResourceOnly());
+			if (d != null) {
+				wineThumb.setImageDrawable(d);
+				skipRemainingThumbProcessing = true;
+			}
+
+		}
+
+		if (!skipRemainingThumbProcessing)
+		{
+			String labelThumb = null;
+
+			if (mBottle instanceof Cork)
+			{
+				Cork corkBottle = (Cork)mBottle;
+				if ((corkBottle.getCork_label() != null) && (!corkBottle.getCork_label().equals("")))
+					labelThumb = corkBottle.getCork_label();
+			}
+			else
+				labelThumb = mBottle.getLabel_thumb();
+
+			wineThumb.setRemoteImage(labelThumb, defaultIcon);
+		}
 	}
 
 	@Override
@@ -516,6 +533,96 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	@Override
 	protected void doStartupFetching() {
 		// skip this fetch in cellar view.
+	}
+	
+	private boolean doEditSave(Cork cork, DryncDbAdapter dbAdapter)
+	{
+		Result<Cork> postresult = DryncProvider.postUpdate(cork, deviceId);
+		boolean postSuccess = postresult.isResult();
+		if (!postSuccess)
+		{
+			// failed post, post later.
+
+			cork.setNeedsServerUpdate(true);
+			cork.setUpdateType(Cork.UPDATE_TYPE_UPDATE);	
+		}
+		else
+		{
+			Cork resultCork = null;
+			if (postresult.getContents().size() > 0)
+			{
+				resultCork = postresult.getContents().get(0);
+				if (resultCork != null)
+				{
+					cork.setCork_created_at(resultCork.getCork_created_at());
+				}
+				
+				//  This might be a bit of hack, but after an update
+				// the xml doesn't have the new image, so we need to
+				// keep using the local copy for now
+				if ((DryncAddToCellar.this.localImageResourcePath != null) && 
+					(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+				{
+					cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+					cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+				}
+				
+			}
+			
+			cork.setNeedsServerUpdate(false);
+			cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
+		}
+		// persist to database.
+		dbAdapter.open();
+		boolean result = dbAdapter.updateCork(cork);
+		dbAdapter.close();
+		
+		return result;
+	}
+	
+	private boolean doCreateSave(Cork cork, DryncDbAdapter dbAdapter)
+	{
+		try
+		{
+		Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(DryncAddToCellar.this, cork, deviceId, DryncUtils.isFreeMode());
+		boolean postSuccess = postresult.isResult();
+		
+		Cork resultCork = null;
+		if (postresult.getContents().size() > 0)
+		{
+			resultCork = postresult.getContents().get(0);
+			if (resultCork != null)
+			{
+				cork.setCork_created_at(resultCork.getCork_created_at());
+				cork.setCork_id(resultCork.getCork_id());
+			}
+		}
+		
+		if (!postSuccess)
+		{
+			// failed post, post later.
+
+			cork.setNeedsServerUpdate(true);
+			cork.setUpdateType(Cork.UPDATE_TYPE_INSERT);	
+		}
+		// persist to database.
+		dbAdapter.open();
+		long result = -1;
+		result = dbAdapter.insertCork(cork);
+
+
+		return result >= 0;		
+		
+		}
+		catch (DryncFreeCellarExceededException e)
+		{
+			return false;
+		}
+		finally
+		{
+			dbAdapter.close();
+		}
+		
 	}
 }
 

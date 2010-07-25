@@ -25,8 +25,17 @@ public class Cork extends Bottle implements Parcelable
     Integer cork_year;
     String cork_poi;
     String public_note = null;
+    String cork_labelInline = null;
     
-    public String getPublic_note() {
+    public String getCork_labelInline() {
+		return cork_labelInline;
+	}
+
+	public void setCork_labelInline(String corkLabelInline) {
+		cork_labelInline = corkLabelInline;
+	}
+
+	public String getPublic_note() {
 		return public_note;
 	}
 
@@ -203,6 +212,11 @@ public class Cork extends Bottle implements Parcelable
 		form.put("cork[location]", this.getLocation());
 		form.put("cork[public_note]", this.getPublic_note());
 		form.put("cork[style]", this.getStyle());
+		
+		if (this.getCork_labelInline() != null)
+		{
+			form.put("cork[label_inline]", this.getCork_labelInline().replace(' ', '+'));
+		}
 		/*
     * cork[user_style]
    * cork[label_inline]

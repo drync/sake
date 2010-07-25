@@ -19,6 +19,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 
 public class DryncUtils {
 
@@ -347,7 +348,4 @@ public class DryncUtils {
 	    f.read(buffer);
 	    return new String(buffer);
 	}
-	
-	
-
 }

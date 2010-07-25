@@ -8,6 +8,7 @@
  */
 package com.drync.android;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -171,7 +172,14 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		if (mAdapter == null)
 		{
+			try
+			{
 			Collections.sort(mResults, new BottleComparator());
+			}
+			catch (NullPointerException e)
+			{
+				int i=0;
+			}
 			
 			mAdapter = new WineAdapter(mResults);
 			mList.setAdapter(mAdapter);
@@ -1120,6 +1128,44 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}		
 	}
 	
+	private synchronized void runUploadImagesReaper(List<Cork> corks)
+	{
+		final List<Cork> finalCorks = corks;
+		final Runnable uploadImagesReaper = new Runnable()
+		{
+			public void run()
+			{
+				File uploaddir = new File(DryncUtils.getCacheDir() + "uploadimages/");
+				if (uploaddir.exists())
+				{
+					File[] filearray = uploaddir.listFiles();
+					for (File file : filearray)
+					{
+						boolean bFound = false;
+						
+						String filename = file.getName();
+						for (Cork cork : finalCorks)
+						{
+							if (cork.getLocalImageResourceOnly().contains(filename))
+							{
+								bFound = true;
+								break;
+							}
+						}
+						
+						if (!bFound && (System.currentTimeMillis() - file.lastModified()) > 
+								1000*60*60*24)
+							file.delete();
+					}
+					
+					
+						
+				}
+			}
+		};
+		uploadImagesReaper.run();
+	}
+	
 	private void startCellarUpdateThread()
 	{
 		ScheduledExecutorService ex = Executors.newSingleThreadScheduledExecutor();
@@ -1188,7 +1234,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 						}
 						
-						
+						runUploadImagesReaper(corks);
 						//	Arraylist<Cork> getAllCorksNeedingUpdates()
 					}
 					else

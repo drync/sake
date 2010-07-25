@@ -1,5 +1,7 @@
 package com.drync.android;
 
+import java.util.Random;
+
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdSenseSpec;
 import com.google.ads.GoogleAdView;
@@ -137,7 +139,11 @@ public abstract class DryncBaseActivity extends Activity {
                 // do nothing.
             } 
             else {
-                this.startDryncCellarActivity();
+            	/*if (resultCode == DryncCellar.CELLAR_NEEDS_REFRESH)
+            	{
+            		this.doStartupFetching(false);
+            	}*/
+               // this.startDryncCellarActivity();
             }
             break;
         case MYACCOUNT_RESULT:
@@ -150,24 +156,41 @@ public abstract class DryncBaseActivity extends Activity {
     }
 	}
 
-	protected void startDryncCellarActivity()
+    protected void startDryncCellarActivity()
+    {
+    	startDryncCellarActivity(false);
+    }
+    
+	protected void startDryncCellarActivity(boolean triggerRefresh)
     {
     	Intent setIntent = new Intent(this, DryncCellar.class);
+    	if (triggerRefresh)
+    	{
+    		setIntent.putExtra("needsrefresh", true);
+    	}
     	startActivity(setIntent);
     }
 	
 	protected void doStartupFetching()
 	{
+		doStartupFetching(false);
+	}
+	
+	protected void doStartupFetching(boolean wait)
+	{
 		 // do refresh of cellar data on start of every activity...
-		   String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
-		   
-			final String threadDeviceId = deviceId;
+		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
+		final String threadDeviceId = deviceId;
+
+		if (!wait)
+		{
+
 			Thread t = new Thread() {
 				public void run() {
 					try
 					{
 						DryncProvider.getInstance()
-							.getCorks(DryncBaseActivity.this, threadDeviceId);
+						.getCorks(DryncBaseActivity.this, threadDeviceId);
 						DryncProvider.getInstance().myAcctGet(threadDeviceId);
 					}
 					catch(Exception e)
@@ -177,6 +200,20 @@ public abstract class DryncBaseActivity extends Activity {
 				}
 			};
 			t.start();
+		}
+		else
+		{
+			try
+			{
+				DryncProvider.getInstance()
+			.getCorks(DryncBaseActivity.this, threadDeviceId);
+				DryncProvider.getInstance().myAcctGet(threadDeviceId);
+			}
+			catch (Exception e)
+			{
+				Log.e("An error has occurred during a determined fetch of the cellar & My Account info.", e.getMessage());
+			}
+		}
 	}
 	
 	public void onStart()
@@ -218,7 +255,8 @@ public abstract class DryncBaseActivity extends Activity {
 		    .setCompanyName("Drync LLC")
 		    .setAppName("Drync Wine Free Droid")
 		    .setKeywords(getGoogleAdSenseKeywords())
-		    .setAdType(AdType.IMAGE);
+		    .setChannel("4305989908")
+		    .setAdType(AdType.TEXT_IMAGE);
 		
 		adSenseSpec.setAdTestEnabled(false);
 		
@@ -243,12 +281,33 @@ public abstract class DryncBaseActivity extends Activity {
 		}
 	}
 	
+	static final String[] adKeywords = 
+		{
+			"restaurant", "merlot", "shiraz", "pairing", "chardonnay", "burgundy",
+			"cabernet", "sauvignon", "vineyard", "vine", "Torbreck", "cellar",
+			"reserve", "zinfandel", "moscato", "semillon", "muscat", "dom perignon",
+			"blanc", "pinot", "gris", "vino", "grape", "syrah", "brut", "rose", "red", "white"
+		};
+	
+	private static Random rand = new Random(System.currentTimeMillis());
+	
 	public String getGoogleAdSenseKeywords()
 	{
-		StringBuilder bldr = new StringBuilder("wine merlot shiraz pairing chardonnay burgundy cabernet") 
+		
+		StringBuilder bldr = new StringBuilder("wine drink alcohol");
+		
+		// get 3 of above at random and append.
+		for (int i=0,n=3; i<n; i++)
+		{
+			String keyword = adKeywords[rand.nextInt(adKeywords.length)];
+			bldr.append(" " + keyword);
+		}
+		
+		
+		/*merlot shiraz pairing chardonnay burgundy cabernet") 
 		.append(" sauvingon vineyard vine Torbreck cellar reserve zinfandel") 
 		.append(" moscato semillon muscat dom perignon blanc pinot gris vino") 
-		.append(" grape syrah brut rose red white");
+		.append(" grape syrah brut rose red white");*/
 		
 		return bldr.toString();
 	}

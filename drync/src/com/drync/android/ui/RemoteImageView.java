@@ -6,6 +6,7 @@ package com.drync.android.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
@@ -100,7 +101,15 @@ public class RemoteImageView extends ImageView {
 
 	public String saveNewImage(Bitmap bm)
 	{
-		String newpath = DryncUtils.getCacheDir() + "corkimage.jpg";
+		Random rand = new Random(System.currentTimeMillis());
+		int randint = rand.nextInt(10000);
+		
+		File tmpDir = new File(DryncUtils.getCacheDir() + "uploadimages/");
+		if (! tmpDir.exists())
+			tmpDir.mkdirs();
+		
+		String newpath = DryncUtils.getCacheDir() + "uploadimages/" +
+				"corkimg_" + randint + ".jpg";
 
 		try {
 			FileOutputStream fos = new FileOutputStream(newpath);

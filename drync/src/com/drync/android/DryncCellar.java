@@ -8,6 +8,7 @@
  */
 package com.drync.android;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -129,9 +131,11 @@ private ProgressDialog progressDlg = null;
             } 
             else if ( resultCode == CELLAR_NEEDS_REFRESH )
             {
+            	super.doStartupFetching(true);  // wait for this to return.
             	doFilteredCellarQuery(DryncCellar.this.lastSelectedCellar, this.searchEntry.getText().toString());	
             }
             else {
+            	int i=0;
                 //this.startDryncCellarActivity();
             }
         default:
@@ -174,6 +178,7 @@ private ProgressDialog progressDlg = null;
 		{
 			mAdapter.mWines.clear();
 			mAdapter.viewHash.clear();
+			Collections.sort(mResults, new CorkComparator());
 			mAdapter.mWines.addAll(mResults);
 			this.resultsLastSetTimestamp = System.currentTimeMillis();
 		}
@@ -511,30 +516,49 @@ private ProgressDialog progressDlg = null;
 			
 			if (corkThumb != null  && !mFlinging )
 			{
-				/*if (wine.getLocalImageResourceOnly() != null)
+				boolean skipRemainingThumbProcessing = false;
+				if (wine.getLocalImageResourceOnly() != null)
 				{
-					URI localURI = new URI(wine.getLocalImageResourceOnly());
-					corkThumb.setImageURI(localURI);
-				}*/
-				if (wine.getLabel_thumb() != null)
+					Drawable d = Drawable.createFromPath(wine.getLocalImageResourceOnly());
+					if (d != null) {
+						corkThumb.setImageDrawable(d);
+						skipRemainingThumbProcessing = true;
+					}
+					
+				}
+				String corkThumbUrl = null;
+				
+				if (!skipRemainingThumbProcessing)
 				{
-					if (wine.getLabel_thumb().startsWith("http"))
+					if ((wine.getLabel_thumb() != null) || (wine.getCork_label() != null))
 					{
-						corkThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
-						corkThumb.setRemoteURI(wine.getLabel_thumb());
+						if ((wine.getLabel_thumb() != null) && (! wine.getLabel_thumb().equals("")))
+							corkThumbUrl = wine.getLabel_thumb();
+
+						if ((wine.getCork_label() != null) && (! wine.getCork_label().equals("")))
+							corkThumbUrl = wine.getCork_label();
+					}
+
+					if (corkThumbUrl != null)
+					{
+						if (corkThumbUrl.startsWith("http"))
+						{
+							corkThumb.setLocalURI(DryncUtils.getCacheFileName(corkThumbUrl));
+							corkThumb.setRemoteURI(corkThumbUrl);
+						}
+						else
+						{
+							corkThumb.setLocalURI(corkThumbUrl);
+							corkThumb.setRemoteURI(null);
+						}
+						corkThumb.setImageDrawable(defaultIcon);
+						corkThumb.setUseDefaultOnly(false);
 					}
 					else
 					{
-						corkThumb.setLocalURI(wine.getLabel_thumb());
-						corkThumb.setRemoteURI(null);
+						corkThumb.setUseDefaultOnly(true);
+						corkThumb.setImageDrawable(defaultIcon);
 					}
-					corkThumb.setImageDrawable(defaultIcon);
-					corkThumb.setUseDefaultOnly(false);
-				}
-				else
-				{
-					corkThumb.setUseDefaultOnly(true);
-					corkThumb.setImageDrawable(defaultIcon);
 				}
 			}
 			
