@@ -596,6 +596,16 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				cork.setCork_created_at(resultCork.getCork_created_at());
 				cork.setCork_id(resultCork.getCork_id());
 			}
+			
+		//  This might be a bit of hack, but after an update
+			// the xml doesn't have the new image, so we need to
+			// keep using the local copy for now
+			if ((DryncAddToCellar.this.localImageResourcePath != null) && 
+				(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+			{
+				cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+				cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+			}
 		}
 		
 		if (!postSuccess)

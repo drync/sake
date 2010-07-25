@@ -12,7 +12,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.Handler;
@@ -124,6 +128,24 @@ public class RemoteImageView extends ImageView {
 
 	}
 	
+	@Override
+	public void draw(Canvas canvas) {
+		super.draw(canvas);
+		
+		if (this.isLaunchCameraOnClick())
+		{
+			Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_menu_camera_small);
+			
+			Rect r = new Rect(canvas.getWidth()/2 - canvas.getWidth()/4,
+							  0, canvas.getWidth()/4, canvas.getHeight()/3);
+			
+			float centerx = canvas.getClipBounds().exactCenterX() - bMap.getWidth()/2;
+			float centery = canvas.getClipBounds().bottom - (bMap.getHeight() + bMap.getHeight()/4);
+			
+			canvas.drawBitmap(bMap, centerx, centery, new Paint());
+		}
+	}
+
 	public void loadImage() {
 		if ((mRemote != null) && (!useDefaultOnly)) {
 			if (mLocal == null) {
