@@ -345,9 +345,7 @@ public class Drync extends Activity {
 
 	public void onStart() {
 		super.onStart();
-		if (DryncUtils.isRunningOnEmulator(this.getContentResolver()))
-			FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());
-
+		FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());
 	}
 	
 	public boolean hasConnectivity()
