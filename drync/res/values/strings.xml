@@ -4,8 +4,8 @@
     <string name="app_name">Drync Wine Pro</string>
     <string name="cellar_name">Drync Wine Pro - Cellar</string>
     <string name="find_your_wine">Find your wine.</string>
-    <string name="fyw1">Drinking a wine you like?  Drync scours millions of listings to find the wine you're drinking along with reviews, ratings and prices.</string>
-    <string name="fyw2">Quickly jot a note about a wine you're drinking.  Search and add it to your cellar when you've got more time.</string>
+    <string name="fyw1">Drinking a wine you like?  Drync scours millions of listings to find the wine you\'re drinking along with reviews, ratings and prices.</string>
+    <string name="fyw2">Quickly jot a note about a wine you\'re drinking.  Search and add it to your cellar when you\'ve got more time.</string>
     <string name="fyw3">Add wines to your Virtual Cellar to remember them later, share or track your collection.</string>
 	<string name="fywbutton">Thanks, I get it.</string>
 	
@@ -26,7 +26,7 @@
     
     <string name="searchtoast1">Welcome to Drync Search</string>
     <string name="searchtoast2">Find your wine by typing a few words from the wine label into the search bar above.</string>
-    <string name="searchtoast3">You don't need to type in all the details - just make sure you give Drync enough to work with, like "2004 inman pinot" or "chateau margaux 2001".</string>
+    <string name="searchtoast3">You don\'t need to type in all the details - just make sure you give Drync enough to work with, like "2004 inman pinot" or "chateau margaux 2001".</string>
 	
 	<string name="noresults">No matching results could be found.</string>
 	<string name="noresults2">Please try again!</string>
@@ -51,7 +51,7 @@
 	
 	<string name="noreviewurl">There is no link attached to this review.</string>
 	
-	<string name="emailsubject">Hi! I'm using Drync on my Android to send you this wine recommendation...</string>
+	<string name="emailsubject">Hi! I\'m using Drync on my Android to send you this wine recommendation...</string>
 	<string name="emailfooter">Drync-Wine - research and remember wines you enjoy using your iPhone or Android Device.</string>
 	<string name="emailfooter2">To learn more visit www.drync.com</string>
 	
@@ -209,7 +209,7 @@
 <item>Bourgueil</item>
 <item>Bouzeron</item>
 <item>Bowen</item>
-<item>Brachetto d'Acqui</item>
+<item>Brachetto d\'Acqui</item>
 <item>Breede River Valley</item>
 <item>Breisgau</item>
 <item>Broke Fordwich</item>
@@ -225,7 +225,7 @@
 <item>CÃ´te de Brouilly</item>
 <item>CÃ´te de Nuits-Villages</item>
 <item>CÃ´te RÃ´tie</item>
-<item>CÃ´tes d'Auvergne</item>
+<item>CÃ´tes d\'Auvergne</item>
 <item>CÃ´tes de Beaune</item>
 <item>CÃ´tes de Bergerac moelleux</item>
 <item>CÃ´tes de Bergerac</item>
@@ -250,7 +250,7 @@
 <item>CÃ´tes du Vivarais</item>
 <item>CaÃ±ete â€“ LunahuanÃ¡</item>
 <item>Cabardès</item>
-<item>Cabernet d'Anjou</item>
+<item>Cabernet d\'Anjou</item>
 <item>Cachi</item>
 <item>Cadillac</item>
 <item>Cafayate</item>
@@ -371,9 +371,9 @@
 <item>Costières de NÃ®mes</item>
 <item>Cosumnes River</item>
 <item>Coteaux Champenois</item>
-<item>Coteaux d'Aix-en-Provence</item>
-<item>Coteaux d'Aix</item>
-<item>Coteaux de l'Aubance</item>
+<item>Coteaux d\'Aix-en-Provence</item>
+<item>Coteaux d\'Aix</item>
+<item>Coteaux de l\'Aubance</item>
 <item>Coteaux de Languedoc</item>
 <item>Coteaux de Lyonnais</item>
 <item>Coteaux de Mascara</item>
@@ -390,7 +390,7 @@
 <item>Cova da Beira</item>
 <item>Covelo</item>
 <item>Cowra</item>
-<item>CrÃ©mant d'Alsace</item>
+<item>CrÃ©mant d\'Alsace</item>
 <item>CrÃ©mant de Bordeaux</item>
 <item>CrÃ©mant de Bourgogne</item>
 <item>CrÃ©mant de Die</item>
@@ -546,7 +546,7 @@
 <item>Knights Valley</item>
 <item>Kocher-Jagst-Tauber</item>
 <item>Kraichgau</item>
-<item>L'Étoile (Jura)</item>
+<item>L\'Étoile (Jura)</item>
 <item>La Arboleda</item>
 <item>La Central</item>
 <item>La Colonia</item>
@@ -635,8 +635,8 @@
 <item>Margaux</item>
 <item>MarkgrÃ¤flerland</item>
 <item>Marsannay</item>
-<item>Martha's Vineyard</item>
-<item>Mascara Tlemcen D'hara Bejaia Chlef Algiers</item>
+<item>Martha\'s Vineyard</item>
+<item>Mascara Tlemcen D\'hara Bejaia Chlef Algiers</item>
 <item>Maury</item>
 <item>Mavrodafni Kephalinia</item>
 <item>Mavrodafni Patra</item>
@@ -675,7 +675,7 @@
 <item>Montalbano</item>
 <item>Monte ComÃ¡n</item>
 <item>Montecaseros</item>
-<item>Montepulciano d'Abruzzo Colline Teramane</item>
+<item>Montepulciano d\'Abruzzo Colline Teramane</item>
 <item>Monterey</item>
 <item>Monterrei</item>
 <item>Montespertoli</item>
@@ -1095,7 +1095,7 @@
 <item>Vino Nobile di Montepulciano</item>
 <item>Vinos de Madrid</item>
 <item>Vinsobres</item>
-<item>Virginia's Eastern Shore</item>
+<item>Virginia\'s Eastern Shore</item>
 <item>Vista Flores</item>
 <item>Vistalba</item>
 <item>Volnay</item>
@@ -1337,7 +1337,7 @@
 	<item>Lambrusco</item>
 	<item>Lazki Rizling</item>
 	<item>Lemberger</item>
-	<item>Len de l'El</item>
+	<item>Len de l\'El</item>
 	<item>Leànyka</item>
 	<item>Loureira</item>
 	<item>Macabeo</item>
@@ -1409,7 +1409,7 @@
 	<item>Negroamaro</item>
 	<item>Nerello Cappuccio</item>
 	<item>Nerello Mascalese</item>
-	<item>Nero d'Avola</item>
+	<item>Nero d\'Avola</item>
 	<item>Neuburger</item>
 	<item>Nielluccio</item>
 	<item>Nocera</item>

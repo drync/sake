@@ -73,7 +73,7 @@ public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
 	static String TEST_SERVER_HOST="drync-test.morphexchange.com";
 	static String STAGING_SERVER_HOST="staging.drync.com";
-	static String DEV_SERVER_HOST="10.0.2.2";
+	static String DEV_SERVER_HOST="drync-build.ath.cx";
 	static String USING_SERVER_HOST=SERVER_HOST;
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";

@@ -19,8 +19,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
-import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;

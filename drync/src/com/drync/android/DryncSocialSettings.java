@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-public class DryncSettings extends DryncBaseActivity {
+public class DryncSocialSettings extends DryncBaseActivity {
 
 	SharedPreferences settings;
 	final Handler mHandler = new Handler();
@@ -42,14 +42,13 @@ public class DryncSettings extends DryncBaseActivity {
 	EditText passwordEdit;
 	ToggleButton cellarTweetBtn;*/
 	
-	Button myAcctButton;
-	Button socialSettingsButton;
-	Button resetButton;
+	Button twitterButton;
+	Button facebookButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		 super.onCreate(savedInstanceState);
-	     setContentView(R.layout.settings);
+	     setContentView(R.layout.socialsettings);
 	     
 	     settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 	     
@@ -57,9 +56,8 @@ public class DryncSettings extends DryncBaseActivity {
 	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal);
 	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal); */
 	     
-	     myAcctButton = (Button)this.findViewById(R.id.acctSettingsBtn);
-	     socialSettingsButton = (Button)this.findViewById(R.id.socialSettingsBtn);
-	     resetButton = (Button)this.findViewById(R.id.resetBtn);
+	     twitterButton = (Button)this.findViewById(R.id.twitterSettingsBtn);
+	     facebookButton = (Button)this.findViewById(R.id.facebookSettingsBtn);
 	   /*  String username = settings.getString(DryncUtils.TWITTER_USERNAME_PREF, "");
 	     usernameEdit.setText(username);
 	     
@@ -74,31 +72,21 @@ public class DryncSettings extends DryncBaseActivity {
 	     cellarTweetBtn.setChecked(cellarTweet);*/
 	     
 	     
-	     myAcctButton.setOnClickListener(new OnClickListener(){
+	     twitterButton.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
 				Intent intent = new Intent();
-    			intent.setClass(DryncSettings.this, DryncMyAccountActivity.class);
-    			startActivityForResult(intent, MYACCOUNT_RESULT);
+    			intent.setClass(DryncSocialSettings.this, DryncTwitterActivity.class);
+    			startActivity(intent);
 				
 			}});
 	     
-	     socialSettingsButton.setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					Intent intent = new Intent();
-	    			intent.setClass(DryncSettings.this, DryncSocialSettings.class);
-	    			startActivity(intent);					
-				}});
-	     
-	     this.resetButton.setOnClickListener(new OnClickListener(){
+	     this.facebookButton.setOnClickListener(new OnClickListener(){
 	    		 public void onClick(View v)
 	    		 {
-	    			 progressDlg =  new ProgressDialog(DryncSettings.this);
-						progressDlg.setTitle("Dryncing...");
-						progressDlg.setMessage("Updating Settings...");
-						progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-						progressDlg.show();
-	    			 resetSettings();
+	    			 Intent intent = new Intent();
+	     			 intent.setClass(DryncSocialSettings.this, DryncFacebookActivity.class);
+	     			 startActivity(intent);
 	    		 }});
 	     
 	}
@@ -113,7 +101,7 @@ public class DryncSettings extends DryncBaseActivity {
 				
 				try {
 					DryncProvider.getInstance()
-					.getCorks(DryncSettings.this, threadDeviceId);
+					.getCorks(DryncSocialSettings.this, threadDeviceId);
 					DryncProvider.getInstance().myAcctGet(threadDeviceId);
 				} catch (DryncHostException e) {
 					Log.e("DryncSettings", "Error getting my account page", e);

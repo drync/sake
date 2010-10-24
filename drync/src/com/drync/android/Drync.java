@@ -50,7 +50,7 @@ public class Drync extends Activity {
 	private static final int STOPSPLASH = 0;
 	private static final int STARTMAIN = 1;
 	private static final int REGISTER = 2;
-	private static final long SPLASHTIME = 6000;
+	private static final long SPLASHTIME = 2000;
 
 	private static RelativeLayout splash;
 	private static LinearLayout register;

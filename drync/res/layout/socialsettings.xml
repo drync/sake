@@ -4,7 +4,7 @@
 	android:id="@+id/settingsflipper" android:layout_width="fill_parent" android:orientation="vertical"
 	android:layout_height="fill_parent" android:background="@drawable/wood2">
 
-	<!-- <LinearLayout android:id="@+id/twittersettings"
+	<!--  <LinearLayout android:id="@+id/twittersettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:visibility="visible">
 
@@ -65,24 +65,45 @@
 	 	</RelativeLayout> 
 	</LinearLayout> -->
 	
-	<LinearLayout android:id="@+id/accountsettings"
+	<LinearLayout android:id="@+id/socialsettings"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:visibility="visible">
 		
-		<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
+		<Button android:id="@+id/twitterSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:text="My Account" android:textColor="#FFFFFF"
+				android:text="Twitter" android:textColor="#FFFFFF"
 				android:gravity="center" android:background="@drawable/dryncbutton"/>
 		
-		<Button android:id="@+id/socialSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
+		<Button android:id="@+id/facebookSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:text="Social Settings" android:textColor="#FFFFFF"
+				android:text="Facebook" android:textColor="#FFFFFF"
 				android:gravity="center" android:background="@drawable/dryncbutton"/>
-				
-		<Button android:id="@+id/resetBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
+			
+		<RelativeLayout android:id="@+id/cellarTweetSection"
+			android:layout_width="fill_parent" android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+			android:layout_marginTop="25px" android:background="@drawable/rndbordertransparent"
+			android:layout_marginLeft="10px" android:padding="15px"
+			android:layout_marginRight="10px" android:layout_marginBottom="25px">
+		
+			<TextView android:id="@+id/cellarTweetsLbl"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
+				android:textColor="#000000" android:textSize="18px" 
+				android:layout_marginLeft="10px" android:layout_marginTop="40px" android:layout_marginBottom="25px"
+				android:gravity="center" android:text="Cellar Tweets" />
+			
+			<ToggleButton android:id="@+id/cellarTweetVal"  
+				android:layout_width="wrap_content" android:layout_height="20px" 
+				android:layout_marginTop="10px"
+				android:layout_toRightOf="@id/cellarTweetsLbl" android:layout_marginLeft="10px" 
+				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" /> 
+		
+	 	</RelativeLayout> 	
+		<!-- <Button android:id="@+id/resetBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="Reset Settings" android:textColor="#FFFFFF"
-				android:gravity="center" android:background="@drawable/dryncbutton"/>
+				android:gravity="center" android:background="@drawable/dryncbutton"/> -->
 				
 	</LinearLayout>
 </LinearLayout>

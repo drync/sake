@@ -12,68 +12,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
-import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.TwitterException;
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import com.drync.android.objects.Bottle;
-import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
-import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
 
 public class DryncDetailReviews extends DryncBaseActivity {
@@ -159,7 +127,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 			TextView reviewCount = (TextView)reviewView.findViewById(R.id.reviewCount);
 
 			revListHolder.removeAllViews();
-			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			RelativeLayout.LayoutParams rcparams = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 			rcparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 			rcparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 			revListHolder.addView(reviewCount, rcparams);
@@ -193,7 +161,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 					DryncDetailReviews.this.finish();
 				}});
 
-			RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+			RelativeLayout.LayoutParams listparams = new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.FILL_PARENT);
 			listparams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 			listparams.addRule(RelativeLayout.BELOW, R.id.reviewCount);
 			

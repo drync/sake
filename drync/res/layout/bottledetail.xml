@@ -211,10 +211,16 @@
 				android:layout_height="wrap_content" android:layout_alignParentTop="true"
 				android:gravity="center" android:background="@drawable/dryncbutton"
 				android:textColor="#FFFFFF" android:text="Add to Cellar" />
+			
 			<Button android:id="@+id/share" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_below="@id/addToCellar"
 				android:background="@drawable/dryncbutton" android:textColor="#FFFFFF"
-				android:gravity="center" android:text="Share" />
+				android:gravity="center" android:text="Share via Email" />
+				
+			<Button android:id="@+id/social" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/share"
+				android:background="@drawable/dryncbutton" android:textColor="#FFFFFF"
+				android:gravity="center" android:text="Tell My Friends" />
 
 		</RelativeLayout>
 

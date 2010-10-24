@@ -21,16 +21,23 @@ import android.view.View;
 
 public abstract class DryncBaseActivity extends Activity {
 	
+	// Menu IDs
 	public static final int SEARCH_ID = Menu.FIRST;
 	public static final int CELLAR_ID = Menu.FIRST + 1;
 	public static final int TOP_WINE_ID = Menu.FIRST + 2;
 	public static final int SETTINGS_ID = Menu.FIRST + 3;
 	
+	// Activity Results
 	public static final int ADDTOCELLAR_RESULT = 1;	
 	public static final int MYACCOUNT_RESULT = 2;
 	
 	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
 	
+	
+	// view members:
+	GoogleAdView googleAdView;
+	
+	// abstract methods
 	public abstract int getMenuItemToSkip();
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,6 +75,7 @@ public abstract class DryncBaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		DryncUtils.isFreeMode();
 	}
 
@@ -106,11 +114,11 @@ public abstract class DryncBaseActivity extends Activity {
         }
         case SETTINGS_ID:
         {
-        	/*Intent setIntent = new Intent(this, DryncSettings.class);
-        	startActivity(setIntent);*/
-        	Intent intent = new Intent();
+        	Intent setIntent = new Intent(this, DryncSettings.class);
+        	startActivity(setIntent);
+        	/*Intent intent = new Intent();
 			intent.setClass(this, DryncMyAccountActivity.class);
-			startActivityForResult(intent, MYACCOUNT_RESULT);
+			startActivityForResult(intent, MYACCOUNT_RESULT);*/
         	break;
         }
         case CELLAR_ID:
@@ -264,7 +272,8 @@ public abstract class DryncBaseActivity extends Activity {
 	
 	public void initializeAds()
 	{
-		GoogleAdView googleAdView = (GoogleAdView) findViewById(R.id.adview);
+		if (googleAdView == null)
+			googleAdView = (GoogleAdView) findViewById(R.id.adview);
 		
 		if (googleAdView != null)
 		{
@@ -285,7 +294,8 @@ public abstract class DryncBaseActivity extends Activity {
 			"restaurant", "merlot", "shiraz", "pairing", "chardonnay", "burgundy",
 			"cabernet", "sauvignon", "vineyard", "vine", "Torbreck", "cellar",
 			"reserve", "zinfandel", "moscato", "semillon", "muscat", "dom perignon",
-			"blanc", "pinot", "gris", "vino", "grape", "syrah", "brut", "rose", "red", "white"
+			"blanc", "pinot", "gris", "vino", "grape", "syrah", "brut", "rose", "red", 
+			"white", "wine glasses", "shot glasses", "decanter"
 		};
 	
 	private static Random rand = new Random(System.currentTimeMillis());
@@ -293,10 +303,10 @@ public abstract class DryncBaseActivity extends Activity {
 	public String getGoogleAdSenseKeywords()
 	{
 		
-		StringBuilder bldr = new StringBuilder("wine drink alcohol");
+		StringBuilder bldr = new StringBuilder("wine drink");
 		
-		// get 3 of above at random and append.
-		for (int i=0,n=3; i<n; i++)
+		// get 4 of above at random and append.
+		for (int i=0,n=4; i<n; i++)
 		{
 			String keyword = adKeywords[rand.nextInt(adKeywords.length)];
 			bldr.append(" " + keyword);
