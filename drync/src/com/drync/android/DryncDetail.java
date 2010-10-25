@@ -13,65 +13,43 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
+
 import com.drync.android.objects.Bottle;
-import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 import com.drync.android.ui.RemoteImageView;
@@ -94,8 +72,6 @@ public class DryncDetail extends DryncBaseActivity {
 	
 	int lastSelectedTopWine = -1;
 	
-	
-	
 	private TableLayout mReviewTable;
 	
 	LinearLayout searchView;
@@ -109,9 +85,6 @@ public class DryncDetail extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 	
 	Drawable defaultIcon = null;
-	
-	private String userTwitterUsername = null;
-	private String userTwitterPassword = null;
 	
 	boolean launchedFromTopWines = false; 
 
@@ -219,7 +192,49 @@ public class DryncDetail extends DryncBaseActivity {
 			TextView styleView = (TextView) detailView.findViewById(R.id.styleval);
 			TextView regionView = (TextView) detailView.findViewById(R.id.regionval);
 			
-			/*Button btnTweet = (Button)detailView.findViewById(R.id.tweet);*/
+			Button btnTweet = (Button)detailView.findViewById(R.id.social);
+			btnTweet.setOnClickListener(new OnClickListener(){
+				public void onClick(View arg0) {
+					if (!hasConnectivity())
+					{
+						new AlertDialog.Builder(DryncDetail.this)
+						.setMessage(getResources().getString(R.string.nonettweet))
+								.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										dialog.cancel();
+									}})
+									.show();
+					}
+					else
+					{
+						boolean twitterAuth = DryncUtils.isTwitterAuthorized(DryncDetail.this);
+						boolean fbAuth = DryncUtils.isFacebookAuthorized(DryncDetail.this);
+						
+						if (twitterAuth || fbAuth)
+						{
+							if (twitterAuth)
+							{
+								boolean result = DryncProvider.postTweetToFriends(mBottle, deviceId);
+							}
+
+							if (fbAuth)
+							{
+								boolean result2 = DryncProvider.postScrawlToFriends(mBottle, deviceId);
+							}
+							Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialupdated), Toast.LENGTH_SHORT);
+							tst.setGravity(Gravity.CENTER, 0, 0);
+							tst.show();
+						}
+						else
+						{
+							Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialnotenabled), Toast.LENGTH_SHORT);
+							tst.setGravity(Gravity.CENTER, 0, 0);
+							tst.show();
+						}
+						
+						
+					}
+				}});
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);
 			
 			revListHolder.removeAllViews();
@@ -359,51 +374,7 @@ public class DryncDetail extends DryncBaseActivity {
 			}
 			
 
-		/*	if (btnTweet != null)
-			{
-				btnTweet.setOnClickListener(new OnClickListener()
-				{
-
-					public void onClick(View v) {
-						StringBuilder tweetStr = new StringBuilder();
-						if ((userTwitterUsername == null) || (userTwitterPassword == null))
-						{
-							Toast noTwtSettings = Toast.makeText(DryncDetail.this, getResources().getString(R.string.twittersettingsmsg), Toast.LENGTH_LONG);
-							noTwtSettings.show();
-						}
-						else
-						{
-							Twitter twitter = new Twitter(userTwitterUsername, userTwitterPassword);
-							twitter.setSource("DryncWineDroid");
-							tweetStr.append("Drinking the ");
-							tweetStr.append(mBottle.getName());
-							String lastSubstr = " #wine";
-							// ensure proper length for tweet.
-							if (tweetStr.length() > (160 - lastSubstr.length()))
-							{
-								tweetStr.setLength(160 - 3 - lastSubstr.length());
-								tweetStr.append("...");								
-							}
-							tweetStr.append(lastSubstr);
-
-							try
-							{
-								twitter.updateStatus(tweetStr.toString());
-
-								Toast tweetTst = Toast.makeText(DryncDetail.this, "Tweeted \"" + tweetStr.toString() + "\"", Toast.LENGTH_LONG);
-								tweetTst.show();
-							}
-							catch (TwitterException e)
-							{
-								Toast noTweetTst = Toast.makeText(DryncDetail.this, "Tweet could not be posted.", Toast.LENGTH_LONG);
-								noTweetTst.show();
-							}
-						}
-					}});
-			}*/
-
-
-			if (buyBtnSection != null)
+		    if (buyBtnSection != null)
 			{
 				ArrayList<Source> sources = mBottle.getSources();
 				int lastAdded = -1;

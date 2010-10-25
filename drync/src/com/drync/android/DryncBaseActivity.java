@@ -30,6 +30,8 @@ public abstract class DryncBaseActivity extends Activity {
 	// Activity Results
 	public static final int ADDTOCELLAR_RESULT = 1;	
 	public static final int MYACCOUNT_RESULT = 2;
+	public static final int TWITTER_AUTH_RESULT = 10;
+	public static final int FACEBOOK_AUTH_RESULT = 11;
 	
 	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
 	

@@ -71,12 +71,12 @@
 		
 		<Button android:id="@+id/twitterSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:text="Twitter" android:textColor="#FFFFFF"
+				android:text="Sign In" android:textColor="#FFFFFF" android:drawableLeft="@drawable/twitter"
 				android:gravity="center" android:background="@drawable/dryncbutton"/>
 		
 		<Button android:id="@+id/facebookSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
-				android:text="Facebook" android:textColor="#FFFFFF"
+				android:text="Sign In" android:textColor="#FFFFFF" android:drawableLeft="@drawable/facebook"
 				android:gravity="center" android:background="@drawable/dryncbutton"/>
 			
 		<RelativeLayout android:id="@+id/cellarTweetSection"
@@ -94,7 +94,7 @@
 				android:gravity="center" android:text="Cellar Tweets" />
 			
 			<ToggleButton android:id="@+id/cellarTweetVal"  
-				android:layout_width="wrap_content" android:layout_height="20px" 
+				android:layout_width="wrap_content" android:layout_height="wrap_content" 
 				android:layout_marginTop="10px"
 				android:layout_toRightOf="@id/cellarTweetsLbl" android:layout_marginLeft="10px" 
 				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" /> 

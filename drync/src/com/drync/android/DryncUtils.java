@@ -111,6 +111,9 @@ public class DryncUtils {
 
 	private static String deviceId = null;
 	private static String etag;
+	private static boolean twitterAuthorized = false;
+	private static boolean facebookAuthorized = false;
+	private static boolean cellarTweetsEnabled = false;
 	
 	//Shared Prefs
 	public static final String PREFS_NAME = "DRYNC_PREFS";
@@ -120,9 +123,11 @@ public class DryncUtils {
 	public static final String LAST_FILTER_PREF = "lastFilter";
 	public static final String CELLAR_ETAG = "cellarEtag";
 	/*public static final String TWITTER_USERNAME_PREF = "twitter_username";
-	public static final String TWITTER_PASSWORD_PREF = "twitter_password";
-	public static final String TWITTER_CELLARTWT_PREF = "twitter_cellartweet";
-	public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";*/
+	public static final String TWITTER_PASSWORD_PREF = "twitter_password";*/
+	public static final String CELLARTWT_PREF = "twitter_cellartweet";
+	public static final String TWITTER_AUTHORIZED = "twitter_authorized";
+	public static final String FACEBOOK_AUTHORIZED = "facebook_authorized";
+	/*public static final String TWITTER_PW_ENCRYPT_SEED = "red truck chardonnay";*/
 	public static final String UUID_KEY = "UuidKey";
 	public static final String LAST_UUID_VAL = "lastUuidVal";
 
@@ -245,6 +250,68 @@ public class DryncUtils {
 		editor.commit();
 		
 	}
+	
+	public static boolean isTwitterAuthorized(Activity activity)
+	{
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+		twitterAuthorized = settings.getBoolean(DryncUtils.TWITTER_AUTHORIZED, false);
+		
+		return twitterAuthorized;
+	}
+	
+	public static void setTwitterAuthorized(Activity activity, boolean twitter_authorized)
+	{
+		DryncUtils.twitterAuthorized = twitter_authorized;
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putBoolean(DryncUtils.TWITTER_AUTHORIZED, DryncUtils.twitterAuthorized);
+		editor.commit();
+		
+	}
+	
+	public static boolean isFacebookAuthorized(Activity activity)
+	{
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+		facebookAuthorized = settings.getBoolean(DryncUtils.FACEBOOK_AUTHORIZED, false);
+		
+		return facebookAuthorized;
+	}
+	
+	public static void setFacebookAuthorized(Activity activity, boolean facebook_authorized)
+	{
+		DryncUtils.facebookAuthorized = facebook_authorized;
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putBoolean(DryncUtils.FACEBOOK_AUTHORIZED, DryncUtils.facebookAuthorized);
+		editor.commit();
+	}
+	
+	public static boolean isCellarTweetsEnabled(Activity activity)
+	{
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+		cellarTweetsEnabled = settings.getBoolean(DryncUtils.CELLARTWT_PREF, false);
+		
+		return cellarTweetsEnabled;
+	}
+	
+	public static void setCellarTweetsEnabled(Activity activity, boolean cellarTweetsEnabled)
+	{
+		DryncUtils.cellarTweetsEnabled = cellarTweetsEnabled;
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putBoolean(DryncUtils.CELLARTWT_PREF, DryncUtils.cellarTweetsEnabled);
+		editor.commit();
+	}
+	
 	
 	public static String getDeviceId(ContentResolver resolver, Activity activity)
 	{

@@ -1,29 +1,15 @@
 package com.drync.android;
 
 
-
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
-
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
-import android.view.Gravity;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class DryncTwitterActivity extends Activity {
 
-	private LinearLayout register;
 	private WebView regWebView;
 	
 	@Override
@@ -39,32 +25,12 @@ public class DryncTwitterActivity extends Activity {
 		DryncUtils.isFreeMode();
 		
 		setContentView(R.layout.registerweb);
-		
-		CookieSyncManager.createInstance(this);
-		CookieSyncManager.getInstance().startSync();
-		
-		register = (LinearLayout) findViewById(R.id.registerwebwrap);
-		
+				
 		regWebView = (WebView) findViewById(R.id.registerWeb);
 		regWebView.setBackgroundColor(0);
 		regWebView.getSettings().setJavaScriptEnabled(true);
 		regWebView.setWebViewClient(new CustomWebViewClient());
 		
-		
-		
-		String myacctfile = null;
-		
-		/*try
-		{
-			myacctfile = DryncUtils.readFileAsString(DryncUtils.getCacheDir(this) + "myacct.html");
-		} catch (DryncConfigException e) {
-			myacctfile = null;
-		} catch (IOException e) {
-			myacctfile = null;
-		}
-		
-		if ((myacctfile != null) && (! myacctfile.equals("")))
-		{*/
 			StringBuilder sb = new StringBuilder("http://");
 			sb.append(DryncProvider.USING_SERVER_HOST);
 			if (DryncProvider.USING_SERVER_HOST == DryncProvider.DEV_SERVER_HOST)
@@ -73,48 +39,17 @@ public class DryncTwitterActivity extends Activity {
 			sb.append(DryncUtils.getDeviceId(DryncTwitterActivity.this.getContentResolver(), DryncTwitterActivity.this));
 			
 			regWebView.loadUrl(sb.toString());
-			//regWebView.loadDataWithBaseURL(sb.toString(), myacctfile, "text/html", "utf-8", null);
 			regWebView.requestFocus();
-		/*}
-		else
-		{
-			Toast noReviewUrl = Toast.makeText(this, getResources().getString(R.string.nosettingsyet) + "\n\n" +
-					getResources().getString(R.string.nosettingsyet2) +"\n", Toast.LENGTH_LONG);
-			noReviewUrl.setGravity(Gravity.CENTER, 0, 0);
-			noReviewUrl.show();
-			this.finish();
-		}*/
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		CookieSyncManager.getInstance().stopSync();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		CookieStore cookieStore = DryncUtils.getCookieStore();
-		if (cookieStore != null)
-		{
-			CookieManager cookieManager = CookieManager.getInstance();
-			cookieManager.removeSessionCookie();
-			List<Cookie> cookies = cookieStore.getCookies();
-			for (Cookie cookie : cookies)
-			{
-				StringBuilder cookieUrl = new StringBuilder("http://");
-				cookieUrl.append(cookie.getDomain()).append("/");
-				StringBuilder cookieString = new StringBuilder();
-				cookieString.append(cookie.getName()).append("=").append(cookie.getValue()).append("; domain=").append(
-						cookie.getDomain());
-
-				cookieManager.setCookie(cookieUrl.toString(), cookieString.toString());
-				CookieSyncManager.getInstance().sync(); 
-			}
-		}
-		CookieSyncManager.getInstance().startSync();
 	}
 
 	private class CustomWebViewClient extends WebViewClient {
@@ -123,6 +58,7 @@ public class DryncTwitterActivity extends Activity {
 	    	if (url.startsWith("close:"))
 	    	{
 	    		DryncTwitterActivity.this.finish();
+	    		DryncTwitterActivity.this.setResult(RESULT_OK);
 	    		return true;
 	    	}
 	    	else if (url.startsWith("twitter:///"))
@@ -130,51 +66,17 @@ public class DryncTwitterActivity extends Activity {
 	    		if (url.contains("account_name"))
 	    		{
 	    			String substring = url.substring(url.indexOf("account_name"));
+	    			DryncUtils.setTwitterAuthorized(DryncTwitterActivity.this, true);
 	    		}
-	    		
+	    		CookieManager.getInstance().removeAllCookie();	
+	    		DryncTwitterActivity.this.setResult(RESULT_OK);
 	    		DryncTwitterActivity.this.finish();
 	    		return true;
 	    	}
 
 	        view.loadUrl(url);
-	        return true;
+	        return false;
 	    }
-
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			super.onPageFinished(view, url);
-			CookieSyncManager.getInstance().sync();
-			
-			if (url.endsWith("#___1__"))
-			{
-				Toast acctCreated = Toast.makeText(DryncTwitterActivity.this, "Your account has been created.", Toast.LENGTH_LONG);
-				acctCreated.show();
-				
-				Thread thread = new Thread()
-				{
-					@Override
-					public void run() {
-						super.run();
-						// redo this to reset cookies.
-						try {
-							DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(DryncTwitterActivity.this.getContentResolver(), DryncTwitterActivity.this));
-						} catch (DryncHostException e) {
-							Log.e("DryncMyAccountActivity", "Error resetting my account page", e);
-						}
-					}
-				};
-				
-				thread.start();
-				
-				DryncTwitterActivity.this.finish();
-			}
-		}
-
-		@Override
-		public void onReceivedError(WebView view, int errorCode,
-				String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, failingUrl);
-		}
 	}
 	
 	public void onConfigurationChanged(Configuration newConfig) {

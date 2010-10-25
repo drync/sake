@@ -35,8 +35,12 @@
 	<string name="nonet_twsearch">A Data Connection is required to fetch the </string>
 	<string name="nonetsearch2">Please try again later when a connection is present.</string>
 	
+	<string name="nonettweet">Sorry, not connected to the internet right now, Try again later!</string>
 	<string name="nosettingsyet">Due to data connection issues, no settings have been fetched from the server yet.</string>
 	<string name="nosettingsyet2">Please try again later.</string>
+	
+	<string name="socialnotenabled">Facebook and Twitter are not enabled.  Please Visit the Drync Wine Settings.</string>
+	<string name="socialupdated">Your friends have been updated.</string>
 	
 	<string name="twittersettingsmsg">You must configure Twitter first, in the "Settings" tab!</string>
 	

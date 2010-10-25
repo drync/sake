@@ -1216,4 +1216,187 @@ public class DryncProvider {
 			return "";
 		}
 	}
+	
+	public static boolean postTweetToFriends(Bottle bottle, String deviceId)
+	{
+		String targetType = "bottles";
+		long targetId = bottle.getBottle_Id();
+		int year = 0;
+		String name;
+		if (bottle instanceof Cork)
+		{
+			targetType = "corks";
+			targetId = ((Cork)bottle).getCork_id();
+			year = ((Cork)bottle).getCork_year();
+			name = ((Cork)bottle).getName();
+		}
+		else
+		{
+			year = bottle.getYear();
+			name = bottle.getName();
+		}
+		
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/%s/%d/tweets", USING_SERVER_HOST,SERVER_PORT,targetType, targetId);
+		boolean returnval = false;
+		try {
+			Map<String, String> kvpairs = new HashMap<String, String>();
+			kvpairs.put("message", null);
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, kvpairs, deviceId);
+			
+			String content = "";
+			if (response.getEntity() != null)
+				content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//returnVal.setResult(false);
+		return false;
+	}
+	
+	public static boolean postScrawlToFriends(Bottle bottle, String deviceId)
+	{
+		String targetType = "bottles";
+		long targetId = bottle.getBottle_Id();
+		int year = 0;
+		String name;
+		if (bottle instanceof Cork)
+		{
+			targetType = "corks";
+			targetId = ((Cork)bottle).getCork_id();
+			year = ((Cork)bottle).getCork_year();
+			name = ((Cork)bottle).getName();
+		}
+		else
+		{
+			year = bottle.getYear();
+			name = bottle.getName();
+		}
+		
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/%s/%d/scrawls", USING_SERVER_HOST,SERVER_PORT,targetType, targetId);
+		boolean returnval = false;
+		try {
+			Map<String, String> kvpairs = new HashMap<String, String>();
+			kvpairs.put("message", null);
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, kvpairs, deviceId);
+			
+			String content = "";
+			if (response.getEntity() != null)
+				content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//returnVal.setResult(false);
+		return false;
+	}
+	
+	public static boolean postFacebookDeauth(String deviceId)
+	{
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/facebook_authorization/deauthorize", USING_SERVER_HOST,SERVER_PORT);
+		boolean returnval = false;
+		try {
+			Map<String, String> kvpairs = new HashMap<String, String>();
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, kvpairs, deviceId);
+			
+			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//returnVal.setResult(false);
+		return false;
+	}
+	
+	public static boolean postTwitterDeauth(String deviceId)
+	{
+		// Define our Restlet client resources.  
+		String clientResourceUrl = String.format("http://%s:%d/twitter_authorization/deauthorize", USING_SERVER_HOST,SERVER_PORT);
+		boolean returnval = false;
+		try {
+			Map<String, String> kvpairs = new HashMap<String, String>();
+			HttpResponse response = DryncProvider.doPost(clientResourceUrl, kvpairs, deviceId);
+			
+			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
+			Log.d("DryncProvider", response.getStatusLine().toString() + "\n" + content);
+			if (response.getStatusLine().getStatusCode() < 400)
+			{
+				DryncProvider dp = DryncProvider.getInstance();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//returnVal.setResult(false);
+		return false;
+	}
+	
 }

@@ -2,28 +2,16 @@ package com.drync.android;
 
 
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
-
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class DryncFacebookActivity extends Activity {
 
-	private LinearLayout register;
 	private WebView regWebView;
 	
 	@Override
@@ -39,63 +27,35 @@ public class DryncFacebookActivity extends Activity {
 		
 		setContentView(R.layout.registerweb);
 		
-		CookieSyncManager.createInstance(this);
-		CookieSyncManager.getInstance().startSync();
-		
-		register = (LinearLayout) findViewById(R.id.registerwebwrap);
-		
 		regWebView = (WebView) findViewById(R.id.registerWeb);
 		regWebView.setBackgroundColor(0);
 		regWebView.getSettings().setJavaScriptEnabled(true);
-		//regWebView.setWebViewClient(new CustomWebViewClient());
+		regWebView.setWebViewClient(new CustomWebViewClient());
 		
-		
-		
-		String myacctfile = null;
-		
-		/*try
-		{
-			myacctfile = DryncUtils.readFileAsString(DryncUtils.getCacheDir(this) + "myacct.html");
-		} catch (DryncConfigException e) {
-			myacctfile = null;
-		} catch (IOException e) {
-			myacctfile = null;
-		}
-		
-		if ((myacctfile != null) && (! myacctfile.equals("")))
-		{*/
-			StringBuilder sb = new StringBuilder("http://");
-			sb.append(DryncProvider.USING_SERVER_HOST);
-			if (DryncProvider.USING_SERVER_HOST == DryncProvider.DEV_SERVER_HOST)
-				sb.append(":3000");
-			sb.append("/facebook_authorization/authorize?device_id=");
-			sb.append(DryncUtils.getDeviceId(DryncFacebookActivity.this.getContentResolver(), DryncFacebookActivity.this));
-			
-			regWebView.loadUrl(sb.toString());
-			//regWebView.loadDataWithBaseURL(sb.toString(), myacctfile, "text/html", "utf-8", null);
-			regWebView.requestFocus();
-		/*}
-		else
-		{
-			Toast noReviewUrl = Toast.makeText(this, getResources().getString(R.string.nosettingsyet) + "\n\n" +
-					getResources().getString(R.string.nosettingsyet2) +"\n", Toast.LENGTH_LONG);
-			noReviewUrl.setGravity(Gravity.CENTER, 0, 0);
-			noReviewUrl.show();
-			this.finish();
-		}*/
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(DryncProvider.USING_SERVER_HOST);
+		if (DryncProvider.USING_SERVER_HOST == DryncProvider.DEV_SERVER_HOST)
+			sb.append(":3000");
+		sb.append("/facebook_authorization/authorize?device_id=");
+		sb.append(DryncUtils.getDeviceId(DryncFacebookActivity.this.getContentResolver(), DryncFacebookActivity.this));
+
+		regWebView.loadUrl(sb.toString());
+		//regWebView.loadDataWithBaseURL(sb.toString(), myacctfile, "text/html", "utf-8", null);
+		regWebView.requestFocus();
+
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		CookieSyncManager.getInstance().stopSync();
+		//CookieSyncManager.getInstance().stopSync();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		CookieStore cookieStore = DryncUtils.getCookieStore();
+	/*	CookieStore cookieStore = DryncUtils.getCookieStore();
 		if (cookieStore != null)
 		{
 			CookieManager cookieManager = CookieManager.getInstance();
@@ -113,7 +73,7 @@ public class DryncFacebookActivity extends Activity {
 				CookieSyncManager.getInstance().sync(); 
 			}
 		}
-		CookieSyncManager.getInstance().startSync();
+		CookieSyncManager.getInstance().startSync(); */
 	}
 
 	private class CustomWebViewClient extends WebViewClient {
@@ -125,22 +85,24 @@ public class DryncFacebookActivity extends Activity {
 	    	if (url.startsWith("close:"))
 	    	{
 	    		DryncFacebookActivity.this.finish();
+	    		DryncFacebookActivity.this.setResult(RESULT_OK);
 	    		return true;
 	    	}
-	    	else if (url.startsWith("facebook://"))
+	    	else if (url.startsWith("facebook:///"))
 	    	{
 	    		if (url.contains("account_name"))
 	    		{
 	    			String substring = url.substring(url.indexOf("account_name"));
+	    			DryncUtils.setFacebookAuthorized(DryncFacebookActivity.this, true);
 	    		}
-	    		
+	    		CookieManager.getInstance().removeAllCookie();
+	    		DryncFacebookActivity.this.setResult(RESULT_OK);
 	    		DryncFacebookActivity.this.finish();
 	    		return true;
 	    	}
 
 	    	view.loadUrl(url);
 	    	Log.d("FACEBOOK_ACTIVITY", "continuing.");
-	    	
 	        return true;
 	    }
 
