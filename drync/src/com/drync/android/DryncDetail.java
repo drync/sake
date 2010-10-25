@@ -58,6 +58,7 @@ public class DryncDetail extends DryncBaseActivity {
 
 	private ListView mList;
 	final Handler mHandler = new Handler();
+	final Handler tweetHandler = new Handler();
 	private List<Bottle> mResults = null;
 
 	private Bottle mBottle = null;
@@ -207,23 +208,47 @@ public class DryncDetail extends DryncBaseActivity {
 					}
 					else
 					{
-						boolean twitterAuth = DryncUtils.isTwitterAuthorized(DryncDetail.this);
-						boolean fbAuth = DryncUtils.isFacebookAuthorized(DryncDetail.this);
+						final boolean twitterAuth = DryncUtils.isTwitterAuthorized(DryncDetail.this);
+						final boolean fbAuth = DryncUtils.isFacebookAuthorized(DryncDetail.this);
 						
 						if (twitterAuth || fbAuth)
 						{
-							if (twitterAuth)
+							progressDlg =  new ProgressDialog(DryncDetail.this);
+							progressDlg.setTitle("Dryncing...");
+							progressDlg.setMessage("Telling your friends...");
+							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+							progressDlg.show();
+							
+							Thread t = new Thread()
 							{
-								boolean result = DryncProvider.postTweetToFriends(mBottle, deviceId);
-							}
+								public void run() {
 
-							if (fbAuth)
-							{
-								boolean result2 = DryncProvider.postScrawlToFriends(mBottle, deviceId);
-							}
-							Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialupdated), Toast.LENGTH_SHORT);
-							tst.setGravity(Gravity.CENTER, 0, 0);
-							tst.show();
+									if (twitterAuth)
+									{
+										boolean result = DryncProvider.postTweetToFriends(mBottle, deviceId);
+									}
+
+									if (fbAuth)
+									{
+										boolean result2 = DryncProvider.postScrawlToFriends(mBottle, deviceId);
+									}
+
+									DryncDetail.this.tweetHandler.post(new Runnable(){
+
+										public void run() {
+											
+											if (progressDlg != null)
+											{
+												progressDlg.dismiss();
+											}
+											
+											Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialupdated), Toast.LENGTH_SHORT);
+											tst.setGravity(Gravity.CENTER, 0, 0);
+											tst.show();											
+										}});
+								}
+							};
+							t.start();
 						}
 						else
 						{
@@ -231,8 +256,6 @@ public class DryncDetail extends DryncBaseActivity {
 							tst.setGravity(Gravity.CENTER, 0, 0);
 							tst.show();
 						}
-						
-						
 					}
 				}});
 			RelativeLayout buyBtnSection = (RelativeLayout)detailView.findViewById(R.id.buySection);

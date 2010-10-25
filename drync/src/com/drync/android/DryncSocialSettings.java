@@ -90,6 +90,7 @@ public class DryncSocialSettings extends DryncBaseActivity {
 								public void onClick(DialogInterface dialog, int id) {
 									DryncProvider.postTwitterDeauth(deviceId);
 									DryncUtils.setTwitterAuthorized(DryncSocialSettings.this, false);
+									twitterAuthd = false;
 									twitterButton.setText("Twitter");
 									dialog.cancel();
 								}})
@@ -119,6 +120,7 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	 								public void onClick(DialogInterface dialog, int id) {
 	 									DryncProvider.postFacebookDeauth(deviceId);
 	 									DryncUtils.setFacebookAuthorized(DryncSocialSettings.this, false);
+	 									fbAuthd = false;
 	 									facebookButton.setText("Facebook");
 	 									dialog.cancel();
 	 								}})
