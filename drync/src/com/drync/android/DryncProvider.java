@@ -135,7 +135,7 @@ public class DryncProvider {
 				devId = "test";
 		
 		StringBuilder bldr = new StringBuilder();
-		bldr.append(URL1).append(keywords.replaceAll(" ", "+")).append(URL2).append(devId);
+		bldr.append(URL1).append(keywords.replaceAll(" ", "+").replaceAll("\"", "")).append(URL2).append(devId);
 		Log.d("DryncPrvdr", "Loading Wines: " + bldr.toString());
 		HttpGet get = new HttpGet(bldr.toString());
 		try {
