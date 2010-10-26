@@ -218,6 +218,7 @@
 				android:gravity="center" android:text="Share via Email" />
 				
 			<Button android:id="@+id/social" android:layout_width="fill_parent"
+				android:drawableLeft="@drawable/twitter_facebook"
 				android:layout_height="wrap_content" android:layout_below="@id/share"
 				android:background="@drawable/dryncbutton" android:textColor="#FFFFFF"
 				android:gravity="center" android:text="Tell My Friends" />

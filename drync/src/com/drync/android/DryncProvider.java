@@ -1059,8 +1059,14 @@ public class DryncProvider {
 				}
 			}
 		
+		String tweetAppend = "";
+		if (DryncUtils.isCellarTweetsEnabled((Activity)ctx))
+		{
+			tweetAppend = "?tweet&scrawl";
+		}
+		
 		// Define our Restlet client resources.  
-		String clientResourceUrl = String.format("http://%s:%d/corks", USING_SERVER_HOST,SERVER_PORT);
+		String clientResourceUrl = String.format("http://%s:%d/corks%s", USING_SERVER_HOST,SERVER_PORT,tweetAppend);
 		Result<Cork> returnVal = new Result<Cork>();
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);

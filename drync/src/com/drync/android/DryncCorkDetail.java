@@ -15,9 +15,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -60,6 +62,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 
 	private ListView mList;
 	final Handler mHandler = new Handler();
+	final Handler tweetHandler = new Handler();
 	private List<Cork> mResults = null;
 
 	private Cork mBottle = null;
@@ -366,47 +369,71 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				});
 			}
 
-			/*if (btnTweet != null)
-			{
-				btnTweet.setOnClickListener(new OnClickListener()
-				{
-					public void onClick(View v) {
-						StringBuilder tweetStr = new StringBuilder();
-						if ((userTwitterUsername == null) || (userTwitterPassword == null))
+			Button btnTweet = (Button)detailView.findViewById(R.id.social);
+			btnTweet.setOnClickListener(new OnClickListener(){
+				public void onClick(View arg0) {
+					if (!hasConnectivity())
+					{
+						new AlertDialog.Builder(DryncCorkDetail.this)
+						.setMessage(getResources().getString(R.string.nonettweet))
+								.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+										dialog.cancel();
+									}})
+									.show();
+					}
+					else
+					{
+						final boolean twitterAuth = DryncUtils.isTwitterAuthorized(DryncCorkDetail.this);
+						final boolean fbAuth = DryncUtils.isFacebookAuthorized(DryncCorkDetail.this);
+						
+						if (twitterAuth || fbAuth)
 						{
-							Toast noTwtSettings = Toast.makeText(DryncCorkDetail.this, getResources().getString(R.string.twittersettingsmsg), Toast.LENGTH_LONG);
-							noTwtSettings.show();
+							progressDlg =  new ProgressDialog(DryncCorkDetail.this);
+							progressDlg.setTitle("Dryncing...");
+							progressDlg.setMessage("Telling your friends...");
+							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+							progressDlg.show();
+							
+							Thread t = new Thread()
+							{
+								public void run() {
+
+									if (twitterAuth)
+									{
+										boolean result = DryncProvider.postTweetToFriends(mBottle, deviceId);
+									}
+
+									if (fbAuth)
+									{
+										boolean result2 = DryncProvider.postScrawlToFriends(mBottle, deviceId);
+									}
+
+									DryncCorkDetail.this.tweetHandler.post(new Runnable(){
+
+										public void run() {
+											
+											if (progressDlg != null)
+											{
+												progressDlg.dismiss();
+											}
+											
+											Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialupdated), Toast.LENGTH_SHORT);
+											tst.setGravity(Gravity.CENTER, 0, 0);
+											tst.show();											
+										}});
+								}
+							};
+							t.start();
 						}
 						else
 						{
-							Twitter twitter = new Twitter(userTwitterUsername, userTwitterPassword);
-							twitter.setSource("DryncWineDroid");
-							tweetStr.append("Drinking the ");
-							tweetStr.append(mBottle.getName());
-							String lastSubstr = " #wine";
-							// ensure proper length for tweet.
-							if (tweetStr.length() > (160 - lastSubstr.length()))
-							{
-								tweetStr.setLength(160 - 3 - lastSubstr.length());
-								tweetStr.append("...");								
-							}
-							tweetStr.append(lastSubstr);
-
-							try
-							{
-								twitter.updateStatus(tweetStr.toString());
-
-								Toast tweetTst = Toast.makeText(DryncCorkDetail.this, "Tweeted \"" + tweetStr.toString() + "\"", Toast.LENGTH_LONG);
-								tweetTst.show();
-							}
-							catch (TwitterException e)
-							{
-								Toast noTweetTst = Toast.makeText(DryncCorkDetail.this, "Tweet could not be posted.", Toast.LENGTH_LONG);
-								noTweetTst.show();
-							}
+							Toast tst = Toast.makeText(getApplicationContext(),getResources().getString(R.string.socialnotenabled), Toast.LENGTH_SHORT);
+							tst.setGravity(Gravity.CENTER, 0, 0);
+							tst.show();
 						}
-					}});
-			}*/
+					}
+				}});
 
 			if (buyBtnSection != null)
 			{

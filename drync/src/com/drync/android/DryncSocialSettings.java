@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class DryncSocialSettings extends DryncBaseActivity {
 
@@ -43,8 +45,8 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	};
 	
 	/*EditText usernameEdit;
-	EditText passwordEdit;
-	ToggleButton cellarTweetBtn;*/
+	EditText passwordEdit; */
+	ToggleButton cellarTweetBtn;
 	
 	Button twitterButton;
 	Button facebookButton;
@@ -57,8 +59,10 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	     settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 	     
 	    /* usernameEdit = (EditText)this.findViewById(R.id.usernameVal);
-	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal);
-	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal); */
+	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal); */
+	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal); 
+	     
+	     cellarTweetBtn.setChecked(DryncUtils.isCellarTweetsEnabled(DryncSocialSettings.this));
 	     
 	     twitterButton = (Button)this.findViewById(R.id.twitterSettingsBtn);
 	     
@@ -194,9 +198,9 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		
-		/*final Editor editor = settings.edit();
+		final Editor editor = settings.edit();
 		
-		String username = usernameEdit.getText().toString();
+		/*String username = usernameEdit.getText().toString();
 		if ((username != null) && (!username.equals("")))
 			editor.putString(DryncUtils.TWITTER_USERNAME_PREF, username);
 		
@@ -205,12 +209,12 @@ public class DryncSocialSettings extends DryncBaseActivity {
 		{
 			String encryptedPw = DryncUtils.encryptTwitterPassword(password);
 			editor.putString(DryncUtils.TWITTER_PASSWORD_PREF, encryptedPw);
-		}
+		} */
 		
 		boolean cellarTweet = cellarTweetBtn.isChecked();
-			editor.putBoolean(DryncUtils.TWITTER_CELLARTWT_PREF, cellarTweet);
+			editor.putBoolean(DryncUtils.CELLARTWT_PREF, cellarTweet);
 		
-		editor.commit(); */
+		editor.commit(); 
 	}
 	
 	@Override
