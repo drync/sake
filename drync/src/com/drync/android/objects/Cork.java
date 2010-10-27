@@ -195,7 +195,15 @@ public class Cork extends Bottle implements Parcelable
 		form.put("prod", "wine-free");
 		form.put("cork[name]", this.getName());
 		form.put("cork[description]", this.getDescription());
-		form.put("cork[rating]", "" + this.getCork_rating());
+		if ((this.getCork_rating() != null) && this.getCork_rating() >= 0)
+		{
+			form.put("cork[rating]", "" + this.getCork_rating());
+		}
+		else
+		{
+			form.put("cork[rating]", "");
+		}
+		
 		if (this.getBottle_Id() != 0)
 			form.put("cork[bottle_id]", "" + this.getBottle_Id());
 		//form.add("cork[label_inline]" + this.getCork_label());

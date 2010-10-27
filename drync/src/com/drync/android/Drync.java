@@ -50,7 +50,7 @@ public class Drync extends Activity {
 	private static final int STOPSPLASH = 0;
 	private static final int STARTMAIN = 1;
 	private static final int REGISTER = 2;
-	private static final long SPLASHTIME = 2000;
+	private static final long SPLASHTIME = 4000;
 
 	private static RelativeLayout splash;
 	private static LinearLayout register;
@@ -113,9 +113,9 @@ public class Drync extends Activity {
 
 			case STARTMAIN:
 				// remove SplashScreen from view
-				splash.setVisibility(View.GONE);
-				if (register != null)
-					register.setVisibility(View.GONE);
+				//splash.setVisibility(View.GONE);
+				//if (register != null)
+				//	register.setVisibility(View.GONE);
 				// start Main & End Intro
 				Intent intent = new Intent();
 				intent.setClass(Drync.this, DryncSearch.class);

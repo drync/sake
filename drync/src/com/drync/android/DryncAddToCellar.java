@@ -66,6 +66,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	private String deviceId;
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
+	boolean ratingTouched = false;
 	
 	private ProgressDialog progressDlg = null;
 
@@ -110,24 +111,27 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == RemoteImageView.CAMERA_PIC_REQUEST) {  
-			Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
-
-			RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
-
-			if (image != null)
+		if (requestCode == RemoteImageView.CAMERA_PIC_REQUEST) { 
+			if (data != null)
 			{
-				String newpath = image.saveNewImage(thumbnail);
-				DryncAddToCellar.this.localImageResourcePath = newpath;
-				image.setImageBitmap(thumbnail);
-				
-				String base64encoding = null;
-				try {
-					base64encoding = Base64.encodeFromFile(newpath);
-					DryncAddToCellar.this.imageBase64Representation = base64encoding;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
+
+				RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+
+				if (image != null)
+				{
+					String newpath = image.saveNewImage(thumbnail);
+					DryncAddToCellar.this.localImageResourcePath = newpath;
+					image.setImageBitmap(thumbnail);
+
+					String base64encoding = null;
+					try {
+						base64encoding = Base64.encodeFromFile(newpath);
+						DryncAddToCellar.this.imageBase64Representation = base64encoding;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}  
@@ -205,7 +209,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			public void onRatingChanged(RatingBar ratingBar, float rating,
 					boolean fromUser) {
 				ratingVal.setText("" + rating);
-				
+				if (fromUser)
+					DryncAddToCellar.this.ratingTouched = true;				
 			}});
 		
 		ownVal.setOnClickListener(new OnClickListener()
@@ -334,7 +339,16 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					//cork.setCork_created_at(System.currentTimeMillis());
 					cork.setGrape(varietalVal.getEditableText().toString());
 					cork.setRegion(regionVal.getEditableText().toString());
-					cork.setCork_rating(ratingbar.getRating());
+					
+					if (DryncAddToCellar.this.ratingTouched == true)
+					{
+						cork.setCork_rating(ratingbar.getRating());
+					}
+					else
+					{
+						cork.setCork_rating(null);
+					}
+					
 					cork.setPublic_note(tastingNotesVal.getEditableText().toString());
 					cork.setDescription(privateNotesVal.getEditableText().toString());
 					cork.setLocation(locationVal.getEditableText().toString());
@@ -426,8 +440,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			String price = ((Cork)mBottle).getCork_price();
 			priceVal.setText((price == null || price.equals("")) ? mBottle.getPrice() : price);
 			RatingBar ratingBar = (RatingBar)addView.findViewById(R.id.atcRatingVal);
-			ratingBar.setRating(((Cork)mBottle).getCork_rating());
-			ratingVal.setText("" + ((Cork)mBottle).getCork_rating());
+			
+			if (((Cork)mBottle).getCork_rating() == null || ((Cork)mBottle).getCork_rating() < 0)
+			{
+				this.ratingTouched = false;
+				ratingBar.setRating((float) 0.0);
+				ratingVal.setText("N/A");
+			}
+			else
+			{
+				ratingBar.setRating(((Cork)mBottle).getCork_rating());
+				ratingVal.setText("" + ((Cork)mBottle).getCork_rating());
+			}
 			
 			DryncAddToCellar.this.localImageResourcePath = ((Cork)mBottle).getLocalImageResourceOnly();
 			DryncAddToCellar.this.imageBase64Representation = ((Cork)mBottle).getCork_labelInline();

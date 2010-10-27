@@ -240,7 +240,7 @@ private ProgressDialog progressDlg = null;
 	{
 		Log.d(LOG_IDENTIFIER, "Querying: '" + query + "' filter type: " + filterType);
 		
-		final String curQuery = query;
+		final String curQuery = query.replace("\'s", "");
 		final int curFilterType = filterType;
 		
 		SharedPreferences.Editor editor = settings.edit();

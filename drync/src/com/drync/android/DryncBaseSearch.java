@@ -96,15 +96,22 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		public void run()
 		{
 			updateResultsInUi();
-			if (progressDlg != null)
+			if ((progressDlg != null) && (progressDlg.isShowing()))
 			{
-				progressDlg.dismiss();
+				try
+				{
+					progressDlg.dismiss();
+				}
+				catch (IllegalArgumentException e)
+				{
+					Log.e("PROGDLG_ERROR", "Progress Dialog not attached.");
+				}
+				
 				if (searchEntry != null)
 				{
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 					imm.hideSoftInputFromWindow(searchEntry.getWindowToken(), 0);
 				}
-
 			}
 		}
 	};
@@ -195,8 +202,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		startCellarUpdateThread();
 		
-		LayoutInflater inflater = getLayoutInflater();
-		
 		initializeAds();
 		
 		searchView = (LinearLayout) this.findViewById(R.id.searchview);
@@ -278,6 +283,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		if (displaySearch && !bail)
 		{
+			LayoutInflater inflater = getLayoutInflater();
+			
 			View tstLayout = inflater.inflate(R.layout.searchinstructions,
 					(ViewGroup) findViewById(R.id.search_toast_layout));
 			

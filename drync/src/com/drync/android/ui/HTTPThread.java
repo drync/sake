@@ -71,7 +71,9 @@ public class HTTPThread extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
-				is.close();
+				if (is != null)
+					is.close();
+				
 				fos.flush();
 				fos.close();
 			}
