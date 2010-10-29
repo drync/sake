@@ -61,6 +61,11 @@ public class DryncDetail extends DryncBaseActivity {
 	final Handler tweetHandler = new Handler();
 	private List<Bottle> mResults = null;
 
+	@Override
+	public boolean isTrackGPS() {
+		return true;
+	}
+
 	private Bottle mBottle = null;
 	private ProgressDialog progressDlg = null;
 	private String deviceId;

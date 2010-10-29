@@ -61,6 +61,7 @@ import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.drync.android.helpers.Result;
@@ -68,6 +69,8 @@ import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
+import com.drync.android.objects.Venue;
+import com.google.android.maps.GeoPoint;
 
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
@@ -1403,6 +1406,106 @@ public class DryncProvider {
 		
 		//returnVal.setResult(false);
 		return false;
+	}
+	
+	public ArrayList<Venue> getVenues(Location loc)
+	{
+		ArrayList<Venue> venueLst = new ArrayList<Venue>();
+		
+		HttpHost target = new HttpHost("api.foursquare.com", 80, "http");
+		String foursquareUrl = "/v1/venues";
+		Document doc = null;
+		HttpClient client = new DefaultHttpClient();
+		
+		GeoPoint initGeoPoint = new GeoPoint(
+				(int)(
+						loc.getLatitude()*1000000),
+						(int)loc.getLongitude()*1000000);
+		
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(foursquareUrl).append("?geolat=").append(loc.getLatitude()).append("&geolong=").append(loc.getLongitude())
+			.append("&l=30");
+		
+		HttpGet get = new HttpGet(bldr.toString());
+		
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			HttpEntity entity = client.execute(target, get).getEntity();
+
+			doc = builder.parse(entity.getContent());
+			NodeList venues = doc.getElementsByTagName("venue");
+			
+			if (venues != null)
+			{
+				for (int j=0,m=venues.getLength();j<m;j++)
+				{
+					Node venueNode = venues.item(j);
+					Venue venue = parseVenueFromNode(venueNode);
+					Log.d("VENUE_GET", "Read Venue: " + venue.getName());
+					venueLst.add(venue);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			Log.e("DRYNCPROVIDER", "Exception caught: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return venueLst;
+	}
+	
+	private Venue parseVenueFromNode(Node venueNode)
+	{
+		
+		if (venueNode != null)
+		{
+			Venue venue=new Venue();
+			NodeList nodeList = venueNode.getChildNodes();
+			int len = nodeList.getLength();
+			for(int i=0; i<len; i++) {
+				try
+				{
+					Node node = nodeList.item(i);
+					String value = this.getNodeValue(node);
+					
+					if("id".equals(node.getNodeName())) {
+						venue.setId(Long.parseLong(value));
+					} else if("name".equals(node.getNodeName())) {
+						venue.setName(value);
+					} else if ("address".equals(node.getNodeName())) {
+						venue.setAddress(value);
+					} else if ("crossstreet".equals(node.getNodeName())) {
+						venue.setCrossstreet(value);
+					} else if ("city".equals(node.getNodeName())) {
+						venue.setCity(value);
+					} else if ("state".equals(node.getNodeName())) {
+						venue.setState(value);
+					} else if ("zip".equals(node.getNodeName())) {
+						venue.setZip(value);
+					} else if ("geolat".equals(node.getNodeName())) {
+						venue.setGeolat(value);
+					} else if ("geolong".equals(node.getNodeName())) {
+						venue.setGeolong(value);
+					} else if ("phone".equals(node.getNodeName())) {
+						venue.setPhone(value);
+				    } else if ("distance".equals(node.getNodeName())) {
+						venue.setDistance(Long.valueOf(value));
+				    }
+					// else skip for now.
+
+				} catch (NumberFormatException e)
+				{
+					// skip for now.
+					e.printStackTrace();
+				}
+			}
+			
+			return venue;
+		} // end if (bottleNode != null)
+		else
+			return null;
 	}
 	
 }

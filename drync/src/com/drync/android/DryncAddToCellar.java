@@ -8,13 +8,12 @@
  */
 package com.drync.android;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,36 +24,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
+import android.view.View.OnLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 
 import com.drync.android.helpers.Base64;
 import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
+import com.drync.android.objects.Venue;
 import com.drync.android.ui.RemoteImageView;
 import com.drync.android.widget.NumberPicker;
 
@@ -67,6 +62,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
 	boolean ratingTouched = false;
+	ArrayList<String> venuestrs = null;
+	final String CUSTOM_VENUE = "Custom Venue...";
 	
 	private ProgressDialog progressDlg = null;
 
@@ -197,12 +194,74 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
 		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
-		final EditText locationVal = (EditText)addView.findViewById(R.id.atcLocationVal);
+		final TextView locationVal = (TextView)addView.findViewById(R.id.atcLocationVal);
 		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
 		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
 		final CheckBox ownVal = (CheckBox)addView.findViewById(R.id.atcOwnCountValue);
 		//final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
+		
+		
+		locationVal.setClickable(true);
+		//locationVal.setLongClickable(true);
+		locationVal.setHint("Click to set a location...");
+		locationVal.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View v) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
+				builder.setTitle("Pick a venue");
+				String curText = locationVal.getText().toString();
+				if ((curText != null) && (!curText.equals("")) && (!venuestrs.contains(curText)))
+				{
+					venuestrs.add(1, curText);
+				}
+				final String[] venues = venuestrs.toArray(new String[]{});
+				AlertDialog listprompt;
+				
+				DialogInterface.OnClickListener listpromptlistener = new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int item) {
+				    	String selVal = venues[item];
+				    	if (selVal.equals(CUSTOM_VENUE))
+				    	{
+				    		dialog.dismiss();
+				    		
+				    		AlertDialog.Builder alert = new AlertDialog.Builder(DryncAddToCellar.this);  
+
+				    		alert.setTitle("Custom Location");  
+				    		alert.setMessage("Enter your location:");  
+
+				    		// Set an EditText view to get user input   
+				    		final EditText input = new EditText(DryncAddToCellar.this);  
+				    		alert.setView(input);  
+
+				    		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {  
+				    			public void onClick(DialogInterface dialog, int whichButton) {  
+				    				String value = input.getText().toString();  
+				    				locationVal.setText(value);
+				    				dialog.dismiss();
+				    			}  
+				    		});  
+
+				    		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {  
+				    			public void onClick(DialogInterface dialog, int whichButton) {  
+				    				dialog.cancel();
+				    			}  
+				    		});  
+
+				    		AlertDialog alertdlg = alert.create();
+				    		alertdlg.show();
+				    	}
+				    	else
+				    	{
+				    		locationVal.setText(selVal);
+				    		dialog.dismiss();
+				    	}
+				    }
+				};
+				builder.setSingleChoiceItems(venues, -1, listpromptlistener );
+				listprompt = builder.create();
+				listprompt.show();
+			}});
 		
 		ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
 
@@ -351,7 +410,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					
 					cork.setPublic_note(tastingNotesVal.getEditableText().toString());
 					cork.setDescription(privateNotesVal.getEditableText().toString());
-					cork.setLocation(locationVal.getEditableText().toString());
+					cork.setLocation(locationVal.getText().toString());
 					cork.setCork_want(wantVal.isChecked());
 					cork.setCork_drank(drankVal.isChecked());
 					//cork.setStyle(styleVal.getSelectedItem().toString());
@@ -604,6 +663,25 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		return result;
 	}
 	
+	@Override
+	public void onLocationChanged(Location location) {
+		ArrayList<Venue> venues = DryncProvider.getInstance().getVenues(location);
+		
+		ArrayList<String> venuestrs = new ArrayList<String>();
+
+		venuestrs.add(DryncAddToCellar.this.CUSTOM_VENUE);
+		
+		boolean foundSelected = false;
+		for (Venue venue : venues)
+		{
+			
+				venuestrs.add(venue.getName());
+			
+		}
+
+		DryncAddToCellar.this.venuestrs = venuestrs;
+	}
+
 	private boolean doCreateSave(Cork cork, DryncDbAdapter dbAdapter)
 	{
 		try
@@ -658,5 +736,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		}
 		
 	}
+	
+
+	@Override
+	public boolean isTrackGPS() {
+		return true;
+	}
+	
+	
 }
 

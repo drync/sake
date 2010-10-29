@@ -207,10 +207,10 @@
 					android:typeface="sans" android:ellipsize="none"
 					android:singleLine="true" android:text="Location Bought or Drank:" /> 
 					
-				<EditText android:id="@+id/atcLocationVal"
+				<TextView android:id="@+id/atcLocationVal"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:maxWidth="200dip" android:minWidth="200dip"
-					android:paddingTop="5px" android:background="@drawable/rndborder" 
+					android:maxWidth="200dip" android:minWidth="200dip" android:textColor="#000000"
+					android:paddingTop="5px" android:background="@drawable/rndborder" android:textSize="18.0sp" 
 					android:layout_below="@id/locationHdr" android:singleLine="true" />	
 			
 			</RelativeLayout>

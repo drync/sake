@@ -8,11 +8,9 @@
  */
 package com.drync.android;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,17 +23,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -50,9 +44,7 @@ import android.widget.TextView;
 import android.widget.TwoBtnClearableSearch;
 import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
-import com.drync.android.DryncBaseSearch.WineAdapter.ViewHolder;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
@@ -261,6 +253,12 @@ private ProgressDialog progressDlg = null;
 		t.start();
 	}
 	
+	@Override
+	public boolean isTrackGPS() {
+		// TODO Auto-generated method stub
+		return super.isTrackGPS();
+	}
+
 	SharedPreferences settings;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

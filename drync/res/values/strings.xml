@@ -59,6 +59,8 @@
 	<string name="emailfooter">Drync-Wine - research and remember wines you enjoy using your iPhone or Android Device.</string>
 	<string name="emailfooter2">To learn more visit www.drync.com</string>
 	
+	<string name="venueprompt">Please select a venue...</string>
+	
 	<string name="style_prompt">Choose a style</string>
     <string-array name="style_array">
         <item>Dessert</item>

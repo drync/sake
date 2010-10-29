@@ -10,6 +10,9 @@ import com.google.ads.AdSenseSpec.AdType;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,7 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public abstract class DryncBaseActivity extends Activity {
+public abstract class DryncBaseActivity extends Activity implements LocationListener{
 	
 	// Menu IDs
 	public static final int SEARCH_ID = Menu.FIRST;
@@ -34,7 +37,8 @@ public abstract class DryncBaseActivity extends Activity {
 	public static final int FACEBOOK_AUTH_RESULT = 11;
 	
 	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
-	
+	public LocationManager myLocationManager;
+	public boolean skipGPSTracking = true;
 	
 	// view members:
 	GoogleAdView googleAdView;
@@ -78,7 +82,20 @@ public abstract class DryncBaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		if (isTrackGPS())
+		{
+			myLocationManager = (LocationManager)getSystemService(
+					Context.LOCATION_SERVICE);
+
+			LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
+		}
+
 		DryncUtils.isFreeMode();
+	}
+
+	public boolean isTrackGPS() {
+		return false;
 	}
 
 	@Override
@@ -321,6 +338,26 @@ public abstract class DryncBaseActivity extends Activity {
 		.append(" grape syrah brut rose red white");*/
 		
 		return bldr.toString();
+	}
+	
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
 	}
 	
 	
