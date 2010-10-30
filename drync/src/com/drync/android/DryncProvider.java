@@ -1416,12 +1416,7 @@ public class DryncProvider {
 		String foursquareUrl = "/v1/venues";
 		Document doc = null;
 		HttpClient client = new DefaultHttpClient();
-		
-		GeoPoint initGeoPoint = new GeoPoint(
-				(int)(
-						loc.getLatitude()*1000000),
-						(int)loc.getLongitude()*1000000);
-		
+				
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(foursquareUrl).append("?geolat=").append(loc.getLatitude()).append("&geolong=").append(loc.getLongitude())
 			.append("&l=30");

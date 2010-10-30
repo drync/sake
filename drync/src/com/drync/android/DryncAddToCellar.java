@@ -211,6 +211,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
 				builder.setTitle("Pick a venue");
 				String curText = locationVal.getText().toString();
+				if (venuestrs == null)
+				{
+					venuestrs = new ArrayList<String>();
+					venuestrs.add(CUSTOM_VENUE);
+				}
+				
 				if ((curText != null) && (!curText.equals("")) && (!venuestrs.contains(curText)))
 				{
 					venuestrs.add(1, curText);

@@ -82,24 +82,29 @@
 		<RelativeLayout android:id="@+id/cellarTweetSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
 			android:layout_alignParentLeft="true" android:layout_height="wrap_content"
-			android:layout_marginTop="25px" android:background="@drawable/rndbordertransparent"
 			android:layout_marginLeft="10px" android:padding="15px"
-			android:layout_marginRight="10px" android:layout_marginBottom="25px">
+			android:layout_marginRight="10px">
 		
 			<TextView android:id="@+id/cellarTweetsLbl"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true" android:layout_alignParentTop="true"
-				android:textColor="#000000" android:textSize="18px" 
-				android:layout_marginLeft="10px" android:layout_marginTop="40px" android:layout_marginBottom="25px"
-				android:gravity="center" android:text="Cellar Tweets" />
+				android:layout_alignParentLeft="true" 
+				android:textColor="#FFFFFF" android:textSize="16px" 
+				android:layout_marginLeft="10px" android:layout_marginTop="30px"
+				android:gravity="center" android:layout_centerVertical="true" android:text="Share new cellar entries?" />
 			
 			<ToggleButton android:id="@+id/cellarTweetVal"  
 				android:layout_width="wrap_content" android:layout_height="wrap_content" 
 				android:layout_marginTop="10px"
 				android:layout_toRightOf="@id/cellarTweetsLbl" android:layout_marginLeft="10px" 
-				android:gravity="center" android:layout_alignBottom="@id/cellarTweetsLbl" /> 
+				android:gravity="center" android:layout_centerVertical="true" /> 
 		
 	 	</RelativeLayout> 	
+	 	
+	 	<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
+			    android:layout_marginLeft="10px" android:layout_marginRight="10px"
+				android:text="My Account" android:textColor="#FFFFFF"
+				android:gravity="center" android:drawableLeft="@drawable/bottles" 
+				android:background="@drawable/dryncbutton"/>
 		<!-- <Button android:id="@+id/resetBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="Reset Settings" android:textColor="#FFFFFF"

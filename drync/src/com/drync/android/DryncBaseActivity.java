@@ -133,7 +133,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
         }
         case SETTINGS_ID:
         {
-        	Intent setIntent = new Intent(this, DryncSettings.class);
+        	Intent setIntent = new Intent(this, DryncSocialSettings.class);
         	startActivity(setIntent);
         	/*Intent intent = new Intent();
 			intent.setClass(this, DryncMyAccountActivity.class);

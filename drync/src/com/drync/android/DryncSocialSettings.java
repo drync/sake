@@ -50,6 +50,7 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	
 	Button twitterButton;
 	Button facebookButton;
+	Button myAcctButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,18 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	     
 	     settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 	     
-	    /* usernameEdit = (EditText)this.findViewById(R.id.usernameVal);
-	     passwordEdit = (EditText)this.findViewById(R.id.passwordVal); */
+	    
+	     myAcctButton = (Button)this.findViewById(R.id.acctSettingsBtn);
+	     
+	     myAcctButton.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					Intent intent = new Intent();
+	    			intent.setClass(DryncSocialSettings.this, DryncMyAccountActivity.class);
+	    			startActivityForResult(intent, MYACCOUNT_RESULT);
+					
+				}});
+		     
 	     cellarTweetBtn = (ToggleButton)this.findViewById(R.id.cellarTweetVal); 
 	     
 	     cellarTweetBtn.setChecked(DryncUtils.isCellarTweetsEnabled(DryncSocialSettings.this));
