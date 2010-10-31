@@ -72,12 +72,12 @@
 		<Button android:id="@+id/twitterSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="Sign In" android:textColor="#FFFFFF" android:drawableLeft="@drawable/twitter"
-				android:gravity="center" android:background="@drawable/dryncbutton"/>
+				android:gravity="center" android:background="@drawable/dryncbutton" android:drawablePadding="-75.0sp" android:paddingLeft="75.0sp"/>
 		
 		<Button android:id="@+id/facebookSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="Sign In" android:textColor="#FFFFFF" android:drawableLeft="@drawable/facebook"
-				android:gravity="center" android:background="@drawable/dryncbutton"/>
+				android:gravity="center" android:background="@drawable/dryncbutton" android:drawablePadding="-75.0sp" android:paddingLeft="75.0sp"/>
 			
 		<RelativeLayout android:id="@+id/cellarTweetSection"
 			android:layout_width="fill_parent" android:layout_alignParentTop="true"
@@ -103,7 +103,7 @@
 	 	<Button android:id="@+id/acctSettingsBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 			    android:layout_marginLeft="10px" android:layout_marginRight="10px"
 				android:text="My Account" android:textColor="#FFFFFF"
-				android:gravity="center" android:drawableLeft="@drawable/bottles" 
+				android:gravity="center" android:drawableLeft="@drawable/drync_settings" android:drawablePadding="-75.0sp" android:paddingLeft="75.0sp"
 				android:background="@drawable/dryncbutton"/>
 		<!-- <Button android:id="@+id/resetBtn" android:layout_width="fill_parent" android:layout_height="40dip" 
 				android:layout_marginTop="10px" android:layout_marginLeft="10px" android:layout_marginRight="10px"

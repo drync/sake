@@ -337,7 +337,7 @@
 				android:drawableLeft="@drawable/twitter_facebook"
 				android:layout_height="wrap_content" android:layout_below="@id/share"
 				android:background="@drawable/dryncbutton" android:textColor="#FFFFFF"
-				android:gravity="center" android:text="Tell My Friends" />
+				android:gravity="center" android:text="Tell My Friends" android:drawablePadding="-75.0sp" android:paddingLeft="75.0sp" />
 				
 				<Button android:id="@+id/deleteBtn" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" 
