@@ -183,6 +183,7 @@
 					<TextView android:id="@+id/atcRatingObserver"
 					android:layout_width="wrap_content" android:layout_height="30dip"
 					android:layout_alignParentRight="true"
+					android:textSize="18dip"
 					android:layout_alignBottom="@id/atcRatingVal"
 					android:layout_gravity="right|bottom"
 					android:layout_marginRight="10px"

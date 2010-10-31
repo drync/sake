@@ -161,7 +161,7 @@ public class DryncLocationChooser extends DryncBaseActivity {
 				Log.d("VenueAdapter", "Venue clicked at position: " + position);
 				VenueRelativeLayout selvrl = (VenueRelativeLayout)arg1;
 				selectedVenue = selvrl.getVenue();
-				advice.setText("");
+				advice.setText(selectedVenue.getName());
 				arg1.setBackgroundColor(Color.LTGRAY);
 				((VenueAdapter)arg0.getAdapter()).notifyDataSetChanged();	
 			}
@@ -176,7 +176,11 @@ public class DryncLocationChooser extends DryncBaseActivity {
 				{
 					Venue venue = (Venue)pvenue;
 					if (venue.getName().equals(curSelection))
+					{
 						selectedVenue = venue;
+						advice.setText(selectedVenue.getName());
+						break;
+					}
 				}
 			}
 

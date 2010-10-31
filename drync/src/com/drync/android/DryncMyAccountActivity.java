@@ -120,7 +120,7 @@ public class DryncMyAccountActivity extends Activity {
 	private class CustomWebViewClient extends WebViewClient {
 	    @Override
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-	    	if (url.startsWith("close:"))
+	    	if (url.startsWith("close://"))
 	    	{
 	    		DryncMyAccountActivity.this.finish();
 	    		return true;

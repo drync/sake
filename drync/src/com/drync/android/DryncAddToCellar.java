@@ -254,7 +254,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				{
 					progressDlg =  new ProgressDialog(DryncAddToCellar.this);
 					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Loading venues, please wait...");
+					progressDlg.setMessage("Loading venues...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
 					
@@ -263,6 +263,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					{
 						public void run()
 						{
+							startLocationChooser();
 							if ((progressDlg != null) && (progressDlg.isShowing()))
 							{
 								try
@@ -274,7 +275,6 @@ public class DryncAddToCellar extends DryncBaseActivity {
 									Log.e("PROGDLG_ERROR", "Progress Dialog not attached.");
 								}
 							}
-							startLocationChooser();
 						}
 					};
 					
@@ -305,7 +305,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 			public void onRatingChanged(RatingBar ratingBar, float rating,
 					boolean fromUser) {
-				ratingVal.setText("" + rating);
+				StringBuilder bldr = new StringBuilder();
+				bldr.append("(");
+				bldr.append(rating);
+				bldr.append(")");
+				ratingVal.setText(bldr.toString());
 				if (fromUser)
 					DryncAddToCellar.this.ratingTouched = true;				
 			}});
@@ -404,101 +408,146 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
 				EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
 				Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
+				TextView locationVal = (TextView) addView.findViewById(R.id.atcLocationVal);
 				
-				public void onClick(View v) {
-					//populate cork object
-					Cork cork = null;
-					if (isEdit)
-					{
-						cork = ((Cork)mBottle);
-					}
-					else
-					{
-						cork = new Cork();
-						cork.setCork_uuid(DryncUtils.nextUuid(DryncAddToCellar.this));
-						cork.setBottle_Id(mBottle.getBottle_Id());
-						cork.setYear(mBottle.getYear());
-					}
-					//this.mBottle.setLocalImageResourceOnly(newpath);
-					//this.mBottle.setLabel_thumb(newpath);
-					//cork.setLabel_thumb(DryncAddToCellar.this.localImageResourcePath);
-					if ((DryncAddToCellar.this.localImageResourcePath != null) && 
-					   (!DryncAddToCellar.this.localImageResourcePath.equals("")))
-					{
-						cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+				
+				public void onClick(View v) 
+				{
+					final Handler saveHandler = new Handler();
 					
-					}
-					cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
-					
-					cork.setCork_price(priceVal.getEditableText().toString());
-					cork.setName(nameVal.getEditableText().toString());
-					cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString().trim()));
-					//cork.setCork_created_at(System.currentTimeMillis());
-					cork.setGrape(varietalVal.getEditableText().toString());
-					cork.setRegion(regionVal.getEditableText().toString());
-					
-					if (DryncAddToCellar.this.ratingTouched == true)
-					{
-						cork.setCork_rating(ratingbar.getRating());
-					}
-					else
-					{
-						cork.setCork_rating(null);
-					}
-					
-					cork.setPublic_note(tastingNotesVal.getEditableText().toString());
-					cork.setDescription(privateNotesVal.getEditableText().toString());
-					cork.setLocation(locationVal.getText().toString());
-					cork.setLocationLat(curVenueLat);
-					cork.setLocationLong(curVenueLong);
-					cork.setCork_want(wantVal.isChecked());
-					cork.setCork_drank(drankVal.isChecked());
-					//cork.setStyle(styleVal.getSelectedItem().toString());
-					String styleText = (String) styleVal.getAdapter().getItem(styleVal.getSelectedItemPosition()).toString();
-					cork.setStyle(styleText);
-					int ownCount = 0;
-					
-					ownCount = ownValueHolder;
-
-					cork.setCork_bottle_count(ownCount);
-
-					if (ownCount > 0)
-						cork.setCork_own(true);
-					else
-						cork.setCork_own(false);
-
-					final Cork saveCork = cork;
-					
-					progressDlg =  new ProgressDialog(DryncAddToCellar.this);
-					progressDlg.setTitle("Dryncing...");
-					progressDlg.setMessage("Saving cork...");
-					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					progressDlg.show();
-					
-					Thread saveThread = new Thread()
+					final Runnable saveProc = new Runnable()
 					{
 						public void run()
 						{
-							boolean result = false;
+							//populate cork object
+							Cork cork = null;
 							if (isEdit)
 							{
-								result = doEditSave(saveCork, dbAdapter);
+								cork = ((Cork)mBottle);
 							}
 							else
 							{
-								result = doCreateSave(saveCork, dbAdapter);
+								cork = new Cork();
+								cork.setCork_uuid(DryncUtils.nextUuid(DryncAddToCellar.this));
+								cork.setBottle_Id(mBottle.getBottle_Id());
+								cork.setYear(mBottle.getYear());
 							}
-							
-							
-							//doStartupFetching(true);
-								
-							
-							mHandler.post(mHandleLongTransaction);
+
+							if ((DryncAddToCellar.this.localImageResourcePath != null) && 
+									(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+							{
+								cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+
+							}
+							cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+
+							cork.setCork_price(priceVal.getEditableText().toString());
+							cork.setName(nameVal.getEditableText().toString());
+							cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString().trim()));
+							//cork.setCork_created_at(System.currentTimeMillis());
+							cork.setGrape(varietalVal.getEditableText().toString());
+							cork.setRegion(regionVal.getEditableText().toString());
+
+							if (DryncAddToCellar.this.ratingTouched == true)
+							{
+								cork.setCork_rating(ratingbar.getRating());
+							}
+							else
+							{
+								cork.setCork_rating(null);
+							}
+
+							cork.setPublic_note(tastingNotesVal.getEditableText().toString());
+							cork.setDescription(privateNotesVal.getEditableText().toString());
+							cork.setLocation(locationVal.getText().toString());
+							cork.setLocationLat(curVenueLat);
+							cork.setLocationLong(curVenueLong);
+							cork.setCork_want(wantVal.isChecked());
+							cork.setCork_drank(drankVal.isChecked());
+							//cork.setStyle(styleVal.getSelectedItem().toString());
+							String styleText = (String) styleVal.getAdapter().getItem(styleVal.getSelectedItemPosition()).toString();
+							cork.setStyle(styleText);
+							int ownCount = 0;
+
+							ownCount = ownValueHolder;
+
+							cork.setCork_bottle_count(ownCount);
+
+							if (ownCount > 0)
+								cork.setCork_own(true);
+							else
+								cork.setCork_own(false);
+
+							final Cork saveCork = cork;
+
+							progressDlg =  new ProgressDialog(DryncAddToCellar.this);
+							progressDlg.setTitle("Dryncing...");
+							progressDlg.setMessage("Saving wine...");
+							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+							progressDlg.show();
+
+							Thread saveThread = new Thread()
+							{
+								public void run()
+								{
+									boolean result = false;
+									if (isEdit)
+									{
+										result = doEditSave(saveCork, dbAdapter);
+									}
+									else
+									{
+										result = doCreateSave(saveCork, dbAdapter);
+									}
+
+
+									//doStartupFetching(true);
+
+
+									mHandler.post(mHandleLongTransaction);
+								}
+							};
+
+							saveThread.start();
 						}
+
 					};
-					
-					saveThread.start();
-				}};
+				
+					boolean rxPromptResult = false;
+					// check for location, if none set, prompt to set one before saving.
+					String loctext = locationVal.getText().toString();
+					if ((loctext == null) || (loctext.equals(""))) // no location
+					{
+						AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
+						builder.setMessage("Select a location for this wine?")
+						       .setCancelable(true)
+						       .setNeutralButton("Save", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+						                dialog.dismiss();
+						                saveHandler.post(saveProc);
+						           }
+						       })
+						       .setPositiveButton("Select Location", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+						        	   locationVal.performClick();
+						        	   dialog.dismiss();
+						           }
+						       })
+						       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.cancel();
+								}
+							});
+						AlertDialog alert = builder.show();
+					}
+					else
+					{
+						saveProc.run();
+					}
+				};
+
+			};
 
 				if (addToCellarBtn != null)
 				{
@@ -544,12 +593,20 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			{
 				this.ratingTouched = false;
 				ratingBar.setRating((float) 0.0);
-				ratingVal.setText("N/A");
+				StringBuilder bldr = new StringBuilder();
+				bldr.append("(");
+				bldr.append("N/A");
+				bldr.append(")");
+				ratingVal.setText(bldr.toString());
 			}
 			else
 			{
 				ratingBar.setRating(((Cork)mBottle).getCork_rating());
-				ratingVal.setText("" + ((Cork)mBottle).getCork_rating());
+				StringBuilder bldr = new StringBuilder();
+				bldr.append("(");
+				bldr.append(((Cork)mBottle).getCork_rating());
+				bldr.append(")");
+				ratingVal.setText(bldr.toString());
 			}
 			
 			DryncAddToCellar.this.localImageResourcePath = ((Cork)mBottle).getLocalImageResourceOnly();
@@ -588,7 +645,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			
 			varietalVal.setText("" + mBottle.getGrape());
 			
-			ratingVal.setText("" + 0);
+			StringBuilder bldr = new StringBuilder();
+			bldr.append("(");
+			bldr.append("N/A");
+			bldr.append(")");
+			ratingVal.setText(bldr.toString());
 			
 		}
 		
