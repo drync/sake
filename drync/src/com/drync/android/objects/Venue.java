@@ -16,6 +16,7 @@ public class Venue implements Parcelable {
 	String geolong;
 	String phone;
 	long distance;
+	String iconurl;
 	
 	public Venue() {
 		super();
@@ -136,6 +137,7 @@ public class Venue implements Parcelable {
 		geolong = in.readString();
 		phone = in.readString();
 		distance = in.readLong();
+		iconurl = in.readString();
 	}
     
 	public int describeContents() {
@@ -155,6 +157,15 @@ public class Venue implements Parcelable {
 		out.writeString(geolong);
 		out.writeString(phone);
 		out.writeLong(distance);
+		out.writeString(iconurl);
+	}
+
+	public String getIconurl() {
+		return iconurl;
+	}
+
+	public void setIconurl(String iconurl) {
+		this.iconurl = iconurl;
 	}
 
 }

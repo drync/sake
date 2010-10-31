@@ -35,6 +35,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	public static final int MYACCOUNT_RESULT = 2;
 	public static final int TWITTER_AUTH_RESULT = 10;
 	public static final int FACEBOOK_AUTH_RESULT = 11;
+	public static final int LOCATION_CHOOSER_RESULT = 3;
 	
 	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
 	public LocationManager myLocationManager;
@@ -95,7 +96,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	}
 
 	public boolean isTrackGPS() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -341,8 +342,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	}
 	
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-
+		DryncUtils.setLastKnownLocation(this, "" + location.getLatitude(), "" + location.getLongitude(), "" + location.getAccuracy());
 	}
 
 	public void onProviderDisabled(String provider) {

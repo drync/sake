@@ -26,8 +26,26 @@ public class Cork extends Bottle implements Parcelable
     String cork_poi;
     String public_note = null;
     String cork_labelInline = null;
+    String locationLat = null;
+    String locationLong = null;
     
-    public String getCork_labelInline() {
+    public String getLocationLat() {
+		return locationLat;
+	}
+
+	public void setLocationLat(String locationLat) {
+		this.locationLat = locationLat;
+	}
+
+	public String getLocationLong() {
+		return locationLong;
+	}
+
+	public void setLocationLong(String locationLong) {
+		this.locationLong = locationLong;
+	}
+
+	public String getCork_labelInline() {
 		return cork_labelInline;
 	}
 
@@ -225,6 +243,9 @@ public class Cork extends Bottle implements Parcelable
 		{
 			form.put("cork[label_inline]", this.getCork_labelInline().replace(' ', '+'));
 		}
+		
+		form.put("cork[cork_latitude]", this.getLocationLat());
+		form.put("cork[cork_longitude]", this.getLocationLong());
 		/*
     * cork[user_style]
    * cork[label_inline]
@@ -271,6 +292,8 @@ public class Cork extends Bottle implements Parcelable
 		out.writeString(public_note);
 		out.writeInt(needsServerUpdate ? 1 : 0);
 		out.writeInt(updateType);
+		out.writeString(locationLat);
+		out.writeString(locationLong);
 	}
 
 	public void readFromParcel(Parcel in)
@@ -295,5 +318,7 @@ public class Cork extends Bottle implements Parcelable
     	public_note = in.readString();
     	needsServerUpdate = in.readInt() == 0 ? false : true;
     	updateType = in.readInt();
+    	locationLat = in.readString();
+    	locationLong = in.readString();
     }
 }

@@ -19,7 +19,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Bitmap;
 
 public class DryncUtils {
 
@@ -56,6 +55,9 @@ public class DryncUtils {
 	public static long cellarLastUpdatedTimestamp = -1;
 	public static long myAcctGetLastUpdatedTimestamp = -1;
 	public static Boolean freeMode = null;
+	public static String lastLocationLat = null;
+	public static String lastLocationLong = null;
+	public static String lastLocationAccuracy = null;
 	
 	
 	public static boolean isFreeMode() {
@@ -122,6 +124,9 @@ public class DryncUtils {
 	public static final String LAST_QUERY_PREF = "lastQuery";
 	public static final String LAST_FILTER_PREF = "lastFilter";
 	public static final String CELLAR_ETAG = "cellarEtag";
+	public static final String LAST_LOCATION_LAT = "lastLocationLat";
+	public static final String LAST_LOCATION_LONG = "lastLocationLong";
+	public static final String LAST_LOCATION_ACCURACY = "lastLocationAccuracy";
 	/*public static final String TWITTER_USERNAME_PREF = "twitter_username";
 	public static final String TWITTER_PASSWORD_PREF = "twitter_password";*/
 	public static final String CELLARTWT_PREF = "twitter_cellartweet";
@@ -249,6 +254,60 @@ public class DryncUtils {
 		editor.putString(DryncUtils.CELLAR_ETAG, DryncUtils.etag);
 		editor.commit();
 		
+	}
+	
+	public static void setLastKnownLocation(Activity activity, String lastlocationlat, String lastlocationlong, String lastlocationaccuracy)
+	{
+		DryncUtils.lastLocationLat = lastlocationlat;
+		DryncUtils.lastLocationLong = lastlocationlong;
+		DryncUtils.lastLocationAccuracy = lastlocationaccuracy;
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putString(DryncUtils.LAST_LOCATION_LAT, DryncUtils.lastLocationLat);
+		editor.putString(DryncUtils.LAST_LOCATION_LONG, DryncUtils.lastLocationLong);
+		editor.putString(DryncUtils.LAST_LOCATION_ACCURACY, DryncUtils.lastLocationAccuracy);
+		editor.commit();
+	}
+	
+	public static String getLastKnownLocationLat(Activity activity)
+	{
+		if ((lastLocationLat == null) && (activity != null))
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+			lastLocationLat = settings.getString(DryncUtils.LAST_LOCATION_LAT, null);
+			lastLocationLong = settings.getString(DryncUtils.LAST_LOCATION_LONG, null);
+			lastLocationAccuracy = settings.getString(DryncUtils.LAST_LOCATION_ACCURACY, null);
+		}
+		return lastLocationLat;
+	}
+	
+	public static String getLastKnownLocationLong(Activity activity)
+	{
+		if ((lastLocationLong == null) && (activity != null))
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+			lastLocationLat = settings.getString(DryncUtils.LAST_LOCATION_LAT, null);
+			lastLocationLong = settings.getString(DryncUtils.LAST_LOCATION_LONG, null);
+			lastLocationAccuracy = settings.getString(DryncUtils.LAST_LOCATION_ACCURACY, null);
+		}
+		return lastLocationLong;
+	}
+	
+	public static String getLastKnownLocationAccuracy(Activity activity)
+	{
+		if ((lastLocationAccuracy== null) && (activity != null))
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+			
+			lastLocationLat = settings.getString(DryncUtils.LAST_LOCATION_LAT, null);
+			lastLocationLong = settings.getString(DryncUtils.LAST_LOCATION_LONG, null);
+			lastLocationAccuracy = settings.getString(DryncUtils.LAST_LOCATION_ACCURACY, null);
+		}
+		return lastLocationAccuracy;
 	}
 	
 	public static boolean isTwitterAuthorized(Activity activity)

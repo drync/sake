@@ -174,7 +174,7 @@ public class Drync extends Activity {
 		String register = null;
 		if (hasConnectivity())
 		{
-			register = DryncProvider.getInstance().startupPost(deviceId);
+			register = DryncProvider.getInstance().startupPost(this, deviceId);
 
 			final String threadDeviceId = deviceId;
 			Thread t = new Thread() {

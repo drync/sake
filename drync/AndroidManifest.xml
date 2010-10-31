@@ -38,6 +38,9 @@
 		</activity>
 		<activity android:name=".DryncSettings">
 		</activity>
+		<activity android:name=".DryncLocationChooser">
+		</activity>
+		
 		<activity android:name=".DryncSocialSettings">
 		</activity>
 		<activity android:name=".DryncTwitterActivity"

@@ -110,10 +110,10 @@ public class DryncProvider {
 		return this.searchBottles(target, query, deviceId);
 	}
 	
-	public String startupPost(String deviceId)
+	public String startupPost(Activity activity, String deviceId)
 	{
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
-		return this.startupPost(target, deviceId);
+		return this.startupPost(activity, target, deviceId);
 	}
 
 	/**
@@ -544,7 +544,7 @@ public class DryncProvider {
 	 * @param keywords - comma delimited keywords. May contain spaces.
 	 * @return - PromoInfo that matches the keywords. If error or no match, return null.
 	 */
-	public String startupPost(HttpHost target, String deviceId) {
+	public String startupPost(Activity activity, HttpHost target, String deviceId) {
 		// http://{hostname}/app_session?device_id={device_id}&prod={product_selector}
 		String urlPost1 = "/app_session";
 		Document doc = null;
@@ -565,6 +565,13 @@ public class DryncProvider {
 		List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 		nvps.add(new BasicNameValuePair("device_id", devId));
 		nvps.add(new BasicNameValuePair("prod", DryncUtils.getProductId()));
+		String lastlat = DryncUtils.getLastKnownLocationLat(activity);
+		String lastlong = DryncUtils.getLastKnownLocationLong(activity);
+		if ((lastlat != null) && (lastlong != null))
+		{
+			nvps.add(new BasicNameValuePair("location[latitude]", lastlat));
+			nvps.add(new BasicNameValuePair("location[longitude]", lastlong));
+		}
 
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -1410,6 +1417,12 @@ public class DryncProvider {
 	
 	public ArrayList<Venue> getVenues(Location loc)
 	{
+		String latitude = "" + loc.getLatitude() ;
+		String longitude = "" + loc.getLongitude();
+		return getVenues(latitude, longitude);
+	}
+	public ArrayList<Venue> getVenues(String latitude, String longitude)
+	{
 		ArrayList<Venue> venueLst = new ArrayList<Venue>();
 		
 		HttpHost target = new HttpHost("api.foursquare.com", 80, "http");
@@ -1418,7 +1431,7 @@ public class DryncProvider {
 		HttpClient client = new DefaultHttpClient();
 				
 		StringBuilder bldr = new StringBuilder();
-		bldr.append(foursquareUrl).append("?geolat=").append(loc.getLatitude()).append("&geolong=").append(loc.getLongitude())
+		bldr.append(foursquareUrl).append("?geolat=").append(latitude).append("&geolong=").append(longitude)
 			.append("&l=30");
 		
 		HttpGet get = new HttpGet(bldr.toString());
@@ -1487,6 +1500,19 @@ public class DryncProvider {
 						venue.setPhone(value);
 				    } else if ("distance".equals(node.getNodeName())) {
 						venue.setDistance(Long.valueOf(value));
+				    } else if ("primarycategory".equals(node.getNodeName())) {
+				    	NodeList catnodes = node.getChildNodes();
+				    	
+				    	for (int j=0,m=catnodes.getLength();j<m;j++)
+				    	{
+				    		Node catnode = catnodes.item(j);
+				    		String catnodeval = this.getNodeValue(catnode);
+				    		
+				    		if ("iconurl".equals(catnode.getNodeName()))
+				    		{
+				    			venue.setIconurl(catnodeval);
+				    		}
+				    	}
 				    }
 					// else skip for now.
 

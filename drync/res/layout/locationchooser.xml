@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/wood">
+    
+    <RelativeLayout android:id="@+id/headerSec"
+				android:layout_width="fill_parent" android:layout_height="40dip"
+				android:paddingLeft="5px" android:paddingRight="5px" android:layout_alignParentTop="true"
+				android:background="@drawable/btnhdrbg">
+
+				<Button android:id="@+id/cancelBtn" android:textColor="#FFFFFF"
+				android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:minWidth="60dip" android:maxWidth="60dip"
+				android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+				android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:typeface="normal" android:textStyle="normal"
+				android:layout_marginTop="5dip" android:layout_marginBottom="5dip"
+				android:text="Cancel" />
+				
+				<Button android:id="@+id/saveBtn" android:textColor="#FFFFFF"
+				android:layout_width="wrap_content" android:layout_height="fill_parent"
+				android:minWidth="60dip" android:maxWidth="60dip" android:layout_alignParentRight="true"
+				android:layout_centerVertical="true" android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:typeface="normal" android:textStyle="normal" android:layout_marginTop="5dip"
+				android:layout_marginBottom="5dip" android:text="Save" />
+
+				<TextView android:id="@+id/locationChooserTitle"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:layout_toRightOf="@id/cancelBtn" android:layout_toLeftOf="@id/saveBtn"
+				android:layout_gravity="center" android:layout_marginLeft="10px"
+				android:layout_marginRight="10px" android:marqueeRepeatLimit="marquee_forever"
+				android:focusable="true" android:textStyle="bold" android:gravity="center"
+				android:textColor="#FFFFFF" android:typeface="sans"
+				android:ellipsize="end" android:singleLine="true"
+				android:layout_centerVertical="true" android:text="Set Location" />
+			</RelativeLayout>
+
+	<LinearLayout
+    android:orientation="horizontal"
+    android:padding="10dip"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+    	android:id="@+id/advice"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:textColor="#000000"
+        android:hint="Tap for Custom Location"
+        android:background="@drawable/rndborder"
+        android:textSize="18.0sp"
+    />
+
+	</LinearLayout>
+
+    <LinearLayout android:id="@+id/listholder"
+		android:orientation="horizontal" android:layout_width="fill_parent" android:padding="10dip"
+		android:layout_height="fill_parent" android:background="@drawable/rndbordertransparentthin"
+		android:layout_marginLeft="10dip" android:layout_marginRight="10dip" android:layout_weight="1">
+		
+			<ListView android:id="@+id/venueList" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:padding="10dip" />
+		</LinearLayout>
+		
+	<com.google.ads.GoogleAdView
+    android:id="@+id/adview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+</LinearLayout>

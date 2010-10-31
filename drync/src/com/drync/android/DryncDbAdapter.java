@@ -49,6 +49,9 @@ public class DryncDbAdapter
     public static final String KEY_REVIEWCOUNT = "reviewCount";
     public static final String KEY_LOCALIMGRESOURCE = "localImageResource";
     
+    public static final String KEY_LOCATIONLAT = "cork_latitude";
+    public static final String KEY_LOCATIONLONG = "cork_longitude";
+    
     public static final String KEY_NEEDSSERVERUPDATE = "needsServerUpdate";
     public static final String KEY_UPDATETYPE = "updateType";
     
@@ -59,7 +62,7 @@ public class DryncDbAdapter
     private static final String DATABASE_FREE_NAME = "dryncfree";
     private static String DATABASE_NAME = DATABASE_PRO_NAME;
     private static final String DATABASE_TABLE = "corks";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_CREATE =
         "create table corks ("
@@ -95,7 +98,9 @@ public class DryncDbAdapter
         + "needsServerUpdate integer, "
         + "updateType integer, "
         + "localImageResource text,"
-        + "cork_label_inline text"
+        + "cork_label_inline text,"
+        + "cork_latitude text,"
+        + "cork_longitude text"
         + ");";
         
     private final Context context; 
@@ -170,7 +175,9 @@ public class DryncDbAdapter
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
         	    KEY_LOCALIMGRESOURCE,
-        	    KEY_CORK_LABEL_INLINE
+        	    KEY_CORK_LABEL_INLINE,
+        	    KEY_LOCATIONLAT,
+        	    KEY_LOCATIONLONG
         	    }, 
         	    whereclause, 
         	    null, 
@@ -240,6 +247,18 @@ public class DryncDbAdapter
             	try
             	{
             		db.execSQL("ALTER TABLE corks ADD COLUMN cork_label_inline text;");
+            	}
+            	catch (SQLiteException e)
+            	{
+            		Log.e("DbAdapter", "Failure Updating Database", e);
+            	}
+            }
+            if (oldVersion <= 9)
+            {
+            	try
+            	{
+            		db.execSQL("ALTER TABLE corks ADD COLUMN cork_latitude text;");
+            		db.execSQL("ALTER TABLE corks ADD COLUMN cork_longitude text;");
             	}
             	catch (SQLiteException e)
             	{
@@ -334,6 +353,8 @@ public class DryncDbAdapter
         initialValues.put(KEY_UPDATETYPE, updateType);
         initialValues.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
         initialValues.put(KEY_CORK_LABEL_INLINE, cork.getCork_labelInline());
+        initialValues.put(KEY_LOCATIONLAT, cork.getLocationLat());
+        initialValues.put(KEY_LOCATIONLONG, cork.getLocationLong());
         return db.insert(DATABASE_TABLE, "", initialValues);
     }
 
@@ -456,7 +477,10 @@ public class DryncDbAdapter
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
         	    KEY_LOCALIMGRESOURCE,
-        	    KEY_CORK_LABEL_INLINE}, 
+        	    KEY_CORK_LABEL_INLINE,
+        	    KEY_LOCATIONLAT,
+        	    KEY_LOCATIONLONG
+        	    }, 
         	    includePendingDeletes ? null : pendingWhere, 
                 null, 
                 null, 
@@ -512,7 +536,9 @@ public class DryncDbAdapter
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
         	    KEY_LOCALIMGRESOURCE,
-        	    KEY_CORK_LABEL_INLINE}, 
+        	    KEY_CORK_LABEL_INLINE,
+        	    KEY_LOCATIONLAT,
+        	    KEY_LOCATIONLONG}, 
         	    null, 
                 null, 
                 null, 
@@ -579,7 +605,9 @@ public class DryncDbAdapter
         	    KEY_NEEDSSERVERUPDATE,
         	    KEY_UPDATETYPE,
         	    KEY_LOCALIMGRESOURCE,
-        	    KEY_CORK_LABEL_INLINE}, 
+        	    KEY_CORK_LABEL_INLINE,
+        	    KEY_LOCATIONLAT,
+        	    KEY_LOCATIONLONG}, 
         	    KEY_NEEDSSERVERUPDATE + "=" + 1,  
                 null, 
                 null, 
@@ -636,6 +664,8 @@ public class DryncDbAdapter
     	cork.setUpdateType(cur.getInt(cur.getColumnIndex(KEY_UPDATETYPE)));
     	cork.setLocalImageResourceOnly(cur.getString(cur.getColumnIndex(KEY_LOCALIMGRESOURCE)));
     	cork.setCork_labelInline(cur.getString(cur.getColumnIndex(KEY_CORK_LABEL_INLINE)));
+    	cork.setLocationLat(cur.getString(cur.getColumnIndex(KEY_LOCATIONLAT)));
+    	cork.setLocationLong(cur.getString(cur.getColumnIndex(KEY_LOCATIONLONG)));
     	
     	return cork;
     }
@@ -680,7 +710,9 @@ public class DryncDbAdapter
     					KEY_NEEDSSERVERUPDATE,
     					KEY_UPDATETYPE,
     					KEY_LOCALIMGRESOURCE,
-    					KEY_CORK_LABEL_INLINE
+    					KEY_CORK_LABEL_INLINE,
+    					KEY_LOCATIONLAT,
+    					KEY_LOCATIONLONG
     			}, 
     			KEY_CORK_UUID + "='" + uuId + "'", 
     			null,
@@ -744,7 +776,9 @@ public class DryncDbAdapter
                 	    KEY_NEEDSSERVERUPDATE,
                 	    KEY_UPDATETYPE,
                 	    KEY_LOCALIMGRESOURCE,
-                	    KEY_CORK_LABEL_INLINE
+                	    KEY_CORK_LABEL_INLINE,
+                	    KEY_LOCATIONLAT,
+                	    KEY_LOCATIONLONG
                 		}, 
                 		KEY_ROWID + "=" + rowId, 
                 		null,
@@ -802,6 +836,8 @@ public class DryncDbAdapter
         args.put(KEY_UPDATETYPE, updateType);
         args.put(KEY_LOCALIMGRESOURCE, cork.getLocalImageResourceOnly());
         args.put(KEY_CORK_LABEL_INLINE, cork.getCork_labelInline());
+        args.put(KEY_LOCATIONLAT, cork.getLocationLat());
+        args.put(KEY_LOCATIONLONG, cork.getLocationLong());
         
         
         int rowsModified = db.update(DATABASE_TABLE, args, 

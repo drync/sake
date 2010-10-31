@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +62,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	private String deviceId;
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
+	
+	TextView locationVal;
 	boolean ratingTouched = false;
 	ArrayList<String> venuestrs = null;
 	final String CUSTOM_VENUE = "Custom Venue...";
+	ArrayList<Venue> venues;
+	Object venuelock = new Object();
+	
+	String curLocationLat;
+	String curLocationLong;
+	String curVenueLat;
+	String curVenueLong;
 	
 	private ProgressDialog progressDlg = null;
 
@@ -131,7 +141,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					}
 				}
 			}
-		}  
+		}
+		else if (requestCode == LOCATION_CHOOSER_RESULT)
+		{
+			if (resultCode == RESULT_OK)
+			{
+				Venue venue = data.getExtras().getParcelable("selectedVenue");
+				locationVal.setText(venue.getName());
+				curVenueLat = venue.getGeolat();
+				curVenueLong = venue.getGeolong();
+			}
+			//else // cancelled, do nothing
+		}
 	}
 
 	SharedPreferences settings;
@@ -159,6 +180,25 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		
 		addView = (ScrollView) this.findViewById(R.id.addtocellarview); 
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
+		
+		// initialize based on last known location.
+		Thread t = new Thread()
+		{
+
+			@Override
+			public void run() {
+				super.run();
+				
+				synchronized(venuelock)
+				{
+					venues = DryncProvider.getInstance().
+							getVenues(DryncUtils.getLastKnownLocationLat(DryncAddToCellar.this),
+									  DryncUtils.getLastKnownLocationLong(DryncAddToCellar.this));
+				}
+			}
+		};
+		
+		t.start();
 		
 		launchAddToCellar(bottle);
 	}
@@ -194,7 +234,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
 		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
-		final TextView locationVal = (TextView)addView.findViewById(R.id.atcLocationVal);
+		locationVal = (TextView)addView.findViewById(R.id.atcLocationVal);
 		final CheckBox wantVal = (CheckBox)addView.findViewById(R.id.atcWantValue);
 		final CheckBox drankVal = (CheckBox)addView.findViewById(R.id.atcDrankValue);
 		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
@@ -205,68 +245,60 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		locationVal.setClickable(true);
 		//locationVal.setLongClickable(true);
 		locationVal.setHint("Click to set a location...");
+		
+		
 		locationVal.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
-				builder.setTitle("Pick a venue");
-				String curText = locationVal.getText().toString();
-				if (venuestrs == null)
+				if (venues == null) // still loading venues, please wait
 				{
-					venuestrs = new ArrayList<String>();
-					venuestrs.add(CUSTOM_VENUE);
+					progressDlg =  new ProgressDialog(DryncAddToCellar.this);
+					progressDlg.setTitle("Dryncing...");
+					progressDlg.setMessage("Loading venues, please wait...");
+					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressDlg.show();
+					
+					final Handler chooserHandler = new Handler();
+					final Runnable startChooserThread = new Runnable()
+					{
+						public void run()
+						{
+							if ((progressDlg != null) && (progressDlg.isShowing()))
+							{
+								try
+								{
+									progressDlg.dismiss();
+								}
+								catch (IllegalArgumentException e)
+								{
+									Log.e("PROGDLG_ERROR", "Progress Dialog not attached.");
+								}
+							}
+							startLocationChooser();
+						}
+					};
+					
+					Thread t = new Thread()
+					{
+						public void run() {
+							while (venues == null)
+							{
+								try {
+									Thread.sleep(10);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							chooserHandler.post(startChooserThread);
+						}
+					};
+					t.start();
 				}
-				
-				if ((curText != null) && (!curText.equals("")) && (!venuestrs.contains(curText)))
+				else
 				{
-					venuestrs.add(1, curText);
+					startLocationChooser();
 				}
-				final String[] venues = venuestrs.toArray(new String[]{});
-				AlertDialog listprompt;
-				
-				DialogInterface.OnClickListener listpromptlistener = new DialogInterface.OnClickListener() {
-				    public void onClick(DialogInterface dialog, int item) {
-				    	String selVal = venues[item];
-				    	if (selVal.equals(CUSTOM_VENUE))
-				    	{
-				    		dialog.dismiss();
-				    		
-				    		AlertDialog.Builder alert = new AlertDialog.Builder(DryncAddToCellar.this);  
-
-				    		alert.setTitle("Custom Location");  
-				    		alert.setMessage("Enter your location:");  
-
-				    		// Set an EditText view to get user input   
-				    		final EditText input = new EditText(DryncAddToCellar.this);  
-				    		alert.setView(input);  
-
-				    		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {  
-				    			public void onClick(DialogInterface dialog, int whichButton) {  
-				    				String value = input.getText().toString();  
-				    				locationVal.setText(value);
-				    				dialog.dismiss();
-				    			}  
-				    		});  
-
-				    		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {  
-				    			public void onClick(DialogInterface dialog, int whichButton) {  
-				    				dialog.cancel();
-				    			}  
-				    		});  
-
-				    		AlertDialog alertdlg = alert.create();
-				    		alertdlg.show();
-				    	}
-				    	else
-				    	{
-				    		locationVal.setText(selVal);
-				    		dialog.dismiss();
-				    	}
-				    }
-				};
-				builder.setSingleChoiceItems(venues, -1, listpromptlistener );
-				listprompt = builder.create();
-				listprompt.show();
 			}});
 		
 		ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
@@ -417,6 +449,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					cork.setPublic_note(tastingNotesVal.getEditableText().toString());
 					cork.setDescription(privateNotesVal.getEditableText().toString());
 					cork.setLocation(locationVal.getText().toString());
+					cork.setLocationLat(curVenueLat);
+					cork.setLocationLong(curVenueLong);
 					cork.setCork_want(wantVal.isChecked());
 					cork.setCork_drank(drankVal.isChecked());
 					//cork.setStyle(styleVal.getSelectedItem().toString());
@@ -528,6 +562,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			tastingNotesVal.setText(((Cork)mBottle).getPublic_note());
 			privateNotesVal.setText(((Cork)mBottle).getDescription());
 			locationVal.setText(((Cork)mBottle).getLocation());
+			curVenueLat = (((Cork)mBottle).getLocationLat());
+			curVenueLong = (((Cork)mBottle).getLocationLong());
 			
 			wantVal.setChecked(((Cork)mBottle).isCork_want());
 			drankVal.setChecked(((Cork)mBottle).isCork_drank());
@@ -671,8 +707,15 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		ArrayList<Venue> venues = DryncProvider.getInstance().getVenues(location);
+		super.onLocationChanged(location);
 		
+		curLocationLat = "" + location.getLatitude();
+		curLocationLong = "" + location.getLongitude();
+		
+		synchronized(venuelock)
+		{
+			venues = DryncProvider.getInstance().getVenues(location);
+		}
 		ArrayList<String> venuestrs = new ArrayList<String>();
 
 		venuestrs.add(DryncAddToCellar.this.CUSTOM_VENUE);
@@ -749,6 +792,19 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		return true;
 	}
 	
+	public void startLocationChooser()
+	{
+		Intent twIntent = new Intent(DryncAddToCellar.this, DryncLocationChooser.class);
+		twIntent.putExtra("curSelection", locationVal.getText().toString());
+		twIntent.putExtra("curSelectionLat", curVenueLat);
+		twIntent.putExtra("curSelectionLong", curVenueLong);
+		twIntent.putExtra("curLocationLat", curLocationLat);
+		twIntent.putExtra("curLocationLong", curLocationLong);
+		
+		twIntent.putParcelableArrayListExtra("venues", venues);
+		
+		startActivityForResult(twIntent, LOCATION_CHOOSER_RESULT);  
+	}
 	
 }
 
