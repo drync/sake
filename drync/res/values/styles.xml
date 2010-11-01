@@ -14,7 +14,6 @@ parent="@android:style/Widget.RatingBar.Indicator">
     <!--  editing version of style -->
     <style name="wineRatingBar" parent="@android:style/Widget.RatingBar">
     	        <item name="android:progressDrawable">@drawable/wine_ratingbar_full</item>
-    	        <item name="android:minWidth">180dip</item>
     	        <item name="android:minHeight">66dip</item>
     	        <item name="android:maxHeight">66dip</item>
     </style>

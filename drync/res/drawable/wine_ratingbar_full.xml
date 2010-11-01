@@ -2,17 +2,17 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+android:id/background"
           android:drawable="@drawable/wine_ratingbar_full_empty" />
- <!-- entertaining, if nothing else   <item android:id="@+android:id/secondaryProgress" >
-    <clip android:drawable="@drawable/wine_ratingbar_full_half" /> 
-    </item>
-    -->
+ <!-- entertaining, if nothing else --> 
+  <!--  --> <item android:id="@+android:id/secondaryProgress"  android:drawable="@drawable/wine_ratingbar_full_half" /> 
+   
     <item android:id="@+android:id/progress"
           android:drawable="@drawable/wine_ratingbar_full_filled" />
 <!-- 	<item android:id="@+android:id/progress">
 		<level-list>
+			<item min="0.0"
 			<item min="0.5" max="0.5" android:drawable="@drawable/wine_ratingbar_full_half" />
 			<item min="1.0" max="1.0" android:drawable="@drawable/wine_ratingbar_full_filled" />
 		</level-list>
 	</item>
-	 -->
+-->
 </layer-list>
