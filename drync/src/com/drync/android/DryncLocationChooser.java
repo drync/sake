@@ -119,6 +119,7 @@ public class DryncLocationChooser extends DryncBaseActivity {
 				// Set an EditText view to get user input   
 				final EditText input = new EditText(DryncLocationChooser.this);  
 				alert.setView(input);  
+				input.setText(advice.getText());
 
 				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {  
 					public void onClick(DialogInterface dialog, int whichButton) {  

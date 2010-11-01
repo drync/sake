@@ -225,7 +225,10 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			priceView.setText((price != null) && (!price.equals("")) ? price : mBottle.getPrice());
 			
 			ratingBar.setRating(mBottle.getCork_rating());
-			ratingObserver.setText("" + mBottle.getCork_rating());
+			if ((mBottle.getCork_rating() == null) || (mBottle.getCork_rating() < 0))
+				ratingObserver.setText("(N/A)");
+			else
+				ratingObserver.setText("(" + mBottle.getCork_rating() + ")");
 			
 			String location = mBottle.getLocation();
 			locationVal.setText(((location == null) || (location.equals(""))) ? "n/a" : location);

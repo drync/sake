@@ -30,9 +30,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -231,6 +233,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		wineThumb.setLaunchCameraOnClick(DryncAddToCellar.this, true);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final TextView ratingVal = (TextView) addView.findViewById(R.id.atcRatingObserver);
+		
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
 		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
@@ -299,6 +302,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				{
 					startLocationChooser();
 				}
+			}});
+		
+		ratingbar.setOnTouchListener(new OnTouchListener(){
+
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				StringBuilder bldr = new StringBuilder();
+				bldr.append("(");
+				bldr.append(ratingbar.getRating());
+				bldr.append(")");
+				ratingVal.setText(bldr.toString());
+				DryncAddToCellar.this.ratingTouched = true;
+				return false;
 			}});
 		
 		ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
