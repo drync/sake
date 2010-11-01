@@ -882,6 +882,10 @@ public class DryncProvider {
 						bottle.setCork_price(value);
 					} else if ("cork_label".equals(node.getNodeName())) {
 						bottle.setCork_label(value);
+					} else if ("cork_latitude".equals(node.getNodeName())) {
+						bottle.setLocationLat(value);
+					} else if ("cork_longitude".equals(node.getNodeName())) {
+						bottle.setLocationLong(value);
 					}
 					// else skip for now.
 

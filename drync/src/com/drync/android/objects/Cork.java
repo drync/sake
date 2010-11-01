@@ -244,8 +244,8 @@ public class Cork extends Bottle implements Parcelable
 			form.put("cork[label_inline]", this.getCork_labelInline().replace(' ', '+'));
 		}
 		
-		form.put("cork[cork_latitude]", this.getLocationLat());
-		form.put("cork[cork_longitude]", this.getLocationLong());
+		form.put("cork[latitude]", this.getLocationLat());
+		form.put("cork[longitude]", this.getLocationLong());
 		/*
     * cork[user_style]
    * cork[label_inline]
