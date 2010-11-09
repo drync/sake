@@ -1454,7 +1454,7 @@ public class DryncProvider {
 				{
 					Node venueNode = venues.item(j);
 					Venue venue = parseVenueFromNode(venueNode);
-					Log.d("VENUE_GET", "Read Venue: " + venue.getName());
+					//Log.d("VENUE_GET", "Read Venue: " + venue.getName());
 					venueLst.add(venue);
 				}
 			}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.drync.android.objects.Cork;
+import com.drync.android.objects.Venue;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -566,6 +567,41 @@ public class DryncDbAdapter
         return corks;
     }
     
+    public List<Venue> getAllUsedVenues() 
+    {
+    	List<Venue> venues = new ArrayList<Venue>();
+    	/*String[] querymod = {KEY_NEEDSSERVERUPDATE + "!=" + 1, KEY_UPDATETYPE + "!=" + Cork.UPDATE_TYPE_DELETE};
+    	
+    	if (includePendingDeletes)
+    	{
+    		querymod = null;
+    	}*/
+    	
+        Cursor cur =  db.query(DATABASE_TABLE, new String[] {
+        		KEY_ROWID,
+        	    KEY_LOCATION,
+        	    KEY_LOCATIONLAT,
+        	    KEY_LOCATIONLONG}, 
+        	    null, 
+                null, 
+                null, 
+                null, 
+                null);
+        
+        cur.moveToFirst();
+        while (cur.isAfterLast() == false) {
+        	
+            Venue venue = buildVenue(cur);
+            if (!venues.contains(venue))
+            	venues.add(venue);
+       	    cur.moveToNext();
+        }
+        
+        cur.close();
+
+        return venues;
+    }
+    
   //---retrieves all the titles---
     public List<Cork> getAllCorksNeedingUpdates() 
     {
@@ -668,6 +704,16 @@ public class DryncDbAdapter
     	cork.setLocationLong(cur.getString(cur.getColumnIndex(KEY_LOCATIONLONG)));
     	
     	return cork;
+    }
+    
+    private Venue buildVenue(Cursor cur)
+    {
+    	Venue venue = new Venue();
+    	venue.setName(cur.getString(cur.getColumnIndex(KEY_LOCATION)));
+    	venue.setGeolat(cur.getString(cur.getColumnIndex(KEY_LOCATIONLAT)));
+    	venue.setGeolong(cur.getString(cur.getColumnIndex(KEY_LOCATIONLONG)));
+    	
+    	return venue;
     }
 
     public Cork getCorkByUUID(String uuId) throws SQLException 

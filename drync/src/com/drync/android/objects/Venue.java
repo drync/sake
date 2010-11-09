@@ -168,4 +168,29 @@ public class Venue implements Parcelable {
 		this.iconurl = iconurl;
 	}
 
+	public String toString()
+	{
+		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		StringBuilder bldr = new StringBuilder();
+		bldr.append(id);
+		bldr.append(name);
+		bldr.append(address);
+		bldr.append(crossstreet);
+		bldr.append(city);
+		bldr.append(state);
+		bldr.append(zip);
+		bldr.append(geolat);
+		bldr.append(geolong);
+		bldr.append(phone);
+		bldr.append(distance);
+		bldr.append(iconurl);
+		
+		return bldr.toString().hashCode();
+	}
+	
+	
 }

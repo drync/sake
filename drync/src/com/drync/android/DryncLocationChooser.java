@@ -23,6 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,8 +49,10 @@ public class DryncLocationChooser extends DryncBaseActivity {
 	String curLocationLong;
 	ArrayList<Parcelable> venues;
 	boolean loaded = false;
+	List<Venue> usedVenues;
 	
 	Venue selectedVenue;
+	Venue typeaheadSelectedVenue;
 	
 	LinearLayout listholder;
 	ListView mList;
@@ -71,7 +76,11 @@ public class DryncLocationChooser extends DryncBaseActivity {
 		curLocationLat = (String) (extras != null ? extras.getString("curLocationLat") : null);
 		curLocationLong = (String) (extras != null ? extras.getString("curLocationLong") : null);
 		venues = (ArrayList<Parcelable>) (extras != null ? (ArrayList<Parcelable>)extras.getParcelableArrayList("venues") : null);
-
+		DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncLocationChooser.this);
+		dbAdapter.open();
+		usedVenues = dbAdapter.getAllUsedVenues();
+		dbAdapter.close();
+		
 		setContentView(R.layout.locationchooser);
 		
 		initializeAds();
@@ -111,27 +120,50 @@ public class DryncLocationChooser extends DryncBaseActivity {
 
 			public void onClick(View v) 
 			{
+				
+				
 				AlertDialog.Builder alert = new AlertDialog.Builder(DryncLocationChooser.this);  
-
 				alert.setTitle("Custom Location");  
 				alert.setMessage("Enter your location:");  
 
 				// Set an EditText view to get user input   
-				final EditText input = new EditText(DryncLocationChooser.this);  
+				final AutoCompleteTextView input = new AutoCompleteTextView(DryncLocationChooser.this);
+				ArrayAdapter<Venue> adapter = new ArrayAdapter<Venue>(DryncLocationChooser.this, R.layout.list_item, usedVenues);
+				input.setAdapter(adapter);
+				typeaheadSelectedVenue = null;
+				input.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						typeaheadSelectedVenue = (Venue) arg0.getAdapter().getItem(arg2);
+						
+					}
+				});
+				
 				alert.setView(input);  
 				input.setText(advice.getText());
 
 				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {  
-					public void onClick(DialogInterface dialog, int whichButton) {  
-						String value = input.getText().toString();  
-						advice.setText(value);
-						Venue customvenue = new Venue();
-						customvenue.setName(value);
-						customvenue.setGeolat(curLocationLat);
-						customvenue.setGeolong(curLocationLong);
-						//customvenue.set
-						selectedVenue = customvenue;
-						advice.setText(customvenue.getName());
+					public void onClick(DialogInterface dialog, int whichButton) { 
+						if ((typeaheadSelectedVenue != null) && 
+								(input.getText().toString().equals(typeaheadSelectedVenue.getName())))
+						{
+							advice.setText(typeaheadSelectedVenue.getName());
+							selectedVenue = typeaheadSelectedVenue;
+						}
+						else
+						{
+							String value = input.getText().toString();  
+							advice.setText(value);
+							Venue customvenue = new Venue();
+							customvenue.setName(value);
+							customvenue.setGeolat(curLocationLat);
+							customvenue.setGeolong(curLocationLong);
+							//customvenue.set
+							selectedVenue = customvenue;
+							advice.setText(customvenue.getName());
+						}
 						((VenueAdapter)DryncLocationChooser.this.mAdapter).notifyDataSetChanged();	
 						dialog.dismiss();
 					}  
