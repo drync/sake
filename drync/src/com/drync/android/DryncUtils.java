@@ -355,7 +355,7 @@ public class DryncUtils {
 	{
 		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
 
-		cellarTweetsEnabled = settings.getBoolean(DryncUtils.CELLARTWT_PREF, false);
+		cellarTweetsEnabled = settings.getBoolean(DryncUtils.CELLARTWT_PREF, true);
 		
 		return cellarTweetsEnabled;
 	}

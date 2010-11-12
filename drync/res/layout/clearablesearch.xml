@@ -19,7 +19,8 @@
 			android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/searchBtn"
 			android:layout_marginLeft="2dip"/>
 	
-	<EditText android:id="@+id/searchentry" android:layout_width="wrap_content" android:layout_alignParentLeft="true"
+	<com.drync.android.widget.CustomAutoCompleteTextView
+			android:id="@+id/searchentry" android:layout_width="wrap_content" android:layout_alignParentLeft="true"
     		android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/clearFilterBtn"
 			android:layout_height="fill_parent" android:drawablePadding="2dip"  android:background="@android:drawable/edit_text"
 			android:layout_marginTop="5dip" android:ellipsize="start" android:autoText="false" android:inputType="text" 

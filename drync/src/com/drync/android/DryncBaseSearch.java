@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +31,8 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,6 +59,9 @@ import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.ui.RemoteImageView;
+import com.drync.android.widget.CustomAutoCompleteTextView;
+import com.drync.android.SearchTermDbAdapter;
+import com.drync.android.widget.CustomArrayAdapter;
 
 public class DryncBaseSearch extends DryncBaseActivity {
 	
@@ -77,7 +83,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	int lastSelectedTopWine = -1;
 	
 	LinearLayout searchView;
-	EditText searchEntry;
+	ArrayList<String> dataset = new ArrayList<String>();
+	CustomArrayAdapter<String> autocompleteadapter;
+	CustomAutoCompleteTextView searchEntry;
+	SearchTermDbAdapter searchAdapter = null;
 	ScrollView detailView;
 	ScrollView reviewView;
 	ScrollView addView;
@@ -187,6 +196,15 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	public static Toast instToast = null;
 	
 	@Override
+	public void onStop() {
+		super.onStop();
+		if (searchAdapter != null)
+		{
+			searchAdapter.close();
+		}
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.searchview);
@@ -195,6 +213,12 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		String lastQuery = settings.getString(DryncUtils.LAST_QUERY_PREF, null);
 		searchTerm = lastQuery;
+		
+		searchAdapter = new SearchTermDbAdapter(this);
+		searchAdapter.open();
+		
+		// prime the pump, as it were.
+		searchAdapter.search("merlot");
 		
 		Bundle extras = getIntent().getExtras();
 		this.displaySearch = extras != null ? extras.getBoolean("displaySearch") : true;
@@ -209,7 +233,12 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		
 		final ClearableSearch searchholder = (ClearableSearch) findViewById(R.id.clrsearch);
 		
-		searchEntry = (EditText)findViewById(R.id.searchentry);
+		searchEntry = (CustomAutoCompleteTextView)findViewById(R.id.searchentry);
+		
+		autocompleteadapter = new CustomArrayAdapter<String>(this, R.layout.cust_auto_list_item, dataset);
+		searchEntry.addTextChangedListener(textChecker);
+		searchEntry.setAdapter(autocompleteadapter);
+		autocompleteadapter.setNotifyOnChange(true);
 		
 		searchholder.setCommitOnClear(false);
 		
@@ -304,6 +333,32 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 	}
 	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if (searchAdapter == null)
+		{
+			searchAdapter = new SearchTermDbAdapter(this);
+			searchAdapter.open();
+		}
+	}
+
+	@Override
+	protected void onPostResume() {
+		// TODO Auto-generated method stub
+		super.onPostResume();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if (searchAdapter == null)
+		{
+			searchAdapter = new SearchTermDbAdapter(this);
+		}
+		searchAdapter.open();
+	}
+
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
@@ -879,5 +934,39 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	public int getMenuItemToSkip() {
 		return SEARCH_ID;
 	}
+	
+	final TextWatcher textChecker = new TextWatcher() {
+		public void afterTextChanged(Editable s) {
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before, int count) 
+		{
+			String sact = searchEntry.getEditableText().toString();
+			// get just last word typed:
+			if (sact.lastIndexOf(" ") > 0)
+			{
+				sact = sact.substring(sact.lastIndexOf(" ")).trim();
+			}
+			
+			if (sact.length() < 1)
+				return;
+
+			List<String> results = searchAdapter.search(sact.toString().toLowerCase());
+
+			DryncBaseSearch.this.dataset.clear();
+			autocompleteadapter.clear();
+			Iterator<String> iter = results.iterator();
+			while (iter.hasNext())
+			{
+				String curEntry = iter.next();
+				autocompleteadapter.add(curEntry);
+			}
+
+			autocompleteadapter.notifyDataSetChanged();
+		}
+	};
 }
 
