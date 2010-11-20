@@ -265,10 +265,13 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 
 		NetworkInfo mobileinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		NetworkInfo wifiinfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo wimaxInfo = cmgr.getNetworkInfo(ConnectivityManager.TYPE_WIMAX);
 
 		if (((mobileinfo != null) && 
 				(mobileinfo.isConnected())) ||
-				((wifiinfo != null) && (wifiinfo.isConnected())))
+				((wifiinfo != null) && 
+				 (wifiinfo.isConnected())) ||
+				 (wimaxInfo != null) && (wimaxInfo.isConnected()))
 			return true;
 		
 		else
