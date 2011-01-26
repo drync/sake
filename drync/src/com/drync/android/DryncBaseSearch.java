@@ -667,6 +667,41 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			e.printStackTrace();
 		}
 		
+		if (query.toLowerCase().startsWith("drync presto"))
+		{  // this is a special command, just do it, don't search.
+			
+			if (query.toLowerCase().startsWith("drync presto device")) // switching the device id
+			{
+				// get the new one
+				String newDeviceId = query.substring(query.trim().lastIndexOf(" "));
+				
+				DryncUtils.setNewDeviceId(getContentResolver(), this, newDeviceId);
+				
+				this.doStartupFetching();
+				
+				Toast devidtst = Toast.makeText(this, "DeviceId Changed", Toast.LENGTH_LONG);
+				devidtst.show();
+			}
+			else if (query.toLowerCase().startsWith("drync presto reset"))
+			{
+				DryncUtils.setNewDeviceId(getContentResolver(), this, null);
+				
+				this.doStartupFetching();
+				
+				Toast reset = Toast.makeText(this, "Reset Triggered", Toast.LENGTH_LONG);
+				reset.show();
+			}
+			else if (query.toLowerCase().startsWith("drync presto refresh cellar"))
+			{
+				this.doStartupFetching();
+				
+				Toast refresh = Toast.makeText(this, "Refresh Triggered", Toast.LENGTH_LONG);
+				refresh.show();
+			}
+			
+			return;
+		}
+		
 		if (!hasConnectivity())
 		{
 			new AlertDialog.Builder(this)

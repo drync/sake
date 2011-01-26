@@ -213,7 +213,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 			addedView.setText(mBottle.getCork_created_at());
 			nameView.setText(mBottle.getName());
 			titleView.setText(mBottle.getName());
-			int year = mBottle.getCork_year();
+			Integer year = mBottle.getCork_year();
 			TextView yearView = (TextView) detailView.findViewById(R.id.yearValue);
 			if (year > 0)
 				yearView.setText("" + year);

@@ -224,6 +224,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 					catch(Exception e)
 					{
 						Log.e("An error has occurred during a periodic fetch of the cellar & My Account info.", e.getMessage());
+						e.printStackTrace();
 					}
 				}
 			};

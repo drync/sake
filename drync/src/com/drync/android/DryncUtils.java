@@ -372,6 +372,19 @@ public class DryncUtils {
 	}
 	
 	
+	public static void setNewDeviceId(ContentResolver resolver, Activity activity, String newdeviceId)
+	{
+		newdeviceId = newdeviceId.trim();
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putString(DryncUtils.DEVICE_ID, newdeviceId);
+		editor.commit();	
+		
+		deviceId = newdeviceId;
+	}
+	
 	public static String getDeviceId(ContentResolver resolver, Activity activity)
 	{
 		if (deviceId == null)

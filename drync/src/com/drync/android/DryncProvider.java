@@ -907,8 +907,15 @@ public class DryncProvider {
 		if("name".equals(node.getNodeName())) {
 			bottle.setName(value);
 		} else if("year".equals(node.getNodeName())) {
-			if (value != null)
-				bottle.setYear(Integer.parseInt(value));
+			try
+			{
+				if ((value != null) && (!value.equals("")) && (value.compareToIgnoreCase("NV") != 0))
+					bottle.setYear(Integer.parseInt(value));
+			}
+			catch (NumberFormatException e)
+			{
+				// skip setting the year.
+			}
 		} else if("bottle_id".equals(node.getNodeName())) {
 			if (value != null)
 				bottle.setBottle_Id(Integer.parseInt(value));
