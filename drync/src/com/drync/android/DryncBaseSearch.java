@@ -10,8 +10,10 @@ package com.drync.android;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -724,7 +726,11 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			Thread t = new Thread()
 			{
 				public void run() {
-					mResults = DryncProvider.getInstance().getMatches(deviceId, curQuery);
+					try {
+						mResults = DryncProvider.getInstance().getMatches(deviceId, URLEncoder.encode(curQuery, "UTF-8"));
+					} catch (UnsupportedEncodingException e) {
+						Log.e("DryncBaseSearch", "Exception encoding string " + curQuery, e);
+					}
 					mHandler.post(mUpdateResults);
 				}
 			};

@@ -47,6 +47,16 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	// abstract methods
 	public abstract int getMenuItemToSkip();
 	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		if (myLocationManager != null)
+		{
+			myLocationManager.removeUpdates(this);
+		}
+	}
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		
@@ -88,8 +98,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 			myLocationManager = (LocationManager)getSystemService(
 					Context.LOCATION_SERVICE);
 
-			LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
+			myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 		}
 
 		DryncUtils.isFreeMode();

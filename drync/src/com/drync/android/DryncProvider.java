@@ -871,7 +871,10 @@ public class DryncProvider {
 					} else if ("public_note".equals(node.getNodeName())) {
 						bottle.setPublic_note(value);
 					} else if ("cork_bottle_count".equals(node.getNodeName())) {
-						bottle.setCork_bottle_count(Integer.parseInt(value));
+						if (value != null)
+							bottle.setCork_bottle_count(Integer.parseInt(value));
+						else
+							bottle.setCork_bottle_count(0);
 					} else if ("cork_want".equals(node.getNodeName())) {
 						bottle.setCork_want(Boolean.valueOf(value));
 				    } else if ("cork_own".equals(node.getNodeName())) {

@@ -374,7 +374,10 @@ public class DryncUtils {
 	
 	public static void setNewDeviceId(ContentResolver resolver, Activity activity, String newdeviceId)
 	{
-		newdeviceId = newdeviceId.trim();
+		if (newdeviceId != null)
+		{
+			newdeviceId = newdeviceId.trim();
+		}
 		
 		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
 		
