@@ -143,6 +143,7 @@ public class DryncProvider {
 		HttpGet get = new HttpGet(bldr.toString());
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setCoalescing(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			HttpEntity entity = client.execute(target, get).getEntity();
 
@@ -201,6 +202,7 @@ public class DryncProvider {
 		HttpGet get = new HttpGet(bldr.toString());
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setCoalescing(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			HttpEntity entity = client.execute(target, get).getEntity();
 
@@ -265,6 +267,7 @@ public class DryncProvider {
 
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setCoalescing(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
 		    StringReader reader = new StringReader(xml);
@@ -448,6 +451,7 @@ public class DryncProvider {
 		try
 		{
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setCoalescing(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			response = doCorksGet(activity, target, deviceId);
 			
@@ -507,6 +511,7 @@ public class DryncProvider {
 		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setCoalescing(true);
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
 			FileInputStream fin = new FileInputStream(DryncUtils.getCacheDir() + "cellar.xml");
