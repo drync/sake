@@ -378,7 +378,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	private void fireLongToast(Toast toastToShow) {
 
 		final Toast toast = toastToShow;
-		longToastThread = new Thread() {
+		longToastThread = new DryncThread() {
 			public void run() {
 				int count = 0;
 				// do not reset 'bail'... if it's been shown, let it be.
@@ -602,7 +602,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncBaseSearch.this.getBaseContext(), wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
 					wineThumb.setImageDrawable(defaultIcon);
 					wineThumb.setUseDefaultOnly(false);
@@ -723,7 +723,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progressDlg.show();
 			
-			Thread t = new Thread()
+			Thread t = new DryncThread()
 			{
 				public void run() {
 					try {
@@ -788,7 +788,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progressDlg.show();
 			
-			Thread t = new Thread()
+			Thread t = new DryncThread()
 			{
 				public void run() {
 					mResults = DryncProvider.getInstance().getTopWines(deviceId, type);
@@ -842,8 +842,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			public void run()
 			{
-				File uploaddir = new File(DryncUtils.getCacheDir() + "uploadimages/");
-				if (uploaddir.exists())
+				File uploaddir = null;
+				uploaddir = new File(DryncUtils.getCacheDir(DryncBaseSearch.this) + "uploadimages/");
+				
+				if (uploaddir != null && uploaddir.exists())
 				{
 					File[] filearray = uploaddir.listFiles();
 					for (File file : filearray)
@@ -863,10 +865,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 						if (!bFound && (System.currentTimeMillis() - file.lastModified()) > 
 								1000*60*60*24)
 							file.delete();
-					}
-					
-					
-						
+					}	
 				}
 			}
 		};

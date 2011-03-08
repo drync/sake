@@ -50,7 +50,7 @@ public class DryncUtils {
 
 	private static StringBuilder builder = new StringBuilder();
 	private static String CACHE_DIRECTORY = null;
-	public static boolean isDebugMode = DryncUtils.checkForDebugMode();
+	public static boolean isDebugMode = false; //DryncUtils.checkForDebugMode();
 	public static CookieStore cookieStore;
 	public static long cellarLastUpdatedTimestamp = -1;
 	public static long myAcctGetLastUpdatedTimestamp = -1;
@@ -136,7 +136,7 @@ public class DryncUtils {
 	public static final String UUID_KEY = "UuidKey";
 	public static final String LAST_UUID_VAL = "lastUuidVal";
 
-	private static boolean checkForDebugMode() 
+	/*private static boolean checkForDebugMode() 
 	{
 		try
 		{
@@ -151,11 +151,11 @@ public class DryncUtils {
 			return false;
 		}
 		
-	}
+	}*/
 
-	public static String getCacheFileName(String url) {
+	public static String getCacheFileName(Context ctx, String url) {
 		builder.setLength(0);
-		builder.append(getCacheDir());
+		builder.append(getCacheDir(ctx));
 		builder.append(url.hashCode()).append(".jpg");
 		return builder.toString();
 	}
@@ -182,7 +182,7 @@ public class DryncUtils {
 		}
 		return null;
 	}*/
-	public static String getCacheDir()
+	/*public static String getCacheDir()
 	{
 		try {
 			return getCacheDir(null);
@@ -190,19 +190,15 @@ public class DryncUtils {
 			Log.e("DryncUtil", "DryncConfigException: " + e.getMessage());
 		}
 		
-		return /* this is probably where it should go, so let's let it work, at least: */
+		return  this is probably where it should go, so let's let it work, at least: 
 		    "/data/data/com.drync.android/cache/";
-	}
-	public static String getCacheDir(Context context) throws DryncConfigException
+	}*/
+	public static String getCacheDir(Context context) 
 	{
 		if (DryncUtils.CACHE_DIRECTORY == null)
 		{
 			if (context == null)
-			{
-				String message = "CACHE DIRECTORY NOT SET.  Must call getCacheDir with a valid context first!";
-				DryncConfigException dce = new DryncConfigException();
-				throw dce;	
-			}
+				return null;  // fail this way.
 			
 			try {
 				DryncUtils.CACHE_DIRECTORY = context.getCacheDir().getCanonicalPath() + "/";

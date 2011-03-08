@@ -108,11 +108,11 @@ public class RemoteImageView extends ImageView {
 		Random rand = new Random(System.currentTimeMillis());
 		int randint = rand.nextInt(10000);
 		
-		File tmpDir = new File(DryncUtils.getCacheDir() + "uploadimages/");
+		File tmpDir = new File(DryncUtils.getCacheDir(this.getContext()) + "uploadimages/");
 		if (! tmpDir.exists())
 			tmpDir.mkdirs();
 		
-		String newpath = DryncUtils.getCacheDir() + "uploadimages/" +
+		String newpath = DryncUtils.getCacheDir(this.getContext()) + "uploadimages/" +
 				"corkimg_" + randint + ".jpg";
 
 		try {
@@ -149,7 +149,7 @@ public class RemoteImageView extends ImageView {
 	public void loadImage() {
 		if ((mRemote != null) && (!useDefaultOnly)) {
 			if (mLocal == null) {
-				mLocal = DryncUtils.getCacheDir() + mRemote.hashCode() + ".jpg";
+				mLocal = DryncUtils.getCacheDir(this.getContext()) + mRemote.hashCode() + ".jpg";
 			}
 			// check for the local file here instead of in the thread because
 			// otherwise previously-cached files wouldn't be loaded until after
@@ -213,7 +213,7 @@ public class RemoteImageView extends ImageView {
 		if (labelThumb != null && !labelThumb.equals(""))
 		{
 			this.setRemoteURI(labelThumb);
-				this.setLocalURI(DryncUtils.getCacheFileName(labelThumb));
+				this.setLocalURI(DryncUtils.getCacheFileName(this.getContext(), labelThumb));
 				this.setImageDrawable(defaultIcon);
 				this.setUseDefaultOnly(false);
 				this.loadImage();

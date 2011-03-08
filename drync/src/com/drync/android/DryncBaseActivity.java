@@ -1,5 +1,6 @@
 package com.drync.android;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import com.flurry.android.FlurryAgent;
@@ -100,6 +101,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 
 			myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 		}
+		
+		Thread.setDefaultUncaughtExceptionHandler(new DryncThread.DryncUncaughtExceptionHandler());
 
 		DryncUtils.isFreeMode();
 	}
@@ -222,13 +225,13 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		if (!wait)
 		{
 
-			Thread t = new Thread() {
+			Thread t = new DryncThread() {
 				public void run() {
 					try
 					{
 						DryncProvider.getInstance()
 						.getCorks(DryncBaseActivity.this, threadDeviceId);
-						DryncProvider.getInstance().myAcctGet(threadDeviceId);
+						DryncProvider.getInstance().myAcctGet(DryncBaseActivity.this.getBaseContext(), threadDeviceId);
 					}
 					catch(Exception e)
 					{
@@ -245,7 +248,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 			{
 				DryncProvider.getInstance()
 			.getCorks(DryncBaseActivity.this, threadDeviceId);
-				DryncProvider.getInstance().myAcctGet(threadDeviceId);
+				DryncProvider.getInstance().myAcctGet(DryncBaseActivity.this.getBaseContext(), 
+						threadDeviceId);
 			}
 			catch (Exception e)
 			{
@@ -257,7 +261,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	public void onStart()
 	{
 	   super.onStart();
-	   FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());	
+	   FlurryAgent.onStartSession(this, DryncUtils.getDryncFlurryCode());
+	   FlurryAgent.setLogEvents(true);
 	   doStartupFetching();
 	}
 	
@@ -372,6 +377,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 	
 	
 }

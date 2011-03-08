@@ -353,7 +353,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncDetailReviews.this.getBaseContext(), wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
 					wineThumb.setImageDrawable(defaultIcon);
 					wineThumb.setUseDefaultOnly(false);

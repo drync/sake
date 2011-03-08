@@ -360,12 +360,12 @@ public class DryncProvider {
 		return response;
 	}
 
-	public boolean getCorksToFile(Activity activity, String deviceId) {
+	/*public boolean getCorksToFile(Activity activity, String deviceId) {
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		return getCorksToFile(activity, target, deviceId);
-	}
+	}*/
 	
-	private boolean getCorksToFile(Activity activity, HttpHost target, String deviceId) {
+/*	private boolean getCorksToFile(Activity activity, HttpHost target, String deviceId) {
 		
 		boolean wroteContent = false;
 		InputStream is = null;
@@ -430,7 +430,7 @@ public class DryncProvider {
 		}
 		
 		return false;
-	}
+	}  */
 	
 	/**
 	 * Call the REST service to retrieve the first matching promotion based
@@ -505,7 +505,7 @@ public class DryncProvider {
 		return bottleList;
 	}
 	
-	public List<Cork> getCorksFromFile() {
+	/*public List<Cork> getCorksFromFile() {
 		ArrayList<Cork> bottleList = new ArrayList<Cork>();
 		Document doc = null;
 		
@@ -538,7 +538,7 @@ public class DryncProvider {
 		}
 		
 		return bottleList;
-	}
+	} */
 	
 	
 	
@@ -621,16 +621,20 @@ public class DryncProvider {
 				{
 					if (DryncUtils.isDebugMode)
 					{
-						String filename = DryncUtils.getCacheDir() + "register.html";
-						File outputFile = new File(filename);
-						//use buffering
-						Writer output = new BufferedWriter(new FileWriter(outputFile));
-						try {
-							//FileWriter always assumes default encoding is OK!
-							output.write( out.toString() );
-						}
-						finally {
-							output.close();
+						String cachedir = DryncUtils.getCacheDir(activity);
+						if (cachedir != null)
+						{
+							String filename = cachedir + "register.html";
+							File outputFile = new File(filename);
+							//use buffering
+							Writer output = new BufferedWriter(new FileWriter(outputFile));
+							try {
+								//FileWriter always assumes default encoding is OK!
+								output.write( out.toString() );
+							}
+							finally {
+								output.close();
+							}
 						}
 					}
 				}
@@ -654,7 +658,7 @@ public class DryncProvider {
 		return null;
 	}
 	
-	public synchronized String myAcctGet(String deviceId) throws DryncHostException {
+	public synchronized String myAcctGet(Context ctx, String deviceId) throws DryncHostException {
 		
 		// little safety to prevent this from happening too often.
 		if ((DryncUtils.getMyAcctGetLastUpdatedTimestamp() != -1) && 
@@ -666,104 +670,108 @@ public class DryncProvider {
 		
 		HttpHost target = new HttpHost(USING_SERVER_HOST, SERVER_PORT, "http");
 		DryncUtils.setMyAcctGetLastUpdatedTimestamp(System.currentTimeMillis());
-		return myAcctGet(target, deviceId);
+		return myAcctGet(ctx, target, deviceId);
 	}
 	
-	public synchronized String myAcctGet(HttpHost target, String deviceId) throws DryncHostException {
-		String filename = DryncUtils.getCacheDir() + "myacct.html";
-		
-		File myacctfile = new File(filename);
-		
-		StringBuilder urlGet1 = new StringBuilder("/register");
-		urlGet1.append("?device_id=");
-		Document doc = null;
-		HttpClient client = new DefaultHttpClient();
-		CookieStore cookieStore = new BasicCookieStore();
-		((DefaultHttpClient)client).setCookieStore(cookieStore);
-		
-		// set up deviceId
-		String devId = deviceId;
-		String fake = "UDID-droid-fake-888888888888888888888888888890";
-		if ((deviceId == null) || (deviceId.equals("")))
-			devId = "UDID-droid-fake-" + System.currentTimeMillis();
+	public synchronized String myAcctGet(Context ctx, HttpHost target, String deviceId) throws DryncHostException {
+		String cachedir = DryncUtils.getCacheDir(ctx);
+		if (cachedir != null)
+		{
+			String filename = cachedir  + "myacct.html";
 
-		urlGet1.append(devId).append("&prod=").append(DryncUtils.getProductId());
-		
-		Log.d("DryncPrvdr", "Get My Account Page: " + urlGet1.toString());
-		HttpGet get = new HttpGet(urlGet1.toString());
-		get.addHeader("X-UDID", devId);
-		get.addHeader("Accept", "text/iphone");
-		
-		boolean wroteContent = false;
-		InputStream is = null;
-		try {
-			HttpResponse response = client.execute(target, get);
-			HttpEntity entity = response.getEntity();
+			File myacctfile = new File(filename);
 
-			List<Cookie> cookies = cookieStore.getCookies();
-			DryncUtils.setCookieStore(cookieStore);
-			
-			StatusLine sl = response.getStatusLine();
-			if (sl.getStatusCode() != 200)
-				return null;
-			
-			if (entity != null) {
-				is = entity.getContent();
+			StringBuilder urlGet1 = new StringBuilder("/register");
+			urlGet1.append("?device_id=");
+			Document doc = null;
+			HttpClient client = new DefaultHttpClient();
+			CookieStore cookieStore = new BasicCookieStore();
+			((DefaultHttpClient)client).setCookieStore(cookieStore);
 
-				final char[] buffer = new char[0x10000];
-				StringBuilder out = new StringBuilder();
-				Reader in = new InputStreamReader(is, "UTF-8");
-				int read;
-				do 
-				{
-					read = in.read(buffer, 0, buffer.length);
-					if (read>0) {
-						String stringcontent = new String(buffer);
-						if (! stringcontent.trim().equals(""))
-						{
-							out.append(buffer, 0, read);
-							wroteContent = true;
+			// set up deviceId
+			String devId = deviceId;
+			String fake = "UDID-droid-fake-888888888888888888888888888890";
+			if ((deviceId == null) || (deviceId.equals("")))
+				devId = "UDID-droid-fake-" + System.currentTimeMillis();
+
+			urlGet1.append(devId).append("&prod=").append(DryncUtils.getProductId());
+
+			Log.d("DryncPrvdr", "Get My Account Page: " + urlGet1.toString());
+			HttpGet get = new HttpGet(urlGet1.toString());
+			get.addHeader("X-UDID", devId);
+			get.addHeader("Accept", "text/iphone");
+
+			boolean wroteContent = false;
+			InputStream is = null;
+			try {
+				HttpResponse response = client.execute(target, get);
+				HttpEntity entity = response.getEntity();
+
+				List<Cookie> cookies = cookieStore.getCookies();
+				DryncUtils.setCookieStore(cookieStore);
+
+				StatusLine sl = response.getStatusLine();
+				if (sl.getStatusCode() != 200)
+					return null;
+
+				if (entity != null) {
+					is = entity.getContent();
+
+					final char[] buffer = new char[0x10000];
+					StringBuilder out = new StringBuilder();
+					Reader in = new InputStreamReader(is, "UTF-8");
+					int read;
+					do 
+					{
+						read = in.read(buffer, 0, buffer.length);
+						if (read>0) {
+							String stringcontent = new String(buffer);
+							if (! stringcontent.trim().equals(""))
+							{
+								out.append(buffer, 0, read);
+								wroteContent = true;
+							}
 						}
 					}
-				}
-				while (read>=0);
+					while (read>=0);
 
-				if ((out.toString() != null) &&
-						(! out.toString().equals("")) && wroteContent)
-				{
-					
-					File outputFile = new File(filename);
-					//use buffering
-					Writer output = new BufferedWriter(new FileWriter(outputFile));
-					try {
-						//FileWriter always assumes default encoding is OK!
-						output.write( out.toString() );
-					}
-					finally {
-						output.close();
-					}
+					if ((out.toString() != null) &&
+							(! out.toString().equals("")) && wroteContent)
+					{
 
+						File outputFile = new File(filename);
+						//use buffering
+						Writer output = new BufferedWriter(new FileWriter(outputFile));
+						try {
+							//FileWriter always assumes default encoding is OK!
+							output.write( out.toString() );
+						}
+						finally {
+							output.close();
+						}
+
+					}
+					return out.toString();
 				}
-				return out.toString();
 			}
-		}
-		catch (UnknownHostException e)
-		{
-			Log.e("StartupGet", "Caught UnknownHostException getting my account page.");
-			throw new DryncHostException(e);
-		}
-		catch( Exception e)
-		{
-			Log.e("StartupGet", "Error getting my account page", e);
-		}
-		finally
-		{
-			if (is != null)
-				try {
-					is.close();
-				} catch (IOException e) {
-					Log.w("StartupGet", "Error posting or reading Startup Get", e);
-				}
+			catch (UnknownHostException e)
+			{
+				Log.e("StartupGet", "Caught UnknownHostException getting my account page.");
+				throw new DryncHostException(e);
+			}
+			catch( Exception e)
+			{
+				Log.e("StartupGet", "Error getting my account page", e);
+			}
+			finally
+			{
+				if (is != null)
+					try {
+						is.close();
+					} catch (IOException e) {
+						Log.w("StartupGet", "Error posting or reading Startup Get", e);
+					}
+			}
 		}
 
 		return null;

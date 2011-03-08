@@ -398,7 +398,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 							progressDlg.show();
 							
-							Thread t = new Thread()
+							Thread t = new DryncThread()
 							{
 								public void run() {
 
@@ -696,7 +696,7 @@ public class DryncCorkDetail extends DryncBaseActivity {
 				{
 					if (corkThumbUrl.startsWith("http"))
 					{
-						wineThumb.setLocalURI(DryncUtils.getCacheFileName(corkThumbUrl));
+						wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncCorkDetail.this.getBaseContext(), corkThumbUrl));
 						wineThumb.setRemoteURI(corkThumbUrl);
 					}
 					else

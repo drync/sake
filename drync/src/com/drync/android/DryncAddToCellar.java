@@ -184,7 +184,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		
 		// initialize based on last known location.
-		Thread t = new Thread()
+		Thread t = new DryncThread()
 		{
 
 			@Override
@@ -281,7 +281,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						}
 					};
 					
-					Thread t = new Thread()
+					Thread t = new DryncThread()
 					{
 						public void run() {
 							while (venues == null)
@@ -501,7 +501,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 							progressDlg.show();
 
-							Thread saveThread = new Thread()
+							Thread saveThread = new DryncThread()
 							{
 								public void run()
 								{

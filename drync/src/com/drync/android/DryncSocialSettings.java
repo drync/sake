@@ -186,13 +186,13 @@ public class DryncSocialSettings extends DryncBaseActivity {
 		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		
 		final String threadDeviceId = deviceId;
-		Thread t = new Thread() {
+		Thread t = new DryncThread() {
 			public void run() {
 				
 				try {
 					DryncProvider.getInstance()
 					.getCorks(DryncSocialSettings.this, threadDeviceId);
-					DryncProvider.getInstance().myAcctGet(threadDeviceId);
+					DryncProvider.getInstance().myAcctGet(DryncSocialSettings.this, threadDeviceId);
 				} catch (DryncHostException e) {
 					Log.e("DryncSettings", "Error getting my account page", e);
 				} catch (DryncXmlParseExeption e) {

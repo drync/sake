@@ -224,7 +224,7 @@ public class DryncDetail extends DryncBaseActivity {
 							progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 							progressDlg.show();
 							
-							Thread t = new Thread()
+							Thread t = new DryncThread()
 							{
 								public void run() {
 
@@ -628,7 +628,7 @@ public class DryncDetail extends DryncBaseActivity {
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					wineThumb.setLocalURI(DryncUtils.getCacheFileName(wine.getLabel_thumb()));
+					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncDetail.this.getBaseContext(), wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
 					wineThumb.setImageDrawable(defaultIcon);
 					wineThumb.setUseDefaultOnly(false);
@@ -696,7 +696,7 @@ public class DryncDetail extends DryncBaseActivity {
 		editor.putString(DryncUtils.LAST_QUERY_PREF, query);
 		editor.commit();
 		
-		Thread t = new Thread()
+		Thread t = new DryncThread()
 		{
 			public void run() {
 				mResults = DryncProvider.getInstance().getMatches(deviceId, curQuery);
@@ -708,7 +708,7 @@ public class DryncDetail extends DryncBaseActivity {
 	
 	protected void startTopWineQueryOperation(final int type)
 	{
-		Thread t = new Thread()
+		Thread t = new DryncThread()
 		{
 			public void run() {
 				mResults = DryncProvider.getInstance().getTopWines(deviceId, type);

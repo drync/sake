@@ -143,13 +143,8 @@ public class Drync extends Activity {
 		CookieSyncManager.getInstance().startSync();
 
 		// call this to initialize the cache directory
-		try {
-			DryncUtils.getCacheDir(this);
-		} catch (DryncConfigException e) {
-			Log.d("Drync", "Error initializing the CacheDirectory. - "
-					+ e.getMessage());
-		}
-
+		DryncUtils.getCacheDir(this);
+		
 		setContentView(R.layout.splash);
 		splash = (RelativeLayout) findViewById(R.id.splashscreen);
 
@@ -177,13 +172,13 @@ public class Drync extends Activity {
 			register = DryncProvider.getInstance().startupPost(this, deviceId);
 
 			final String threadDeviceId = deviceId;
-			Thread t = new Thread() {
+			Thread t = new DryncThread() {
 				public void run() {
 					
 					try {
 						DryncProvider.getInstance()
 						.getCorks(Drync.this, threadDeviceId);
-						DryncProvider.getInstance().myAcctGet(threadDeviceId);
+						DryncProvider.getInstance().myAcctGet(Drync.this.getApplicationContext(), threadDeviceId);
 					} catch (DryncHostException e) {
 						Log.e("Drync", "DryncHostException on Startup", e);
 					} catch (DryncXmlParseExeption e) {

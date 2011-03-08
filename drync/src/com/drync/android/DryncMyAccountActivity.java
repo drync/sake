@@ -59,8 +59,6 @@ public class DryncMyAccountActivity extends Activity {
 		try
 		{
 			myacctfile = DryncUtils.readFileAsString(DryncUtils.getCacheDir(this) + "myacct.html");
-		} catch (DryncConfigException e) {
-			myacctfile = null;
 		} catch (IOException e) {
 			myacctfile = null;
 		}
@@ -140,14 +138,14 @@ public class DryncMyAccountActivity extends Activity {
 				Toast acctCreated = Toast.makeText(DryncMyAccountActivity.this, "Your account has been created.", Toast.LENGTH_LONG);
 				acctCreated.show();
 				
-				Thread thread = new Thread()
+				Thread thread = new DryncThread()
 				{
 					@Override
 					public void run() {
 						super.run();
 						// redo this to reset cookies.
 						try {
-							DryncProvider.getInstance().myAcctGet(DryncUtils.getDeviceId(DryncMyAccountActivity.this.getContentResolver(), DryncMyAccountActivity.this));
+							DryncProvider.getInstance().myAcctGet(DryncMyAccountActivity.this.getBaseContext(), DryncUtils.getDeviceId(DryncMyAccountActivity.this.getContentResolver(), DryncMyAccountActivity.this));
 						} catch (DryncHostException e) {
 							Log.e("DryncMyAccountActivity", "Error resetting my account page", e);
 						}

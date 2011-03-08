@@ -239,7 +239,7 @@ private ProgressDialog progressDlg = null;
 		editor.putString(DryncUtils.LAST_FILTER_PREF, query);
 		editor.commit();
 		
-		Thread t = new Thread()
+		Thread t = new DryncThread()
 		{
 			public void run() {
 				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncCellar.this);
@@ -541,7 +541,7 @@ private ProgressDialog progressDlg = null;
 					{
 						if (corkThumbUrl.startsWith("http"))
 						{
-							corkThumb.setLocalURI(DryncUtils.getCacheFileName(corkThumbUrl));
+							corkThumb.setLocalURI(DryncUtils.getCacheFileName(DryncCellar.this.getBaseContext(), corkThumbUrl));
 							corkThumb.setRemoteURI(corkThumbUrl);
 						}
 						else
@@ -607,7 +607,7 @@ private ProgressDialog progressDlg = null;
 	
 	protected void startCellarOperation()
 	{
-		Thread t = new Thread()
+		Thread t = new DryncThread()
 		{
 			public void run() {
 				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncCellar.this);
