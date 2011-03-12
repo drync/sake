@@ -64,28 +64,28 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	private String deviceId;
 	LayoutInflater mMainInflater;
 	ViewFlipper flipper;
-	
+
 	TextView locationVal;
 	boolean ratingTouched = false;
 	ArrayList<String> venuestrs = null;
 	final String CUSTOM_VENUE = "Custom Venue...";
 	ArrayList<Venue> venues;
 	Object venuelock = new Object();
-	
+
 	String curLocationLat;
 	String curLocationLong;
 	String curVenueLat;
 	String curVenueLong;
-	
+
 	private ProgressDialog progressDlg = null;
 
 	boolean displaySearch = true;
 	boolean displayTopWinesBtns = false;
 
 	int lastSelectedTopWine = -1;
-	
+
 	int ownValueHolder = 0;
-	
+
 	String localImageResourcePath = null;
 	String imageBase64Representation = null;
 
@@ -100,22 +100,28 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 
 	Drawable defaultIcon = null;
-	
+
 	final Runnable mHandleLongTransaction = new Runnable()
 	{
 		public void run()
 		{
-			
-			if (progressDlg != null)
+			try
 			{
-				progressDlg.dismiss();
+				if (progressDlg != null)
+				{
+					progressDlg.dismiss();
+				}
 			}
-			
+			catch (IllegalArgumentException e)
+			{
+				Log.d("DryncAddToCellar", "Handled WindowNotAttachedToView IllegalArgumentException from progressDlg: 1");
+			}
+
 			DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
 			DryncAddToCellar.this.finish();
 		}
 	};
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -158,17 +164,17 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	}
 
 	SharedPreferences settings;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addtocellar);
-		
+
 		initializeAds();
 
 		Bundle extras = getIntent().getExtras();
 		Bottle bottle = (Bottle) (extras != null ? extras.getParcelable("bottle") : null);
-		
+
 		if (bottle == null)
 		{
 			bottle = (Cork) (extras != null ? extras.getParcelable("cork") : null);
@@ -179,10 +185,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		{
 			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
-		
+
 		addView = (ScrollView) this.findViewById(R.id.addtocellarview); 
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
-		
+
 		// initialize based on last known location.
 		Thread t = new DryncThread()
 		{
@@ -190,18 +196,18 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			@Override
 			public void run() {
 				super.run();
-				
+
 				synchronized(venuelock)
 				{
 					venues = DryncProvider.getInstance().
-							getVenues(DryncUtils.getLastKnownLocationLat(DryncAddToCellar.this),
-									  DryncUtils.getLastKnownLocationLong(DryncAddToCellar.this));
+					getVenues(DryncUtils.getLastKnownLocationLat(DryncAddToCellar.this),
+							DryncUtils.getLastKnownLocationLong(DryncAddToCellar.this));
 				}
 			}
 		};
-		
+
 		t.start();
-		
+
 		launchAddToCellar(bottle);
 	}
 
@@ -214,15 +220,15 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			return;
 
 		final TextView atcTitle = (TextView) addView.findViewById(R.id.addToCellarTitle);
-		
+
 		if (isEdit)
 		{
 			atcTitle.setText("Edit Cork");
 		}
-		
+
 		EditText priceVal = (EditText) addView.findViewById(R.id.atcPriceVal);
 		EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
-		
+
 		final AutoCompleteTextView yearVal = (AutoCompleteTextView) addView.findViewById(R.id.atcYearVal);
 		//final EditText varietalVal = (EditText) addView.findViewById(R.id.atcVarietalVal);
 		final AutoCompleteTextView varietalVal = (AutoCompleteTextView) addView.findViewById(R.id.atcVarietalVal);
@@ -233,7 +239,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		wineThumb.setLaunchCameraOnClick(DryncAddToCellar.this, true);
 		final RatingBar ratingbar = (RatingBar) addView.findViewById(R.id.atcRatingVal);
 		final TextView ratingVal = (TextView) addView.findViewById(R.id.atcRatingObserver);
-		
+
 		final Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 		final EditText tastingNotesVal = (EditText)addView.findViewById(R.id.atcTastingNoteVal);
 		final EditText privateNotesVal = (EditText)addView.findViewById(R.id.atcPrivateNoteVal);
@@ -243,13 +249,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		//final EditText ownVal = (EditText)addView.findViewById(R.id.atcOwnCountVal);
 		final CheckBox ownVal = (CheckBox)addView.findViewById(R.id.atcOwnCountValue);
 		//final TextView ownLbl = (TextView)addView.findViewById(R.id.atcOwnCountLbl);
-		
-		
+
+
 		locationVal.setClickable(true);
 		//locationVal.setLongClickable(true);
 		locationVal.setHint("Click to set a location...");
-		
-		
+
+
 		locationVal.setOnClickListener(new OnClickListener(){
 
 			public void onClick(View v) {
@@ -260,7 +266,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					progressDlg.setMessage("Loading venues...");
 					progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressDlg.show();
-					
+
 					final Handler chooserHandler = new Handler();
 					final Runnable startChooserThread = new Runnable()
 					{
@@ -280,7 +286,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 							}
 						}
 					};
-					
+
 					Thread t = new DryncThread()
 					{
 						public void run() {
@@ -303,7 +309,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					startLocationChooser();
 				}
 			}});
-		
+
 		ratingbar.setOnTouchListener(new OnTouchListener(){
 
 			public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -315,7 +321,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				DryncAddToCellar.this.ratingTouched = true;
 				return false;
 			}});
-		
+
 		ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
 
 			public void onRatingChanged(RatingBar ratingBar, float rating,
@@ -328,7 +334,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				if (fromUser)
 					DryncAddToCellar.this.ratingTouched = true;				
 			}});
-		
+
 		ownVal.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v) {
@@ -357,9 +363,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						ownVal.setText("I Own " + picker.getCurrent());
 						thisDialog.cancel();
 					}});
-				
+
 				dialog.show();
-				
+
 				dialog.setOnCancelListener(new Dialog.OnCancelListener(){
 
 					public void onCancel(DialogInterface dialog) {
@@ -377,7 +383,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 
 		});
-		
+
 
 		ArrayAdapter<String> yearSpnAdapter = null;
 		ArrayAdapter<CharSequence> varietalSpnAdapter = null;
@@ -402,9 +408,9 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			yearSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			yearVal.setAdapter(yearSpnAdapter); 
 
-			 varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
-			  varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			  varietalVal.setAdapter(varietalSpnAdapter); 
+			varietalSpnAdapter = ArrayAdapter.createFromResource(this, R.array.varietal_array, android.R.layout.simple_spinner_dropdown_item);
+			varietalSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			varietalVal.setAdapter(varietalSpnAdapter); 
 
 			// regionSpnAdapter = ArrayAdapter.createFromResource(this, R.array.region_array, android.R.layout.simple_spinner_dropdown_item);
 			// regionSpnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -424,12 +430,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				EditText nameVal = (EditText) addView.findViewById(R.id.atcWineName);
 				Spinner styleVal = (Spinner)addView.findViewById(R.id.atcStyleVal);
 				TextView locationVal = (TextView) addView.findViewById(R.id.atcLocationVal);
-				
-				
+
+
 				public void onClick(View v) 
 				{
 					final Handler saveHandler = new Handler();
-					
+
 					final Runnable saveProc = new Runnable()
 					{
 						public void run()
@@ -527,7 +533,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						}
 
 					};
-				
+
 					boolean rxPromptResult = false;
 					// check for location, if none set, prompt to set one before saving.
 					String loctext = locationVal.getText().toString();
@@ -535,25 +541,25 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					{
 						AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
 						builder.setMessage("Select a location for this wine?")
-						       .setCancelable(true)
-						       .setNeutralButton("Save", new DialogInterface.OnClickListener() {
-						           public void onClick(DialogInterface dialog, int id) {
-						                dialog.dismiss();
-						                saveHandler.post(saveProc);
-						           }
-						       })
-						       .setPositiveButton("Select Location", new DialogInterface.OnClickListener() {
-						           public void onClick(DialogInterface dialog, int id) {
-						        	   locationVal.performClick();
-						        	   dialog.dismiss();
-						           }
-						       })
-						       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-								
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.cancel();
-								}
-							});
+						.setCancelable(true)
+						.setNeutralButton("Save", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+								saveHandler.post(saveProc);
+							}
+						})
+						.setPositiveButton("Select Location", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								locationVal.performClick();
+								dialog.dismiss();
+							}
+						})
+						.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+							}
+						});
 						AlertDialog alert = builder.show();
 					}
 					else
@@ -564,28 +570,28 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 			};
 
-				if (addToCellarBtn != null)
-				{
-					addToCellarBtn.setOnClickListener(saveListener);
-				}	
+			if (addToCellarBtn != null)
+			{
+				addToCellarBtn.setOnClickListener(saveListener);
+			}	
 
-				if (saveBtn != null)
-				{
-					saveBtn.setOnClickListener(saveListener);
-				}
+			if (saveBtn != null)
+			{
+				saveBtn.setOnClickListener(saveListener);
+			}
 
-				Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
-				if (cancelBtn != null)
-				{
-					cancelBtn.setOnClickListener(new OnClickListener(){
+			Button cancelBtn = (Button)addView.findViewById(R.id.cancelBtn);
+			if (cancelBtn != null)
+			{
+				cancelBtn.setOnClickListener(new OnClickListener(){
 
-						public void onClick(View v) {
-							// in order 
-							DryncAddToCellar.this.finish();
-						}});
-				}
+					public void onClick(View v) {
+						// in order 
+						DryncAddToCellar.this.finish();
+					}});
+			}
 
-				buildOnceAddToCellar = false;
+			buildOnceAddToCellar = false;
 		}
 
 		int position = -1;
@@ -595,7 +601,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			position = yearSpnAdapter.getPosition("" + year);
 
 		nameVal.setText(mBottle.getName());
-		
+
 		if (isEdit)
 		{
 			int cyear = ((Cork)mBottle).getCork_year();
@@ -603,7 +609,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			String price = ((Cork)mBottle).getCork_price();
 			priceVal.setText((price == null || price.equals("")) ? mBottle.getPrice() : price);
 			RatingBar ratingBar = (RatingBar)addView.findViewById(R.id.atcRatingVal);
-			
+
 			if (((Cork)mBottle).getCork_rating() == null || ((Cork)mBottle).getCork_rating() < 0)
 			{
 				this.ratingTouched = false;
@@ -623,55 +629,55 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				bldr.append(")");
 				ratingVal.setText(bldr.toString());
 			}
-			
+
 			DryncAddToCellar.this.localImageResourcePath = ((Cork)mBottle).getLocalImageResourceOnly();
 			DryncAddToCellar.this.imageBase64Representation = ((Cork)mBottle).getCork_labelInline();
-			
+
 			// set style field:
 			if (((Cork)mBottle).getStyle() != null)
 				styleVal.setSelection(styleSpnAdapter.getPosition(((Cork)mBottle).getStyle().toString()));
-			
+
 			tastingNotesVal.setText(((Cork)mBottle).getPublic_note());
 			privateNotesVal.setText(((Cork)mBottle).getDescription());
 			locationVal.setText(((Cork)mBottle).getLocation());
 			curVenueLat = (((Cork)mBottle).getLocationLat());
 			curVenueLong = (((Cork)mBottle).getLocationLong());
-			
+
 			wantVal.setChecked(((Cork)mBottle).isCork_want());
 			drankVal.setChecked(((Cork)mBottle).isCork_drank());
-			
+
 			ownValueHolder = ((Cork)mBottle).getCork_bottle_count();
 			ownVal.setChecked(ownValueHolder > 0);
 			ownVal.setText("I Own " + ((Cork)mBottle).getCork_bottle_count());
-			
+
 			varietalVal.setText("" + ((Cork)mBottle).getGrape());
-			
+
 		}
 		else
 		{
 			yearVal.setText("" + mBottle.getYear());
 			priceVal.setText(mBottle.getPrice());
-			
+
 			int stylepos = styleSpnAdapter.getPosition(mBottle.getStyle());
 			if ((stylepos < styleSpnAdapter.getCount() || (stylepos > styleSpnAdapter.getCount())))
 				styleVal.setSelection(styleSpnAdapter.getPosition("Other"));
 			else
 				styleVal.setSelection(stylepos);
-			
+
 			varietalVal.setText("" + mBottle.getGrape());
-			
+
 			StringBuilder bldr = new StringBuilder();
 			bldr.append("(");
 			bldr.append("N/A");
 			bldr.append(")");
 			ratingVal.setText(bldr.toString());
-			
+
 		}
-		
+
 		regionVal.setText("" + mBottle.getRegion());
-		
+
 		boolean skipRemainingThumbProcessing = false;
-		
+
 		if (mBottle.getLocalImageResourceOnly() != null)
 		{
 			Drawable d = Drawable.createFromPath(mBottle.getLocalImageResourceOnly());
@@ -730,12 +736,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	public int getMenuItemToSkip() {
 		return -1;
 	}
-	
+
 	@Override
 	protected void doStartupFetching() {
 		// skip this fetch in cellar view.
 	}
-	
+
 	private boolean doEditSave(Cork cork, DryncDbAdapter dbAdapter)
 	{
 		Result<Cork> postresult = DryncProvider.postUpdate(cork, deviceId);
@@ -757,19 +763,19 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				{
 					cork.setCork_created_at(resultCork.getCork_created_at());
 				}
-				
+
 				//  This might be a bit of hack, but after an update
 				// the xml doesn't have the new image, so we need to
 				// keep using the local copy for now
 				if ((DryncAddToCellar.this.localImageResourcePath != null) && 
-					(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+						(!DryncAddToCellar.this.localImageResourcePath.equals("")))
 				{
 					cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
 					cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
 				}
-				
+
 			}
-			
+
 			cork.setNeedsServerUpdate(false);
 			cork.setUpdateType(Cork.UPDATE_TYPE_NONE);
 		}
@@ -777,17 +783,17 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		dbAdapter.open();
 		boolean result = dbAdapter.updateCork(cork);
 		dbAdapter.close();
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public void onLocationChanged(Location location) {
 		super.onLocationChanged(location);
-		
+
 		curLocationLat = "" + location.getLatitude();
 		curLocationLong = "" + location.getLongitude();
-		
+
 		synchronized(venuelock)
 		{
 			venues = DryncProvider.getInstance().getVenues(location);
@@ -795,13 +801,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		ArrayList<String> venuestrs = new ArrayList<String>();
 
 		venuestrs.add(DryncAddToCellar.this.CUSTOM_VENUE);
-		
+
 		boolean foundSelected = false;
 		for (Venue venue : venues)
 		{
-			
-				venuestrs.add(venue.getName());
-			
+
+			venuestrs.add(venue.getName());
+
 		}
 
 		DryncAddToCellar.this.venuestrs = venuestrs;
@@ -811,45 +817,45 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	{
 		try
 		{
-		Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(DryncAddToCellar.this, cork, deviceId, DryncUtils.isFreeMode());
-		boolean postSuccess = postresult.isResult();
-		
-		Cork resultCork = null;
-		if (postresult.getContents().size() > 0)
-		{
-			resultCork = postresult.getContents().get(0);
-			if (resultCork != null)
+			Result<Cork> postresult  = DryncProvider.postCreateOrUpdate(DryncAddToCellar.this, cork, deviceId, DryncUtils.isFreeMode());
+			boolean postSuccess = postresult.isResult();
+
+			Cork resultCork = null;
+			if (postresult.getContents().size() > 0)
 			{
-				cork.setCork_created_at(resultCork.getCork_created_at());
-				cork.setCork_id(resultCork.getCork_id());
+				resultCork = postresult.getContents().get(0);
+				if (resultCork != null)
+				{
+					cork.setCork_created_at(resultCork.getCork_created_at());
+					cork.setCork_id(resultCork.getCork_id());
+				}
+
+				//  This might be a bit of hack, but after an update
+				// the xml doesn't have the new image, so we need to
+				// keep using the local copy for now
+				if ((DryncAddToCellar.this.localImageResourcePath != null) && 
+						(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+				{
+					cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
+					cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+				}
 			}
-			
-		//  This might be a bit of hack, but after an update
-			// the xml doesn't have the new image, so we need to
-			// keep using the local copy for now
-			if ((DryncAddToCellar.this.localImageResourcePath != null) && 
-				(!DryncAddToCellar.this.localImageResourcePath.equals("")))
+
+			if (!postSuccess)
 			{
-				cork.setLocalImageResourceOnly(DryncAddToCellar.this.localImageResourcePath);
-				cork.setCork_labelInline(DryncAddToCellar.this.imageBase64Representation);
+				// failed post, post later.
+
+				cork.setNeedsServerUpdate(true);
+				cork.setUpdateType(Cork.UPDATE_TYPE_INSERT);	
 			}
-		}
-		
-		if (!postSuccess)
-		{
-			// failed post, post later.
-
-			cork.setNeedsServerUpdate(true);
-			cork.setUpdateType(Cork.UPDATE_TYPE_INSERT);	
-		}
-		// persist to database.
-		dbAdapter.open();
-		long result = -1;
-		result = dbAdapter.insertCork(cork);
+			// persist to database.
+			dbAdapter.open();
+			long result = -1;
+			result = dbAdapter.insertCork(cork);
 
 
-		return result >= 0;		
-		
+			return result >= 0;		
+
 		}
 		catch (DryncFreeCellarExceededException e)
 		{
@@ -859,15 +865,15 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		{
 			dbAdapter.close();
 		}
-		
+
 	}
-	
+
 
 	@Override
 	public boolean isTrackGPS() {
 		return true;
 	}
-	
+
 	public void startLocationChooser()
 	{
 		Intent twIntent = new Intent(DryncAddToCellar.this, DryncLocationChooser.class);
@@ -876,11 +882,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		twIntent.putExtra("curSelectionLong", curVenueLong);
 		twIntent.putExtra("curLocationLat", curLocationLat);
 		twIntent.putExtra("curLocationLong", curLocationLong);
-		
+
 		twIntent.putParcelableArrayListExtra("venues", venues);
-		
+
 		startActivityForResult(twIntent, LOCATION_CHOOSER_RESULT);  
 	}
-	
+
 }
 

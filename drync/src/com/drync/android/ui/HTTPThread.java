@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.drync.android.DryncUtils;
+import com.flurry.android.FlurryAgent;
 
 import android.os.Handler;
 import android.util.Log;
@@ -86,6 +87,11 @@ public class HTTPThread extends Thread {
 			mError = true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			mError = true;
+		} catch (NullPointerException e)
+		{
+			FlurryAgent.onEvent("HTTPThread_NPE_HANDLED");
+			Log.d("HTTPThread", "Could not download remote image - NPE on GuessContentFromStream - use default: " + e.getMessage()); 
 			mError = true;
 		}
 
