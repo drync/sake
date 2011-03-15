@@ -129,6 +129,8 @@ public class DryncDbAdapter
     	
     	List<Cork> corks = new ArrayList<Cork>();
     	
+    	query = query.replace("'", "''");
+    	
     	String whereclause = null;
     	if ((query != null) && (!query.equals("")))
     	{

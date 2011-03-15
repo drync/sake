@@ -103,7 +103,14 @@ private ProgressDialog progressDlg = null;
 			
 			if ((progressDlg != null) && (progressDlg.isShowing()))
 			{
-				progressDlg.dismiss();
+				try
+				{
+					progressDlg.dismiss();
+				}
+				catch (IllegalArgumentException e)
+				{
+					Log.e("DRYNCCELLAR_ERROR", "Progress Dialog not attached.");
+				}
 				if (searchEntry != null)
 				{
 					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.Handler;
@@ -147,6 +148,7 @@ public class RemoteImageView extends ImageView {
 	}
 
 	public void loadImage() {
+		
 		if ((mRemote != null) && (!useDefaultOnly)) {
 			if (mLocal == null) {
 				mLocal = DryncUtils.getCacheDir(this.getContext()) + mRemote.hashCode() + ".jpg";
@@ -186,6 +188,7 @@ public class RemoteImageView extends ImageView {
 	}
 
 	private void setFromLocal() {
+		
 		mThread = null;
 		Drawable d = Drawable.createFromPath(mLocal);
 		if (d != null) {
