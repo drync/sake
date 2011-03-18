@@ -58,6 +58,7 @@ public class DryncUtils {
 	public static String lastLocationLat = null;
 	public static String lastLocationLong = null;
 	public static String lastLocationAccuracy = null;
+	public static boolean skipGPSTracking = false;
 	
 	
 	public static boolean isFreeMode() {

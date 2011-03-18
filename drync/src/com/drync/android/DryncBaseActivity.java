@@ -40,7 +40,6 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	
 	public static final String STARTUP_INTENT = "com.drync.android.intent.action.STARTUP";
 	public LocationManager myLocationManager;
-	public boolean skipGPSTracking = true;
 	
 	// view members:
 	GoogleAdView googleAdView;
@@ -93,13 +92,22 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if (isTrackGPS())
 		{
-			myLocationManager = (LocationManager)getSystemService(
-					Context.LOCATION_SERVICE);
+			try
+			{
+				myLocationManager = (LocationManager)getSystemService(
+						Context.LOCATION_SERVICE);
 
-			myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
+				myLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
+			}
+			catch (IllegalArgumentException e)
+			{
+				Log.d("DRYNCBASEACTIVITY", "No GPS Provider Present");
+				DryncUtils.skipGPSTracking = true;
+			}
+
 		}
 		
 		Thread.setDefaultUncaughtExceptionHandler(new DryncThread.DryncUncaughtExceptionHandler());
@@ -108,7 +116,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	}
 
 	public boolean isTrackGPS() {
-		return true;
+		return !DryncUtils.skipGPSTracking;
 	}
 
 	@Override

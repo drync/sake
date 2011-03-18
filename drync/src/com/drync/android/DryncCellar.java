@@ -260,12 +260,6 @@ private ProgressDialog progressDlg = null;
 		t.start();
 	}
 	
-	@Override
-	public boolean isTrackGPS() {
-		// TODO Auto-generated method stub
-		return super.isTrackGPS();
-	}
-
 	SharedPreferences settings;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

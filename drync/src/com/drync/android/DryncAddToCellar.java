@@ -100,6 +100,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 
 	Drawable defaultIcon = null;
+	
+	//public boolean skipGPSTracking = false;
 
 	final Runnable mHandleLongTransaction = new Runnable()
 	{
@@ -866,12 +868,6 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			dbAdapter.close();
 		}
 
-	}
-
-
-	@Override
-	public boolean isTrackGPS() {
-		return true;
 	}
 
 	public void startLocationChooser()

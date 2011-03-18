@@ -60,11 +60,6 @@ public class DryncLocationChooser extends DryncBaseActivity {
 	Button saveBtn;
 	Button cancelBtn;
 
-    @Override
-	public boolean isTrackGPS() {
-		return true;
-	}
-
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
