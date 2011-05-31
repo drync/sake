@@ -704,6 +704,26 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			
 			return;
 		}
+		else if (query.toLowerCase().equals("senddeviceid"))
+		{
+			Intent i = new Intent(Intent.ACTION_SEND);
+			i.setType("text/plain");
+			i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"feedback@drync.com"});
+			i.putExtra(Intent.EXTRA_SUBJECT, "Requested device Id");
+			StringBuilder bldr = new StringBuilder();
+			bldr.append(DryncUtils.getDeviceId(this.getContentResolver(), this));
+			i.putExtra(Intent.EXTRA_TEXT   , bldr.toString());
+			i.setType("message/rfc822");
+			
+			try {
+			    startActivity(Intent.createChooser(i, "Send mail..."));
+			} catch (android.content.ActivityNotFoundException ex) {
+			    Toast.makeText(this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+			}
+			
+			return;
+
+		}
 		
 		if (!hasConnectivity())
 		{

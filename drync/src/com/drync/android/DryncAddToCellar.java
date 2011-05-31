@@ -15,6 +15,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.acra.ErrorReporter;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -100,7 +102,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	boolean buildOnceAddToCellar = true;
 
 	Drawable defaultIcon = null;
-	
+
 	//public boolean skipGPSTracking = false;
 
 	final Runnable mHandleLongTransaction = new Runnable()
@@ -129,37 +131,57 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == RemoteImageView.CAMERA_PIC_REQUEST) { 
-			if (data != null)
+			try
 			{
-				Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
-
-				RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
-
-				if (image != null)
+				if (data != null)
 				{
-					String newpath = image.saveNewImage(thumbnail);
-					DryncAddToCellar.this.localImageResourcePath = newpath;
-					image.setImageBitmap(thumbnail);
+					Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
 
-					String base64encoding = null;
-					try {
-						base64encoding = Base64.encodeFromFile(newpath);
-						DryncAddToCellar.this.imageBase64Representation = base64encoding;
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+
+					if (image != null)
+					{
+						String newpath = image.saveNewImage(thumbnail);
+						DryncAddToCellar.this.localImageResourcePath = newpath;
+						image.setImageBitmap(thumbnail);
+
+						String base64encoding = null;
+						try {
+							base64encoding = Base64.encodeFromFile(newpath);
+							DryncAddToCellar.this.imageBase64Representation = base64encoding;
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
+			} catch (Exception e)
+			{
+				ErrorReporter.getInstance().putCustomData("Location", "DryncAddToCellar_OnActivityResult-Photo");
+				ErrorReporter.getInstance().putCustomData("state", "caught");
+				ErrorReporter.getInstance().handleException(e);
 			}
 		}
 		else if (requestCode == LOCATION_CHOOSER_RESULT)
 		{
 			if (resultCode == RESULT_OK)
 			{
-				Venue venue = data.getExtras().getParcelable("selectedVenue");
-				locationVal.setText(venue.getName());
-				curVenueLat = venue.getGeolat();
-				curVenueLong = venue.getGeolong();
+				try
+				{
+					Venue venue = data.getExtras().getParcelable("selectedVenue");
+					if (venue != null)
+					{
+						locationVal.setText(venue.getName());
+						curVenueLat = venue.getGeolat();
+						curVenueLong = venue.getGeolong();
+					}
+				}
+				catch (Exception e)
+				{
+					ErrorReporter.getInstance().putCustomData("Location", "DryncAddToCellar_OnActivityResult-Location");
+					ErrorReporter.getInstance().putCustomData("state", "caught");
+					ErrorReporter.getInstance().handleException(e);					
+				}
 			}
 			//else // cancelled, do nothing
 		}
@@ -466,7 +488,16 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 							cork.setCork_price(priceVal.getEditableText().toString());
 							cork.setName(nameVal.getEditableText().toString());
-							cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString().trim()));
+							try
+							{
+								cork.setCork_year(Integer.parseInt(yearVal.getEditableText().toString().trim()));
+							}
+							catch (NumberFormatException e)
+							{
+								Log.d("DRYNCADDTOCELLAR", "Could not parse year: " + yearVal.getEditableText().toString());
+								cork.setCork_year(mBottle.getYear());
+							}
+
 							//cork.setCork_created_at(System.currentTimeMillis());
 							cork.setGrape(varietalVal.getEditableText().toString());
 							cork.setRegion(regionVal.getEditableText().toString());
