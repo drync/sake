@@ -479,7 +479,7 @@ public class DryncProvider {
 							long result = -1;
 							try
 							{
-								result = dbAdapter.insertOrUpdateCork((Cork)bottle);
+								result = dbAdapter.insertOrUpdateCork((Cork)bottle, true);
 								if (result >= 0)
 									bottleList.add(bottle);
 							}

@@ -287,11 +287,15 @@ public class DryncDbAdapter
     
     public long insertOrUpdateCork(Cork cork) throws DryncFreeCellarExceededException
     {
+    	return insertOrUpdateCork(cork, false);
+    }
+    public long insertOrUpdateCork(Cork cork, boolean ignoreFreeCellarLimit) throws DryncFreeCellarExceededException
+    {
     	Cork localCopy = this.getCorkByUUID(cork.getCork_uuid());
     	if (localCopy == null) // then it's easy:
     	{
     		// if cork is not present, insert.
-    		return this.insertCork(cork);
+    		return this.insertCork(cork, ignoreFreeCellarLimit);
     	}
     	else
     	{
@@ -314,7 +318,12 @@ public class DryncDbAdapter
     //---insert a title into the database---
     public long insertCork(Cork cork) throws DryncFreeCellarExceededException
     {
-    	if (DryncUtils.isFreeMode() && (getCorkCount() >= DryncUtils.FREE_CELLAR_MAX_CORKS))
+    	return insertCork(cork, false);
+    }
+    
+    public long insertCork(Cork cork, boolean ignoreFreeCellarLimit) throws DryncFreeCellarExceededException
+    {
+    	if (!ignoreFreeCellarLimit && DryncUtils.isFreeMode() && (getCorkCount() >= DryncUtils.FREE_CELLAR_MAX_CORKS))
     		throw new DryncFreeCellarExceededException();
     	else
     		return insertCork(cork, false, 0);

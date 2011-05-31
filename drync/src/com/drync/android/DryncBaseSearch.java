@@ -678,6 +678,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				String newDeviceId = query.substring(query.trim().lastIndexOf(" "));
 				
 				DryncUtils.setNewDeviceId(getContentResolver(), this, newDeviceId);
+				DryncUtils.setEtag(this, null);
 				
 				this.doStartupFetching();
 				

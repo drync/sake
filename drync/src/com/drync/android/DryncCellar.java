@@ -494,6 +494,7 @@ private ProgressDialog progressDlg = null;
 			
 			ViewHolder holder = new ViewHolder();
 			holder.name = (TextView) corkItem.findViewById(R.id.wineName);
+			
 			holder.icon = (RemoteImageView) corkItem.findViewById(R.id.corkThumb);
 			holder.notes = (TextView) corkItem.findViewById(R.id.myNotesValue);
 			holder.rating = (TextView) corkItem.findViewById(R.id.ratingValue);
@@ -563,6 +564,7 @@ private ProgressDialog progressDlg = null;
 			
 			TextView wineNameText = holder.name; 
 			wineNameText.setText(wine.getName());
+			Log.d("DryncCellar", "Creating view for : " + wine.getName());
 			Float corkRating = wine.getCork_rating();
 			ratingVal.setText(((corkRating == null) || (corkRating == 0)) ? "NR" : "" + wine.getCork_rating());
 			Integer corkYear = wine.getCork_year();
