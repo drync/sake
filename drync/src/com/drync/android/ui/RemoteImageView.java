@@ -5,6 +5,8 @@
 package com.drync.android.ui;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Random;
 
@@ -37,7 +39,16 @@ public class RemoteImageView extends ImageView {
 	private HTTPThread mThread = null;
 	boolean useDefaultOnly = false;
 	boolean loaded = false;
+	boolean thumbnail = false;
 	
+	public boolean isThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(boolean thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+
 	public static final int CAMERA_PIC_REQUEST = 1337;
 	
 	boolean launchCameraOnClick = false;
@@ -190,11 +201,43 @@ public class RemoteImageView extends ImageView {
 	private void setFromLocal() {
 		
 		mThread = null;
-		Drawable d = Drawable.createFromPath(mLocal);
+		File file = new File(mLocal);
+		Bitmap bm = decodeFile(file);
+		Drawable d = new BitmapDrawable(bm);
 		if (d != null) {
 			setImageDrawable(d);
 		}
 		loaded = true;
+	}
+
+	//decodes image and scales it to reduce memory consumption
+	private Bitmap decodeFile(File f){
+	    try {
+	        //Decode image size
+	        BitmapFactory.Options o = new BitmapFactory.Options();
+	        o.inJustDecodeBounds = true;
+	        BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+
+	        //The new size we want to scale to
+	        final int REQUIRED_SIZE=50;
+
+	        //Find the correct scale value. It should be the power of 2.
+	        int width_tmp=o.outWidth, height_tmp=o.outHeight;
+	        int scale=1;
+	        while(true && thumbnail){
+	            if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
+	                break;
+	            width_tmp/=2;
+	            height_tmp/=2;
+	            scale*=2;
+	        }
+
+	        //Decode with inSampleSize
+	        BitmapFactory.Options o2 = new BitmapFactory.Options();
+	        o2.inSampleSize=scale;
+	        return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+	    } catch (FileNotFoundException e) {}
+	    return null;
 	}
 
 	private Handler mHandler = new Handler() {

@@ -602,6 +602,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			{
 				if (wine.getLabel_thumb() != null)
 				{
+					wineThumb.setThumbnail(true);
 					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncBaseSearch.this.getBaseContext(), wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
 					wineThumb.setImageDrawable(defaultIcon);

@@ -543,11 +543,13 @@ private ProgressDialog progressDlg = null;
 					{
 						if (corkThumbUrl.startsWith("http"))
 						{
+							corkThumb.setThumbnail(true);
 							corkThumb.setLocalURI(DryncUtils.getCacheFileName(DryncCellar.this.getBaseContext(), corkThumbUrl));
 							corkThumb.setRemoteURI(corkThumbUrl);
 						}
 						else
 						{
+							corkThumb.setThumbnail(true);
 							corkThumb.setLocalURI(corkThumbUrl);
 							corkThumb.setRemoteURI(null);
 						}
