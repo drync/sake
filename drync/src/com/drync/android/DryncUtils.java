@@ -34,6 +34,7 @@ public class DryncUtils {
 	private static final String PRODUCT_ID_PAID = "wine";
 	private static final String PRODUCT_ID_FREE = "wine-free";
 	public static final int FREE_CELLAR_MAX_CORKS = 10;
+	static final String producttype = PRODUCT_ID_PAID;
 	
 	static String productId = PRODUCT_ID_PAID;
 	
@@ -71,7 +72,7 @@ public class DryncUtils {
 	public static boolean isFreeMode() {
 		if (freeMode == null)
 		{
-			freeMode = DryncUtils.class.getPackage().getName().contains("dryncfree");
+			freeMode = producttype.equals(PRODUCT_ID_FREE);
 		}
 		
 		setFreeMode(freeMode);

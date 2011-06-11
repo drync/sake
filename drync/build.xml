@@ -17,6 +17,11 @@
     		<replacetoken>DATABASE_NAME = DATABASE_PRO_NAME</replacetoken>
     	</replace>
     	
+    	<replace summary="yes" dir="${src}" value="producttype = PRODUCT_ID_FREE">
+		    <include name="**/*.java"/> 
+			<replacetoken>producttype = PRODUCT_ID_PAID</replacetoken>
+		</replace>
+		
     	<replace summary="yes" dir="${src}" value="com.dryncfree.android">
     	     <include name="**/*.aidl"/> 
     	     <replacetoken>com.drync.android</replacetoken>
@@ -59,6 +64,11 @@
 		<replace summary="yes" dir="${src}" value="DATABASE_NAME = DATABASE_PRO_NAME">
 		    <include name="**/*.java"/> 
 			<replacetoken>DATABASE_NAME = DATABASE_FREE_NAME</replacetoken>
+		</replace>
+		
+		<replace summary="yes" dir="${src}" value="producttype = PRODUCT_ID_PAID">
+		    <include name="**/*.java"/> 
+			<replacetoken>producttype = PRODUCT_ID_FREE</replacetoken>
 		</replace>
 	        	
 		<replace summary="yes" dir="${src}" value="com.drync.android">
