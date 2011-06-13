@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -15,10 +17,8 @@ import com.drync.android.objects.Cork;
 import com.drync.android.objects.Source;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
@@ -498,32 +498,87 @@ public class DryncUtils {
 
 	private static String generateNewDeviceId(Context ctx)
 	{
+		boolean supportsCpuAbi = false;
+		boolean supportsManufacturer = false;
+		Field cpuAbiField = null;
+		try {
+			cpuAbiField = Build.class.getField("CPU_ABI");
+			if (cpuAbiField != null)
+				supportsCpuAbi = true;
+		} catch (SecurityException e1) {
+				supportsCpuAbi = false;
+		} catch (NoSuchFieldException e1) {
+			supportsCpuAbi = false;
+		}
+		
+		Field manufacturer = null;
+		try {
+			manufacturer = Build.class.getField("MANUFACTURER");
+			if (manufacturer != null)
+				supportsManufacturer = true;
+		} catch (SecurityException e1) {
+			supportsManufacturer = false;
+		} catch (NoSuchFieldException e1) {
+			supportsManufacturer = false;
+		}
+		
 		try
 		{
 
 			TelephonyManager TelephonyMgr = (TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE);
 			String m_szImei = TelephonyMgr.getDeviceId(); // Requires READ_PHONE_STATE
 
-			String m_szDevIDShort = "35" + //we make this look like a valid IMEI
-			Build.BOARD.length()%10+ Build.BRAND.length()%10 +
-			Build.CPU_ABI.length()%10 + Build.DEVICE.length()%10 +
-			Build.DISPLAY.length()%10 + Build.HOST.length()%10 +
-			Build.ID.length()%10 + Build.MANUFACTURER.length()%10 +
-			Build.MODEL.length()%10 + Build.PRODUCT.length()%10 +
-			Build.TAGS.length()%10 + Build.TYPE.length()%10 +
-			Build.USER.length()%10 ; //13 digits
+			StringBuilder m_szDevIDShort = new StringBuilder("35"); //we make this look like a valid IMEI
+			m_szDevIDShort.append(Build.BOARD.length()%10);
+			m_szDevIDShort.append(Build.BRAND.length()%10);
+			
+			if (supportsCpuAbi && (cpuAbiField != null)) { m_szDevIDShort.append(((String)cpuAbiField.get(Build.class)).length()%10); };
+			m_szDevIDShort.append(Build.DEVICE.length()%10);
+			m_szDevIDShort.append(Build.DISPLAY.length()%10);
+			m_szDevIDShort.append(Build.HOST.length()%10);
+			m_szDevIDShort.append(Build.ID.length()%10);
+			if (supportsManufacturer && (manufacturer != null)) { m_szDevIDShort.append(((String)manufacturer.get(Build.class)).length()%10); };
+			
+			m_szDevIDShort.append(Build.MODEL.length()%10);
+			m_szDevIDShort.append(Build.PRODUCT.length()%10);
+			m_szDevIDShort.append(Build.TAGS.length()%10);
+			m_szDevIDShort.append(Build.TYPE.length()%10);
+			m_szDevIDShort.append(Build.USER.length()%10); //13 digits
 
 			String m_szAndroidID = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+			if (m_szAndroidID == null)
+			{
+				// probably an emulator - return "droidem"
+				m_szAndroidID = "droidem";
+			}
+				
 
 			/*	WifiManager wm = (WifiManager)ctx.getSystemService(Context.WIFI_SERVICE);
 		String m_szWLANMAC = wm.getConnectionInfo().getMacAddress();
 			 */
-			BluetoothAdapter m_BluetoothAdapter	= null; // Local Bluetooth adapter
-			m_BluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 			String m_szBTMAC = "";
-			if (m_BluetoothAdapter != null) { m_szBTMAC = m_BluetoothAdapter.getAddress(); }
+			try
+			{
+				Class clazz = Class.forName("android.bluetooth.BluetoothAdapter");
 
-			String m_szLongID = m_szImei + m_szDevIDShort + m_szAndroidID+/* m_szWLANMAC +*/ m_szBTMAC;
+
+				Method method = clazz.getMethod("getDefaultAdapter", new Class[0]);
+				Object m_BluetoothAdapter = method.invoke(clazz, new Object[0]);
+
+				if (m_BluetoothAdapter != null) 
+				{
+
+					Method getAddrMethod = clazz.getMethod("getAddress", new Class[0]);
+					String address = (String)getAddrMethod.invoke(m_BluetoothAdapter, new Object[0]);
+					m_szBTMAC = address;
+				}
+			}
+			catch (Throwable t)
+			{
+				m_szBTMAC = "";
+			}
+
+			String m_szLongID = m_szImei + m_szDevIDShort.toString() + m_szAndroidID+/* m_szWLANMAC +*/ m_szBTMAC;
 
 			// compute md5
 			MessageDigest m = null;
@@ -552,6 +607,7 @@ public class DryncUtils {
 		}
 		catch (Exception e) // if anything bad happens, revert to android Id
 		{
+			Log.d("GETDEVICEID", "Couldn't calculate unique device ID, revert to AndroidId", e);
 			return Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
 		}
 	}
