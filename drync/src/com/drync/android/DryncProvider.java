@@ -2,9 +2,7 @@ package com.drync.android;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +22,6 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -41,23 +38,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.restlet.Client;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.Protocol;
-import org.restlet.engine.io.ReaderInputStream;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -70,7 +58,6 @@ import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 import com.drync.android.objects.Venue;
-import com.google.android.maps.GeoPoint;
 
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
