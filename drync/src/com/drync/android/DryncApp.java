@@ -1,5 +1,6 @@
 package com.drync.android;
 
+
 import android.app.Application;
 import org.acra.*;
 import org.acra.annotation.*;

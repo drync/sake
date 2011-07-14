@@ -144,7 +144,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		{
 			try
 			{
-				Collections.sort(mResults, new BottleComparator());
+				if (mResults != null)
+				{
+					Collections.sort(mResults, new BottleComparator());
+				}
 			}
 			catch (NullPointerException e)
 			{

@@ -1,6 +1,7 @@
 package com.drync.android.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Selection;
 import android.util.AttributeSet;
 import android.view.inputmethod.CompletionInfo;

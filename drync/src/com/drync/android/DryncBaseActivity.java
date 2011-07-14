@@ -1,6 +1,5 @@
 package com.drync.android;
 
-import java.util.HashMap;
 import java.util.Random;
 
 import com.flurry.android.FlurryAgent;
@@ -16,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -44,6 +44,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	// view members:
 	GoogleAdView googleAdView;
 	
+	boolean themeLight = true;
+	
 	// abstract methods
 	public abstract int getMenuItemToSkip();
 	
@@ -61,6 +63,9 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		boolean result = super.onCreateOptionsMenu(menu);
 		
 		int skipMenuItem = getMenuItemToSkip();
+		
+		// getMenuInflater().inflate(R.menu.searchmenu, menu);
+
 		
 		if (skipMenuItem != SEARCH_ID)
 		{
@@ -88,10 +93,21 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		
 		return result;
 	}
-
+//	boolean themeLight = true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+			setTheme(themeLight ? R.style.Theme_Sherlock_Light : R.style.Theme_Sherlock);
+		
+        super.onCreate(savedInstanceState);
+        
+       // setContentView(R.layout.feature_demo_activity);
+
+// getSupportActionBar().setCustomView(com.drync.android.R.layout.actionbar_custom_view);
+//        getSupportActionBar().setDisplayShowCustomEnabled(false);
+//        getSupportActionBar().setDisplayShowHomeEnabled(false);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 		if (isTrackGPS())
 		{
