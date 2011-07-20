@@ -16,11 +16,16 @@
 
 package android.widget;
 
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 
+import com.drync.android.BottleComparator;
+import com.drync.android.OnSortListener;
 import com.drync.android.R;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -42,6 +47,7 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     
 
     private final EditText mText;
+    private final ImageButton sortButton;
     private final ImageButton searchButton;
     private final ImageButton clearButton;
     private boolean commitOnClear = true;
@@ -61,6 +67,8 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     protected int mPrevious;
     private OnChangedListener mListener;
     private OnCommitListener mCommitListener;
+    private OnSortListener mSortListener;
+    private int curSort = -1;
    
     public ClearableSearch(Context context) {
         this(context, null);
@@ -85,9 +93,15 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
         mText = (EditText) findViewById(R.id.searchentry);
         clearButton = (ImageButton)findViewById(R.id.clearFilterBtn);
         searchButton = (ImageButton)findViewById(R.id.searchBtn);
+        sortButton = (ImageButton)findViewById(R.id.sortBtn);
         
         clearButton.setOnClickListener(this);
         searchButton.setOnClickListener(this);
+        
+        if (sortButton != null)
+        {
+        	sortButton.setOnClickListener(this);
+        }
         
         mText.addTextChangedListener(new ClearableSearchTextWatcher());
         mText.setOnKeyListener(new OnKeyListener(){
@@ -140,6 +154,27 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
         else if (R.id.searchBtn == v.getId()) {
                 notifyCommitListeners();
         }
+        else if (R.id.sortBtn == v.getId()) {
+        		// todo - show sort chooser
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+            builder.setTitle("Sort By:");
+            // I hate this... should probably fix it.
+            final CharSequence[] sortItems = BottleComparator.getSortableCorkItems();
+            int defaultVal = Arrays.asList(sortItems).indexOf(BottleComparator.SortValueToName(curSort));
+            builder.setSingleChoiceItems(sortItems, defaultVal, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialogInterface, int item) {
+                	curSort = BottleComparator.SortNameToValue(sortItems[item].toString());
+                	//Toast.makeText(ClearableSearch.this.getContext(), "Chose: " + BottleComparator.sortItems[item] + " with value " + curSort, Toast.LENGTH_SHORT).show();
+                	notifySortListeners();
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.create().show();
+        	    // set curSort value
+        		//notifySortListeners();
+        	
+        		//notifyCommitListeners();
+        }
     }
 
     public void onFocusChange(View v, boolean hasFocus) {
@@ -150,6 +185,24 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
         if (!hasFocus) {
   
         }
+    }
+    
+    public void setOnSortListener(OnSortListener mSortListener)
+    {
+    	this.mSortListener = mSortListener;
+    }
+    
+    public OnSortListener getOnSortListener()
+    {
+    	return mSortListener;
+    }
+    
+    private void notifySortListeners()
+    {
+    	if (mSortListener != null)
+    	{
+    		this.mSortListener.onSortChanged(this, curSort);
+    	}
     }
     
     public void setOnCommitListener(OnCommitListener mCommitListener) {
@@ -167,7 +220,8 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
 			this.mCommitListener.onCommit(this, this.getEditableText().toString());
 		}
 	}
-
+	
+	
 	public interface OnCommitListener
     {
     	public boolean onCommit(View arg0, String text);
@@ -203,5 +257,13 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
 			
 		}
 		
+	}
+	
+	public void hideSortButton()
+	{
+		if (sortButton != null)
+		{
+			sortButton.setVisibility(GONE);
+		}
 	}
 }

@@ -72,6 +72,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
+	private BottleComparator comparator = null;
+	
 
 	private ProgressDialog progressDlg = null;
 	private String deviceId;
@@ -146,7 +148,10 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			{
 				if (mResults != null)
 				{
-					Collections.sort(mResults, new BottleComparator());
+					if (comparator == null)	
+						comparator = new BottleComparator();
+					
+					Collections.sort(mResults, comparator);
 				}
 			}
 			catch (NullPointerException e)
@@ -237,7 +242,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		
 		final ClearableSearch searchholder = (ClearableSearch) findViewById(R.id.clrsearch);
-		
+		searchholder.hideSortButton();
+		comparator = new BottleComparator();
 		searchEntry = (CustomAutoCompleteTextView)findViewById(R.id.searchentry);
 		
 		autocompleteadapter = new CustomArrayAdapter<String>(this, R.layout.cust_auto_list_item, dataset);

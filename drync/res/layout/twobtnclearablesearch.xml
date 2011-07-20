@@ -25,11 +25,19 @@
 			android:layout_alignParentTop="true" android:layout_toLeftOf="@id/searchBtn"
 			android:layout_marginLeft="2px"/>
 	
-	<EditText android:id="@+id/searchentry" android:layout_width="wrap_content" android:layout_alignParentLeft="true"
-    		android:layout_alignParentTop="true" android:layout_toLeftOf="@id/clearFilterBtn"
+	<ImageButton android:id="@+id/sortBtn" android:textColor="#FFFFFF"
+			android:layout_width="30dip" android:layout_height="fill_parent" android:background="@drawable/rndborderfulltransparent"
+			 android:src="@drawable/clearbutton" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+			android:layout_alignParentTop="true"
+			android:layout_marginLeft="2dip" android:layout_alignParentLeft="true"/>	
+	
+	<EditText android:id="@+id/searchentry" android:layout_width="wrap_content" 
+    		android:layout_alignParentTop="true" android:layout_toLeftOf="@id/clearFilterBtn" android:layout_toRightOf="@id/sortBtn"
 			android:layout_height="fill_parent" android:drawablePadding="2dip" android:background="@android:drawable/edit_text"
 			android:layout_marginTop="5dip" android:ellipsize="start" android:autoText="false" android:inputType="text"
 			/>
+
+			
     
 </RelativeLayout>
 

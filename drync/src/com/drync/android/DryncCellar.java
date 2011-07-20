@@ -12,9 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -34,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ClearableSearch;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -49,7 +53,7 @@ import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.ui.RemoteImageView;
 
-public class DryncCellar extends DryncBaseActivity {
+public class DryncCellar extends DryncBaseActivity implements OnSortListener {
 
 	@Override
 	protected void doStartupFetching() {
@@ -81,6 +85,7 @@ private ProgressDialog progressDlg = null;
 	
 	LinearLayout cellarView;
 	EditText searchEntry;
+	ClearableSearch clrSearch;
 	ScrollView detailView;
 	ScrollView reviewView;
 	ScrollView addView;
@@ -94,6 +99,8 @@ private ProgressDialog progressDlg = null;
 	
 	private String userTwitterUsername = null;
 	private String userTwitterPassword = null;
+	
+	private int curSortValue = CorkComparator.BY_NAME;
 
 	final Runnable mUpdateResults = new Runnable()
 	{
@@ -158,7 +165,7 @@ private ProgressDialog progressDlg = null;
 		
 		if (mAdapter == null)
 		{
-			Collections.sort(mResults, new CorkComparator());
+			Collections.sort(mResults, new CorkComparator(curSortValue));
 			mAdapter = new CorkAdapter(mResults);
 			mList.setAdapter(mAdapter);
 			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -177,7 +184,7 @@ private ProgressDialog progressDlg = null;
 		{
 			mAdapter.mWines.clear();
 			mAdapter.viewHash.clear();
-			Collections.sort(mResults, new CorkComparator());
+			Collections.sort(mResults, new CorkComparator(curSortValue));
 			mAdapter.mWines.addAll(mResults);
 			this.resultsLastSetTimestamp = System.currentTimeMillis();
 		}
@@ -283,6 +290,8 @@ private ProgressDialog progressDlg = null;
 		deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
 		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
 		searchEntry = (EditText)findViewById(R.id.searchentry);
+		clrSearch = (ClearableSearch)findViewById(R.id.clrsearch);
+		clrSearch.setOnSortListener(this);
 		final LinearLayout cellarFilterButtons = (LinearLayout) findViewById(R.id.cellarfilterbuttons);
 		
 		if (! displayFilter)
@@ -699,14 +708,70 @@ private ProgressDialog progressDlg = null;
 		}		
 	}
 	
-	private class CorkComparator implements Comparator<Cork>
+	private class CorkComparator extends BottleComparator<Cork>
 	{
-		public int compare(Cork object1, Cork object2) {
+		
+		public CorkComparator() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public CorkComparator(int primarySort) {
+			super(primarySort);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		protected int doSort(int SORT_TYPE, Cork arg0, Cork arg1) {
+			
+			if (SORT_TYPE == BY_VINTAGE)
+				return (((Integer)(arg0.getCork_year())).compareTo(((Integer)(arg1.getCork_year()))));
+				
+			else if (SORT_TYPE == BY_MY_RATING)
+			{
+				return Float.compare(arg0.getCork_rating(), arg1.getCork_rating());
+			}
+			else if (SORT_TYPE == BY_PRICE)
+			{
+				return compareStringsAsFloats(arg0.getCork_price(), arg1.getCork_price());
+			}
+			else if (SORT_TYPE == BY_ENTRY_DATE)
+			{
+				// sample date format
+				// Sat, 27 Nov 2010 21:50:31 -0500
+				String datepattern = "EEE, d MMM yyyy HH:mm:ss Z";
+				SimpleDateFormat sdf = new SimpleDateFormat(datepattern);
+				
+				Date arg0date = null;
+				Date arg1date = null;
+				try {
+					arg0date = sdf.parse(arg0.getCork_created_at());
+					arg1date = sdf.parse(arg1.getCork_created_at());
+				} catch (ParseException e) {
+					// nothing to do really.
+				}
+				
+				if ((arg0date != null) && (arg1date != null))
+					return arg0date.compareTo(arg1date);
+				else if (arg0date == null)
+					return -1;
+				else
+					return 1;
+			}
+				
+				// still here?
+			return super.doSort(SORT_TYPE, arg0, arg1);
+		}
+
+		
+		
+		
+		/*public int compare(Cork object1, Cork object2) {
 			Long obj1Id = object1.getCork_id();
 			Long obj2Id = object2.getCork_id();
 			
 			return obj1Id.compareTo(obj2Id);
-		}
+		}*/
 		
 	}
 	
@@ -743,6 +808,18 @@ private ProgressDialog progressDlg = null;
 	@Override
 	public int getMenuItemToSkip() {
 		return this.CELLAR_ID;
+	}
+
+
+	@Override
+	public boolean onSortChanged(View arg0, int sortType) {
+		if (arg0 == clrSearch)
+		{
+			curSortValue = sortType;
+			doFilteredCellarQuery(DryncCellar.this.lastSelectedCellar, this.searchEntry.getText().toString());	
+		}
+		
+		return true;
 	}
 }
 

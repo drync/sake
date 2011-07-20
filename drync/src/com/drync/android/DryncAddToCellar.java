@@ -159,6 +159,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			{
 				ErrorReporter.getInstance().putCustomData("Location", "DryncAddToCellar_OnActivityResult-Photo");
 				ErrorReporter.getInstance().putCustomData("state", "caught");
+				ErrorReporter.getInstance().putCustomData("devid", DryncUtils.getDeviceId(getContentResolver(), this));
 				ErrorReporter.getInstance().handleException(e);
 			}
 		}

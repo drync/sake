@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import org.acra.ErrorReporter;
 import org.apache.http.client.CookieStore;
 
 import com.drync.android.objects.Bottle;
@@ -431,6 +432,7 @@ public class DryncUtils {
 		}
 		
 		Log.d("DryncUtils", "Got deviceId: " + deviceId);
+		ErrorReporter.getInstance().putCustomData("devid", deviceId);
 		
 		return deviceId;
 	}

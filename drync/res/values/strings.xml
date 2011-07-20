@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="varietal">Varietal</string>
+    <string name="style">Style</string>
+    <string name="vintage">Vintage</string>
+    <string name="name">Name</string>
+    <string name="rating">My Rating</string>
+    <string name="price">Price</string>
+    <string name="winery">Winery</string>
+    
     <string name="hello">Hello World, Drync!</string>
     <string name="app_name">Drync Wine Pro</string>
     <string name="cellar_name">Drync Wine Pro - Cellar</string>
