@@ -36,6 +36,18 @@
     <string name="searchtoast2">Find your wine by typing a few words from the wine label into the search bar above.</string>
     <string name="searchtoast3">You don\'t need to type in all the details - just make sure you give Drync enough to work with, like "2004 inman pinot" or "chateau margaux 2001".</string>
 	
+	<string name="regreq1">Please Register</string>
+    <string name="regreq2">You must register to save wines in your Drync Cellar</string>
+    <string name="regreq3">Registering also gives you: Cellar Backups, Access to your Cellar on Drync.com, Cellar Sharing, and Easy Device Upgrades</string>
+	<string name="regreq4">(we will never sell/share your email)</string>
+	
+	
+	<string name="freeex1">Upgrade to Drync Wine</string>
+	<string name="freeex1_1">Pro</string>
+    <string name="freeex2">Drync Wine</string>
+    <string name="freeex2_1">Free has a 10 bottle Cellar limit.  To add more wines, upgrade to Drync Wine</string>
+    <string name="freeex2_2">Pro.</string>
+    
 	<string name="noresults">No matching results could be found.</string>
 	<string name="noresults2">Please try again!</string>
 	

@@ -42,6 +42,8 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -577,6 +579,7 @@ public class DryncProvider {
 		try {
 			HttpResponse response = client.execute(target, post);
 			HttpEntity entity = response.getEntity();
+			Header accountHeader = response.getFirstHeader("X-Drync-Account");
 
 			StatusLine sl = response.getStatusLine();
 			if (sl.getStatusCode() != 200)
@@ -584,6 +587,15 @@ public class DryncProvider {
 
 			if (entity != null) {
 				is = entity.getContent();
+				String username = null;
+				
+				if (accountHeader != null)
+				{
+					JSONObject object = (JSONObject) new JSONTokener(accountHeader.getValue()).nextValue();
+					username = (String) object.get("user_name");
+					if (! username.equals(""))
+						DryncUtils.setRegisteredUsername(username);
+				}
 
 				final char[] buffer = new char[0x10000];
 				StringBuilder out = new StringBuilder();
@@ -1065,30 +1077,36 @@ public class DryncProvider {
 		return response;
 	} 
 	
-	public static Result<Cork> postCreateOrUpdate(Context ctx, Cork cork, String deviceId, boolean testforfree) throws DryncFreeCellarExceededException
+	public static Result<Cork> postCreateOrUpdate(Context ctx, Cork cork, String deviceId, boolean testforfree) throws DryncFreeCellarExceededException, DryncNotRegisteredException
 	{
+		// check to see if we're registered.
+		if (DryncUtils.getRegisteredUsername() == null)
+		{
+			throw new DryncNotRegisteredException();
+		}
+		
 		if (testforfree)
 		{
 			DryncDbAdapter dbAdapter = new DryncDbAdapter(ctx);
-			
+
 			try
 			{
 				dbAdapter.open();
 				if (DryncUtils.isFreeMode() && (dbAdapter.getCorkCount() >= DryncUtils.FREE_CELLAR_MAX_CORKS))
 					throw new DryncFreeCellarExceededException();
-				}
-				finally
-				{
-					dbAdapter.close();
-				}
 			}
-		
+			finally
+			{
+				dbAdapter.close();
+			}
+		}
+
 		String tweetAppend = "";
 		if (DryncUtils.isCellarTweetsEnabled((Activity)ctx))
 		{
 			tweetAppend = "?tweet&scrawl";
 		}
-		
+
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks%s", USING_SERVER_HOST,SERVER_PORT,tweetAppend);
 		Result<Cork> returnVal = new Result<Cork>();
@@ -1119,21 +1137,21 @@ public class DryncProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		returnVal.setResult(false);
 		return returnVal;
 		/*ClientResource itemsResource = new ClientResource(  
 				clientResourceUrl);
-		
+
 		ChallengeResponse authentication = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, "preview", "drync_web");
 		itemsResource.setChallengeResponse(authentication);
 
 		ClientResource itemResource = null;
 		Representation rpre = cork.getRepresentation(deviceId);
 		Representation r = itemsResource.post(rpre); 
-	
+
 		Log.d("DryncProvider", itemsResource.getStatus().getDescription(), itemsResource.getStatus().getThrowable());
-		
+
 		return itemsResource.getStatus().isSuccess();*/
 	}
 	

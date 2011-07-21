@@ -689,6 +689,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				
 				DryncUtils.setNewDeviceId(getContentResolver(), this, newDeviceId);
 				DryncUtils.setEtag(this, null);
+				DryncUtils.setRegisteredUsername(null);
 				
 				this.doStartupFetching();
 				
@@ -698,6 +699,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			else if (query.toLowerCase().startsWith("drync presto reset"))
 			{
 				DryncUtils.setNewDeviceId(getContentResolver(), this, null);
+				DryncUtils.setRegisteredUsername(null);
 				
 				this.doStartupFetching();
 				

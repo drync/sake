@@ -68,8 +68,16 @@ public class DryncUtils {
 	public static String lastLocationLong = null;
 	public static String lastLocationAccuracy = null;
 	public static boolean skipGPSTracking = false;
+	public static String registeredUsername = null;
 	
-	
+	public static String getRegisteredUsername() {
+		return registeredUsername;
+	}
+
+	public static void setRegisteredUsername(String registeredUsername) {
+		DryncUtils.registeredUsername = registeredUsername;
+	}
+
 	public static boolean isFreeMode() {
 		if (freeMode == null)
 		{

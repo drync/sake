@@ -4,7 +4,7 @@
 <RelativeLayout
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="50px"
+    android:layout_height="55dip"
     android:background="#FFFFFF">	
     	
 	<ImageButton android:id="@+id/addBtn" android:textColor="#FFFFFF"

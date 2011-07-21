@@ -253,6 +253,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 				public void run() {
 					try
 					{
+						DryncProvider.getInstance().startupPost(DryncBaseActivity.this, DryncUtils.getDeviceId(DryncBaseActivity.this.getContentResolver(), DryncBaseActivity.this));
 						DryncProvider.getInstance()
 						.getCorks(DryncBaseActivity.this, threadDeviceId);
 						DryncProvider.getInstance().myAcctGet(DryncBaseActivity.this.getBaseContext(), threadDeviceId);

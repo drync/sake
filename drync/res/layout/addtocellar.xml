@@ -70,27 +70,27 @@
 				android:layout_width="fill_parent" android:layout_alignParentTop="true"
 				android:layout_alignParentLeft="true" android:layout_height="wrap_content"
 				android:layout_marginLeft="10px" android:layout_marginRight="10px" 
-				android:layout_marginBottom="20px" 
+				android:layout_marginBottom="20dip" 
 				android:padding="5dip">
 
 				<TextView android:id="@+id/atcYearLbl"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="20px"
+					android:gravity="center_vertical" android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip" android:layout_marginTop="20dip"
 					android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"
 					android:singleLine="true" android:text="Year" />
 					
 				<AutoCompleteTextView android:id="@+id/atcYearVal"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:maxWidth="100dip" android:minWidth="100dip"
+					android:maxWidth="100dip" android:minWidth="100dip" android:layout_marginTop="20dip"
 					android:layout_toRightOf="@id/atcYearLbl" 
 					android:singleLine="true" android:layout_alignBaseline="@id/atcYearLbl"  />
 					
 				<TextView android:id="@+id/atcPriceLbl"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:gravity="center_vertical" android:layout_marginLeft="10px"
-					android:layout_marginRight="10px" android:layout_marginTop="25px"
+					android:gravity="center_vertical" android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip" android:layout_marginTop="25dip"
 					android:layout_below="@id/atcYearLbl" android:layout_alignParentLeft="true"
 					android:textColor="#000000"
 					android:typeface="sans" android:ellipsize="none"

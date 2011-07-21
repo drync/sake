@@ -24,16 +24,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
@@ -48,6 +52,7 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.drync.android.helpers.Base64;
@@ -60,6 +65,16 @@ import com.drync.android.widget.NumberPicker;
 
 public class DryncAddToCellar extends DryncBaseActivity {
 
+	private static final int NO_ERROR = 0;
+	private static final int FREE_EXCEEDED_ERROR = 1;
+	private static final int REGISTRATION_REQUIRED_ERROR = 2;
+	
+	// for use by long toasts
+	public static boolean bail = false;
+	public static Thread longToastThread = null;
+	public static Toast instToast = null;
+	
+	
 	final Handler mHandler = new Handler();
 	private Bottle mBottle = null;
 	private boolean isEdit = false;
@@ -104,7 +119,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	Drawable defaultIcon = null;
 
 	//public boolean skipGPSTracking = false;
-
+	int errorOccurred = NO_ERROR;
 	final Runnable mHandleLongTransaction = new Runnable()
 	{
 		public void run()
@@ -121,8 +136,91 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				Log.d("DryncAddToCellar", "Handled WindowNotAttachedToView IllegalArgumentException from progressDlg: 1");
 			}
 
-			DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
-			DryncAddToCellar.this.finish();
+			boolean bFinish = false;
+			
+			switch (errorOccurred)
+			{
+			case NO_ERROR:
+				DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
+				DryncAddToCellar.this.finish();
+				break;
+			case FREE_EXCEEDED_ERROR:
+				errorOccurred = NO_ERROR;
+				
+				View freeexlayout = getLayoutInflater().inflate(R.layout.freeexeeded, (ViewGroup) findViewById(R.id.layout_root));
+				
+				String t1 = getResources().getString(R.string.freeex1) + " " + getResources().getString(R.string.freeex1_1);
+				String t2 = getResources().getString(R.string.freeex2) + " " + getResources().getString(R.string.freeex2_1) +
+							" " + getResources().getString(R.string.freeex2_2);
+				
+				TextView tv1 = (TextView)freeexlayout.findViewById(R.id.text1);
+				TextView tv2 = (TextView)freeexlayout.findViewById(R.id.text2);
+				
+				tv1.setText(t1);
+				tv2.setText(t2);
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
+				builder.setView(freeexlayout)
+				.setCancelable(true)
+				
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+						DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
+						DryncAddToCellar.this.finish();
+					}
+				})
+				.setPositiveButton("Upgrade Now", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+						
+						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.drync" + ".android"
+));
+		    			startActivity(intent);
+						
+					}
+				});
+				AlertDialog alert = builder.show();
+				
+				break;
+			case REGISTRATION_REQUIRED_ERROR:
+				bFinish = false;
+				errorOccurred = NO_ERROR;
+				
+				View layout = getLayoutInflater().inflate(R.layout.registrationrequired, (ViewGroup) findViewById(R.id.layout_root));
+				
+				AlertDialog.Builder regbuilder = new AlertDialog.Builder(DryncAddToCellar.this);
+				regbuilder.setView(layout)
+				.setCancelable(true)
+				
+				.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+						DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
+						DryncAddToCellar.this.finish();
+					}
+				})
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+						
+						Intent intent = new Intent();
+		    			intent.setClass(DryncAddToCellar.this, DryncMyAccountActivity.class);
+		    			startActivityForResult(intent, MYACCOUNT_RESULT);
+						
+					}
+				});
+				AlertDialog regalert = regbuilder.show();
+				
+				break;
+			default:
+				DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
+				DryncAddToCellar.this.finish();
+				break;
+			}
+			
 		}
 	};
 
@@ -162,6 +260,10 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				ErrorReporter.getInstance().putCustomData("devid", DryncUtils.getDeviceId(getContentResolver(), this));
 				ErrorReporter.getInstance().handleException(e);
 			}
+		}
+		else if (requestCode == MYACCOUNT_RESULT)
+		{
+			DryncProvider.getInstance().startupPost(DryncAddToCellar.this, DryncUtils.getDeviceId(getContentResolver(), DryncAddToCellar.this));
 		}
 		else if (requestCode == LOCATION_CHOOSER_RESULT)
 		{
@@ -893,6 +995,12 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		}
 		catch (DryncFreeCellarExceededException e)
 		{
+			errorOccurred = FREE_EXCEEDED_ERROR;
+			return false;
+		} catch (DryncNotRegisteredException e) {
+			//Toast.makeText(this, "Cannot save a wine until you are registered with the server.", Toast.LENGTH_LONG);
+			errorOccurred = REGISTRATION_REQUIRED_ERROR;
+			
 			return false;
 		}
 		finally
@@ -915,6 +1023,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		startActivityForResult(twIntent, LOCATION_CHOOSER_RESULT);  
 	}
+	
+	
 
 }
 

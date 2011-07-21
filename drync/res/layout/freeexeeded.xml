@@ -1,0 +1,23 @@
+<com.drync.android.ui.BorderlessTransparentPanel xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/regreq_toast_layout"
+              android:orientation="vertical"
+              android:layout_height="fill_parent"
+              android:padding="10dp" 
+              android:layout_width="fill_parent" android:layout_marginLeft="30px" android:layout_marginRight="30px">
+   
+    <TextView android:id="@+id/text1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#FFF" android:clickable="true"
+              android:text="@string/freeex1"
+		      android:layout_gravity="center_horizontal"
+		      android:layout_marginBottom="10px"
+              android:textStyle="bold" android:typeface="normal"/>
+    <TextView android:id="@+id/text2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:clickable="true"
+              android:textColor="#FFF"
+              android:text="@string/freeex2" android:typeface="normal" android:visibility="visible" android:layout_marginBottom="5px" android:textSize="12px"/>
+            
+</com.drync.android.ui.BorderlessTransparentPanel>
