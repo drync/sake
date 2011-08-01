@@ -4,11 +4,7 @@ import java.util.Random;
 
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdRequest;
-import com.google.ads.AdSenseSpec;
 import com.google.ads.AdView;
-import com.google.ads.GoogleAdView;
-import com.google.ads.AdSenseSpec.AdType;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +40,6 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	public LocationManager myLocationManager;
 	
 	// view members:
-	GoogleAdView googleAdView;
 	AdView adView;
 	
 	boolean themeLight = true;
@@ -321,7 +316,8 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 			return false;
 	}
 	
-	public AdSenseSpec buildAdSpec()
+	// left for reference in case we can set keywords on admob.
+	/*public AdSenseSpec buildAdSpec()
 	{
 		AdSenseSpec adSenseSpec =
 		    new AdSenseSpec("ca-mb-app-pub-2007025970278328")
@@ -334,7 +330,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		adSenseSpec.setAdTestEnabled(false);
 		
 		return adSenseSpec;
-	}
+	}*/
 	
 	public void initializeAds()
 	{

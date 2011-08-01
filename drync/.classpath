@@ -5,9 +5,8 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
 	<classpathentry kind="lib" path="lib/FlurryAgent.jar"/>
-	<classpathentry kind="lib" path="lib/GoogleAdView.jar"/>
 	<classpathentry kind="lib" path="lib/acra-3.1.1.jar"/>
-	<classpathentry kind="src" path="ActionBarSherlock_src"/>
 	<classpathentry kind="lib" path="lib/GoogleAdMobAdsSdk-4.1.1.jar"/>
+	<classpathentry kind="src" path="ActionBarSherlock_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
