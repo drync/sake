@@ -3,7 +3,9 @@ package com.drync.android;
 import java.util.Random;
 
 import com.flurry.android.FlurryAgent;
+import com.google.ads.AdRequest;
 import com.google.ads.AdSenseSpec;
+import com.google.ads.AdView;
 import com.google.ads.GoogleAdView;
 import com.google.ads.AdSenseSpec.AdType;
 
@@ -43,6 +45,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	
 	// view members:
 	GoogleAdView googleAdView;
+	AdView adView;
 	
 	boolean themeLight = true;
 	
@@ -335,7 +338,29 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 	
 	public void initializeAds()
 	{
-		if (googleAdView == null)
+		if (adView == null)
+			adView = (AdView)findViewById(R.id.adView);
+		//adView.setAdListener(this);     
+		
+		
+		if (adView != null)
+		{
+			if (DryncUtils.isFreeMode())
+			{
+				AdRequest request = new AdRequest();
+				/*request.addTestDevice(AdRequest.TEST_EMULATOR);
+				request.setTesting(true);   */  
+				adView.loadAd(request);
+			}
+			else
+			{
+				adView.setVisibility(View.GONE);
+			}
+			
+		}
+		
+
+		/*if (googleAdView == null)
 			googleAdView = (GoogleAdView) findViewById(R.id.adview);
 		
 		if (googleAdView != null)
@@ -349,7 +374,7 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 			{
 				googleAdView.setVisibility(View.GONE);
 			}
-		}
+		} */
 	}
 	
 	static final String[] adKeywords = 

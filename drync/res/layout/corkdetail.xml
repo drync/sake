@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads" 
 	android:id="@+id/detailview" android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="fill_parent"
 	android:scrollbarAlwaysDrawVerticalTrack="false">
 
 	<LinearLayout android:orientation="vertical"
@@ -44,9 +45,12 @@
 
 		</RelativeLayout>
 
-		<com.google.ads.GoogleAdView android:id="@+id/adview"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" /> 
-
+		<com.google.ads.AdView android:id="@+id/adView" android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         ads:adUnitId="a149667b30439f2"
+                         ads:adSize="BANNER"
+                         ads:loadAdOnCreate="false"/>
+                         
 		<RelativeLayout android:id="@+id/dateAddedSec"
 			android:orientation="horizontal" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:paddingRight="10px"
@@ -91,8 +95,8 @@
 					android:layout_height="wrap_content" android:textColor="#000000"
 					android:minWidth="50px" android:maxWidth="50px" android:gravity="right"
 					android:textStyle="bold" android:textSize="12.0sp"
-					android:singleLine="true" android:paddingLeft="5px"
-					android:paddingRight="5px" android:text="Year:" />
+					android:singleLine="true" android:paddingLeft="5dip"
+					android:paddingRight="5dip" android:text="Year:" />
 				<TextView android:id="@+id/yearValue" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:textColor="#FFFFFF"
 					android:textStyle="bold" android:singleLine="true"
@@ -102,8 +106,8 @@
 					android:layout_width="60dip" android:layout_height="wrap_content"
 					android:textColor="#000000" android:gravity="right"
 					android:textSize="12.0sp" android:singleLine="true"
-					android:minWidth="50px" android:paddingRight="5px"
-					android:maxWidth="50px" android:layout_below="@id/yearLabel"
+					android:minWidth="50dip" android:paddingRight="5dip"
+					android:maxWidth="50dip" android:layout_below="@id/yearLabel"
 					android:textStyle="bold" android:text="Varietal:"
 					android:layout_alignRight="@id/yearLabel" />
 				<TextView android:id="@+id/varietalValue"
@@ -116,8 +120,8 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="#000000" android:gravity="right"
 					android:textSize="12.0sp" android:singleLine="true"
-					android:minWidth="50px" android:paddingRight="5px"
-					android:maxWidth="50px" android:layout_below="@id/varietalLabel"
+					android:minWidth="50dip" android:paddingRight="5dip"
+					android:maxWidth="50dip" android:layout_below="@id/varietalLabel"
 					android:textStyle="bold" android:text="Rating:"
 					android:layout_alignRight="@id/yearLabel" />
 				<TextView android:id="@+id/avgRatingValue"
@@ -130,8 +134,8 @@
 					android:layout_width="60dip" android:layout_height="wrap_content"
 					android:textColor="#000000" android:gravity="right"
 					android:textSize="12.0sp" android:singleLine="true"
-					android:minWidth="50px" android:paddingRight="5px"
-					android:maxWidth="50px" android:layout_below="@id/avgRatingLabel"
+					android:minWidth="50dip" android:paddingRight="5dip"
+					android:maxWidth="50dip" android:layout_below="@id/avgRatingLabel"
 					android:textStyle="bold" android:text="Style:"
 					android:layout_alignRight="@id/yearLabel" />
 				<TextView android:id="@+id/styleValue"
@@ -144,8 +148,8 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="#000000" android:gravity="right"
 					android:textSize="12.0sp" android:singleLine="true"
-					android:minWidth="50px" android:paddingRight="5px"
-					android:maxWidth="50px" android:layout_below="@id/styleLabel"
+					android:minWidth="50dip" android:paddingRight="5dip"
+					android:maxWidth="50dip" android:layout_below="@id/styleLabel"
 					android:textStyle="bold" android:text="Region:"
 					android:layout_alignRight="@id/yearLabel" />
 				<TextView android:id="@+id/regionValue"
@@ -158,8 +162,8 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="#000000" android:gravity="right"
 					android:textSize="12.0sp" android:singleLine="true"
-					android:minWidth="50px" android:paddingRight="5px"
-					android:maxWidth="50px" android:layout_below="@id/regionLabel"
+					android:minWidth="50dip" android:paddingRight="5dip"
+					android:maxWidth="50dip" android:layout_below="@id/regionLabel"
 					android:textStyle="bold" android:text="Price:"
 					android:layout_alignRight="@id/yearLabel" />
 				<TextView android:id="@+id/priceValue"

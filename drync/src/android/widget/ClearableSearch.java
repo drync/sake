@@ -70,7 +70,15 @@ public class ClearableSearch extends RelativeLayout implements OnClickListener,
     private OnSortListener mSortListener;
     private int curSort = -1;
    
-    public ClearableSearch(Context context) {
+    public int getCurSort() {
+		return curSort;
+	}
+
+	public void setCurSort(int curSort) {
+		this.curSort = curSort;
+	}
+
+	public ClearableSearch(Context context) {
         this(context, null);
     }
 

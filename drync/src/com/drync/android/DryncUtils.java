@@ -69,6 +69,30 @@ public class DryncUtils {
 	public static String lastLocationAccuracy = null;
 	public static boolean skipGPSTracking = false;
 	public static String registeredUsername = null;
+	public static Integer cellarSortType = null;
+	
+	public static int getCellarSortType(Activity activity) 
+	{
+		if (cellarSortType == null)
+		{
+			SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+
+			cellarSortType = settings.getInt(DryncUtils.CELLAR_SORT, BottleComparator.BY_NAME);
+		}
+		return cellarSortType;
+	}
+	
+	public static void setCellarSortType(Activity activity, int curSort)
+	{
+		DryncUtils.cellarSortType = curSort;
+		
+		SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+		
+		Editor editor = settings.edit();
+		editor.putInt(DryncUtils.CELLAR_SORT, DryncUtils.cellarSortType);
+		editor.commit();
+		
+	}
 	
 	public static String getRegisteredUsername() {
 		return registeredUsername;
@@ -142,6 +166,7 @@ public class DryncUtils {
 	public static final String LAST_QUERY_PREF = "lastQuery";
 	public static final String LAST_FILTER_PREF = "lastFilter";
 	public static final String CELLAR_ETAG = "cellarEtag";
+	public static final String CELLAR_SORT = "cellarSort";
 	public static final String LAST_LOCATION_LAT = "lastLocationLat";
 	public static final String LAST_LOCATION_LONG = "lastLocationLong";
 	public static final String LAST_LOCATION_ACCURACY = "lastLocationAccuracy";

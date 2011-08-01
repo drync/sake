@@ -165,7 +165,6 @@ private ProgressDialog progressDlg = null;
 		
 		if (mAdapter == null)
 		{
-			Collections.sort(mResults, new CorkComparator(curSortValue));
 			mAdapter = new CorkAdapter(mResults);
 			mList.setAdapter(mAdapter);
 			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -259,7 +258,7 @@ private ProgressDialog progressDlg = null;
 				DryncDbAdapter dbAdapter = new DryncDbAdapter(DryncCellar.this);
 				dbAdapter.open();
 				mResults = dbAdapter.getFilteredCorks(curFilterType, curQuery);
-				
+				Collections.sort(mResults, new CorkComparator(curSortValue));
 				mHandler.post(mUpdateResults);
 				dbAdapter.close();
 			}
@@ -277,6 +276,8 @@ private ProgressDialog progressDlg = null;
 		
 		String lastFilter = settings.getString(DryncUtils.LAST_FILTER_PREF, null);
 		
+		curSortValue = DryncUtils.getCellarSortType(this);
+		
 		Bundle extras = getIntent().getExtras();
 		this.displayFilter = true; //extras != null ? extras.getBoolean("displayFilter") : true;
 		this.displayCellarFilterBtns = true; //extras != null ? extras.getBoolean("displayCellarFilterBtns") : false;
@@ -291,6 +292,7 @@ private ProgressDialog progressDlg = null;
 		final LinearLayout searchholder = (LinearLayout) findViewById(R.id.searchHolder);
 		searchEntry = (EditText)findViewById(R.id.searchentry);
 		clrSearch = (ClearableSearch)findViewById(R.id.clrsearch);
+		clrSearch.setCurSort(curSortValue);
 		clrSearch.setOnSortListener(this);
 		final LinearLayout cellarFilterButtons = (LinearLayout) findViewById(R.id.cellarfilterbuttons);
 		
@@ -722,20 +724,20 @@ private ProgressDialog progressDlg = null;
 		}
 		
 		@Override
-		protected int doSort(int SORT_TYPE, Cork arg0, Cork arg1) {
-			
-			if (SORT_TYPE == BY_VINTAGE)
-				return (((Integer)(arg0.getCork_year())).compareTo(((Integer)(arg1.getCork_year()))));
+		protected int doSort(Cork arg0, Cork arg1) {
+			int SORT_TYPE = primarySort;
+			if (SORT_TYPE == BY_VINTAGE) // descending
+				return (((Integer)(arg0.getYearValue())).compareTo(((Integer)(arg1.getYearValue()))) * -1);
 				
-			else if (SORT_TYPE == BY_MY_RATING)
+			else if (SORT_TYPE == BY_MY_RATING) // I think rating should be descending.
 			{
-				return Float.compare(arg0.getCork_rating(), arg1.getCork_rating());
+				return (Float.compare(arg0.getCork_rating(), arg1.getCork_rating()) * -1);
 			}
 			else if (SORT_TYPE == BY_PRICE)
 			{
-				return compareStringsAsFloats(arg0.getCork_price(), arg1.getCork_price());
+				return (compareStringsAsFloats(arg0.getCork_price(), arg1.getCork_price()) * -1);
 			}
-			else if (SORT_TYPE == BY_ENTRY_DATE)
+			else if (SORT_TYPE == BY_ENTRY_DATE) // descending
 			{
 				// sample date format
 				// Sat, 27 Nov 2010 21:50:31 -0500
@@ -752,7 +754,7 @@ private ProgressDialog progressDlg = null;
 				}
 				
 				if ((arg0date != null) && (arg1date != null))
-					return arg0date.compareTo(arg1date);
+					return (arg0date.compareTo(arg1date) * -1); // make descending
 				else if (arg0date == null)
 					return -1;
 				else
@@ -760,7 +762,7 @@ private ProgressDialog progressDlg = null;
 			}
 				
 				// still here?
-			return super.doSort(SORT_TYPE, arg0, arg1);
+			return super.doSort(arg0, arg1);
 		}
 
 		
@@ -785,7 +787,8 @@ private ProgressDialog progressDlg = null;
 			mResults = savedInstanceState.getParcelableArrayList("mResults");
 			lastSelectedCellar = savedInstanceState.getInt("lastSelectedCellar");
 			this.resultsLastSetTimestamp = savedInstanceState.getLong("resultsLastSetTimestamp");
-
+			this.curSortValue = savedInstanceState.getInt("curSort");
+			
 			final Button myWinesButton = (Button)findViewById(R.id.myWinesBtn);
 			final Button iDrankButton = (Button)findViewById(R.id.iDrankBtn);
 			final Button iOwnButton = (Button)findViewById(R.id.iOwnBtn);
@@ -803,6 +806,7 @@ private ProgressDialog progressDlg = null;
 		outState.putParcelableArrayList("mResults", (ArrayList<Cork>) mResults);
 		outState.putInt("lastSelectedCellar", lastSelectedCellar);
 		outState.putLong("resultsLastSetTimestamp", this.resultsLastSetTimestamp);
+		outState.putInt("curSort", this.curSortValue);
 	}
 	
 	@Override
@@ -816,6 +820,7 @@ private ProgressDialog progressDlg = null;
 		if (arg0 == clrSearch)
 		{
 			curSortValue = sortType;
+			DryncUtils.setCellarSortType(this, curSortValue);
 			doFilteredCellarQuery(DryncCellar.this.lastSelectedCellar, this.searchEntry.getText().toString());	
 		}
 		

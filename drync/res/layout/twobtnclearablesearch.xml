@@ -26,10 +26,10 @@
 			android:layout_marginLeft="2px"/>
 	
 	<ImageButton android:id="@+id/sortBtn" android:textColor="#FFFFFF"
-			android:layout_width="30dip" android:layout_height="fill_parent" android:background="@drawable/rndborderfulltransparent"
-			 android:src="@drawable/clearbutton" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+			android:background="@drawable/rndborderfulltransparent"
+			android:src="@drawable/sortbutton" android:layout_centerVertical="true" 
 			android:layout_alignParentTop="true"
-			android:layout_marginLeft="2dip" android:layout_alignParentLeft="true"/>	
+			android:layout_marginLeft="2px" android:layout_alignParentLeft="true" android:layout_width="30dip" android:layout_height="match_parent"/>	
 	
 	<EditText android:id="@+id/searchentry" android:layout_width="wrap_content" 
     		android:layout_alignParentTop="true" android:layout_toLeftOf="@id/clearFilterBtn" android:layout_toRightOf="@id/sortBtn"

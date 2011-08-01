@@ -55,20 +55,25 @@ public class BottleComparator<T extends Bottle> implements Comparator<T>, OnSort
 	public int compare(T arg0, T arg1) {
 		// only do secondary sort if primary sort is the same.
 		// start with primary:
-		int result = doSort(primarySort, arg0, arg1);
+		int result = doSort(arg0, arg1);
 		
-		if (result == 0)
+		/*if (result == 0)
 			result = doSort(secondarySort, arg0, arg1);		
-		
+		*/
 		return result;
 	}
 	
-	protected int doSort(int SORT_TYPE, T arg0, T arg1)
+	protected int doSort(T arg0, T arg1)
 	{
+		int SORT_TYPE = primarySort;
+		boolean descendingflag = false;
 		try
 		{
-			if (SORT_TYPE == BY_VINTAGE)
-				return (((Integer)(arg0.getYear())).compareTo(((Integer)(arg1.getYear()))));
+			if (SORT_TYPE == BY_VINTAGE)  // descending
+			{
+				descendingflag = true;
+				return (((Integer)(arg0.getYearValue())).compareTo(((Integer)(arg1.getYearValue()))) * -1);
+			}
 			else if (SORT_TYPE == BY_STYLE)
 			{
 				return compareStrings(arg0.getStyle(), arg1.getStyle());
@@ -85,13 +90,15 @@ public class BottleComparator<T extends Bottle> implements Comparator<T>, OnSort
 			{
 				return arg0.
 			} */
-			else if (SORT_TYPE == BY_MY_RATING)
+			else if (SORT_TYPE == BY_MY_RATING) // descending
 			{
-				return compareStringsAsFloats(arg0.getRating(), arg1.getRating());
+				descendingflag = true;
+				return (compareStringsAsFloats(arg0.getRating(), arg1.getRating()) * -1);
 			}
-			else if (SORT_TYPE == BY_PRICE)
+			else if (SORT_TYPE == BY_PRICE)  // descending
 			{
-				return compareStringsAsFloats(arg0.getPrice(), arg1.getPrice());
+				descendingflag = true;
+				return (compareStringsAsFloats(arg0.getPrice(), arg1.getPrice()) * -1);
 			}
 			else if (SORT_TYPE == BY_WINERY)
 			{
@@ -104,7 +111,10 @@ public class BottleComparator<T extends Bottle> implements Comparator<T>, OnSort
 		}
 		catch (NullPointerException e)
 		{
-			return -1;
+			if (descendingflag == true)
+				return 1;
+			else
+				return -1;
 		}
 		return -1;
 	}
@@ -244,4 +254,22 @@ public class BottleComparator<T extends Bottle> implements Comparator<T>, OnSort
 	{
 		return corkSortItems;
 	}
+
+	public int getPrimarySort() {
+		return primarySort;
+	}
+
+	public void setPrimarySort(int primarySort) {
+		this.primarySort = primarySort;
+	}
+
+	public int getSecondarySort() {
+		return secondarySort;
+	}
+
+	public void setSecondarySort(int secondarySort) {
+		this.secondarySort = secondarySort;
+	}
+	
+	
 }

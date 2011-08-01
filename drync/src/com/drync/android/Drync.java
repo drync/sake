@@ -14,6 +14,7 @@ import com.drync.android.helpers.CSVReader;
 import com.flurry.android.FlurryAgent;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,9 +32,11 @@ import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
@@ -56,7 +59,11 @@ public class Drync extends Activity {
 	private static LinearLayout register;
 	private static String registerTxt;
 	private static WebView regWebView;
-
+	
+	private ProgressDialog progressDlg = null;
+	boolean startupProcComplete = false;
+	final Handler mNetHandler = new Handler();
+	
 	private Handler splashHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -165,50 +172,101 @@ public class Drync extends Activity {
 			e.printStackTrace();
 		}
 		
-		String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
-		String register = null;
-		if (hasConnectivity())
+		final String deviceId = DryncUtils.getDeviceId(getContentResolver(), this);
+		
+		progressDlg =  new ProgressDialog(Drync.this);
+		progressDlg.setTitle("Dryncing...");
+		progressDlg.setMessage("Fetching Data...");
+		progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressDlg.getWindow().setGravity(Gravity.BOTTOM);
+		progressDlg.show();
+		
+		
+
+		final Runnable finishStartupThread = new Runnable()
 		{
-			register = DryncProvider.getInstance().startupPost(this, deviceId);
-
-			final String threadDeviceId = deviceId;
-			Thread t = new DryncThread() {
-				public void run() {
-					
-					try {
-						DryncProvider.getInstance()
-						.getCorks(Drync.this, threadDeviceId);
-						DryncProvider.getInstance().myAcctGet(Drync.this.getApplicationContext(), threadDeviceId);
-					} catch (DryncHostException e) {
-						Log.e("Drync", "DryncHostException on Startup", e);
-					} catch (DryncXmlParseExeption e) {
-						Log.e("Drync", "DryncXmlParseException on Startup", e);
+			public void run()
+			{
+				if ((progressDlg != null) && (progressDlg.isShowing()))
+				{
+					try
+					{
+						progressDlg.dismiss();
 					}
+					catch (IllegalArgumentException e)
+					{
+						Log.e("PROGDLG_ERROR", "Progress Dialog not attached.");
+					}					
 				}
-			};
-			t.start();
-		}
+				
+				// Restore preferences
+				SharedPreferences settings = getSharedPreferences(
+						DryncUtils.PREFS_NAME, 0);
+				boolean showIntro = settings.getBoolean(DryncUtils.SHOW_INTRO_PREF,
+						true);
+				mShowIntro = showIntro;
 
-		registerTxt = register;
+				mShowReg = registerTxt != null && (!registerTxt.equals(""));
 
-		// Restore preferences
-		SharedPreferences settings = getSharedPreferences(
-				DryncUtils.PREFS_NAME, 0);
-		boolean showIntro = settings.getBoolean(DryncUtils.SHOW_INTRO_PREF,
-				true);
-		mShowIntro = showIntro;
+				Message msg = new Message();
+				if (mShowIntro)
+					msg.what = STOPSPLASH;
+				else if (mShowReg)
+					msg.what = REGISTER;
+				else
+					msg.what = STARTMAIN;
 
-		mShowReg = register != null && (!register.equals(""));
+				splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+				
+				startupProcComplete = true;
+			}
+		};
+		
+		
+		Thread startStartupThread = new Thread()
+		{
+			public void run()
+			{
+				if (hasConnectivity())
+				{
+					registerTxt = DryncProvider.getInstance().startupPost(Drync.this, deviceId);
 
-		Message msg = new Message();
-		if (mShowIntro)
-			msg.what = STOPSPLASH;
-		else if (mShowReg)
-			msg.what = REGISTER;
-		else
-			msg.what = STARTMAIN;
+					final String threadDeviceId = deviceId;
+					Thread t = new DryncThread() {
+						public void run() {
 
-		splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+							try {
+								DryncProvider.getInstance()
+								.getCorks(Drync.this, threadDeviceId);
+								DryncProvider.getInstance().myAcctGet(Drync.this.getApplicationContext(), threadDeviceId);
+							} catch (DryncHostException e) {
+								Log.e("Drync", "DryncHostException on Startup", e);
+							} catch (DryncXmlParseExeption e) {
+								Log.e("Drync", "DryncXmlParseException on Startup", e);
+							}
+						}
+					};
+					t.start();
+				}
+				mNetHandler.post(finishStartupThread);
+				
+			}
+		};
+		
+		
+		startStartupThread.start();
+		
+		/*while (!startupProcComplete)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
+
+		
 	}
 
 	public void onConfigurationChanged(Configuration newConfig) {

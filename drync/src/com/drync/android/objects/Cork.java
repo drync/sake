@@ -321,4 +321,21 @@ public class Cork extends Bottle implements Parcelable
     	locationLat = in.readString();
     	locationLong = in.readString();
     }
+	
+	public int getYearValue()
+	{
+		if ((this.getCork_year() != null) && (this.getCork_year() > 0))
+			return this.getCork_year();
+		else
+			return this.getYear();
+		
+	}
+	
+	public String getDisplayYear()
+	{
+		if (this.getYear() > 0)
+			return Integer.toString(this.getYear());
+		else
+			return "NV";
+	}
 }

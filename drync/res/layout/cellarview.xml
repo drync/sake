@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads" 
     android:id="@+id/cellarview"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="wrap_content" android:visibility="visible"
@@ -65,8 +66,9 @@
 		android:orientation="horizontal" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:layout_weight="1" />
 		
-	<com.google.ads.GoogleAdView
-    android:id="@+id/adview"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+	<com.google.ads.AdView android:id="@+id/adView" android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         ads:adUnitId="a149667b30439f2"
+                         ads:adSize="BANNER"
+                         ads:loadAdOnCreate="false"/>
 </LinearLayout>

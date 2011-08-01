@@ -309,4 +309,17 @@ public class Bottle implements Parcelable {
 		in.readTypedList(sources, Source.CREATOR);
 		this.localImageResourceOnly = in.readString();
 	}
+	
+	public int getYearValue()
+	{
+		return this.getYear();
+	}
+	
+	public String getDisplayYear()
+	{
+		if (getYearValue() > 0)
+			return Integer.toString(getYearValue());
+		else
+			return "NV";
+	}
 }
