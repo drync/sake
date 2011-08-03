@@ -26,12 +26,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -473,7 +475,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 				final NumberPicker picker = (NumberPicker)dialog.findViewById(R.id.pref_num_picker);
 				Button okBtn = (Button)dialog.findViewById(R.id.okBtn);
+				okBtn.setTextColor(Color.DKGRAY);
+				okBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
 				Button cancelBtn = (Button)dialog.findViewById(R.id.cancelBtn);
+				cancelBtn.setTextColor(Color.DKGRAY);
+				cancelBtn.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
 
 				picker.setCurrent(ownValueHolder);
 				final Dialog thisDialog = dialog;

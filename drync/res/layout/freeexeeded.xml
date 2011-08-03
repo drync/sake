@@ -18,6 +18,6 @@
               android:layout_height="wrap_content"
               android:clickable="true"
               android:textColor="#FFF"
-              android:text="@string/freeex2" android:typeface="normal" android:visibility="visible" android:layout_marginBottom="5px" android:textSize="12px"/>
+              android:text="@string/freeex2" android:typeface="normal" android:visibility="visible" android:layout_marginBottom="5px" android:textSize="12dip"/>
             
 </com.drync.android.ui.BorderlessTransparentPanel>

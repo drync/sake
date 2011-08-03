@@ -19,7 +19,7 @@
 				android:layout_width="wrap_content" android:layout_height="fill_parent"
 				android:minWidth="60dip" android:maxWidth="60dip"
 				android:layout_alignParentLeft="true" android:layout_centerVertical="true"
-				android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:textSize="11dip" android:background="@drawable/hdrbtnshade"
 				android:typeface="normal" android:textStyle="normal"
 				android:layout_marginTop="5dip" android:layout_marginBottom="5dip"
 				android:text="Cancel" />
@@ -27,7 +27,7 @@
 				<Button android:id="@+id/saveBtn" android:textColor="#FFFFFF"
 				android:layout_width="wrap_content" android:layout_height="fill_parent"
 				android:minWidth="60dip" android:maxWidth="60dip" android:layout_alignParentRight="true"
-				android:layout_centerVertical="true" android:textSize="9px" android:background="@drawable/hdrbtnshade"
+				android:layout_centerVertical="true" android:textSize="11dip" android:background="@drawable/hdrbtnshade"
 				android:typeface="normal" android:textStyle="normal" android:layout_marginTop="5dip"
 				android:layout_marginBottom="5dip" android:text="Save" />
 

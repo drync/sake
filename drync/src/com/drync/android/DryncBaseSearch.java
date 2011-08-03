@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -712,6 +713,11 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				
 				Toast refresh = Toast.makeText(this, "Refresh Triggered", Toast.LENGTH_LONG);
 				refresh.show();
+			}
+			else if (query.toLowerCase().startsWith("drync presto fywreset"))
+			{			
+				editor.putBoolean(DryncUtils.SHOW_INTRO_PREF, true);
+				editor.commit();
 			}
 			
 			return;
