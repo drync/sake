@@ -743,22 +743,36 @@ private ProgressDialog progressDlg = null;
 				// Sat, 27 Nov 2010 21:50:31 -0500
 				String datepattern = "EEE, d MMM yyyy HH:mm:ss Z";
 				SimpleDateFormat sdf = new SimpleDateFormat(datepattern);
-				
-				Date arg0date = null;
-				Date arg1date = null;
-				try {
-					arg0date = sdf.parse(arg0.getCork_created_at());
-					arg1date = sdf.parse(arg1.getCork_created_at());
-				} catch (ParseException e) {
-					// nothing to do really.
+				if ((arg0 != null) && (arg1 != null))
+				{
+					Date arg0date = null;
+					Date arg1date = null;
+					try {
+						arg0date = sdf.parse(arg0.getCork_created_at());
+						arg1date = sdf.parse(arg1.getCork_created_at());
+					} catch (ParseException e) {
+						// nothing to do really.
+					}
+
+					if ((arg0date != null) && (arg1date != null))
+						return (arg0date.compareTo(arg1date) * -1); // make descending
+					else if (arg0date == null)
+						return -1;
+					else
+						return 1;
 				}
-				
-				if ((arg0date != null) && (arg1date != null))
-					return (arg0date.compareTo(arg1date) * -1); // make descending
-				else if (arg0date == null)
+				else if ((arg0 == null) && (arg1 == null))
+				{
+					return 0;
+				}
+				else if (arg0 == null)
+				{
 					return -1;
+				}
 				else
+				{
 					return 1;
+				}
 			}
 				
 				// still here?

@@ -11,24 +11,24 @@
               android:textColor="#FFF" android:clickable="true"
               android:text="@string/regreq1"
 		      android:layout_gravity="center_horizontal"
-		      android:layout_marginBottom="10px"
+		      android:layout_marginBottom="10px" android:textSize="12dip"
               android:textStyle="bold" android:typeface="normal"/>
     <TextView android:id="@+id/text2"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:clickable="true"
-              android:textColor="#FFF"
-              android:text="@string/regreq2" android:typeface="normal" android:visibility="visible" android:layout_marginBottom="5px" android:textSize="12px"/>
+              android:textColor="#FFF" 
+              android:text="@string/regreq2" android:typeface="normal" android:visibility="visible" android:layout_marginBottom="5px" android:textSize="12dip"/>
     <TextView android:id="@+id/text3"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:clickable="true"
               android:textColor="#FFF"
-              android:text="@string/regreq3" android:textSize="12px" android:textStyle="normal" android:typeface="normal" android:layout_marginTop="5px"/>
+              android:text="@string/regreq3" android:textSize="12dip" android:textStyle="normal" android:typeface="normal" android:layout_marginTop="5px"/>
     <TextView android:id="@+id/text4"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:clickable="true"
               android:textColor="#FFF"
-              android:text="@string/regreq4" android:textSize="12px" android:textStyle="normal" android:typeface="normal" android:layout_marginTop="5px"/>          
+              android:text="@string/regreq4" android:textSize="12dip" android:textStyle="normal" android:typeface="normal" android:layout_marginTop="5px"/>          
 </com.drync.android.ui.BorderlessTransparentPanel>

@@ -54,12 +54,17 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
-import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
 import com.drync.android.objects.Source;
 import com.drync.android.objects.Venue;
+
+import fi.foyt.foursquare.api.FoursquareApi;
+import fi.foyt.foursquare.api.FoursquareApiException;
+import fi.foyt.foursquare.api.entities.Category;
+import fi.foyt.foursquare.api.entities.CompactVenue;
+import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class DryncProvider {
 	static String SERVER_HOST="search.drync.com";
@@ -70,6 +75,10 @@ public class DryncProvider {
 	static int SERVER_PORT = USING_SERVER_HOST == DEV_SERVER_HOST ? 3000 : 80;
 	static String URL1 = "/search?query=";
 	static String URL2 = "&format=xml&device_id=";	
+	
+	static final String FOURSQUARE_CLIENT_ID = "N0J05DQMCNFPRY24FXVOSNTXXKWWLBMZ4ILPV1V2NPMAULB0";
+	static final String FOURSQUARE_CLIENT_SECRET = "P00QNLWIZ2AAG4TJJ5OXIVZUQXLPZLVCGODK2TYFXVIU2GR0";
+	static final String FOURSQUARE_CALLBACK_URL = "http://www.drync.com";
 	
 	static String CORKLISTURL = "/corks?format=xml&device_id=";
 	
@@ -1077,7 +1086,7 @@ public class DryncProvider {
 		return response;
 	} 
 	
-	public static Result<Cork> postCreateOrUpdate(Context ctx, Cork cork, String deviceId, boolean testforfree) throws DryncFreeCellarExceededException, DryncNotRegisteredException
+	public static com.drync.android.helpers.Result<Cork> postCreateOrUpdate(Context ctx, Cork cork, String deviceId, boolean testforfree) throws DryncFreeCellarExceededException, DryncNotRegisteredException
 	{
 		// check to see if we're registered.
 		if (DryncUtils.getRegisteredUsername() == null)
@@ -1109,7 +1118,7 @@ public class DryncProvider {
 
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks%s", USING_SERVER_HOST,SERVER_PORT,tweetAppend);
-		Result<Cork> returnVal = new Result<Cork>();
+		com.drync.android.helpers.Result<Cork> returnVal = new com.drync.android.helpers.Result<Cork>();
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
@@ -1155,11 +1164,11 @@ public class DryncProvider {
 		return itemsResource.getStatus().isSuccess();*/
 	}
 	
-	public static Result<Cork> postUpdate(Cork cork, String deviceId)
+	public static com.drync.android.helpers.Result<Cork> postUpdate(Cork cork, String deviceId)
 	{
 		// Define our Restlet client resources.  
 		String clientResourceUrl = String.format("http://%s:%d/corks/%s", USING_SERVER_HOST,SERVER_PORT,cork.getCork_id());
-		Result<Cork> returnVal = new Result<Cork>();
+		com.drync.android.helpers.Result<Cork> returnVal = new com.drync.android.helpers.Result<Cork>();
 		try {
 			HttpResponse response = DryncProvider.doPost(clientResourceUrl, cork.getRepresentation(deviceId, true), deviceId);
 			String content = DryncProvider.convertStreamToString(response.getEntity().getContent());
@@ -1455,6 +1464,16 @@ public class DryncProvider {
 	}
 	public ArrayList<Venue> getVenues(String latitude, String longitude)
 	{
+		
+		try {
+			return searchVenues(latitude + "," + longitude);
+		} catch (FoursquareApiException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return new ArrayList<Venue>();
+		/*
 		ArrayList<Venue> venueLst = new ArrayList<Venue>();
 		
 		HttpHost target = new HttpHost("api.foursquare.com", 80, "http");
@@ -1493,7 +1512,7 @@ public class DryncProvider {
 			e.printStackTrace();
 		}
 		
-		return venueLst;
+		return venueLst;  */
 	}
 	
 	private Venue parseVenueFromNode(Node venueNode)
@@ -1560,5 +1579,77 @@ public class DryncProvider {
 		else
 			return null;
 	}
+	
+	private Venue parseVenueFromNode(CompactVenue venueNode)
+	{
+		if (venueNode != null)
+		{
+			Venue venue=new Venue();
+			try
+			{
+				venue.setId(Long.parseLong(venueNode.getId()));
+			}
+			catch (NumberFormatException e)
+			{
+				Log.d("LOCATION_PARSE", "Skipped conversion of " + venueNode.getId() + " to Long");
+			}
+			
+			venue.setName(venueNode.getName());
+			venue.setAddress(venueNode.getLocation().getAddress());
+			venue.setCrossstreet(venueNode.getLocation().getCrossStreet());
+			venue.setCity(venueNode.getLocation().getCity());
+			venue.setState(venueNode.getLocation().getState());
+			venue.setZip(venueNode.getLocation().getPostalCode());
+			venue.setGeolat(Double.toString(venueNode.getLocation().getLat()));
+			venue.setGeolong(Double.toString(venueNode.getLocation().getLng()));
+			venue.setPhone(venueNode.getContact().getPhone());
+			venue.setDistance(venueNode.getLocation().getDistance().longValue());
+			
+			Category[] cats = venueNode.getCategories();
+			
+			for (int i=0,n=cats.length;i<n;i++)
+			{
+				Category cat = cats[i];
+				
+				venue.setIconurl(cat.getIcon());
+				break;
+			}
+				
+			return venue;
+		} // end if (bottleNode != null)
+		else
+			return null;
+	}
+
+	
+	public ArrayList<Venue> searchVenues(String ll) throws FoursquareApiException {
+	    // First we need a initialize FoursquareApi. 
+	    FoursquareApi foursquareApi = new FoursquareApi(DryncProvider.FOURSQUARE_CLIENT_ID, 
+	    		DryncProvider.FOURSQUARE_CLIENT_SECRET, DryncProvider.FOURSQUARE_CALLBACK_URL);
+	    ArrayList<Venue> venueLst = new ArrayList<Venue>();
+	    // After client has been initialized we can make queries.
+	    fi.foyt.foursquare.api.Result<VenuesSearchResult> result = foursquareApi.venuesSearch(ll, null, null, null, null, 30, null, null, null, null, null);
+	    
+	    if (result.getMeta().getCode() == 200) {
+	      // if query was ok we can finally we do something with the data
+	      for (CompactVenue venue : result.getResult().getVenues()) {
+	        // TODO: Do something we the data
+	        System.out.println(venue.getName());
+	        Venue venueNode = parseVenueFromNode(venue);
+			//Log.d("VENUE_GET", "Read Venue: " + venue.getName());
+			venueLst.add(venueNode);
+	        
+	      }
+	      
+	      return venueLst;
+	    } else {
+	      // TODO: Proper error handling
+	      System.out.println("Error occured: ");
+	      System.out.println("  code: " + result.getMeta().getCode());
+	      System.out.println("  type: " + result.getMeta().getErrorType());
+	      System.out.println("  detail: " + result.getMeta().getErrorDetail()); 
+	    }
+	    return venueLst;
+	  }
 	
 }

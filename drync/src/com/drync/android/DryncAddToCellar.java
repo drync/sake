@@ -930,29 +930,38 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	}
 
 	@Override
-	public void onLocationChanged(Location location) {
+	public void onLocationChanged(final Location location) {
 		super.onLocationChanged(location);
 
-		curLocationLat = "" + location.getLatitude();
-		curLocationLong = "" + location.getLongitude();
+		Thread locUpdateThread = new Thread() {
 
-		synchronized(venuelock)
-		{
-			venues = DryncProvider.getInstance().getVenues(location);
-		}
-		ArrayList<String> venuestrs = new ArrayList<String>();
+			@Override
+			public void run() {
+				curLocationLat = "" + location.getLatitude();
+				curLocationLong = "" + location.getLongitude();
 
-		venuestrs.add(DryncAddToCellar.this.CUSTOM_VENUE);
+				synchronized(venuelock)
+				{
+					venues = DryncProvider.getInstance().getVenues(location);
+				}
+				ArrayList<String> venuestrs = new ArrayList<String>();
 
-		boolean foundSelected = false;
-		for (Venue venue : venues)
-		{
+				venuestrs.add(DryncAddToCellar.this.CUSTOM_VENUE);
 
-			venuestrs.add(venue.getName());
+				boolean foundSelected = false;
+				for (Venue venue : venues)
+				{
 
-		}
+					venuestrs.add(venue.getName());
 
-		DryncAddToCellar.this.venuestrs = venuestrs;
+				}
+
+				DryncAddToCellar.this.venuestrs = venuestrs;
+				
+			}};
+			
+			locUpdateThread.start();
+			
 	}
 
 	private boolean doCreateSave(Cork cork, DryncDbAdapter dbAdapter)

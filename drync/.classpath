@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/acra-3.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/GoogleAdMobAdsSdk-4.1.1.jar"/>
 	<classpathentry kind="src" path="ActionBarSherlock_src"/>
+	<classpathentry kind="lib" path="lib/foursquare-api-1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
