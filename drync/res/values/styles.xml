@@ -2,6 +2,7 @@
 
 
 <resources>
+    <!-- 
 <style name="Qype.RatingBarSmall"
 parent="@android:style/Widget.RatingBar.Indicator">
         <item name="android:minHeight">40dip</item>
@@ -10,7 +11,7 @@ parent="@android:style/Widget.RatingBar.Indicator">
         <item name="android:stepSize">50</item>
         <item name="android:isIndicator">false</item>
     </style>
-
+-->
     <!--  editing version of style -->
     <style name="wineRatingBar" parent="@android:style/Widget.RatingBar">
     	        <item name="android:progressDrawable">@drawable/wine_ratingbar_full</item>

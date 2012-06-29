@@ -11,13 +11,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class DryncSocialSettings extends DryncBaseActivity {
@@ -133,10 +136,33 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	 					.setMessage("Are you sure you want to sign out?")
 	 							.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	 								public void onClick(DialogInterface dialog, int id) {
-	 									DryncProvider.postFacebookDeauth(deviceId);
-	 									DryncUtils.setFacebookAuthorized(DryncSocialSettings.this, false);
-	 									fbAuthd = false;
-	 									facebookButton.setText("Facebook");
+	 									
+	 									progressDlg =  new ProgressDialog(DryncSocialSettings.this);
+	 									progressDlg.setTitle("Dryncing...");
+	 									progressDlg.setMessage("Deauthorizing Facebook...");
+	 									progressDlg.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	 									progressDlg.show();
+
+	 									Thread deauthThread = new DryncThread()
+	 									{
+	 										public void run()
+	 										{
+	 											boolean result = false;
+	 											
+	 											result = DryncProvider.postFacebookDeauth(deviceId);
+	 											
+	 											if (result)
+	 											{
+	 												DryncUtils.setFacebookAuthorized(DryncSocialSettings.this, false);
+	 												fbAuthd = false;
+	 											}
+
+	 											mHandler.post(mHandleLongTransaction);
+	 										}
+	 									};
+
+	 									deauthThread.start();
+	 									
 	 									dialog.cancel();
 	 								}})
 	 							.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -232,4 +258,31 @@ public class DryncSocialSettings extends DryncBaseActivity {
 	public int getMenuItemToSkip() {
 		return SETTINGS_ID;
 	}
+	
+	final Runnable mHandleLongTransaction = new Runnable()
+	{
+		public void run()
+		{
+			try
+			{
+				if (progressDlg != null)
+				{
+					progressDlg.dismiss();
+					
+					if (!fbAuthd) {
+						facebookButton.setText("Facebook");
+					}
+					else {
+						facebookButton.setText("Sign Out");
+					}
+				}
+			}
+			catch (IllegalArgumentException e)
+			{
+				Log.d("DryncSocialSettings", "Handled WindowNotAttachedToView IllegalArgumentException from progressDlg: 1");
+			}
+
+			boolean bFinish = false;
+		}
+	};
 }

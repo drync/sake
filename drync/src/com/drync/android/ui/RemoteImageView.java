@@ -11,7 +11,9 @@ import java.io.FileOutputStream;
 import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +30,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.drync.android.DryncUtils;
 import com.drync.android.R;
@@ -50,6 +53,7 @@ public class RemoteImageView extends ImageView {
 	}
 
 	public static final int CAMERA_PIC_REQUEST = 1337;
+	public static final int GALLERY_PIC_REQUEST = 1338;
 	
 	boolean launchCameraOnClick = false;
 
@@ -63,13 +67,35 @@ public class RemoteImageView extends ImageView {
 		if (launchCameraOnClick)
 		{
 			final Context clickContext = ctx;
+			((Activity)ctx).registerForContextMenu(this);
+			
 			this.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
 					if (RemoteImageView.this.isLaunchCameraOnClick())
 					{
-						Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-						((Activity)clickContext).startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);  
+						final CharSequence[] items = {"Camera", "Gallery"};
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(clickContext);
+						builder.setTitle("Choose image using...");
+						builder.setItems(items, new DialogInterface.OnClickListener() {
+						    public void onClick(DialogInterface dialog, int item) {
+						    	if (items[item].equals("Camera"))
+						    	{
+						    		Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+									((Activity)clickContext).startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+						    	}
+						    	else 
+						    	{
+						    		Intent i = new Intent(Intent.ACTION_PICK,
+						    	               android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+						    		((Activity)clickContext).startActivityForResult(i, GALLERY_PIC_REQUEST ); 
+						    	}
+						        
+						    }
+						});
+						AlertDialog alert = builder.create();
+						alert.show();
 					}
 					
 				}});

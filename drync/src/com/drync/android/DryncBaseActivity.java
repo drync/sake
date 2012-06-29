@@ -2,6 +2,8 @@ package com.drync.android;
 
 import java.util.Random;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 import com.flurry.android.FlurryAgent;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -17,11 +19,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-public abstract class DryncBaseActivity extends Activity implements LocationListener{
+public abstract class DryncBaseActivity extends SherlockActivity implements LocationListener{
 	
 	// Menu IDs
 	public static final int SEARCH_ID = Menu.FIRST;
@@ -155,43 +155,46 @@ public abstract class DryncBaseActivity extends Activity implements LocationList
 		return super.onKeyDown(keyCode, event);
 	}
 	
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case TOP_WINE_ID:
-        {
-        	Intent twIntent = new Intent(this, DryncTopWines.class);
-    		twIntent.putExtra("displaySearch", false);
-    		twIntent.putExtra("displayTopWinesBtns", true);
-    		twIntent.putExtra("topType", DryncProvider.TOP_FEATURED);
-    		startActivity(twIntent);  
-        	break;
-        }
-        case SETTINGS_ID:
-        {
-        	Intent setIntent = new Intent(this, DryncSocialSettings.class);
-        	startActivity(setIntent);
-        	/*Intent intent = new Intent();
-			intent.setClass(this, DryncMyAccountActivity.class);
-			startActivityForResult(intent, MYACCOUNT_RESULT);*/
-        	break;
-        }
-        case CELLAR_ID:
-        {
-        	startDryncCellarActivity();
-        	break;
-        }
-        case SEARCH_ID:
-        {
-        	Intent setIntent = new Intent(this, DryncSearch.class);
-        	startActivity(setIntent);
-        	break;
-        }
-        }
-       
-        return super.onOptionsItemSelected(item);
-    }
     
     @Override
+	public boolean onOptionsItemSelected(
+			com.actionbarsherlock.view.MenuItem item) {
+    	 switch (item.getItemId()) {
+         case TOP_WINE_ID:
+         {
+         	Intent twIntent = new Intent(this, DryncTopWines.class);
+     		twIntent.putExtra("displaySearch", false);
+     		twIntent.putExtra("displayTopWinesBtns", true);
+     		twIntent.putExtra("topType", DryncProvider.TOP_FEATURED);
+     		startActivity(twIntent);  
+         	break;
+         }
+         case SETTINGS_ID:
+         {
+         	Intent setIntent = new Intent(this, DryncSocialSettings.class);
+         	startActivity(setIntent);
+         	/*Intent intent = new Intent();
+ 			intent.setClass(this, DryncMyAccountActivity.class);
+ 			startActivityForResult(intent, MYACCOUNT_RESULT);*/
+         	break;
+         }
+         case CELLAR_ID:
+         {
+         	startDryncCellarActivity();
+         	break;
+         }
+         case SEARCH_ID:
+         {
+         	Intent setIntent = new Intent(this, DryncSearch.class);
+         	startActivity(setIntent);
+         	break;
+         }
+         }
+        
+         return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	switch (requestCode) {
         case ADDTOCELLAR_RESULT:

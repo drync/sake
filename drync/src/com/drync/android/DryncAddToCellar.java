@@ -25,13 +25,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -70,13 +73,13 @@ public class DryncAddToCellar extends DryncBaseActivity {
 	private static final int NO_ERROR = 0;
 	private static final int FREE_EXCEEDED_ERROR = 1;
 	private static final int REGISTRATION_REQUIRED_ERROR = 2;
-	
+
 	// for use by long toasts
 	public static boolean bail = false;
 	public static Thread longToastThread = null;
 	public static Toast instToast = null;
-	
-	
+
+
 	final Handler mHandler = new Handler();
 	private Bottle mBottle = null;
 	private boolean isEdit = false;
@@ -139,7 +142,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 			}
 
 			boolean bFinish = false;
-			
+
 			switch (errorOccurred)
 			{
 			case NO_ERROR:
@@ -148,23 +151,23 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				break;
 			case FREE_EXCEEDED_ERROR:
 				errorOccurred = NO_ERROR;
-				
+
 				View freeexlayout = getLayoutInflater().inflate(R.layout.freeexeeded, (ViewGroup) findViewById(R.id.layout_root));
-				
+
 				String t1 = getResources().getString(R.string.freeex1) + " " + getResources().getString(R.string.freeex1_1);
 				String t2 = getResources().getString(R.string.freeex2) + " " + getResources().getString(R.string.freeex2_1) +
-							" " + getResources().getString(R.string.freeex2_2);
-				
+						" " + getResources().getString(R.string.freeex2_2);
+
 				TextView tv1 = (TextView)freeexlayout.findViewById(R.id.text1);
 				TextView tv2 = (TextView)freeexlayout.findViewById(R.id.text2);
-				
+
 				tv1.setText(t1);
 				tv2.setText(t2);
-				
+
 				AlertDialog.Builder builder = new AlertDialog.Builder(DryncAddToCellar.this);
 				builder.setView(freeexlayout)
 				.setCancelable(true)
-				
+
 				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
@@ -176,26 +179,26 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				.setPositiveButton("Upgrade Now", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
-						
+
 						Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.drync" + ".android"
-));
-		    			startActivity(intent);
-						
+								));
+						startActivity(intent);
+
 					}
 				});
 				AlertDialog alert = builder.show();
-				
+
 				break;
 			case REGISTRATION_REQUIRED_ERROR:
 				bFinish = false;
 				errorOccurred = NO_ERROR;
-				
+
 				View layout = getLayoutInflater().inflate(R.layout.registrationrequired, (ViewGroup) findViewById(R.id.layout_root));
-				
+
 				AlertDialog.Builder regbuilder = new AlertDialog.Builder(DryncAddToCellar.this);
 				regbuilder.setView(layout)
 				.setCancelable(true)
-				
+
 				.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
@@ -207,22 +210,22 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.dismiss();
-						
+
 						Intent intent = new Intent();
-		    			intent.setClass(DryncAddToCellar.this, DryncMyAccountActivity.class);
-		    			startActivityForResult(intent, MYACCOUNT_RESULT);
-						
+						intent.setClass(DryncAddToCellar.this, DryncMyAccountActivity.class);
+						startActivityForResult(intent, MYACCOUNT_RESULT);
+
 					}
 				});
 				AlertDialog regalert = regbuilder.show();
-				
+
 				break;
 			default:
 				DryncAddToCellar.this.setResult(DryncCellar.CELLAR_NEEDS_REFRESH);
 				DryncAddToCellar.this.finish();
 				break;
 			}
-			
+
 		}
 	};
 
@@ -246,13 +249,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						image.setImageBitmap(thumbnail);
 
 						String base64encoding = null;
-						try {
-							base64encoding = Base64.encodeFromFile(newpath);
-							DryncAddToCellar.this.imageBase64Representation = base64encoding;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						base64encoding = Base64.encodeFromFile(newpath);
+						DryncAddToCellar.this.imageBase64Representation = base64encoding;
 					}
 				}
 			} catch (Exception e)
@@ -262,6 +260,50 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				ErrorReporter.getInstance().putCustomData("devid", DryncUtils.getDeviceId(getContentResolver(), this));
 				ErrorReporter.getInstance().handleException(e);
 			}
+		}
+		else if (requestCode == RemoteImageView.GALLERY_PIC_REQUEST)
+		{
+			if(resultCode == RESULT_OK){  
+				try
+				{
+					if (data != null)
+					{
+						Uri selectedImage = data.getData();
+						String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+						Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+						cursor.moveToFirst();
+
+						int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+						String filePath = cursor.getString(columnIndex);
+						cursor.close();
+
+
+						Bitmap thumbnail = BitmapFactory.decodeFile(filePath);
+
+						RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+
+						if (image != null)
+						{
+							String newpath = image.saveNewImage(thumbnail);
+							DryncAddToCellar.this.localImageResourcePath = newpath;
+							image.setImageBitmap(thumbnail);
+
+							String base64encoding = null;
+							base64encoding = Base64.encodeFromFile(newpath);
+							DryncAddToCellar.this.imageBase64Representation = base64encoding;
+
+						}
+					}
+				} catch (Exception e)
+				{
+					ErrorReporter.getInstance().putCustomData("Location", "DryncAddToCellar_OnActivityResult-Gallery");
+					ErrorReporter.getInstance().putCustomData("state", "caught");
+					ErrorReporter.getInstance().putCustomData("devid", DryncUtils.getDeviceId(getContentResolver(), this));
+					ErrorReporter.getInstance().handleException(e);
+				}
+			}
+
 		}
 		else if (requestCode == MYACCOUNT_RESULT)
 		{
@@ -329,8 +371,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				synchronized(venuelock)
 				{
 					venues = DryncProvider.getInstance().
-					getVenues(DryncUtils.getLastKnownLocationLat(DryncAddToCellar.this),
-							DryncUtils.getLastKnownLocationLong(DryncAddToCellar.this));
+							getVenues(DryncUtils.getLastKnownLocationLat(DryncAddToCellar.this),
+									DryncUtils.getLastKnownLocationLong(DryncAddToCellar.this));
 				}
 			}
 		};
@@ -957,11 +999,11 @@ public class DryncAddToCellar extends DryncBaseActivity {
 				}
 
 				DryncAddToCellar.this.venuestrs = venuestrs;
-				
+
 			}};
-			
+
 			locUpdateThread.start();
-			
+
 	}
 
 	private boolean doCreateSave(Cork cork, DryncDbAdapter dbAdapter)
@@ -1015,7 +1057,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 		} catch (DryncNotRegisteredException e) {
 			//Toast.makeText(this, "Cannot save a wine until you are registered with the server.", Toast.LENGTH_LONG);
 			errorOccurred = REGISTRATION_REQUIRED_ERROR;
-			
+
 			return false;
 		}
 		finally
@@ -1038,8 +1080,8 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		startActivityForResult(twIntent, LOCATION_CHOOSER_RESULT);  
 	}
-	
-	
+
+
 
 }
 
