@@ -15,19 +15,19 @@
 
 		<Button android:id="@+id/featuredBtn" android:textColor="#FFFFFF"
 			android:layout_width="50dip" android:layout_height="30dip"
-			android:textSize="9px" android:background="@drawable/hdrbtnshade"
+			android:textSize="13dip" android:background="@drawable/hdrbtnshade"
 			android:layout_gravity="center" android:typeface="normal"
 			android:textStyle="normal" android:layout_weight=".15" android:text="Featured" />
 
 		<Button android:id="@+id/popularBtn" android:textColor="#FFFFFF"
 			android:layout_width="50dip" android:layout_height="30dip"
-			android:textSize="9px" android:background="@drawable/hdrbtnshade"
+			android:textSize="13dip" android:background="@drawable/hdrbtnshade"
 			android:layout_gravity="center" android:typeface="normal"
 			android:textStyle="normal" android:layout_weight=".15" android:text="Popular" />
 
 		<Button android:id="@+id/mostWantedBtn" android:textColor="#FFFFFF"
 			android:layout_width="50dip" android:layout_height="30dip"
-			android:textSize="9px" android:background="@drawable/hdrbtnshade"
+			android:textSize="13dip" android:background="@drawable/hdrbtnshade"
 			android:layout_gravity="center" android:typeface="normal"
 			android:textStyle="normal" android:layout_marginTop="5px"
 			android:layout_marginBottom="5px" android:layout_weight=".15"
