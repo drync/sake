@@ -23,13 +23,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -48,7 +48,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ClearableSearch;
 import android.widget.ClearableSearch.OnCommitListener;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -61,7 +61,6 @@ import com.drync.android.helpers.Result;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Cork;
 import com.drync.android.objects.Review;
-import com.drync.android.ui.RemoteImageView;
 import com.drync.android.widget.CustomAutoCompleteTextView;
 import com.drync.android.SearchTermDbAdapter;
 import com.drync.android.widget.CustomArrayAdapter;
@@ -73,6 +72,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	private ListView mList;
 	final Handler mHandler = new Handler();
 	private List<Bottle> mResults = null;
+	@SuppressWarnings("rawtypes")
 	private BottleComparator comparator = null;
 	
 
@@ -131,6 +131,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 	};
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void updateResultsInUi() {
 
 		// Back in the UI thread -- update our UI elements based on the data in mResults
@@ -149,8 +150,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			{
 				if (mResults != null)
 				{
-					if (comparator == null)	
-						comparator = new BottleComparator();
+					if (DryncBaseSearch.this.comparator == null)	
+						DryncBaseSearch.this.comparator = new BottleComparator();
 					
 					Collections.sort(mResults, comparator);
 				}
@@ -160,7 +161,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				Log.e("DRYNCBASESEARCH", "NPE Caught", e);
 			}
 			
-			mAdapter = new WineAdapter(mResults);
+			mAdapter = new WineAdapter(this, mResults);
 			mList.setAdapter(mAdapter);
 			mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -215,6 +216,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -523,23 +525,29 @@ public class DryncBaseSearch extends DryncBaseActivity {
 
 		private List<Bottle> mWines;
 		private final LayoutInflater mInflater;
-		private final Drawable defaultIcon;
+		public ImageLoader imageLoader; 
+		private Activity activity;
 		boolean mDone = false;
 		boolean mFlinging = false;
 		Hashtable<Long, View> viewHash = new Hashtable<Long, View>(); 
 		
-		public WineAdapter() {
+		public WineAdapter(Activity a) {
 			super();
+			activity = a;
 			mWines = new ArrayList<Bottle>();
 			mInflater = (LayoutInflater) DryncBaseSearch.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
 			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
+			imageLoader=new ImageLoader(activity.getApplicationContext());
 		}
 
-		public WineAdapter(List<Bottle> wines) {
+		public WineAdapter(Activity a, List<Bottle> wines) {
 			mWines = wines;
+			activity = a;
 			mInflater = (LayoutInflater) DryncBaseSearch.this.getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
+			imageLoader=new ImageLoader(activity.getApplicationContext());
+			
 			defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 		}
 		
@@ -563,7 +571,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
             TextView rating;
             TextView price;
             TextView review;
-            RemoteImageView icon;
+            ImageView icon;
         }
 
 		public View getView(int position, View convertView, ViewGroup parent) {		
@@ -572,17 +580,6 @@ public class DryncBaseSearch extends DryncBaseActivity {
 				createView(parent);
 			
 			bindView(view, wine);
-
-			if (view != null)
-			{
-				RemoteImageView wineThumb = ((ViewHolder)view.getTag()).icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
-				if (wineThumb != null && !mFlinging)
-				{
-
-					if (! wineThumb.isUseDefaultOnly() && ! wineThumb.isLoaded())
-						wineThumb.loadImage();
-				}
-			}
 
 			return view;
 		}
@@ -593,7 +590,7 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			
 			ViewHolder holder = new ViewHolder();
 			holder.name = (TextView) wineItem.findViewById(R.id.wineName);
-			holder.icon = (RemoteImageView) wineItem.findViewById(R.id.wineThumb);
+			holder.icon = (ImageView) wineItem.findViewById(R.id.wineThumb);
 			holder.price = (TextView) wineItem.findViewById(R.id.priceValue);
 			holder.rating = (TextView) wineItem.findViewById(R.id.ratingValue);
 			holder.review = (TextView) wineItem.findViewById(R.id.reviewValue);
@@ -607,23 +604,8 @@ public class DryncBaseSearch extends DryncBaseActivity {
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			ViewHolder holder = (ViewHolder)view.getTag();
 			wiv.setBottle(wine);
-			RemoteImageView wineThumb = holder.icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
-			if (wineThumb != null  && !mFlinging )
-			{
-				if (wine.getLabel_thumb() != null)
-				{
-					wineThumb.setThumbnail(true);
-					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncBaseSearch.this.getBaseContext(), wine.getLabel_thumb()));
-					wineThumb.setRemoteURI(wine.getLabel_thumb());
-					wineThumb.setImageDrawable(defaultIcon);
-					wineThumb.setUseDefaultOnly(false);
-				}
-				else
-				{
-					wineThumb.setUseDefaultOnly(true);
-					wineThumb.setImageDrawable(defaultIcon);
-				}
-			}
+			ImageView wineThumb = holder.icon; 
+			imageLoader.DisplayImage(wine.getLabel_thumb(), wineThumb);
 			
 			TextView wineNameText = holder.name; //(TextView) view.findViewById(R.id.wineName);
 			wineNameText.setText(wine.getName());

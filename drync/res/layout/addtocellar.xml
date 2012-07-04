@@ -12,7 +12,7 @@
 			
 			<RelativeLayout android:id="@+id/headerSec"
 				android:layout_width="fill_parent" android:layout_height="40dip"
-				android:paddingLeft="5px" android:paddingRight="5px" android:layout_alignParentTop="true"
+				android:paddingLeft="5px" android:paddingRight="5px" 
 				android:background="@drawable/btnhdrbg">
 
 				<Button android:id="@+id/cancelBtn" android:textColor="#FFFFFF"
@@ -59,7 +59,7 @@
 					android:background="#FFFFFF" />
 
 				<EditText android:id="@+id/atcWineName" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:layout_weight="0"
+					android:layout_height="wrap_content" 
 					android:layout_toRightOf="@id/atcWineThumb" android:singleLine="false"
 					android:layout_alignParentRight="true"
 					android:layout_alignParentTop="true"  />

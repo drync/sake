@@ -1,11 +1,8 @@
 package com.drync.android;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -13,8 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -23,12 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -59,6 +52,7 @@ public class DryncLocationChooser extends DryncBaseActivity {
 	ListAdapter mAdapter;
 	Button saveBtn;
 	Button cancelBtn;
+	ImageLoader imageLoader;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -75,6 +69,8 @@ public class DryncLocationChooser extends DryncBaseActivity {
 		dbAdapter.open();
 		usedVenues = dbAdapter.getAllUsedVenues();
 		dbAdapter.close();
+		
+		imageLoader = new ImageLoader(this, R.drawable.foursquarewine);
 		
 		setContentView(R.layout.locationchooser);
 		
@@ -307,12 +303,6 @@ public class DryncLocationChooser extends DryncBaseActivity {
 			
 			bindView(view, venue);
 
-			/*if (view != null)
-			{
-				ImageView venueThumb = ((ViewHolder)view.getTag()).icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
-				venueThumb.setImageURI(uri)
-			}*/
-
 			return view;
 		}
 		
@@ -346,13 +336,12 @@ public class DryncLocationChooser extends DryncBaseActivity {
 				view.setBackgroundColor(Color.TRANSPARENT);
 			}
 			
-			ImageView venueThumb = holder.icon; //(RemoteImageView) view.findViewById(R.id.wineThumb);
+			ImageView venueThumb = holder.icon; 
 			if (venueThumb != null  && !mFlinging )
 			{
 				if (venue.getIconurl() != null)
 				{
-					Drawable icon = LoadImageFromWebOperations(venue.getIconurl());
-					venueThumb.setImageDrawable(icon);
+					imageLoader.DisplayImage(venue.getIconurl(), venueThumb);
 				}
 			}
 			
@@ -387,34 +376,11 @@ public class DryncLocationChooser extends DryncBaseActivity {
 		}
 	}
 	
-	static Hashtable<String, Drawable> drawableCache = new Hashtable<String, Drawable>();
-	
 	public float Round(float Rval, int Rpl) {
 		float p = (float)Math.pow(10,Rpl);
 		Rval = Rval * p;
 		float tmp = Math.round(Rval);
 		return (float)tmp/p;
-	}
-	
-	private Drawable LoadImageFromWebOperations(String url)
-	{
-		if (! drawableCache.containsKey(url))
-		{
-			try
-			{
-				InputStream is = (InputStream) new URL(url).getContent();
-				Drawable d = Drawable.createFromStream(is, "src name");
-				drawableCache.put(url, d);
-				return d;
-			}catch (Exception e) {
-				System.out.println("Exc="+e);
-				return null;
-			}
-		}
-		else
-		{
-			return drawableCache.get(url);
-		}
 	}
 	
 	static class VenueDistanceComparator implements Comparator<Parcelable>

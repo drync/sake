@@ -31,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -42,7 +43,6 @@ import android.widget.ViewFlipper;
 import android.widget.WineItemRelativeLayout;
 import com.drync.android.objects.Bottle;
 import com.drync.android.objects.Review;
-import com.drync.android.ui.RemoteImageView;
 
 public class DryncDetailReviews extends DryncBaseActivity {
 
@@ -75,6 +75,7 @@ public class DryncDetailReviews extends DryncBaseActivity {
 	boolean rebuildReviews = false;
 	boolean rebuildAddToCellar = false;
 	boolean buildOnceAddToCellar = true;
+	ImageLoader imageLoader;
 	
 	Drawable defaultIcon = null;
 	
@@ -86,6 +87,8 @@ public class DryncDetailReviews extends DryncBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reviewviewlayout);
+		
+		imageLoader = new ImageLoader(this.getApplicationContext());
 		
 		settings = getSharedPreferences(DryncUtils.PREFS_NAME, 0);
 		// we need to check for changes to twitter settings.
@@ -147,11 +150,12 @@ public class DryncDetailReviews extends DryncBaseActivity {
 				defaultIcon = getResources().getDrawable(R.drawable.bottlenoimage);
 			}
 
-			RemoteImageView riv = (RemoteImageView) reviewView.findViewById(R.id.reviewWineThumb);
+			ImageView riv = (ImageView) reviewView.findViewById(R.id.reviewWineThumb);
 			if (riv != null)
 			{
 				String labelThumb = mBottle.getLabel_thumb();
-				riv.setRemoteImage(labelThumb, defaultIcon);
+				imageLoader.DisplayImage(labelThumb, riv);
+				//riv.setRemoteImage(labelThumb, defaultIcon);
 			}
 
 			Button doneBtn = (Button) this.findViewById(R.id.doneBtn);
@@ -323,17 +327,6 @@ public class DryncDetailReviews extends DryncBaseActivity {
 			if ((wiv.getBottle() == null) || (wiv.getBottle() != wine))
 			{
 				bindView(view, wine);
-
-				if (view != null)
-				{
-					RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
-					if (wineThumb != null && !mFlinging)
-					{
-
-						if (! wineThumb.isUseDefaultOnly() && ! wineThumb.isLoaded())
-							wineThumb.loadImage();
-					}
-				}
 			}
 			
 			return view;
@@ -348,21 +341,18 @@ public class DryncDetailReviews extends DryncBaseActivity {
 		private void bindView(View view, Bottle wine) {
 			WineItemRelativeLayout wiv = (WineItemRelativeLayout) view;
 			wiv.setBottle(wine);
-			RemoteImageView wineThumb = (RemoteImageView) view.findViewById(R.id.wineThumb);
+			ImageView wineThumb = (ImageView) view.findViewById(R.id.wineThumb);
 			if (wineThumb != null  && !mFlinging )
 			{
 				if (wine.getLabel_thumb() != null)
 				{
-					wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncDetailReviews.this.getBaseContext(), wine.getLabel_thumb()));
+					imageLoader.DisplayImage(wine.getLabel_thumb(), wineThumb);
+					/*wineThumb.setLocalURI(DryncUtils.getCacheFileName(DryncDetailReviews.this.getBaseContext(), wine.getLabel_thumb()));
 					wineThumb.setRemoteURI(wine.getLabel_thumb());
 					wineThumb.setImageDrawable(defaultIcon);
-					wineThumb.setUseDefaultOnly(false);
+					wineThumb.setUseDefaultOnly(false);*/
 				}
-				else
-				{
-					wineThumb.setUseDefaultOnly(true);
-					wineThumb.setImageDrawable(defaultIcon);
-				}
+				
 			}
 			
 			TextView wineNameText = (TextView) view.findViewById(R.id.wineName);
