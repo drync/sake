@@ -8,8 +8,6 @@
  */
 package com.drync.android;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,7 +22,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,20 +34,19 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
@@ -241,14 +237,17 @@ public class DryncAddToCellar extends DryncBaseActivity {
 					Bitmap thumbnail = (Bitmap) data.getExtras().get("data");  
 
 					RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
+					
 
 					if (image != null)
 					{
+						thumbnail = RemoteImageView.rotate90(thumbnail);
 						String newpath = image.saveNewImage(thumbnail);
 						DryncAddToCellar.this.localImageResourcePath = newpath;
 						image.setImageBitmap(thumbnail);
 
 						String base64encoding = null;
+						
 						base64encoding = Base64.encodeFromFile(newpath);
 						DryncAddToCellar.this.imageBase64Representation = base64encoding;
 					}
@@ -278,8 +277,15 @@ public class DryncAddToCellar extends DryncBaseActivity {
 						String filePath = cursor.getString(columnIndex);
 						cursor.close();
 
-
-						Bitmap thumbnail = BitmapFactory.decodeFile(filePath);
+						BitmapFactory.Options options = new BitmapFactory.Options();
+						options.inJustDecodeBounds = true;
+						BitmapFactory.decodeFile(filePath, options);
+						
+						options.inSampleSize = calculateInSampleSize(options, 100);
+						
+						options.inJustDecodeBounds = false;
+						
+						Bitmap thumbnail = BitmapFactory.decodeFile(filePath, options);
 
 						RemoteImageView image = (RemoteImageView) findViewById(R.id.atcWineThumb);  
 
@@ -858,7 +864,7 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		}
 
-		regionVal.setText("" + mBottle.getRegion());
+		regionVal.setText("" + (mBottle.getRegion() != null ? mBottle.getRegion() : ""));
 
 		boolean skipRemainingThumbProcessing = false;
 
@@ -1080,7 +1086,25 @@ public class DryncAddToCellar extends DryncBaseActivity {
 
 		startActivityForResult(twIntent, LOCATION_CHOOSER_RESULT);  
 	}
+	
+	public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth) {
+    // Raw height and width of image
+    final int height = options.outHeight;
+    final int width = options.outWidth;
+    
+    float reqHeight = (100f/(float)(width)) * (float)height;
+    int inSampleSize = 1;
 
+    if ((float)height > reqHeight   || width > reqWidth) {
+        if (width > height) {
+            inSampleSize = Math.round((float)height / (float)reqHeight);
+        } else {
+            inSampleSize = Math.round((float)width / (float)reqWidth);
+        }
+    }
+    return inSampleSize;
+}
 
 
 }

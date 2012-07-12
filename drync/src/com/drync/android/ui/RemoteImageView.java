@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,14 +24,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.drync.android.DryncUtils;
 import com.drync.android.R;
@@ -43,6 +44,7 @@ public class RemoteImageView extends ImageView {
 	boolean useDefaultOnly = false;
 	boolean loaded = false;
 	boolean thumbnail = false;
+	Uri capturedImageUri = null;
 	
 	public boolean isThumbnail() {
 		return thumbnail;
@@ -75,6 +77,7 @@ public class RemoteImageView extends ImageView {
 					if (RemoteImageView.this.isLaunchCameraOnClick())
 					{
 						final CharSequence[] items = {"Camera", "Gallery"};
+						
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(clickContext);
 						builder.setTitle("Choose image using...");
@@ -83,6 +86,8 @@ public class RemoteImageView extends ImageView {
 						    	if (items[item].equals("Camera"))
 						    	{
 						    		Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+						    		cameraIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+						    		 
 									((Activity)clickContext).startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 						    	}
 						    	else 
@@ -151,11 +156,12 @@ public class RemoteImageView extends ImageView {
 			tmpDir.mkdirs();
 		
 		String newpath = DryncUtils.getCacheDir(this.getContext()) + "uploadimages/" +
-				"corkimg_" + randint + ".jpg";
+				"corkimg_" + bm.hashCode() + ".jpg";
 
 		try {
 			FileOutputStream fos = new FileOutputStream(newpath);
-			bm.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+			Bitmap bm2 = bm.createScaledBitmap(bm, 100, getHeightWhenWidthScaledTo(bm.getWidth(), bm.getHeight(), 100), true);
+			bm2.compress(Bitmap.CompressFormat.JPEG, 90, fos);
 			fos.flush();
 			fos.close();
 		} catch (Exception e) {
@@ -166,6 +172,13 @@ public class RemoteImageView extends ImageView {
 
 	}
 	
+	private int getHeightWhenWidthScaledTo(int sourceWidth, int sourceHeight, int destwidth)
+	{
+		float targetTransform = (float)destwidth/(float)sourceWidth;
+		float targetHeight = (float)sourceHeight*targetTransform;
+		
+		return (int)targetHeight;
+	}
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
@@ -296,4 +309,19 @@ public class RemoteImageView extends ImageView {
 				this.setImageDrawable(defaultIcon);
 			}
 	}
+
+	
+	public static Bitmap rotate90(Bitmap bm) {
+	    if (bm.getWidth() > bm.getHeight()) {
+	        Matrix matrix = new Matrix();
+	        matrix.postRotate(90);
+	        bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+	        
+	        return bm;
+	    }
+	    
+	    return bm;
+	}
+
+
 }
